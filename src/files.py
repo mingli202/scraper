@@ -6,8 +6,10 @@ from models import Rating, Section
 
 
 class Files:
-    def __init__(self) -> None:
+    def __init__(self, bak: bool = False) -> None:
         semester = "fall"
+        if bak:
+            semester = semester + ".bak"
         curPath = os.path.dirname(__file__)
         curPath = "/".join(curPath.split("/")[:-1]) + "/"
         semesterDir = curPath + semester + "/" + semester
