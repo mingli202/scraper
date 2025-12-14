@@ -21,7 +21,7 @@ class Files:
         self.organized = semesterDir + "-organized.json"
         self.professors = semesterDir + "-professors.json"
         self.ratings = semesterDir + "-ratings.json"
-        self.pids = semesterDir + "-pids.json"
+        self.pids = curPath + "pids.json"
         self.missingPids = semesterDir + "-missing-pid.json"
         self.allClasses = "/".join(semesterDir.split("/")[:-1] + ["allClasses.json"])
 

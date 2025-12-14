@@ -77,12 +77,12 @@ class ScraperTest(unittest.TestCase):
         self.assertEqual(
             Rating(
                 prof="Trepanier, Michele",
-                avg=2.9,
-                takeAgain=48,
-                difficulty=3.5,
-                nRating=21,
+                avg=3.0,
+                takeAgain=52,
+                difficulty=3.4,
+                nRating=23,
                 status="found",
-                score=57.3,
+                score=59.2,
             ),
             rating,
         )
@@ -94,12 +94,12 @@ class ScraperTest(unittest.TestCase):
         self.assertEqual(
             Rating(
                 prof="Young, Ryan",
-                avg=2.7,
-                takeAgain=33,
+                avg=2.4,
+                takeAgain=29,
                 difficulty=2.7,
-                nRating=6,
+                nRating=7,
                 status="found",
-                score=53,
+                score=48.4,
             ),
             rating,
         )
@@ -110,11 +110,11 @@ class ScraperTest(unittest.TestCase):
         self.assertEqual(
             Rating(
                 prof="Young, Thomas",
-                score=73.1,
-                avg=3.8,
-                takeAgain=60,
-                difficulty=2.4,
-                nRating=16,
+                score=68.2,
+                avg=3.5,
+                takeAgain=53,
+                difficulty=2.5,
+                nRating=20,
                 status="found",
             ),
             rating,
@@ -137,8 +137,8 @@ class ScraperTest(unittest.TestCase):
     # NOTE: fall2025 june 6 schedule pdf checked!
     # NOTE: missingPids checked!
     def test_accuracy_of_not_found(self):
-        checked = True
-        updated = True
+        checked = False
+        updated = False
 
         if checked:
             if not updated:
@@ -192,12 +192,12 @@ class ScraperTest(unittest.TestCase):
         self.assertEqual(
             Rating(
                 prof="Lo Vasco, Frank",
-                avg=3.3,
-                takeAgain=51,
+                avg=3.2,
+                takeAgain=50,
                 difficulty=4.1,
-                nRating=53,
+                nRating=54,
                 status="found",
-                score=65.4,
+                score=63.5,
             ),
             rating,
         )
