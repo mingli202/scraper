@@ -7,14 +7,14 @@ from models import Rating, Section
 
 class Files:
     def __init__(self, bak: bool = False) -> None:
-        semester = "fall"
+        semester = "winter"
         if bak:
             semester = semester + ".bak"
         curPath = os.path.dirname(__file__)
         curPath = "/".join(curPath.split("/")[:-1]) + "/"
         semesterDir = curPath + semester + "/" + semester
 
-        self.pdfName = curPath + "Schedule_of_classes_June_17.txt"
+        self.pdfName = curPath + "SCHEDULE_OF_CLASSES_Winter_2026_December_11.txt"
         self.rawFile = semesterDir + "-raw.json"
         self.classesFile = semesterDir + "-classes.json"
         self.outFile = semesterDir + "-out.json"
