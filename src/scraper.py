@@ -37,17 +37,18 @@ class Scraper:
 
         ratings: dict[str, Rating] = {}
         pids = self.get_saved_pids()
-        new_pids = {}
+
+        new_pids: dict[str, str] = {}
 
         self.scrape_ratings(professors, ratings, pids, new_pids)
 
         with open(self.files.ratings, "w") as file:
-            file.write(
+            _ = file.write(
                 json.dumps({k: v.model_dump() for k, v in ratings.items()}, indent=2)
             )
 
         with open(self.files.pids, "w") as file:
-            file.write(json.dumps(new_pids, indent=2))
+            _ = file.write(json.dumps(new_pids, indent=2))
 
         if not unittest.main(
             exit=False, module="test.web_scraper_test"
@@ -80,7 +81,7 @@ class Scraper:
     def get_saved_pids(self) -> dict[str, str]:
         if not os.path.exists(self.files.pids):
             with open(self.files.pids, "w") as file:
-                file.write(json.dumps({}))
+                _ = file.write(json.dumps({}))
 
         with open(self.files.pids, "r") as file:
             return from_json(file.read())
