@@ -53,3 +53,11 @@ class Section(BaseModel):
     lab: LecLab | None = None
     more: str = ""
     viewData: ViewData = []
+
+
+class ColumnsXs(BaseModel):
+    section: float = 0
+    disc: float = 0
+    course_number: float = 0
+    course_title: float = 0
+    day_times: float = 0
