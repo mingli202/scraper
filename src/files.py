@@ -3,7 +3,7 @@ from functools import cache
 from pathlib import Path
 from typing import Any, final
 
-from pydantic import TypeAdapter
+from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
 
 from models import ColumnsXs, Rating, Section
@@ -39,8 +39,12 @@ class Files:
     def get_sorted_lines_content(self) -> list[list[dict[str, Any]]]:
         if self.sorted_lines_path.exists():
             with open(self.sorted_lines_path, "r") as f:
-                adapter = TypeAdapter(list[list[dict[str, Any]]])
-                return adapter.validate_json(f.read())
+                try:
+                    adapter = TypeAdapter(list[list[dict[str, Any]]])
+                    data = adapter.validate_json(f.read())
+                    return data
+                except ValidationError as e:
+                    print(e)
 
         lines: list[list[dict[str, Any]]] = ParserUtils.compute_sorted_lines(
             self.pdf_path
@@ -55,14 +59,18 @@ class Files:
     def get_section_columns_x_content(self) -> ColumnsXs:
         if self.section_columns_x_path.exists():
             with open(self.section_columns_x_path, "r") as f:
-                return ColumnsXs.model_validate_json(f.read())
+                try:
+                    data = ColumnsXs.model_validate_json(f.read())
+                    return data
+                except ValidationError as e:
+                    print(e)
 
         columns_x: ColumnsXs = ParserUtils.compute_columns_x(
             self.get_sorted_lines_content()
         )
 
         with open(self.section_columns_x_path, "w") as f:
-            json.dump(columns_x.model_dump(), f)
+            json.dump(columns_x.model_dump(by_alias=True), f)
 
         return columns_x
 

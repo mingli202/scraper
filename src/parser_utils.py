@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 from typing import Any
 
 import pdfplumber
@@ -40,26 +41,38 @@ class ParserUtils:
 
     @staticmethod
     def compute_columns_x(sorted_lines: list[list[dict[str, Any]]]) -> ColumnsXs:
-        columns_x_dict: dict[str, set[int]] = {}
-        for line in sorted_lines:
-            headers = [
-                w
-                for w in line
-                if w["text"] in ["SECTION", "DISC", "COURSE", "DAY/TIMES"]
-            ]
+        # using the first class section to get all the columns
+        columns_x_dict: dict[str, list[int]] = {}
+        i = 0
+        while i < len(sorted_lines):
+            line = sorted_lines[i]
 
-            for word in headers:
-                text: str = word["text"]
-                columns_x_dict.setdefault(text, set()).add(word["x0"])
+            if line[0]["text"] == "SECTION":
+                break
 
-        course_columns = sorted(list(columns_x_dict["COURSE"]))
+            i += 1
+
+        for word in sorted_lines[i]:
+            text: str = word["text"]
+            columns_x_dict.setdefault(text, []).append(word["x0"])
+
+        i += 1
+
+        section_first_line = sorted_lines[i]
+
+        assert re.match(r"\d{4}-\d{4}", section_first_line[-1]["text"])
+        time_column = section_first_line[-1]["x0"]
+
+        assert re.match(r"[TMWRF]{1,5}", section_first_line[-2]["text"])
+        day_column = section_first_line[-2]["x0"]
 
         columns_x = ColumnsXs(
             section=columns_x_dict["SECTION"].pop(),
             disc=columns_x_dict["DISC"].pop(),
-            day_times=columns_x_dict["DAY/TIMES"].pop(),
-            course_number=course_columns[0],
-            course_title=course_columns[1],
+            day=day_column,
+            time=time_column,
+            course_number=columns_x_dict["COURSE"][0],
+            course_title=columns_x_dict["COURSE"][1],
         )
 
         return columns_x
