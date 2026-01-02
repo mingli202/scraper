@@ -31,7 +31,7 @@ class Files:
         self.section_columns_x_path = data_dir / "section_columns_x.json"
 
     @cache
-    def sorted_lines(self) -> list[list[dict[str, Any]]]:
+    def get_sorted_lines_content(self) -> list[list[dict[str, Any]]]:
         if self.sorted_lines_path.exists():
             with open(self.sorted_lines_path, "r") as f:
                 adapter = TypeAdapter(list[list[dict[str, Any]]])
@@ -47,12 +47,14 @@ class Files:
         return lines
 
     @cache
-    def get_section_columns_x(self) -> ColumnsXs:
+    def get_section_columns_x_content(self) -> ColumnsXs:
         if self.section_columns_x_path.exists():
             with open(self.section_columns_x_path, "r") as f:
                 return ColumnsXs.model_validate_json(f.read())
 
-        columns_x: ColumnsXs = ParserUtils.compute_columns_x(self.sorted_lines())
+        columns_x: ColumnsXs = ParserUtils.compute_columns_x(
+            self.get_sorted_lines_content()
+        )
 
         with open(self.section_columns_x_path, "w") as f:
             json.dump(columns_x.model_dump(), f)

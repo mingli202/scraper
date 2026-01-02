@@ -8,10 +8,10 @@ from models import ColumnsXs
 class NewParser:
     def __init__(self, files: Files):
         self.files = files
-        self.columns_x = self.files.get_section_columns_x()
+        self.columns_x = self.files.get_section_columns_x_content()
 
     def parse(self):
-        lines = self.files.sorted_lines()
+        lines = self.files.get_sorted_lines_content()
 
 
 if __name__ == "__main__":
