@@ -1,10 +1,9 @@
 import re
-from typing import Any, Callable, Literal, Self, override
 import unittest
-from pydantic import AliasGenerator, BaseModel, ConfigDict, ValidationError
-from pydantic.config import ExtraValues
+from typing import Self
+
+from pydantic import BaseModel, ConfigDict, ValidationError
 from pydantic.alias_generators import to_camel, to_snake
-from pydantic.main import IncEx
 
 
 def to_camel_case(snake_str: str) -> str:
