@@ -84,7 +84,7 @@ class Parser:
         tmp.time = Time()
 
     def parse(self):
-        if os.path.exists(self.files.outFile):
+        if os.path.exists(self.files.out_file_path):
             print("out_file already exists")
             return
 
@@ -100,7 +100,7 @@ class Parser:
 
         self.updateSection(tmp)
 
-        with open(self.files.outFile, "w") as file:
+        with open(self.files.out_file_path, "w") as file:
             file.write(json.dumps(self.sections, indent=2))
 
     def parse_row(self, row: str, tmp: LecLab):

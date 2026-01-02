@@ -9,6 +9,9 @@ class NewParser:
         self.files = files
         self.columns_x = self.files.get_section_columns_x_content()
 
+    def __get_line_text(self, line: list[dict[str, Any]]) -> str:
+        return " ".join([word["text"] for word in line])
+
     def parse(self):
         lines = self.files.get_sorted_lines_content()
 
@@ -17,9 +20,6 @@ class NewParser:
         for line in lines[:2]:
             line_text = self.__get_line_text(line)
             print(line_text)
-
-    def __get_line_text(self, line: list[dict[str, Any]]) -> str:
-        return " ".join([word["text"] for word in line])
 
 
 if __name__ == "__main__":

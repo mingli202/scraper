@@ -47,7 +47,7 @@ class Scraper:
                 json.dumps({k: v.model_dump() for k, v in ratings.items()}, indent=2)
             )
 
-        with open(self.files.pids, "w") as file:
+        with open(self.files.pids_path, "w") as file:
             _ = file.write(json.dumps(new_pids, indent=2))
 
         if not unittest.main(
@@ -79,17 +79,17 @@ class Scraper:
             new_pids[prof] = pid
 
     def get_saved_pids(self) -> dict[str, str]:
-        if not os.path.exists(self.files.pids):
-            with open(self.files.pids, "w") as file:
+        if not os.path.exists(self.files.pids_path):
+            with open(self.files.pids_path, "w") as file:
                 _ = file.write(json.dumps({}))
 
-        with open(self.files.pids, "r") as file:
+        with open(self.files.pids_path, "r") as file:
             return from_json(file.read())
 
     def get_professors(self) -> list[str]:
-        if not os.path.exists(self.files.professors):
+        if not os.path.exists(self.files.professors_path):
             profs: set[str] = set()
-            with open(self.files.outFile, "r") as file:
+            with open(self.files.out_file_path, "r") as file:
                 classes: list[Section] = [Section(**d) for d in from_json(file.read())]
 
                 for cl in classes:
@@ -101,11 +101,11 @@ class Scraper:
 
             profs.remove("")
 
-            with open(self.files.professors, "w") as file:
+            with open(self.files.professors_path, "w") as file:
                 file.write(json.dumps(list(profs), indent=2))
 
         professors: list[str] = []
-        with open(self.files.professors, "r") as file:
+        with open(self.files.professors_path, "r") as file:
             professors = from_json(file.read())
 
         return professors

@@ -32,7 +32,7 @@ def addRating(files: Files):
 
         sections_with_rating.append(section.model_dump())
 
-    with open(files.classesFile, "w") as file:
+    with open(files.classes_file_path, "w") as file:
         file.write(json.dumps(sections_with_rating, indent=2))
 
 
@@ -93,5 +93,5 @@ def addViewData(files: Files):
     for index, course in enumerate(classes):
         polished.update({index: handleViewData(course)})
 
-    with open(files.allClasses, "w") as file:
+    with open(files.all_classes_path, "w") as file:
         file.write(json.dumps(polished, indent=2))
