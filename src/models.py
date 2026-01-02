@@ -83,12 +83,12 @@ class Section(ConfiguredBasedModel):
 
 
 class ColumnsXs(ConfiguredBasedModel):
-    section: int
-    disc: int
-    course_number: int
-    course_title: int
-    day: int
-    time: int
+    section: float
+    disc: float
+    course_number: float
+    course_title: float
+    day: float
+    time: float
 
 
 class ModelsTest(unittest.TestCase):

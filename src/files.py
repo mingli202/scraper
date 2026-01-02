@@ -60,7 +60,7 @@ class Files:
         if self.section_columns_x_path.exists():
             with open(self.section_columns_x_path, "r") as f:
                 try:
-                    data = ColumnsXs.model_validate_json(f.read())
+                    data = ColumnsXs.model_validate_json(f.read(), by_alias=True)
                     return data
                 except ValidationError as e:
                     print(e)
@@ -94,14 +94,19 @@ class Files:
 
     def get_out_file_content(self) -> list[Section]:
         with open(self.out_file_path, "r") as file:
-            return [Section.model_validate(s) for s in from_json(file.read())]
+            return [
+                Section.model_validate(s, by_alias=True) for s in from_json(file.read())
+            ]
 
     def get_classes_file_content(self) -> list[Section]:
         with open(self.classes_file_path, "r") as file:
-            return [Section.model_validate(s) for s in from_json(file.read())]
+            return [
+                Section.model_validate(s, by_alias=True) for s in from_json(file.read())
+            ]
 
     def get_all_classes_file_content(self) -> dict[int, Section]:
         with open(self.all_classes_path, "r") as file:
             return {
-                k: Section.model_validate(v) for k, v in from_json(file.read()).items()
+                k: Section.model_validate(v, by_alias=True)
+                for k, v in from_json(file.read()).items()
             }
