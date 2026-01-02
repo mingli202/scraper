@@ -1,12 +1,9 @@
-from functools import cache
 import json
+from functools import cache
 from pathlib import Path
 from typing import Any, final
 
-import pdfplumber
-from pdfplumber.page import Page
 from pydantic import TypeAdapter
-from pydantic_core import from_json
 
 from models import ColumnsXs
 from parser_utils import ParserUtils

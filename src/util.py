@@ -82,7 +82,7 @@ def handleViewData(targetClass: Section) -> dict:
 
                 viewData.append({f"{colStart}": [rowStart, rowEnd]})
 
-    c.viewData = viewData
+    c.view_data = viewData
     return c.model_dump()
 
 
