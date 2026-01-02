@@ -1,19 +1,21 @@
 import os
+from typing import final
 
 from pydantic_core import from_json
 
 from models import Rating, Section
 
 
+@final
 class Files:
-    def __init__(self, bak: bool = False) -> None:
-        semester = "winter"
+    def __init__(self, semester: str = "winter", bak: bool = False) -> None:
         if bak:
             semester = semester + ".bak"
         curPath = os.path.dirname(__file__)
         curPath = "/".join(curPath.split("/")[:-1]) + "/"
         semesterDir = curPath + semester + "/" + semester
 
+        self.pdfFullPath = "/Users/vincentliu/Downloads/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
         self.pdfName = curPath + "SCHEDULE_OF_CLASSES_Winter_2026_December_11.txt"
         self.rawFile = semesterDir + "-raw.json"
         self.classesFile = semesterDir + "-classes.json"
