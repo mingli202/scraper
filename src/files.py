@@ -50,11 +50,11 @@ class Files:
     def get_section_columns_x(self) -> ColumnsXs:
         if self.section_columns_x_path.exists():
             with open(self.section_columns_x_path, "r") as f:
-                return ColumnsXs.model_validate_json(from_json(f.read()))
+                return ColumnsXs.model_validate_json(f.read())
 
         columns_x: ColumnsXs = ParserUtils.compute_columns_x(self.sorted_lines())
 
         with open(self.section_columns_x_path, "w") as f:
-            json.dump(columns_x.model_dump_json(), f)
+            json.dump(columns_x.model_dump(), f)
 
         return columns_x
