@@ -91,6 +91,19 @@ class ColumnsXs(ConfiguredBasedModel):
     time: float
 
 
+class Word(ConfiguredBasedModel):
+    text: str
+    x0: float
+    x1: float
+    top: int
+    doctop: float
+    bottom: float
+    upright: bool
+    height: float
+    width: float
+    direction: str
+
+
 class ModelsTest(unittest.TestCase):
     def test_to_camel_case(self):
         self.assertEqual(to_camel("section_columns_x"), "sectionColumnsX")

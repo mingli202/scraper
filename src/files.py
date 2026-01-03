@@ -6,7 +6,7 @@ from typing import Any, final
 from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
 
-from models import ColumnsXs, Rating, Section
+from models import ColumnsXs, Rating, Section, Word
 from parser_utils import ParserUtils
 
 
@@ -36,19 +36,17 @@ class Files:
         self.all_classes_path = data_dir / "allClasses.json"
 
     @cache
-    def get_sorted_lines_content(self) -> list[list[dict[str, Any]]]:
+    def get_sorted_lines_content(self) -> list[list[Word]]:
         if self.sorted_lines_path.exists():
             with open(self.sorted_lines_path, "r") as f:
                 try:
-                    adapter = TypeAdapter(list[list[dict[str, Any]]])
-                    data = adapter.validate_json(f.read())
+                    adapter = TypeAdapter(list[list[Word]])
+                    data = adapter.validate_json(f.read(), by_alias=True)
                     return data
                 except ValidationError as e:
                     print(e)
 
-        lines: list[list[dict[str, Any]]] = ParserUtils.compute_sorted_lines(
-            self.pdf_path
-        )
+        lines: list[list[Word]] = ParserUtils.compute_sorted_lines(self.pdf_path)
 
         with open(self.sorted_lines_path, "w") as f:
             json.dump(lines, f, indent=2)
