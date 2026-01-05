@@ -1,6 +1,6 @@
 import re
 import unittest
-from typing import Self
+from typing import Self, override
 
 from pydantic import BaseModel, ConfigDict, ValidationError
 from pydantic.alias_generators import to_camel, to_snake
@@ -102,6 +102,10 @@ class Word(ConfiguredBasedModel):
     height: float
     width: float
     direction: str
+
+    @override
+    def __hash__(self):
+        return hash(self.model_dump_json(by_alias=True))
 
 
 class ModelsTest(unittest.TestCase):
