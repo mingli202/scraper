@@ -141,19 +141,6 @@ class NewParser:
 
 
 if __name__ == "__main__":
-    _ = unittest.main()
-
-
-class NewParserTest(unittest.TestCase):
-    def __init__(self, *args: Any, **kwargs: Any):
-        super().__init__(*args, **kwargs)
-        self.parser = None
-        self.files = None
-
-    @override
-    def setUp(self):
-        self.files = Files()
-        self.parser = NewParser(self.files)
-
-    def test_parse(self):
-        pass
+    files = Files()
+    parser = NewParser(files)
+    # parser.parse()

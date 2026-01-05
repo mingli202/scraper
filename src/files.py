@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import json
 from functools import cache
 from pathlib import Path
@@ -36,20 +37,26 @@ class Files:
         self.all_classes_path = data_dir / "allClasses.json"
 
     @cache
-    def get_sorted_lines_content(self) -> list[list[Word]]:
+    def get_sorted_lines_content(self) -> OrderedDict[float, list[Word]]:
         if self.sorted_lines_path.exists():
             with open(self.sorted_lines_path, "r") as f:
                 try:
-                    adapter = TypeAdapter(list[list[Word]])
+                    adapter = TypeAdapter(OrderedDict[float, list[Word]])
                     data = adapter.validate_json(f.read(), by_alias=True)
                     return data
                 except ValidationError as e:
                     print(e)
 
-        lines: list[list[Word]] = ParserUtils.compute_sorted_lines(self.pdf_path)
+        lines: OrderedDict[float, list[Word]] = ParserUtils.compute_sorted_lines(
+            self.pdf_path
+        )
+
+        serializable_lines: OrderedDict[float, list[dict[str, Any]]] = OrderedDict()
+        for k, v in lines.items():
+            serializable_lines[k] = [w.model_dump(by_alias=True) for w in v]
 
         with open(self.sorted_lines_path, "w") as f:
-            json.dump(lines, f, indent=2)
+            json.dump(serializable_lines, f, indent=2)
 
         return lines
 
