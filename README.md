@@ -2,13 +2,7 @@
 
 ## Pdf parser
 
-Made by converting the pdf to a text file using an [online pdf converter](https://products.aspose.app/pdf/parser), then analyzing the pdf structure and filtering out the information.
-
-### How it was filtered
-In the *SCHEDULE_OF_CLASSES_FALL_2023_June_1.txt file*, every line has x amount of spaces before the first word of the line. Since the pdf is organized in a tablelike structure, the same common element (e.g. section number) would be at the same position throughout the entire file, making it easy to identify and consistent. Then, it was only a matter of retaining the parent of each section (such as the program title and the course code) before populating the data file. 
-
-### Note
-Attempts were made using pdf parser libraries such as [pdfminer.six](https://pdfminersix.readthedocs.io/en/latest/) and [PyPDF2](https://pypdf2.readthedocs.io/en/3.0.0/). However, to no avail since the pdf parsers often omit letters and even words, making these libraries unreliable. To see the attempts, go to [scraper.ipynb](https://github.com/Nanoscience202/Codes/tree/main/Python/scraper).
+Uses pdfplumber to get the x cooridinates of words and matching them to the right column.
 
 ## Web scrapper
 

@@ -271,7 +271,7 @@ section_edge_case = [
     "00001        THEA        561-A5R-AB            Production Lab 3                                        M             1430-1730",
     "                         Lecture               Fauquembergue, Kevin                                    W             1100-1200",
     "                         ADDITIONAL FEE:       $60.00                                                  W             1800-2000",
-    "                                                                                                       F              1430-1830",
+    "                                                                                                       F             1430-1830",
 ]
 
 blended_section_case = [
@@ -281,4 +281,23 @@ blended_section_case = [
     "                         technology-mediated asynchronous lectures, labs and/or other activities and a percentage in person on ",
     "                         campus lectures. A computer, reliable internet connection, webcam, and microphone are required to ",
     "                         complete your asynchronous activities.",
+]
+
+double_title_line_and_missing_lecture_case = [
+    "00001        THEA        561-A5R-AB            Production Lab 3 bbbbbbbbbbbbbbbbbbbbbbbbbb             M             1430-1630",
+    "                                               aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa             M             1630-1830",
+    "                                               Fauquembergue, Kevin                                    W             1100-1200",
+    "                         ADDITIONAL FEE:       $60.00                                                  W             1800-2000",
+    "                                                                                                       F             1430-1830",
+]
+
+missing_lecture_case = [
+    "00001        THEA        561-A5R-AB            Production Lab 3 bbbbbbbbbbbbbbbbbbbbbbbbbb             M             1430-1630",
+    "                                               Fauquembergue, Kevin                                                           ",
+]
+
+no_teacher_and_double_title_case = [
+    "00001        THEA        561-A5R-AB            Production Lab 3 bbbbbbbbbbbbbbbbbbbbbbbbbb             M             1430-1630",
+    "                                               aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa                                            ",
+    "                         Lecture                                                                                              ",
 ]
