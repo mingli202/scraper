@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import itertools
 from pathlib import Path
 import re
@@ -9,8 +10,8 @@ from models import ColumnsXs, Word
 
 class ParserUtils:
     @staticmethod
-    def compute_sorted_lines(pdf_path: Path) -> dict[float, list[Word]]:
-        lines: dict[float, list[Word]] = {}
+    def compute_sorted_lines(pdf_path: Path) -> OrderedDict[float, list[Word]]:
+        lines: OrderedDict[float, list[Word]] = OrderedDict()
 
         with pdfplumber.open(pdf_path) as pdf:
             sorted_words = itertools.chain.from_iterable(
@@ -43,9 +44,12 @@ class ParserUtils:
         return [Word.model_validate(w, by_alias=True) for w in sorted_words]
 
     @staticmethod
-    def compute_columns_x(sorted_lines: list[dict[float, list[Word]]]) -> ColumnsXs:
+    def compute_columns_x(
+        sorted_lines_dict: OrderedDict[float, list[Word]],
+    ) -> ColumnsXs:
         # using the first class section to get all the columns
         columns_x_dict: dict[str, list[float]] = {}
+        sorted_lines = list(sorted_lines_dict.values())
         i = 0
         while i < len(sorted_lines):
             line = sorted_lines[i]
