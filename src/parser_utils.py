@@ -1,3 +1,4 @@
+import itertools
 from pathlib import Path
 import re
 
@@ -8,23 +9,26 @@ from models import ColumnsXs, Word
 
 class ParserUtils:
     @staticmethod
-    def compute_sorted_lines(pdf_path: Path) -> list[list[Word]]:
-        lines: list[list[Word]] = []
+    def compute_sorted_lines(pdf_path: Path) -> dict[float, list[Word]]:
+        lines: dict[float, list[Word]] = {}
 
         with pdfplumber.open(pdf_path) as pdf:
-            for page in pdf.pages:
-                sorted_words = ParserUtils.__get_sorted_words(page)
+            sorted_words = itertools.chain.from_iterable(
+                [ParserUtils.__get_sorted_words(page) for page in pdf.pages]
+            )
 
-                line: list[Word] = []
-                y = -1
-                for word in sorted_words:
-                    if word.top != y:
-                        if y != -1:
-                            lines.append(line)
-                            line = []
-                        y = word.top
-                    line.append(word)
-                lines.append(line)
+            y = -1
+            line: list[Word] = []
+            for word in sorted_words:
+                if word.doctop != y:
+                    if y != -1:
+                        lines.update({y: line})
+                        line = []
+                    y = word.doctop
+
+                line.append(word)
+
+            lines.update({y: line})
 
         return lines
 
@@ -39,7 +43,7 @@ class ParserUtils:
         return [Word.model_validate(w, by_alias=True) for w in sorted_words]
 
     @staticmethod
-    def compute_columns_x(sorted_lines: list[list[Word]]) -> ColumnsXs:
+    def compute_columns_x(sorted_lines: list[dict[float, list[Word]]]) -> ColumnsXs:
         # using the first class section to get all the columns
         columns_x_dict: dict[str, list[float]] = {}
         i = 0
