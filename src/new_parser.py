@@ -25,6 +25,7 @@ class NewParser:
         title = self.__get_line_text(lines[0])
 
         i = 0
+        complementary_rules = False
 
         while i < len(lines):
             line = lines[i]
@@ -34,6 +35,15 @@ class NewParser:
                 r"John Abbott College \d{1,3}",
                 line_text,  # footer
             ) or line_text.startswith("SECTION"):  # column header
+                continue
+
+            if line_text == "COMPLEMENTARY RULES":
+                complementary_rules = True
+
+            if complementary_rules:
+                if line_text == title:
+                    complementary_rules = False
+
                 continue
 
             if line_text == title:
