@@ -15,7 +15,7 @@ class ParserUtils:
 
         with pdfplumber.open(pdf_path) as pdf:
             sorted_words = itertools.chain.from_iterable(
-                [ParserUtils.__get_sorted_words(page) for page in pdf.pages]
+                ParserUtils.__get_sorted_words(page) for page in pdf.pages
             )
 
             y = -1
@@ -35,7 +35,7 @@ class ParserUtils:
 
     @staticmethod
     def __get_sorted_words(page: Page) -> list[Word]:
-        words = page.extract_words()
+        words = page.extract_words(x_tolerance=1.789)
 
         for word in words:
             word["top"] = round(word["top"])
