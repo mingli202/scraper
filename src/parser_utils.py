@@ -25,7 +25,7 @@ class ParserUtils:
                     if y != -1:
                         lines.update({y: line})
                         line = []
-                    y = word.doctop
+                    y = round(word.doctop)
 
                 line.append(word)
 
@@ -39,6 +39,8 @@ class ParserUtils:
 
         for word in words:
             word["top"] = round(word["top"])
+            word["doctop"] = round(word["doctop"])
+            word["x0"] = round(word["x0"])
 
         sorted_words = sorted(words, key=lambda w: (w["top"], w["x0"]))
         return [Word.model_validate(w, by_alias=True) for w in sorted_words]
@@ -61,17 +63,17 @@ class ParserUtils:
 
         for word in sorted_lines[i]:
             text: str = word.text
-            columns_x_dict.setdefault(text, []).append(word.x0)
+            columns_x_dict.setdefault(text, []).append(round(word.x0))
 
         i += 1
 
         section_first_line = sorted_lines[i]
 
         assert re.match(r"\d{4}-\d{4}", section_first_line[-1].text)
-        time_column = section_first_line[-1].x0
+        time_column = round(section_first_line[-1].x0)
 
         assert re.match(r"[TMWRF]{1,5}", section_first_line[-2].text)
-        day_column = section_first_line[-2].x0
+        day_column = round(section_first_line[-2].x0)
 
         columns_x = ColumnsXs(
             section=columns_x_dict["SECTION"].pop(),

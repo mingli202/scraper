@@ -1,6 +1,7 @@
 from collections import OrderedDict
 import json
 from functools import cache
+from math import floor
 from pathlib import Path
 from typing import Any, final
 
@@ -51,9 +52,12 @@ class Files:
             self.pdf_path
         )
 
+        def map(word: Word) -> dict[str, Any]:
+            return word.model_dump(by_alias=True)
+
         serializable_lines: OrderedDict[float, list[dict[str, Any]]] = OrderedDict()
         for k, v in lines.items():
-            serializable_lines[k] = [w.model_dump(by_alias=True) for w in v]
+            serializable_lines[k] = [map(w) for w in v]
 
         with open(self.sorted_lines_path, "w") as f:
             json.dump(serializable_lines, f, indent=2)
