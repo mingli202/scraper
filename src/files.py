@@ -1,7 +1,6 @@
 from collections import OrderedDict
 import json
 from functools import cache
-from math import floor
 from pathlib import Path
 from typing import Any, final
 
@@ -37,9 +36,10 @@ class Files:
         self.classes_file_path = data_dir / "classes.json"
         self.all_classes_path = data_dir / "allClasses.json"
 
-    @cache
-    def get_sorted_lines_content(self) -> OrderedDict[float, list[Word]]:
-        if self.sorted_lines_path.exists():
+    def get_sorted_lines_content(
+        self, use_cache: bool = True
+    ) -> OrderedDict[float, list[Word]]:
+        if self.sorted_lines_path.exists() and use_cache:
             with open(self.sorted_lines_path, "r") as f:
                 try:
                     adapter = TypeAdapter(OrderedDict[float, list[Word]])
@@ -64,9 +64,8 @@ class Files:
 
         return lines
 
-    @cache
-    def get_section_columns_x_content(self) -> ColumnsXs:
-        if self.section_columns_x_path.exists():
+    def get_section_columns_x_content(self, use_cache: bool = True) -> ColumnsXs:
+        if self.section_columns_x_path.exists() and use_cache:
             with open(self.section_columns_x_path, "r") as f:
                 try:
                     data = ColumnsXs.model_validate_json(f.read(), by_alias=True)
