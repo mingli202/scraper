@@ -16,7 +16,7 @@ with pdfplumber.open(files.pdf_path) as pdf:
     print("width", page.width, "height", page.height)
 
 
-def print_word_position(word: Word) -> str:
+def get_word_position(word: Word) -> str:
     return f"word: {word.text}, page: {word.doctop / height:.0f}, top: {word.top / height:.2f}, x0: {word.x0 / width:.2f}"
 
 
@@ -118,19 +118,18 @@ def test_correct_line_extraction(parser: NewParser) -> None:
             assert re.match(r"^[MTWRF]+$", day.text) is not None, (
                 "day should only contain letters M, T, W, R, F",
                 line_text,
-                print_word_position(day),
+                get_word_position(day),
             )
             assert re.match(r"^\d{4}-\d{4}$", time.text) is not None, (
                 "time should be in the format of HHMM-HHMM",
                 line_text,
-                print_word_position(time),
+                get_word_position(time),
             )
 
             continue
 
 
 def test_correct_column_x(parser: NewParser):
-    return
     files = parser.files
     lines = files.get_sorted_lines_content()
 
@@ -146,7 +145,7 @@ def test_correct_column_x(parser: NewParser):
             columns_x.setdefault("section", set()).add(first_word)
             columns_x.setdefault("disc", set()).add(line[1])
             columns_x.setdefault("course_number", set()).add(line[2])
-            columns_x.setdefault("course_title", set()).add(line[5])
+            columns_x.setdefault("course_title", set()).add(line[4])
             continue
 
         if re.match(r"^.*[MTWRF]{1,5} \d{4}-\d{4}$", line_text):
@@ -158,16 +157,43 @@ def test_correct_column_x(parser: NewParser):
             columns_x.setdefault("day", set()).add(day)
             columns_x.setdefault("time", set()).add(time)
 
+        if re.match(r"^\d{5}$", first_word.text):
+            columns_x.setdefault("section", set()).add(first_word)
+            columns_x.setdefault("disc", set()).add(line[1])
+
+            code_index = next(
+                i
+                for i, w in enumerate(line)
+                if re.match(r"^\d{3}-[A-Z0-9]{3}-[A-Z0-9]{1,2}$", w.text) is not None
+            )
+
+            columns_x.setdefault("course_number", set()).add(line[code_index])
+            columns_x.setdefault("course_title", set()).add(line[code_index + 1])
+
+        if any(
+            line_text.startswith(s)
+            for s in [
+                "ADDITIONAL FEE",
+                "Approximate materials",
+                "***",
+                "Lecture",
+                "Laboratory",
+                "For students in the old science program",
+                "For Honours Science students only",
+                "BLENDED LEARNING",
+            ]
+        ):
+            columns_x.setdefault("course_number", set()).add(first_word)
+
     assert len({s.x0 for s in columns_x["section"]}) == 1
     assert len({s.x0 for s in columns_x["disc"]}) == 1
+
+    for word in columns_x["course_number"]:
+        if word.x0 == 130:
+            print(get_word_position(word))
+
     assert len({s.x0 for s in columns_x["course_number"]}) == 1
     assert len({s.x0 for s in columns_x["course_title"]}) == 1
-
-    for day in columns_x["day"]:
-        if day.x0 == 406:
-            print(day)
-            break
-
     assert len({s.x0 for s in columns_x["day"]}) == 1
     assert len({s.x0 for s in columns_x["time"]}) == 1
 
