@@ -26,6 +26,65 @@ def parser() -> NewParser:
     return parser
 
 
+def test_optimal_x_tolerance() -> None:
+    with pdfplumber.open(
+        "/Users/vincentliu/Downloads/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
+    ) as pdf:
+        page = pdf.pages[
+            93
+        ]  # this page contains (Blended)MW, which are very close to each other
+
+        left = 1
+        right = 3
+        mid = 0
+
+        for _ in range(0, 100):
+            mid = (left + right) / 2
+            words = page.extract_words(x_tolerance=mid)
+            sorted_words = sorted(words, key=lambda w: (w["top"], w["x0"]))
+
+            for word in sorted_words[::-1]:
+                if "(Blended)" in word["text"]:
+                    if "MW" in word["text"]:
+                        right = mid
+                    else:
+                        left = mid
+                    break
+
+        print("x_tolerance", mid)
+
+
+def test_optmial_y_tolerance() -> None:
+    with pdfplumber.open(
+        "/Users/vincentliu/Downloads/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf",
+    ) as pdf:
+        page = pdf.pages[115]
+
+        left = 1
+        right = 3
+        mid = 0
+
+        for _ in range(0, 100):
+            mid = (left + right) / 2
+            words = page.extract_words(y_tolerance=mid)
+            sorted_words = sorted(words, key=lambda w: (w["top"], w["x0"]))
+
+            has_horlik = False
+            for word in sorted_words[::-1]:
+                if "Horlik" in word["text"]:
+                    has_horlik = True
+                    continue
+
+                if has_horlik:
+                    if "CERAMICS" in word["text"]:
+                        right = mid
+                    else:
+                        left = mid
+                    break
+
+        print("y_tolerance", mid)
+
+
 def test_correct_line_extraction(parser: NewParser) -> None:
     """
     Test to make sure the line extraction is correct: whether a word is well separated and the word text is correct
@@ -122,29 +181,3 @@ def test_correct_column_x(parser: NewParser):
 
 def test_basic_parsing(parser: NewParser):
     pass
-
-
-if __name__ == "__main__":
-    files = Files()
-
-    with pdfplumber.open(files.pdf_path) as pdf:
-        page = pdf.pages[93]
-
-        left = 1.5
-        right = 3.0
-        mid = 0
-
-        for i in range(0, 20):
-            mid = (left + right) / 2
-            words = page.extract_words(x_tolerance=1.75)
-            sorted_words = sorted(words, key=lambda w: (w["top"], w["x0"]))
-
-            for word in sorted_words[::-1]:
-                if "(Blended)" in word["text"]:
-                    if "MW" in word["text"]:
-                        right = mid
-                    else:
-                        left = mid
-                    break
-
-            print(mid)
