@@ -10,8 +10,8 @@ from models import ColumnsXs, Word
 
 class ParserUtils:
     @staticmethod
-    def compute_sorted_lines(pdf_path: Path) -> OrderedDict[float, list[Word]]:
-        lines: OrderedDict[float, list[Word]] = OrderedDict()
+    def compute_sorted_lines(pdf_path: Path) -> OrderedDict[int, list[Word]]:
+        lines: OrderedDict[int, list[Word]] = OrderedDict()
 
         with pdfplumber.open(pdf_path) as pdf:
             sorted_words = itertools.chain.from_iterable(
@@ -56,10 +56,10 @@ class ParserUtils:
 
     @staticmethod
     def compute_columns_x(
-        sorted_lines_dict: OrderedDict[float, list[Word]],
+        sorted_lines_dict: OrderedDict[int, list[Word]],
     ) -> ColumnsXs:
         # using the first class section to get all the columns
-        columns_x_dict: dict[str, list[float]] = {}
+        columns_x_dict: dict[str, list[int]] = {}
         sorted_lines = list(sorted_lines_dict.values())
         i = 0
         while i < len(sorted_lines):

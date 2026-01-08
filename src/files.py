@@ -1,6 +1,5 @@
 from collections import OrderedDict
 import json
-from functools import cache
 from pathlib import Path
 from typing import Any, final
 
@@ -38,17 +37,17 @@ class Files:
 
     def get_sorted_lines_content(
         self, use_cache: bool = True
-    ) -> OrderedDict[float, list[Word]]:
+    ) -> OrderedDict[int, list[Word]]:
         if self.sorted_lines_path.exists() and use_cache:
             with open(self.sorted_lines_path, "r") as f:
                 try:
-                    adapter = TypeAdapter(OrderedDict[float, list[Word]])
+                    adapter = TypeAdapter(OrderedDict[int, list[Word]])
                     data = adapter.validate_json(f.read(), by_alias=True)
                     return data
                 except ValidationError as e:
                     print(e)
 
-        lines: OrderedDict[float, list[Word]] = ParserUtils.compute_sorted_lines(
+        lines: OrderedDict[int, list[Word]] = ParserUtils.compute_sorted_lines(
             self.pdf_path
         )
 

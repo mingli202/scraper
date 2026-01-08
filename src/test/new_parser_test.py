@@ -210,7 +210,7 @@ def test_correct_column_x(parser: NewParser):
 
 class ATestCase(BaseModel):
     name: str
-    lines: list[list[Word]]
+    lines: dict[int, list[Word]]
 
 
 test_cases: list[ATestCase] = []
@@ -253,7 +253,7 @@ with open(
 
 @pytest.mark.parametrize("test_case", test_cases)
 def test_basic_parsing(parser: NewParser, test_case: ATestCase):
-    print(test_case.lines)
+    parser.lines = test_case.lines
 
 
 if __name__ == "__main__":
