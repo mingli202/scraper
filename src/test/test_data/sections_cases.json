@@ -21,6 +21,27 @@
     ]
   },
   {
+    "name": "basic lab",
+    "lines": [
+      [
+        "00001",
+        "GERM",
+        "609-DAA-03",
+        "German I",
+        "TR",
+        "1300-1430"
+      ],
+      [
+        "",
+        "",
+        "Laboratory",
+        "Siderova, Spaska",
+        "",
+        ""
+      ]
+    ]
+  },
+  {
     "name": "basic lecture and lab",
     "lines": [
       [
@@ -51,7 +72,7 @@
         "",
         "",
         "Lecture",
-        "Dupont, Sarah",
+        "Hughes, Cameron",
         "",
         ""
       ]
