@@ -207,3 +207,7 @@ def test_correct_column_x(parser: NewParser):
 
 def test_basic_parsing(parser: NewParser):
     pass
+
+
+if __name__ == "__main__":
+    exit(pytest.main(["-s", __file__]))
