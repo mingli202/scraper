@@ -1,14 +1,11 @@
-from collections import OrderedDict
-from pathlib import Path
-from typing import Any
 import pdfplumber
-from pydantic import BaseModel, TypeAdapter
 import pytest
 import re
 
 from files import Files
-from models import LecLab, Section, Word
+from models import Section, Word
 from new_parser import NewParser
+from .individual_parsing_data import ATestCase, data
 
 files = Files()
 width, height = 0, 0
@@ -209,112 +206,9 @@ def test_correct_column_x(parser: NewParser):
     assert columns_x["time"].pop().x0 == parser.columns_x.time
 
 
-class ATestCase(BaseModel):
-    name: str
-    lines: OrderedDict[int, list[Word]]
-
-
-test_cases: list[ATestCase] = []
-with open(
-    Path(__file__).resolve().parent / "test_data" / "sections_cases.json"
-) as file:
-    adapter = TypeAdapter(list[OrderedDict[str, Any]])
-    a_parser = NewParser(files)
-
-    xs = [
-        a_parser.columns_x.section,
-        a_parser.columns_x.disc,
-        a_parser.columns_x.course_number,
-        a_parser.columns_x.course_title,
-        a_parser.columns_x.day,
-        a_parser.columns_x.time,
-    ]
-
-    def func(x: dict[str, Any]) -> ATestCase:
-        lines: OrderedDict[int, list[Word]] = OrderedDict()
-
-        for i, line in enumerate(x["lines"]):
-            new_line: list[Word] = []
-
-            for k, word in enumerate(line):
-                assert isinstance(word, str)
-
-                if word == "":
-                    continue
-
-                word = Word(page_number=0, text=word, x0=xs[k], top=0, doctop=0)
-                new_line.append(word)
-
-            lines.update({i: new_line})
-
-        return ATestCase(name=x["name"], lines=lines)
-
-    test_cases = [func(x) for x in adapter.validate_json(file.read())]
-
-expected_cases = [
-    Section(
-        type="",
-        count=0,
-        section="00001",
-        course="",
-        code="609-DAA-03",
-        lecture=LecLab(
-            title="German I", prof="Siderova, Spaska", time={"TR": ["1300-1430"]}
-        ),
-        lab=None,
-        more="",
-        view_data=[],
-    ),
-    Section(
-        type="",
-        count=0,
-        section="00001",
-        course="",
-        code="609-DAA-03",
-        lecture=LecLab(
-            title="German I", prof="Siderova, Spaska", time={"TR": ["1300-1430"]}
-        ),
-        lab=None,
-        more="BLENDED LEARNING",
-        view_data=[],
-    ),
-    Section(
-        type="",
-        count=0,
-        section="00001",
-        course="",
-        code="609-DAA-03",
-        lecture=None,
-        lab=LecLab(
-            title="German I", prof="Siderova, Spaska", time={"TR": ["1300-1430"]}
-        ),
-        more="",
-        view_data=[],
-    ),
-    Section(
-        type="",
-        count=0,
-        section="00001",
-        course="",
-        code="101-SN1-AB",
-        lecture=LecLab(
-            title="Cellular Biology",
-            prof="Dupont, Sarah",
-            time={"R": ["0930-1130"]},
-        ),
-        lab=LecLab(
-            title="Cellular Biology",
-            prof="Hughes, Cameron",
-            time={"T": ["1230-1430"]},
-        ),
-        more="",
-        view_data=[],
-    ),
-]
-
-
-@pytest.mark.parametrize("test_case,expected", zip(test_cases, expected_cases))
+@pytest.mark.parametrize("test_case,expected", data)
 def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: Section):
+    print(test_case.name)
     parser.lines = test_case.lines
     parser.parse()
 

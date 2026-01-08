@@ -2,7 +2,9 @@ from collections import OrderedDict
 from typing import Any
 from pydantic import BaseModel
 
+from files import Files
 from models import LecLab, Section, Word
+from new_parser import NewParser
 
 
 class ATestCase(BaseModel):
@@ -10,7 +12,7 @@ class ATestCase(BaseModel):
     lines: OrderedDict[int, list[Word]]
 
 
-data: list[tuple[dict[str, Any], Section]] = [
+raw_data: list[tuple[dict[str, Any], Section]] = [
     (
         {
             "name": "basic lecture",
@@ -270,3 +272,39 @@ data: list[tuple[dict[str, Any], Section]] = [
         ),
     ),
 ]
+
+
+files = Files()
+parser = NewParser(files)
+
+xs = [
+    parser.columns_x.section,
+    parser.columns_x.disc,
+    parser.columns_x.course_number,
+    parser.columns_x.course_title,
+    parser.columns_x.day,
+    parser.columns_x.time,
+]
+
+
+def func(x: dict[str, Any]) -> ATestCase:
+    lines: OrderedDict[int, list[Word]] = OrderedDict()
+
+    for i, line in enumerate(x["lines"]):
+        new_line: list[Word] = []
+
+        for k, word in enumerate(line):
+            assert isinstance(word, str)
+
+            if word == "":
+                continue
+
+            word = Word(page_number=0, text=word, x0=xs[k], top=0, doctop=0)
+            new_line.append(word)
+
+        lines.update({i: new_line})
+
+    return ATestCase(name=x["name"], lines=lines)
+
+
+data: list[tuple[ATestCase, Section]] = [(func(test), exp) for test, exp in raw_data]
