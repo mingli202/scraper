@@ -21,6 +21,35 @@
     ]
   },
   {
+    "name": "lecture with more",
+    "lines": [
+      [
+        "00001",
+        "GERM",
+        "609-DAA-03",
+        "German I",
+        "TR",
+        "1300-1430"
+      ],
+      [
+        "",
+        "",
+        "Lecture",
+        "Siderova, Spaska",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "BLENDED LEARNING",
+        "",
+        "",
+        ""
+      ]
+    ]
+  },
+  {
     "name": "basic lab",
     "lines": [
       [
@@ -75,6 +104,56 @@
         "Hughes, Cameron",
         "",
         ""
+      ]
+    ]
+  },
+  {
+    "name": "hanging day/times",
+    "lines": [
+      [
+        "00001",
+        "GERM",
+        "609-DAA-03",
+        "German I",
+        "TR",
+        "1300-1430"
+      ],
+      [
+        "",
+        "",
+        "Laboratory",
+        "Siderova, Spaska",
+        "M",
+        "0900-1000"
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        "W",
+        "0900-1000"
+      ]
+    ]
+  },
+  {
+    "name": "stuck disc",
+    "lines": [
+      [
+        "00001",
+        "GERM",
+        "609-DAA-03",
+        "German I",
+        "TR",
+        "1300-1430"
+      ],
+      [
+        "",
+        "",
+        "Laboratory",
+        "Siderova, Spaska",
+        "M",
+        "0900-1000"
       ]
     ]
   }

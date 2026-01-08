@@ -271,6 +271,19 @@ expected_cases = [
         section="00001",
         course="",
         code="609-DAA-03",
+        lecture=LecLab(
+            title="German I", prof="Siderova, Spaska", time={"TR": ["1300-1430"]}
+        ),
+        lab=None,
+        more="BLENDED LEARNING",
+        view_data=[],
+    ),
+    Section(
+        type="",
+        count=0,
+        section="00001",
+        course="",
+        code="609-DAA-03",
         lecture=None,
         lab=LecLab(
             title="German I", prof="Siderova, Spaska", time={"TR": ["1300-1430"]}
