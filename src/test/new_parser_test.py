@@ -1,4 +1,7 @@
+from pathlib import Path
+from typing import Any
 import pdfplumber
+from pydantic import BaseModel, TypeAdapter
 import pytest
 import re
 
@@ -205,8 +208,52 @@ def test_correct_column_x(parser: NewParser):
     assert columns_x["time"].pop().x0 == parser.columns_x.time
 
 
-def test_basic_parsing(parser: NewParser):
-    pass
+class ATestCase(BaseModel):
+    name: str
+    lines: list[list[Word]]
+
+
+test_cases: list[ATestCase] = []
+with open(
+    Path(__file__).resolve().parent / "test_data" / "sections_cases.json"
+) as file:
+    adapter = TypeAdapter(list[dict[str, Any]])
+    a_parser = NewParser(files)
+
+    xs = [
+        a_parser.columns_x.section,
+        a_parser.columns_x.disc,
+        a_parser.columns_x.course_number,
+        a_parser.columns_x.course_title,
+        a_parser.columns_x.day,
+        a_parser.columns_x.time,
+    ]
+
+    def func(x: dict[str, Any]) -> ATestCase:
+        lines: list[list[Word]] = []
+
+        for line in x["lines"]:
+            new_line: list[Word] = []
+
+            for i, word in enumerate(line):
+                assert isinstance(word, str)
+
+                if word == "":
+                    continue
+
+                word = Word(page_number=0, text=word, x0=xs[i], top=0, doctop=0)
+                new_line.append(word)
+
+            lines.append(new_line)
+
+        return ATestCase(name=x["name"], lines=lines)
+
+    test_cases = [func(x) for x in adapter.validate_json(file.read())]
+
+
+@pytest.mark.parametrize("test_case", test_cases)
+def test_basic_parsing(parser: NewParser, test_case: ATestCase):
+    print(test_case.lines)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,60 @@
+[
+  {
+    "name": "basic lecture",
+    "lines": [
+      [
+        "00001",
+        "GERM",
+        "609-DAA-03",
+        "German I",
+        "TR",
+        "1300-1430"
+      ],
+      [
+        "",
+        "",
+        "Lecture",
+        "Siderova, Spaska",
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "name": "basic lecture and lab",
+    "lines": [
+      [
+        "00001",
+        "BIOL",
+        "101-SN1-AB",
+        "Cellular Biology",
+        "R",
+        "0930-1130"
+      ],
+      [
+        "",
+        "",
+        "Lecture",
+        "Dupont, Sarah",
+        "",
+        ""
+      ],
+      [
+        "",
+        "BIOL",
+        "101-SN1-AB",
+        "Cellular Biology",
+        "T",
+        "1230-1430"
+      ],
+      [
+        "",
+        "",
+        "Lecture",
+        "Dupont, Sarah",
+        "",
+        ""
+      ]
+    ]
+  }
+]
