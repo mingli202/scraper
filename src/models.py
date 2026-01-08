@@ -92,16 +92,11 @@ class ColumnsXs(ConfiguredBasedModel):
 
 
 class Word(ConfiguredBasedModel):
+    page_number: int
     text: str
-    x0: float
-    x1: float
+    x0: int
     top: int
-    doctop: float
-    bottom: float
-    upright: bool
-    height: float
-    width: float
-    direction: str
+    doctop: int
 
     @override
     def __hash__(self):

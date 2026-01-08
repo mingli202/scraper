@@ -1,6 +1,6 @@
 from collections import OrderedDict
+import sqlite3
 import json
-from functools import cache
 from pathlib import Path
 from typing import Any, final
 
@@ -26,7 +26,7 @@ class Files:
         data_dir = pwd / "data" / self.pdf_path.stem
         data_dir.mkdir(exist_ok=True, parents=True)
 
-        self.sorted_lines_path = data_dir / "sorted_lines.json"
+        self.sorted_lines_path = data_dir / "sorted_lines.db"
         self.section_columns_x_path = data_dir / "section_columns_x.json"
         self.ratings_path = data_dir / "ratings.json"
         self.missing_pids_path = data_dir / "missingPids.json"
@@ -40,27 +40,71 @@ class Files:
         self, use_cache: bool = True
     ) -> OrderedDict[float, list[Word]]:
         if self.sorted_lines_path.exists() and use_cache:
-            with open(self.sorted_lines_path, "r") as f:
-                try:
-                    adapter = TypeAdapter(OrderedDict[float, list[Word]])
-                    data = adapter.validate_json(f.read(), by_alias=True)
-                    return data
-                except ValidationError as e:
-                    print(e)
+            conn = sqlite3.connect(self.sorted_lines_path)
+            cur = conn.cursor()
+
+            data: OrderedDict[float, list[Word]] = OrderedDict()
+
+            for row in cur.execute("SELECT * FROM words"):
+                data.setdefault(row[5], []).append(
+                    Word(
+                        text=row[2],
+                        x0=row[3],
+                        top=row[4],
+                        doctop=row[5],
+                        page_number=row[1],
+                    )
+                )
+
+            return data
 
         lines: OrderedDict[float, list[Word]] = ParserUtils.compute_sorted_lines(
             self.pdf_path
         )
 
-        def map(word: Word) -> dict[str, Any]:
-            return word.model_dump(by_alias=True)
+        conn = sqlite3.connect(self.sorted_lines_path)
+        cur = conn.cursor()
+        _ = cur.execute(
+            """
+            CREATE TABLE IF NOT EXISTS words (
+                word_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                page_number INTEGER,
+                text TEXT,
+                x0 REAL,
+                top REAL,
+                doctop REAL
+            )
+            """
+        )
 
-        serializable_lines: OrderedDict[float, list[dict[str, Any]]] = OrderedDict()
-        for k, v in lines.items():
-            serializable_lines[k] = [map(w) for w in v]
+        for _, line in lines.items():
+            for word in line:
+                _ = cur.execute(
+                    """
+                    INSERT INTO words (page_number, text, x0, top, doctop)
+                    VALUES (?, ?, ?, ?, ?)
+                    """,
+                    (
+                        word.page_number,
+                        word.text,
+                        word.x0,
+                        word.top,
+                        word.doctop,
+                    ),
+                )
 
-        with open(self.sorted_lines_path, "w") as f:
-            json.dump(serializable_lines, f, indent=2)
+        conn.commit()
+        conn.close()
+
+        # def map(word: Word) -> dict[str, Any]:
+        #     return word.model_dump(by_alias=True)
+        #
+        # serializable_lines: OrderedDict[float, list[dict[str, Any]]] = OrderedDict()
+        # for k, v in lines.items():
+        #     serializable_lines[k] = [map(w) for w in v]
+        #
+        # with open(self.sorted_lines_path, "w") as f:
+        #     json.dump(serializable_lines, f, indent=2)
 
         return lines
 
