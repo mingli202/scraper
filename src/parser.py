@@ -1,6 +1,7 @@
 import json
 import os
 import re
+from typing import Any
 from models import Section, LecLab, Time
 
 
@@ -12,7 +13,7 @@ class Parser:
     def __init__(self, files: Files):
         self.files = files
 
-        self.sections: list[dict] = []
+        self.sections: list[dict[str, Any]] = []
         self.currentClass = Section()
         self.tmp = {}
 
