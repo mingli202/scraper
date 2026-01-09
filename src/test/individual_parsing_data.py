@@ -24,9 +24,14 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="609-DAA-03",
-            lecture=LecLab(
-                title="German I", prof="Siderova, Spaska", time={"TR": ["1300-1430"]}
-            ),
+            times=[
+                LecLab(
+                    title="German I",
+                    prof="Siderova, Spaska",
+                    time={"TR": ["1300-1430"]},
+                    type="lecture",
+                )
+            ],
         ),
     ),
     (
@@ -41,9 +46,14 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="609-DAA-03",
-            lecture=LecLab(
-                title="German I", prof="Siderova, Spaska", time={"TR": ["1300-1430"]}
-            ),
+            times=[
+                LecLab(
+                    title="German I",
+                    prof="Siderova, Spaska",
+                    time={"TR": ["1300-1430"]},
+                    type="lecture",
+                )
+            ],
             more="BLENDED LEARNING",
         ),
     ),
@@ -58,9 +68,14 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="609-DAA-03",
-            lab=LecLab(
-                title="German I", prof="Siderova, Spaska", time={"TR": ["1300-1430"]}
-            ),
+            times=[
+                LecLab(
+                    title="German I",
+                    prof="Siderova, Spaska",
+                    time={"TR": ["1300-1430"]},
+                    type="laboratory",
+                )
+            ],
         ),
     ),
     (
@@ -70,22 +85,26 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["00001", "BIOL", "101-SN1-AB", "Cellular Biology", "R", "0930-1130"],
                 ["", "", "Lecture", "Dupont, Sarah", "", ""],
                 ["", "BIOL", "101-SN1-AB", "Cellular Biology", "T", "1230-1430"],
-                ["", "", "Lecture", "Hughes, Cameron", "", ""],
+                ["", "", "Laboratory", "Hughes, Cameron", "", ""],
             ],
         },
         Section(
             section="00001",
             code="101-SN1-AB",
-            lecture=LecLab(
-                title="Cellular Biology",
-                prof="Dupont, Sarah",
-                time={"R": ["0930-1130"]},
-            ),
-            lab=LecLab(
-                title="Cellular Biology",
-                prof="Hughes, Cameron",
-                time={"T": ["1230-1430"]},
-            ),
+            times=[
+                LecLab(
+                    title="Cellular Biology",
+                    prof="Dupont, Sarah",
+                    time={"R": ["0930-1130"]},
+                    type="lecture",
+                ),
+                LecLab(
+                    title="Cellular Biology",
+                    prof="Hughes, Cameron",
+                    time={"T": ["1230-1430"]},
+                    type="laboratory",
+                ),
+            ],
         ),
     ),
     (
@@ -100,11 +119,14 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="609-DAA-03",
-            lab=LecLab(
-                title="German I",
-                prof="Siderova, Spaska",
-                time={"TR": ["1300-1430"], "M": ["0900-1000"], "W": ["0900-1000"]},
-            ),
+            times=[
+                LecLab(
+                    title="German I",
+                    prof="Siderova, Spaska",
+                    time={"TR": ["1300-1430"], "M": ["0900-1000"], "W": ["0900-1000"]},
+                    type="laboratory",
+                )
+            ],
         ),
     ),
     (
@@ -119,11 +141,14 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
-            lecture=LecLab(
-                title="Design",
-                prof="Lupien, Jennifer",
-                time={"R": ["1300-1430"]},
-            ),
+            times=[
+                LecLab(
+                    title="Design",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1300-1600"]},
+                    type="lecture",
+                )
+            ],
             more="ADDITIONAL FEE: $80.00",
         ),
     ),
@@ -146,11 +171,14 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
-            lecture=LecLab(
-                title="Art oratoire en public pour des présentations puissantes et",
-                prof="Lupien, Jennifer",
-                time={"R": ["1300-1430"]},
-            ),
+            times=[
+                LecLab(
+                    title="Art oratoire en public pour des présentations puissantes et",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1300-1600"]},
+                    type="lecture",
+                )
+            ],
             more="ADDITIONAL FEE: $80.00",
         ),
     ),
@@ -173,10 +201,13 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
-            lecture=LecLab(
-                title="Art oratoire en public pour des présentations puissantes et",
-                time={"R": ["1300-1430"]},
-            ),
+            times=[
+                LecLab(
+                    title="Art oratoire en public pour des présentations puissantes et",
+                    time={"R": ["1300-1600"]},
+                    type="lecture",
+                )
+            ],
         ),
     ),
     (
@@ -197,11 +228,13 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
-            lecture=LecLab(
-                title="Art oratoire en public pour des présentations puissantes et",
-                prof="Lupien, Jennifer",
-                time={"R": ["1300-1430"]},
-            ),
+            times=[
+                LecLab(
+                    title="Art oratoire en public pour des présentations puissantes et",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1300-1600"]},
+                )
+            ],
         ),
     ),
     (
@@ -222,11 +255,14 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
-            lecture=LecLab(
-                title="Art oratoire en public pour des présentations puissantes et",
-                prof="Lupien, Jennifer",
-                time={"R": ["1300-1430", "1500-1600"]},
-            ),
+            times=[
+                LecLab(
+                    title="Art oratoire en public pour des présentations puissantes et",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1300-1500", "1500-1600"]},
+                    type="lecture",
+                )
+            ],
         ),
     ),
     (
@@ -242,11 +278,14 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
-            lecture=LecLab(
-                title="Design",
-                prof="Lupien, Jennifer",
-                time={"R": ["1300-1430", "1500-1600"]},
-            ),
+            times=[
+                LecLab(
+                    title="Design",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1300-1500", "1500-1600"]},
+                    type="lecture",
+                )
+            ],
         ),
     ),
     (
@@ -264,11 +303,35 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
-            lecture=LecLab(
-                title="Design",
-                prof="Lupien, Jennifer",
-                time={"R": ["1300-1430", "1500-1600", "1600-1700"]},
-            ),
+            times=[
+                LecLab(
+                    title="Design",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1300-1500", "1500-1600", "1600-1700"]},
+                    type="lecture",
+                )
+            ],
+        ),
+    ),
+    (
+        {
+            "name": "overlapping times",
+            "lines": [
+                ["00001", "VA &", "511-DBA-03", "Design", "R", "1300-1500"],
+                ["", "", "Lecture", "Lupien, Jennifer", "R", "1400-1600"],
+            ],
+        },
+        Section(
+            section="00001",
+            code="511-DBA-03",
+            times=[
+                LecLab(
+                    title="Design",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1300-1600"]},
+                    type="lecture",
+                )
+            ],
         ),
     ),
 ]

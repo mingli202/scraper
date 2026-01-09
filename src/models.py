@@ -1,6 +1,6 @@
 import re
 import unittest
-from typing import Self, override
+from typing import Literal, Self, override
 
 from pydantic import BaseModel, ConfigDict, ValidationError
 from pydantic.alias_generators import to_camel, to_snake
@@ -44,6 +44,7 @@ class Rating(ConfiguredBasedModel):
 
 class LecLab(ConfiguredBasedModel):
     title: str = ""
+    type: Literal["lecture", "laboratory"] | None = None
     prof: str = ""
     time: Time = {}
     rating: Rating | None = None
@@ -76,8 +77,7 @@ class Section(ConfiguredBasedModel):
     section: str = ""
     course: str = ""
     code: str = ""
-    lecture: LecLab | None = None
-    lab: LecLab | None = None
+    times: list[LecLab] = []
     more: str = ""
     view_data: ViewData = []
 
