@@ -143,5 +143,9 @@ class ModelsTest(unittest.TestCase):
         )
 
 
+class GenAiResponse(BaseModel):
+    answer: bool
+
+
 if __name__ == "__main__":
     _ = unittest.main()

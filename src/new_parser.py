@@ -1,8 +1,14 @@
+import logging
 import re
 from typing import Any, final
 
+from pydantic import ValidationError
+
 from files import Files
-from models import LecLab, Section, Word
+from models import GenAiResponse, LecLab, Section, Word
+from google import genai
+
+logger = logging.getLogger(__name__)
 
 
 @final
@@ -15,6 +21,8 @@ class NewParser:
         self.current_section: Section = Section()
         self.leclab: LecLab = LecLab()
         self.lines = self.files.get_sorted_lines_content()
+
+        self.client = genai.Client()
 
     def __get_line_text(self, line: list[Word]) -> str:
         return " ".join([word.text for word in line])
@@ -87,11 +95,37 @@ class NewParser:
         title_lines = self.leclab.title.split(";")
         title_lines = [line.strip() for line in title_lines]
 
+        updated_title = False
+
         if len(title_lines) > 1 and self.leclab.prof == "" and self.leclab.type is None:
+            logger.warning("no 'Lecture' keyword")
+
             prof = title_lines[-1]
-            self.leclab.prof = prof
-            self.leclab.title = " ".join(title_lines[:-1])
-        else:
+
+            if re.match(r"^\w+, \w+$", prof):
+                ai_res = self.client.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=f"Is is plausible that '{prof}' is person's name?",
+                    config={
+                        "response_mime_type": "application/json",
+                        "response_json_schema": GenAiResponse.model_json_schema(),
+                    },
+                )
+
+                try:
+                    res = GenAiResponse.model_validate_json(ai_res.text or "{}")
+                    logger.info(f"AI: {res.answer}")
+
+                    if res.answer:
+                        self.leclab.prof = prof
+                        self.leclab.title = " ".join(title_lines[:-1])
+                        updated_title = True
+
+                except ValidationError as e:
+                    logger.error(e)
+                    return
+
+        if not updated_title:
             self.leclab.title = " ".join(title_lines)
 
         self.current_section.times.append(self.leclab.__deepcopy__())

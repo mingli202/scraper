@@ -220,5 +220,9 @@ def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: S
     assert parser.sections[0] == expected.model_dump(by_alias=True)
 
 
+def test_parity_with_old_parser(parser: NewParser):
+    parser.parse()
+
+
 if __name__ == "__main__":
     exit(pytest.main(["--no-header", "-s", "-v", __file__]))
