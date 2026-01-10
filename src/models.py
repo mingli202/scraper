@@ -1,8 +1,11 @@
+import logging
 import unittest
 from typing import Literal, Self, override
 
 from pydantic import BaseModel, ConfigDict, ValidationError
 from pydantic.alias_generators import to_camel, to_snake
+
+logger = logging.getLogger(__name__)
 
 
 class ConfiguredBasedModel(BaseModel):
@@ -43,6 +46,20 @@ class LecLab(ConfiguredBasedModel):
     def update_time(self, tmp: Time):
         for k, v in tmp.items():
             self.time.setdefault(k, []).extend(v)
+
+        for times in self.time.values():
+            for i, time1 in enumerate(times):
+                start1, end1 = time1.split("-")
+                start1 = int(start1)
+                end1 = int(end1)
+
+                for times2 in times[i + 1 :]:
+                    start2, end2 = times2.split("-")
+                    start2 = int(start2)
+                    end2 = int(end2)
+
+                    if start1 > end2 or start2 > end1:
+                        logger.warning("overlapping times")
 
     def clear(self):
         self.title = ""

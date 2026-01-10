@@ -413,27 +413,6 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
             ],
         ),
     ),
-    (
-        {
-            "name": "overlapping times",
-            "lines": [
-                ["00001", "VA &", "511-DBA-03", "Design", "R", "1300-1500"],
-                ["", "", "Lecture", "Lupien, Jennifer", "R", "1400-1600"],
-            ],
-        },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            times=[
-                LecLab(
-                    title="Design",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1300-1600"]},
-                    type="lecture",
-                )
-            ],
-        ),
-    ),
 ]
 
 

@@ -221,4 +221,4 @@ def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: S
 
 
 if __name__ == "__main__":
-    exit(pytest.main(["-s", "-vvv", __file__]))
+    exit(pytest.main(["--no-header", "-s", "-v", __file__]))
