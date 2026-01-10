@@ -50,11 +50,11 @@ class NewParser:
                 i += 1
                 section_type = self.__get_line_text(lines[i])
 
-                if section_type != self.current_section.type:
+                if section_type != self.current_section.course_type:
                     self.__update_section()
                     self.current_section = Section()
 
-                self.current_section.type = section_type
+                self.current_section.course_type = section_type
                 continue
 
             self.__parse_line(lines[i])
@@ -65,6 +65,22 @@ class NewParser:
 
     def __update_section(self):
         if self.current_section.section == "":
+            return
+
+        self.__update_section_times()
+
+        self.current_section.more = self.current_section.more.strip("\n")
+        self.sections.append(self.current_section.model_dump(by_alias=True))
+
+        self.current_section.count += 1
+        self.current_section.section = ""
+        self.current_section.code = ""
+        self.current_section.times = []
+        self.current_section.more = ""
+        self.current_section.view_data = []
+
+    def __update_section_times(self):
+        if self.leclab.title == "":
             return
 
         title_lines = self.leclab.title.split(";")
@@ -78,21 +94,6 @@ class NewParser:
             self.leclab.title = " ".join(title_lines)
 
         self.leclab.title = self.leclab.title.strip()
-        self.current_section.times.append(self.leclab)
-
-        self.sections.append(self.current_section.model_dump(by_alias=True))
-
-        self.current_section.count += 1
-        self.current_section.section = ""
-        self.current_section.code = ""
-        self.current_section.times = []
-        self.current_section.more = ""
-        self.current_section.view_data = []
-        self.leclab.clear()
-
-    def __update_section_times(self):
-        if self.leclab.title == "":
-            return
 
         self.current_section.times.append(self.leclab.__deepcopy__())
         self.leclab.clear()
