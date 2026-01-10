@@ -3,7 +3,7 @@ import pytest
 import re
 
 from files import Files
-from models import Section, Word
+from models import LecLab, Section, Word
 from new_parser import NewParser
 from .individual_parsing_data import ATestCase, data
 
@@ -22,9 +22,13 @@ def get_word_position(word: Word) -> str:
 
 
 @pytest.fixture
-def parser() -> NewParser:
+def parser():
     parser = NewParser(files)
-    return parser
+    yield parser
+
+    parser.sections = []
+    parser.current_section = Section()
+    parser.leclab = LecLab()
 
 
 def test_optimal_x_tolerance() -> None:
@@ -98,7 +102,7 @@ def test_correct_line_extraction(parser: NewParser) -> None:
     """
 
     files = parser.files
-    lines = files.get_sorted_lines_content(False)
+    lines = files.get_sorted_lines_content()
 
     for line_y, line in lines.items():
         first_word = line[0]
@@ -213,8 +217,8 @@ def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: S
     parser.parse()
 
     assert len(parser.sections) == 1
-    assert parser.sections[0] == expected
+    assert parser.sections[0] == expected.model_dump(by_alias=True)
 
 
 if __name__ == "__main__":
-    exit(pytest.main(["-s", __file__]))
+    exit(pytest.main(["-s", "-vvv", __file__]))
