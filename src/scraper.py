@@ -18,8 +18,8 @@ class Scraper:
         self.debug = False
 
     def run(self):
-        if os.path.exists(self.files.ratings):
-            with open(self.files.ratings, "r") as file:
+        if os.path.exists(self.files.ratings_path):
+            with open(self.files.ratings_path, "r") as file:
                 ratings = json.loads(file.read())
 
             if ratings.__len__() != 0:
@@ -42,7 +42,7 @@ class Scraper:
 
         self.scrape_ratings(professors, ratings, pids, new_pids)
 
-        with open(self.files.ratings, "w") as file:
+        with open(self.files.ratings_path, "w") as file:
             _ = file.write(
                 json.dumps({k: v.model_dump() for k, v in ratings.items()}, indent=2)
             )
@@ -89,7 +89,7 @@ class Scraper:
     def get_professors(self) -> list[str]:
         if not os.path.exists(self.files.professors_path):
             profs: set[str] = set()
-            with open(self.files.out_file_path, "r") as file:
+            with open(self.files.parsed_sections, "r") as file:
                 classes: list[Section] = [Section(**d) for d in from_json(file.read())]
 
                 for cl in classes:

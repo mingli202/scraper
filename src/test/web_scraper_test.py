@@ -177,7 +177,7 @@ class ScraperTest(unittest.TestCase):
 
         self.assertEqual(ratings["Walker, Tara Leigh"].status, "found")
 
-        with open(self.files.ratings, "w") as file:
+        with open(self.files.ratings_path, "w") as file:
             file.write(
                 json.dumps({k: v.model_dump() for k, v in ratings.items()}, indent=2)
             )
