@@ -13,14 +13,14 @@ class NewParser:
 
         self.sections: list[dict[str, Any]] = []
         self.current_section: Section = Section()
-        self.current_section_time: LecLab = LecLab()
+        self.leclab: LecLab = LecLab()
         self.lines = self.files.get_sorted_lines_content()
 
     def __get_line_text(self, line: list[Word]) -> str:
         return " ".join([word.text for word in line])
 
     def parse(self):
-        lines = self.lines
+        lines = list(self.lines.values())
 
         title = self.__get_line_text(lines[0])
 
@@ -67,14 +67,18 @@ class NewParser:
         if self.current_section.section == "":
             return
 
-        title_lines = self.current_section_time.title.split(";")
+        title_lines = self.leclab.title.split(";")
+        title_lines = [line.strip() for line in title_lines]
 
-        if len(title_lines) > 1:
+        if len(title_lines) > 1 and self.leclab.prof == "":
             prof = title_lines[-1]
-            self.current_section_time.prof = prof
-            self.current_section_time.title = " ".join(title_lines[:-1])
+            self.leclab.prof = prof
+            self.leclab.title = " ".join(title_lines[:-1])
+        else:
+            self.leclab.title = " ".join(title_lines)
 
-        self.current_section.times.append(self.current_section_time)
+        self.leclab.title = self.leclab.title.strip()
+        self.current_section.times.append(self.leclab)
 
         self.sections.append(self.current_section.model_dump(by_alias=True))
 
@@ -84,12 +88,20 @@ class NewParser:
         self.current_section.times = []
         self.current_section.more = ""
         self.current_section.view_data = []
-        self.current_section_time.clear()
+        self.leclab.clear()
+
+    def __update_section_times(self):
+        if self.leclab.title == "":
+            return
+
+        self.current_section.times.append(self.leclab.__deepcopy__())
+        self.leclab.clear()
 
     def __parse_line(self, line: list[Word]):
         section = self.current_section
 
         did_update_title = False
+        is_leclab_line = False
 
         for i, word in enumerate(line):
             x = word.x0
@@ -106,12 +118,25 @@ class NewParser:
                 continue
 
             if self.columns_x.disc == x:
+                if "Lecture" in text:
+                    is_leclab_line = True
+                    self.leclab.type = "lecture"
+                elif "Laboratory" in text:
+                    is_leclab_line = True
+                    self.leclab.type = "laboratory"
                 continue
 
             if self.columns_x.course_number == x:
-                if text == "Lecture" or text == "Laboratory":
+                if "Lecture" == text:
+                    is_leclab_line = True
+                    self.leclab.type = "lecture"
+                    continue
+                elif "Laboratory" == text:
+                    is_leclab_line = True
+                    self.leclab.type = "laboratory"
                     continue
                 elif re.match(r"^\d{3}-[A-Z0-9]{3}-[A-Z0-9]{1,2}$", text):
+                    self.__update_section_times()
                     section.code = text
                 else:
                     section.more = self.__get_line_text(line)
@@ -123,19 +148,26 @@ class NewParser:
                 continue
 
             if self.columns_x.course_title <= x < self.columns_x.day:
-                self.current_section_time.title += text + " "
-                did_update_title = True
+                if is_leclab_line:
+                    self.leclab.prof += text + " "
+                else:
+                    self.leclab.title += text + " "
+                    did_update_title = True
                 continue
 
             if self.columns_x.day == x:
                 day = text
                 time = line[i + 1].text
 
-                self.current_section_time.update_time({day: [time]})
+                self.leclab.update_time({day: [time]})
                 continue
 
         if did_update_title:
-            self.current_section_time.title += ";"
+            self.leclab.title = self.leclab.title.strip()
+            self.leclab.title += ";"
+
+        if is_leclab_line:
+            self.leclab.prof = self.leclab.prof.strip()
 
 
 if __name__ == "__main__":
