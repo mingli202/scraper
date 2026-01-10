@@ -1,3 +1,4 @@
+import json
 import logging
 import re
 from typing import Any, final, override
@@ -34,6 +35,11 @@ class NewParser(INewParser):
 
     @override
     def parse(self):
+        if self.files.parsed_sections.exists():
+            with open(self.files.parsed_sections, "r") as file:
+                self.sections = json.loads(file.read())
+            return
+
         lines = list(self.lines.values())
 
         title = self._get_line_text(lines[0])
@@ -196,8 +202,17 @@ class NewParser(INewParser):
         self.current_section.times.append(self.leclab.__deepcopy__())
         self.leclab.clear()
 
+    @override
+    def cache_sections(self):
+        if self.files.parsed_sections.exists():
+            return
+
+        with open(self.files.parsed_sections, "w") as file:
+            _ = file.write(json.dumps(self.sections, indent=2))
+
 
 if __name__ == "__main__":
     files = Files()
     parser = NewParser(files)
-    # parser.parse()
+    parser.parse()
+    parser.cache_sections()
