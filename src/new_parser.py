@@ -83,17 +83,16 @@ class NewParser:
         if self.leclab.title == "":
             return
 
+        self.leclab.title = self.leclab.title.strip(";")
         title_lines = self.leclab.title.split(";")
         title_lines = [line.strip() for line in title_lines]
 
-        if len(title_lines) > 1 and self.leclab.prof == "":
+        if len(title_lines) > 1 and self.leclab.prof == "" and self.leclab.type is None:
             prof = title_lines[-1]
             self.leclab.prof = prof
             self.leclab.title = " ".join(title_lines[:-1])
         else:
             self.leclab.title = " ".join(title_lines)
-
-        self.leclab.title = self.leclab.title.strip()
 
         self.current_section.times.append(self.leclab.__deepcopy__())
         self.leclab.clear()
