@@ -149,11 +149,11 @@ class Parser:
         if not (any(text.find(x) != -1 for x in programs) and space >= 30):
             return False
 
-        if text != cl.type:
+        if text != cl.course_type:
             self.updateSection(tmp)
             cl.course = ""
 
-        cl.type = text
+        cl.course_type = text
         return True
 
     def parse_course_line(self, text: str, space: int, tmp: LecLab) -> bool:
