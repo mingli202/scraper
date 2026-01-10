@@ -184,6 +184,30 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
     ),
     (
         {
+            "name": "stuck disc and double line title",
+            "lines": [
+                ["00001", "VA &", "511-DBA-03", "Design", "R", "1300-1600"],
+                ["", "", "", "Design", "", ""],
+                ["", "CERAMICLecture", "", "Lupien, Jennifer", "", ""],
+                ["", "", "ADDITIONAL FEE: $80.00", "", "", ""],
+            ],
+        },
+        Section(
+            section="00001",
+            code="511-DBA-03",
+            times=[
+                LecLab(
+                    title="Design Design",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1300-1600"]},
+                    type="lecture",
+                )
+            ],
+            more="ADDITIONAL FEE: $80.00",
+        ),
+    ),
+    (
+        {
             "name": "missing prof",
             "lines": [
                 [
@@ -408,7 +432,9 @@ xs = [
 
 
 def func(x: dict[str, Any]) -> ATestCase:
-    lines: OrderedDict[int, list[Word]] = OrderedDict()
+    lines: OrderedDict[int, list[Word]] = OrderedDict(
+        {-1: [Word(page_number=0, text="title line", x0=0, top=0, doctop=0)]}
+    )
 
     for i, line in enumerate(x["lines"]):
         new_line: list[Word] = []
