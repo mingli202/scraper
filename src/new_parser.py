@@ -2,11 +2,9 @@ import logging
 import re
 from typing import Any, final
 
-from pydantic import ValidationError
 
 from files import Files
-from models import GenAiResponse, LecLab, Section, Word
-from google import genai
+from models import LecLab, Section, Word
 
 logger = logging.getLogger(__name__)
 
@@ -21,8 +19,6 @@ class NewParser:
         self.current_section: Section = Section()
         self.leclab: LecLab = LecLab()
         self.lines = self.files.get_sorted_lines_content()
-
-        self.client = genai.Client()
 
     def __get_line_text(self, line: list[Word]) -> str:
         return " ".join([word.text for word in line])
@@ -102,9 +98,7 @@ class NewParser:
 
             prof = title_lines[-1]
 
-            if not prof.startswith("TBA-") and re.match(
-                r"^([A-Z].+), ([A-Z].+)$", prof
-            ):
+            if prof.startswith("TBA-") or re.match(r"^([A-Z].+), ([A-Z].+)$", prof):
                 logger.info(f"{prof} is valid")
 
                 self.leclab.prof = prof

@@ -348,6 +348,33 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
     ),
     (
         {
+            "name": "missing 'Lecture' keyword and TBA prof name",
+            "lines": [
+                [
+                    "00001",
+                    "VA &",
+                    "511-DBA-03",
+                    "Art oratoire en public pour des présentations puissantes",
+                    "R",
+                    "1300-1600",
+                ],
+                ["", "", "", "TBA-1, English", "", ""],
+            ],
+        },
+        Section(
+            section="00001",
+            code="511-DBA-03",
+            times=[
+                LecLab(
+                    title="Art oratoire en public pour des présentations puissantes",
+                    prof="TBA-1, English",
+                    time={"R": ["1300-1600"]},
+                )
+            ],
+        ),
+    ),
+    (
+        {
             "name": "missing 'Lecture' keyword and invalid prof name",
             "lines": [
                 [
@@ -358,7 +385,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                     "R",
                     "1300-1600",
                 ],
-                ["", "", "", "each, day", "", ""],
+                ["", "", "", "et", "", ""],
             ],
         },
         Section(
@@ -366,7 +393,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
             code="511-DBA-03",
             times=[
                 LecLab(
-                    title="Art oratoire en public pour des présentations puissantes each, day",
+                    title="Art oratoire en public pour des présentations puissantes et",
                     time={"R": ["1300-1600"]},
                 )
             ],
