@@ -203,6 +203,35 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
             code="511-DBA-03",
             times=[
                 LecLab(
+                    title="Art oratoire en public pour des présentations puissantes",
+                    time={"R": ["1300-1600"]},
+                    type="lecture",
+                )
+            ],
+        ),
+    ),
+    (
+        {
+            "name": "missing prof and double title line",
+            "lines": [
+                [
+                    "00001",
+                    "VA &",
+                    "511-DBA-03",
+                    "Art oratoire en public pour des présentations puissantes",
+                    "R",
+                    "1300-1600",
+                ],
+                ["", "", "", "et", "", ""],
+                ["", "", "Lecture", "", "", ""],
+                ["", "", "*** Not open. May open during registration. ***", "", "", ""],
+            ],
+        },
+        Section(
+            section="00001",
+            code="511-DBA-03",
+            times=[
+                LecLab(
                     title="Art oratoire en public pour des présentations puissantes et",
                     time={"R": ["1300-1600"]},
                     type="lecture",
@@ -222,6 +251,34 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                     "R",
                     "1300-1600",
                 ],
+                ["", "", "", "Lupien, Jennifer", "", ""],
+            ],
+        },
+        Section(
+            section="00001",
+            code="511-DBA-03",
+            times=[
+                LecLab(
+                    title="Art oratoire en public pour des présentations puissantes",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1300-1600"]},
+                )
+            ],
+        ),
+    ),
+    (
+        {
+            "name": "missing 'Lecture' keyword and double title line",
+            "lines": [
+                [
+                    "00001",
+                    "VA &",
+                    "511-DBA-03",
+                    "Art oratoire en public pour des présentations puissantes",
+                    "R",
+                    "1300-1600",
+                ],
+                ["", "", "", "et", "", ""],
                 ["", "", "", "Lupien, Jennifer", "", ""],
             ],
         },
@@ -257,7 +314,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
             code="511-DBA-03",
             times=[
                 LecLab(
-                    title="Art oratoire en public pour des présentations puissantes et",
+                    title="Art oratoire en public pour des présentations puissantes",
                     prof="Lupien, Jennifer",
                     time={"R": ["1300-1500", "1500-1600"]},
                     type="lecture",
