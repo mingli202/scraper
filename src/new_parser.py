@@ -1,16 +1,28 @@
 import logging
 import re
-from typing import Any, final
+from typing import Any, final, override
+from abc import ABC, abstractmethod
 
 
 from files import Files
 from models import LecLab, Section, Word
 
+
 logger = logging.getLogger(__name__)
 
 
+class INewParser(ABC):
+    @abstractmethod
+    def parse(self):
+        pass
+
+    @abstractmethod
+    def cache_sections(self):
+        pass
+
+
 @final
-class NewParser:
+class NewParser(INewParser):
     def __init__(self, files: Files):
         self.files = files
         self.columns_x = self.files.get_section_columns_x_content()
@@ -20,20 +32,18 @@ class NewParser:
         self.leclab: LecLab = LecLab()
         self.lines = self.files.get_sorted_lines_content()
 
-    def __get_line_text(self, line: list[Word]) -> str:
-        return " ".join([word.text for word in line])
-
+    @override
     def parse(self):
         lines = list(self.lines.values())
 
-        title = self.__get_line_text(lines[0])
+        title = self._get_line_text(lines[0])
 
         i = 0
         complementary_rules = False
 
         while i < len(lines):
             line = lines[i]
-            line_text = self.__get_line_text(line)
+            line_text = self._get_line_text(line)
 
             if re.match(
                 r"John Abbott College \d{1,3}",
@@ -52,66 +62,22 @@ class NewParser:
 
             if line_text == title:
                 i += 1
-                section_type = self.__get_line_text(lines[i])
+                section_type = self._get_line_text(lines[i])
 
                 if section_type != self.current_section.course_type:
-                    self.__update_section()
+                    self._update_section()
                     self.current_section = Section()
 
                 self.current_section.course_type = section_type
                 continue
 
-            self.__parse_line(lines[i])
+            self._parse_line(lines[i])
 
             i += 1
 
-        self.__update_section()
+        self._update_section()
 
-    def __update_section(self):
-        if self.current_section.section == "":
-            return
-
-        self.__update_section_times()
-
-        self.current_section.more = self.current_section.more.strip("\n")
-        self.sections.append(self.current_section.model_dump(by_alias=True))
-
-        self.current_section.count += 1
-        self.current_section.section = ""
-        self.current_section.code = ""
-        self.current_section.times = []
-        self.current_section.more = ""
-        self.current_section.view_data = []
-
-    def __update_section_times(self):
-        if self.leclab.title == "":
-            return
-
-        self.leclab.title = self.leclab.title.strip(";")
-        title_lines = self.leclab.title.split(";")
-        title_lines = [line.strip() for line in title_lines]
-
-        updated_title = False
-
-        if len(title_lines) > 1 and self.leclab.prof == "" and self.leclab.type is None:
-            logger.info("no 'Lecture' keyword")
-
-            prof = title_lines[-1]
-
-            if prof.startswith("TBA-") or re.match(r"^([A-Z].+), ([A-Z].+)$", prof):
-                logger.info(f"{prof} is valid")
-
-                self.leclab.prof = prof
-                self.leclab.title = " ".join(title_lines[:-1])
-                updated_title = True
-
-        if not updated_title:
-            self.leclab.title = " ".join(title_lines)
-
-        self.current_section.times.append(self.leclab.__deepcopy__())
-        self.leclab.clear()
-
-    def __parse_line(self, line: list[Word]):
+    def _parse_line(self, line: list[Word]):
         section = self.current_section
 
         did_update_title = False
@@ -123,11 +89,11 @@ class NewParser:
 
             if self.columns_x.section == x:
                 if re.match(r"^\d{5}$", text):
-                    self.__update_section()
+                    self._update_section()
                     section.section = text
                 else:
                     if section.course != text:
-                        self.__update_section()
+                        self._update_section()
                     section.course = text
                 continue
 
@@ -150,10 +116,10 @@ class NewParser:
                     self.leclab.type = "laboratory"
                     continue
                 elif re.match(r"^\d{3}-[A-Z0-9]{3}-[A-Z0-9]{1,2}$", text):
-                    self.__update_section_times()
+                    self._update_section_times()
                     section.code = text
                 else:
-                    section.more = self.__get_line_text(line)
+                    section.more = self._get_line_text(line)
 
                     if re.match("^ADDITIONAL", text) or re.match(
                         r"\*\*\*.*\*\*\*", text
@@ -182,6 +148,53 @@ class NewParser:
 
         if is_leclab_line:
             self.leclab.prof = self.leclab.prof.strip()
+
+    def _get_line_text(self, line: list[Word]) -> str:
+        return " ".join([word.text for word in line])
+
+    def _update_section(self):
+        if self.current_section.section == "":
+            return
+
+        self._update_section_times()
+
+        self.current_section.more = self.current_section.more.strip("\n")
+        self.sections.append(self.current_section.model_dump(by_alias=True))
+
+        self.current_section.count += 1
+        self.current_section.section = ""
+        self.current_section.code = ""
+        self.current_section.times = []
+        self.current_section.more = ""
+        self.current_section.view_data = []
+
+    def _update_section_times(self):
+        if self.leclab.title == "":
+            return
+
+        self.leclab.title = self.leclab.title.strip(";")
+        title_lines = self.leclab.title.split(";")
+        title_lines = [line.strip() for line in title_lines]
+
+        updated_title = False
+
+        if len(title_lines) > 1 and self.leclab.prof == "" and self.leclab.type is None:
+            logger.info("no 'Lecture' keyword")
+
+            prof = title_lines[-1]
+
+            if prof.startswith("TBA-") or re.match(r"^([A-Z].+), ([A-Z].+)$", prof):
+                logger.info(f"{prof} is valid")
+
+                self.leclab.prof = prof
+                self.leclab.title = " ".join(title_lines[:-1])
+                updated_title = True
+
+        if not updated_title:
+            self.leclab.title = " ".join(title_lines)
+
+        self.current_section.times.append(self.leclab.__deepcopy__())
+        self.leclab.clear()
 
 
 if __name__ == "__main__":
