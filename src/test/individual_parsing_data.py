@@ -331,7 +331,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                     "R",
                     "1300-1500",
                 ],
-                ["", "", "", "Lupien, Jennifer", "R", "1500-1600"],
+                ["", "", "Lecture", "Lupien, Jennifer", "R", "1500-1600"],
             ],
         },
         Section(
@@ -364,9 +364,15 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 LecLab(
                     title="Design",
                     prof="Lupien, Jennifer",
-                    time={"R": ["1300-1500", "1500-1600"]},
+                    time={"R": ["1300-1500"]},
                     type="lecture",
-                )
+                ),
+                LecLab(
+                    title="Design",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1500-1600"]},
+                    type="lecture",
+                ),
             ],
         ),
     ),
@@ -389,9 +395,21 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 LecLab(
                     title="Design",
                     prof="Lupien, Jennifer",
-                    time={"R": ["1300-1500", "1500-1600", "1600-1700"]},
+                    time={"R": ["1300-1500"]},
                     type="lecture",
-                )
+                ),
+                LecLab(
+                    title="Design",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1500-1600"]},
+                    type="lecture",
+                ),
+                LecLab(
+                    title="Design",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1600-1700"]},
+                    type="lecture",
+                ),
             ],
         ),
     ),
