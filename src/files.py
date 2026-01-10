@@ -25,13 +25,16 @@ class Files:
         data_dir = pwd / "data" / self.pdf_path.stem
         data_dir.mkdir(exist_ok=True, parents=True)
 
+        self.data_dir = data_dir
+
         self.sorted_lines_path = data_dir / "sorted_lines.json"
         self.section_columns_x_path = data_dir / "section_columns_x.json"
+        self.parsed_sections = data_dir / "parsed_sections.json"
         self.ratings_path = data_dir / "ratings.json"
-        self.missing_pids_path = data_dir / "missingPids.json"
-        self.professors_path = data_dir / "professors.json"
         self.pids_path = data_dir / "pids.json"
-        self.out_file_path = data_dir / "out.json"
+        self.professors_path = data_dir / "professors.json"
+
+        self.missing_pids_path = data_dir / "missingPids.json"
         self.classes_file_path = data_dir / "classes.json"
         self.all_classes_path = data_dir / "allClasses.json"
 
@@ -100,7 +103,7 @@ class Files:
             return from_json(file.read())
 
     def get_out_file_content(self) -> list[Section]:
-        with open(self.out_file_path, "r") as file:
+        with open(self.parsed_sections, "r") as file:
             return [
                 Section.model_validate(s, by_alias=True) for s in from_json(file.read())
             ]
