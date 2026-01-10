@@ -179,7 +179,6 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                     type="lecture",
                 )
             ],
-            more="ADDITIONAL FEE: $80.00",
         ),
     ),
     (
@@ -232,6 +231,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                     type="lecture",
                 )
             ],
+            more="*** Not open. May open during registration. ***",
         ),
     ),
     (
@@ -261,6 +261,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                     type="lecture",
                 )
             ],
+            more="*** Not open. May open during registration. ***",
         ),
     ),
     (
