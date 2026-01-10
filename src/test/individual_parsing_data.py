@@ -432,9 +432,9 @@ xs = [
 
 
 def func(x: dict[str, Any]) -> ATestCase:
-    lines: OrderedDict[int, list[Word]] = OrderedDict(
-        {-1: [Word(page_number=0, text="title line", x0=0, top=0, doctop=0)]}
-    )
+    lines: OrderedDict[int, list[Word]] = OrderedDict()
+
+    lines.update({-1: [Word(page_number=0, text="title line", x0=0, top=0, doctop=0)]})
 
     for i, line in enumerate(x["lines"]):
         new_line: list[Word] = []
