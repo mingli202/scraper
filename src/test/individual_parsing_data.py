@@ -321,6 +321,59 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
     ),
     (
         {
+            "name": "missing 'Lecture' keyword and valid prof name",
+            "lines": [
+                [
+                    "00001",
+                    "VA &",
+                    "511-DBA-03",
+                    "Art oratoire en public pour des présentations puissantes",
+                    "R",
+                    "1300-1600",
+                ],
+                ["", "", "", "Lupien, Jennifer", "", ""],
+            ],
+        },
+        Section(
+            section="00001",
+            code="511-DBA-03",
+            times=[
+                LecLab(
+                    title="Art oratoire en public pour des présentations puissantes",
+                    prof="Lupien, Jennifer",
+                    time={"R": ["1300-1600"]},
+                )
+            ],
+        ),
+    ),
+    (
+        {
+            "name": "missing 'Lecture' keyword and invalid prof name",
+            "lines": [
+                [
+                    "00001",
+                    "VA &",
+                    "511-DBA-03",
+                    "Art oratoire en public pour des présentations puissantes",
+                    "R",
+                    "1300-1600",
+                ],
+                ["", "", "", "each, day", "", ""],
+            ],
+        },
+        Section(
+            section="00001",
+            code="511-DBA-03",
+            times=[
+                LecLab(
+                    title="Art oratoire en public pour des présentations puissantes each, day",
+                    time={"R": ["1300-1600"]},
+                )
+            ],
+        ),
+    ),
+    (
+        {
             "name": "duplicate days",
             "lines": [
                 [

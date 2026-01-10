@@ -98,32 +98,18 @@ class NewParser:
         updated_title = False
 
         if len(title_lines) > 1 and self.leclab.prof == "" and self.leclab.type is None:
-            logger.warning("no 'Lecture' keyword")
+            logger.info("no 'Lecture' keyword")
 
             prof = title_lines[-1]
 
-            if re.match(r"^\w+, \w+$", prof):
-                ai_res = self.client.models.generate_content(
-                    model="gemini-2.5-flash",
-                    contents=f"Is is plausible that '{prof}' is person's name?",
-                    config={
-                        "response_mime_type": "application/json",
-                        "response_json_schema": GenAiResponse.model_json_schema(),
-                    },
-                )
+            if not prof.startswith("TBA-") and re.match(
+                r"^([A-Z].+), ([A-Z].+)$", prof
+            ):
+                logger.info(f"{prof} is valid")
 
-                try:
-                    res = GenAiResponse.model_validate_json(ai_res.text or "{}")
-                    logger.info(f"AI: {res.answer}")
-
-                    if res.answer:
-                        self.leclab.prof = prof
-                        self.leclab.title = " ".join(title_lines[:-1])
-                        updated_title = True
-
-                except ValidationError as e:
-                    logger.error(e)
-                    return
+                self.leclab.prof = prof
+                self.leclab.title = " ".join(title_lines[:-1])
+                updated_title = True
 
         if not updated_title:
             self.leclab.title = " ".join(title_lines)
