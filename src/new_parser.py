@@ -34,8 +34,8 @@ class NewParser(INewParser):
         self.lines = self.files.get_sorted_lines_content()
 
     @override
-    def parse(self):
-        if self.files.parsed_sections.exists():
+    def parse(self, use_cache: bool = True):
+        if use_cache and self.files.parsed_sections.exists():
             with open(self.files.parsed_sections, "r") as file:
                 self.sections = json.loads(file.read())
             return
