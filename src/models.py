@@ -1,4 +1,3 @@
-import re
 import unittest
 from typing import Literal, Self, override
 
@@ -57,7 +56,7 @@ ViewData = list[dict[str, list[int]]]
 
 
 class Section(ConfiguredBasedModel):
-    type: str = ""
+    course_type: str = ""
     count: int = 0
     section: str = ""
     course: str = ""
