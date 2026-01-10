@@ -6,23 +6,6 @@ from pydantic import BaseModel, ConfigDict, ValidationError
 from pydantic.alias_generators import to_camel, to_snake
 
 
-def to_camel_case(snake_str: str) -> str:
-    components = snake_str.split("_")
-
-    if len(components) == 1:
-        return components[0]
-
-    return "".join([components[0]] + [x.title() for x in components[1:]])
-
-
-def to_snake_case(camel_str: str) -> str:
-    print(camel_str)
-    components = re.split(r"(?<!^)(?=[A-Z])", camel_str)
-    snake_str = "_".join(components).lower()
-    print(snake_str)
-    return snake_str
-
-
 class ConfiguredBasedModel(BaseModel):
     model_config = ConfigDict(
         alias_generator=to_camel, populate_by_name=True, from_attributes=True
@@ -64,8 +47,10 @@ class LecLab(ConfiguredBasedModel):
 
     def clear(self):
         self.title = ""
+        self.type = None
         self.prof = ""
         self.time = Time()
+        self.rating = None
 
 
 ViewData = list[dict[str, list[int]]]
