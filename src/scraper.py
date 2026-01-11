@@ -17,8 +17,8 @@ class Scraper:
         self.files = files
         self.debug = False
 
-    def run(self):
-        if self.files.ratings_db_path.exists():
+    def run(self, force_override: bool = False):
+        if not force_override and self.files.ratings_db_path.exists():
             conn = sqlite3.connect(self.files.ratings_db_path)
             cursor = conn.cursor()
             res = cursor.execute(

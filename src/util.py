@@ -64,7 +64,7 @@ def add_viewdata_to_section(targetClass: Section):
     targetClass.view_data = viewData
 
 
-def save_sections_with_viewData(files: Files):
+def save_sections_with_viewData(files: Files, force_override: bool = False):
     sections = files.get_parsed_sections_file_content()
 
     for section in sections:
@@ -79,9 +79,10 @@ def save_sections_with_viewData(files: Files):
         ).fetchone()
         is not None
     ):
-        override = input("Sections db already exists, override? (y/n) ")
-        if override.lower() != "y":
-            return
+        if not force_override:
+            override = input("Sections db already exists, override? (y/n) ")
+            if override.lower() != "y":
+                return
 
         _ = cursor.execute("DROP TABLE sections")
         _ = cursor.execute("DROP TABLE times")
