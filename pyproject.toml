@@ -10,7 +10,6 @@ dependencies = [
     "requests==2.32.5",
     "pydantic==2.12.5",
     "pytest>=9.0.2",
-    "jq>=1.10.0",
 ]
 authors = [{ name = "Ming Li Liu", email = "vincentmingli@gmail.com" }]
 maintainers = [{ name = "Ming Li Liu", email = "vincentmingli@gmail.com" }]
