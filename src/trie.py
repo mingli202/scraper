@@ -1,3 +1,4 @@
+from functools import cache
 from pydantic import BaseModel
 
 
@@ -15,7 +16,7 @@ class Trie(BaseModel):
             node = node.children.setdefault(char, TrieNode())
         node.word = word
 
-    def search(self, word: str) -> bool:
+    def contains(self, word: str) -> bool:
         node = self.root
         for char in word:
             if char not in node.children:
@@ -23,6 +24,7 @@ class Trie(BaseModel):
             node = node.children[char]
         return node.word == word
 
+    @cache
     def get_words(self, prefix: str) -> list[str]:
         node = self.root
         for char in prefix:
