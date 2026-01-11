@@ -65,8 +65,8 @@ class NewParser(INewParser):
             if complementary_rules:
                 if line_text == title:
                     complementary_rules = False
-
-                continue
+                else:
+                    continue
 
             if line_text == title:
                 section_type = self._get_line_text(lines[i])
