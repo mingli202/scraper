@@ -37,11 +37,11 @@ class Parser:
             exit(1)
 
     def writeToRaw(self):
-        if os.path.exists(self.files.rawFile):
+        if os.path.exists(self.files.raw_file):
             print("Raw file already exists")
             return
 
-        with open(self.files.pdfName, "rb") as file:
+        with open(self.files.pdf_name, "rb") as file:
             lines = file.read()
 
         arr = lines.decode("UTF-16").split("\n")
@@ -56,7 +56,7 @@ class Parser:
             and not re.search(r"John Abbott College", line)
         ]
 
-        with open(self.files.rawFile, "w") as file:
+        with open(self.files.raw_file, "w") as file:
             file.write(json.dumps(arr, indent=2))
 
     def updateSection(self, tmp: LecLab):
@@ -93,7 +93,7 @@ class Parser:
 
         raw: list[str] = []
 
-        with open(self.files.rawFile, "r") as file:
+        with open(self.files.raw_file, "r") as file:
             raw = json.loads(file.read())
 
         tmp = LecLab()

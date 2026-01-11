@@ -13,7 +13,7 @@ from parser_utils import ParserUtils
 @final
 class Files:
     def __init__(self, pdf_path: Path | None = None) -> None:
-        pwd = Path(__file__).parent.parent.resolve()
+        cwd = Path(__file__).parent.parent.resolve()
 
         if pdf_path is not None:
             self.pdf_path = pdf_path
@@ -22,7 +22,7 @@ class Files:
                 "/Users/vincentliu/Downloads/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
             )
 
-        data_dir = pwd / "data" / self.pdf_path.stem
+        data_dir = cwd / "data" / self.pdf_path.stem
         data_dir.mkdir(exist_ok=True, parents=True)
 
         self.data_dir = data_dir
@@ -31,12 +31,16 @@ class Files:
         self.section_columns_x_path = data_dir / "section_columns_x.json"
         self.parsed_sections = data_dir / "parsed_sections.json"
         self.ratings_path = data_dir / "ratings.json"
-        self.pids_path = pwd / "data" / "pids.json"
+        self.pids_path = cwd / "data" / "pids.json"
         self.professors_path = data_dir / "professors.json"
 
         self.missing_pids_path = data_dir / "missingPids.json"
         self.classes_file_path = data_dir / "classes.json"
         self.all_classes_path = data_dir / "allClasses.json"
+
+        self.raw_file = cwd / "winter" / "winter-raw.json"
+        self.pdf_name = cwd / "SCHEDULE_OF_CLASSES_Winter_2026_December_11.txt"
+        self.out_file_path = cwd / "winter" / "winter-out.json"
 
     def get_sorted_lines_content(
         self, use_cache: bool = True
