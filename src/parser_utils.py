@@ -41,7 +41,7 @@ class ParserUtils:
         sorted_words = sorted(
             (
                 Word(
-                    text=ParserUtils.sanitize_string(word["text"]),
+                    text=re.sub(r"\(cid:\d+\)", "", word["text"]),
                     x0=round(word["x0"]),
                     doctop=round(word["doctop"]),
                     top=round(word["top"]),
@@ -55,7 +55,7 @@ class ParserUtils:
         return [Word.model_validate(w, by_alias=True) for w in sorted_words]
 
     @staticmethod
-    def sanitize_string(s: str):
+    def nomalize_string(s: str):
         s = s.replace("\u00e9", "e").replace("é", "e")  #  removes é
         s = s.replace("\u00c9", "E").replace("É", "E")  #  removes É
         s = s.replace("\u00e8", "e").replace("è", "e")  #  removes è

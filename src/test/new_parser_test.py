@@ -283,10 +283,10 @@ def test_parity_with_old_parser(parser: NewParser):
             old_section["more"] = old_section["more"].strip("\n").strip()
 
             old_section = json.loads(
-                ParserUtils.sanitize_string(json.dumps(old_section)).replace("  ", " ")
+                re.sub(" +", " ", ParserUtils.nomalize_string(json.dumps(old_section)))
             )
             new_section = json.loads(
-                ParserUtils.sanitize_string(json.dumps(new_section))
+                ParserUtils.nomalize_string(json.dumps(new_section))
             )
 
             assert old_section == new_section
