@@ -100,7 +100,6 @@ def save_sections_with_viewData(files: Files):
 
     _ = cursor.execute("""
         CREATE TABLE IF NOT EXISTS times (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
             section_id INTEGER,
             prof TEXT,
             title TEXT,
@@ -129,10 +128,9 @@ def save_sections_with_viewData(files: Files):
         for leclab in section.times:
             _ = conn.execute(
                 """
-                INSERT INTO times values (?,?,?,?,?,?)
+                INSERT INTO times values (?,?,?,?,?)
             """,
                 (
-                    None,
                     section.id,
                     leclab.prof,
                     leclab.title,

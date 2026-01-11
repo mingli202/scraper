@@ -8,7 +8,7 @@ from typing import Any, final
 from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
 
-from models import ColumnsXs, Rating, Section, Word
+from models import ColumnsXs, LecLab, Rating, Section, Time, ViewData, Word
 import parser_utils
 from trie import Trie
 
@@ -98,6 +98,50 @@ class Files:
             return {
                 k: Rating.model_validate(v) for k, v in from_json(file.read()).items()
             }
+
+    def get_sections_from_db(self) -> list[Section]:
+        conn = sqlite3.connect(self.all_sections_final_path)
+        cursor = conn.cursor()
+
+        sections: list[Section] = []
+
+        for row in cursor.execute("SELECT * FROM sections"):
+            id, course, section_number, domain, code, more, view_data = row
+
+            id = int(id)
+            validated_view_data: ViewData = TypeAdapter(ViewData).validate_json(
+                view_data
+            )
+
+            section = Section(
+                id=id,
+                course=course,
+                section=section_number,
+                domain=domain,
+                code=code,
+                more=more,
+                view_data=validated_view_data,
+            )
+
+            for time_row in cursor.execute(
+                "SELECT * FROM times WHERE section_id = ?", (id,)
+            ):
+                _, prof, title, type, time = time_row
+
+                parsed_time = TypeAdapter(Time).validate_json(time)
+
+                leclab = LecLab(
+                    title=title,
+                    type=type,
+                    prof=prof,
+                    time=parsed_time,
+                )
+
+                section.times.append(leclab)
+
+        conn.close()
+
+        return sections
 
     def get_ratings_from_db(self) -> dict[str, Rating]:
         conn = sqlite3.connect(self.all_sections_final_path)
