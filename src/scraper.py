@@ -201,7 +201,7 @@ class Scraper:
         return None
 
     def save_ratings(self, ratings: dict[str, Rating]):
-        conn = sqlite3.connect(self.files.all_sections_final_path)
+        conn = sqlite3.connect(self.files.ratings_db_path)
         cursor = conn.cursor()
 
         _ = cursor.execute("""
