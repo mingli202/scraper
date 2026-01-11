@@ -18,11 +18,13 @@ class Scraper:
         self.debug = False
 
     def run(self):
-        if self.files.ratings_path.exists():
-            with open(self.files.ratings_path, "r") as file:
-                ratings = json.loads(file.read())
-
-            if ratings.__len__() != 0:
+        if self.files.all_sections_final_path.exists():
+            conn = sqlite3.connect(self.files.all_sections_final_path)
+            cursor = conn.cursor()
+            res = cursor.execute(
+                "SELECT name from sqlite_schema WHERE type='table' and tbl_name='ratings'"
+            )
+            if res.fetchone() is not None:
                 print("Rating files already exists")
                 return
 
@@ -226,7 +228,13 @@ class Scraper:
             for rating in ratings.values()
         ]
 
-        _ = cursor.executemany("INSERT INTO ratings VALUES (?,?,?,?,?,?,?,?)", rows)
+        _ = cursor.executemany(
+            """
+            INSERT INTO ratings VALUES (?,?,?,?,?,?,?,?)
+            ON CONFLICT(prof) DO UPDATE SET score=excluded.score, avg=excluded.avg, nRating=excluded.nRating, takeAgain=excluded.takeAgain, difficulty=excluded.difficulty, status=excluded.status, pId=excluded.pId
+        """,
+            rows,
+        )
 
         conn.commit()
         conn.close()
@@ -236,3 +244,5 @@ if __name__ == "__main__":
     files = Files()
     scraper = Scraper(files)
     scraper.run()
+
+    print(files.get_ratings_from_db())

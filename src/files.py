@@ -2,6 +2,7 @@ from collections import OrderedDict
 import itertools
 import json
 from pathlib import Path
+import sqlite3
 from typing import Any, final
 
 from pydantic import TypeAdapter, ValidationError
@@ -36,6 +37,7 @@ class Files:
         self.ratings_path = data_dir / "ratings.json"
         self.pids_path = cwd / "data" / "pids.json"
         self.professors_path = data_dir / "professors.json"
+        self.all_sections_final_path = data_dir / "all_sections_final.db"
 
         self.missing_pids_path = data_dir / "missingPids.json"
         self.classes_file_path = data_dir / "classes.json"
@@ -97,6 +99,28 @@ class Files:
                 k: Rating.model_validate(v) for k, v in from_json(file.read()).items()
             }
 
+    def get_ratings_from_db(self) -> dict[str, Rating]:
+        conn = sqlite3.connect(self.all_sections_final_path)
+        cursor = conn.cursor()
+
+        rows = [
+            Rating(
+                prof=row[0],
+                score=row[1],
+                avg=row[2],
+                nRating=row[3],
+                takeAgain=row[4],
+                difficulty=row[5],
+                status=row[6],
+                pId=row[7],
+            )
+            for row in cursor.execute("SELECT * FROM ratings")
+        ]
+
+        conn.close()
+
+        return {r.prof: r for r in rows}
+
     def get_parsed_sections_file_content(self) -> list[Section]:
         if not self.parsed_sections.exists():
             return []
@@ -130,7 +154,7 @@ class Files:
         with open(self.missing_pids_path, "r") as file:
             return from_json(file.read())
 
-    def get_pids_file_content(self) -> dict[str, str]:
+    def get_pids_file_content(self) -> dict[str, str | None]:
         with open(self.pids_path, "r") as file:
             return from_json(file.read())
 
@@ -139,16 +163,3 @@ class Files:
             return [
                 Section.model_validate(s, by_alias=True) for s in from_json(file.read())
             ]
-
-    def get_classes_file_content(self) -> list[Section]:
-        with open(self.classes_file_path, "r") as file:
-            return [
-                Section.model_validate(s, by_alias=True) for s in from_json(file.read())
-            ]
-
-    def get_all_classes_file_content(self) -> dict[int, Section]:
-        with open(self.all_classes_path, "r") as file:
-            return {
-                k: Section.model_validate(v, by_alias=True)
-                for k, v in from_json(file.read()).items()
-            }

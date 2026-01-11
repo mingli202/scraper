@@ -14,7 +14,7 @@ def main():
     parser.run()
     ratings.run()
 
-    util.addRating(files)
+    util.add_rating(files)
     util.addViewData(files)
 
 
