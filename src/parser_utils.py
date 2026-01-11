@@ -41,7 +41,7 @@ class ParserUtils:
         sorted_words = sorted(
             (
                 Word(
-                    text=word["text"],
+                    text=ParserUtils.stripAccent(word["text"]),
                     x0=round(word["x0"]),
                     doctop=round(word["doctop"]),
                     top=round(word["top"]),
@@ -53,6 +53,17 @@ class ParserUtils:
         )
 
         return [Word.model_validate(w, by_alias=True) for w in sorted_words]
+
+    @staticmethod
+    def stripAccent(s: str):
+        s = s.replace("\u00e9", "e")  # * removes é
+        s = s.replace("\u00e8", "e")  # * removes è
+        s = s.replace("\u00e2", "a")  # * removes â
+        s = s.replace("\u00e7", "c")  # * removes ç
+        s = s.replace("\u00e0", "a")  # * removes à
+        s = s.replace("\u0000", "")  # * removes null character
+
+        return s
 
     @staticmethod
     def compute_columns_x(

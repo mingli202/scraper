@@ -31,7 +31,7 @@ class Files:
         self.section_columns_x_path = data_dir / "section_columns_x.json"
         self.parsed_sections = data_dir / "parsed_sections.json"
         self.ratings_path = data_dir / "ratings.json"
-        self.pids_path = data_dir / "pids.json"
+        self.pids_path = pwd / "data" / "pids.json"
         self.professors_path = data_dir / "professors.json"
 
         self.missing_pids_path = data_dir / "missingPids.json"

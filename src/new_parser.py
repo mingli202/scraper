@@ -41,6 +41,7 @@ class NewParser(INewParser):
             return
 
         lines = list(self.lines.values())
+        print("line count", len(lines))
 
         title = self._get_line_text(lines[0])
 
@@ -49,6 +50,7 @@ class NewParser(INewParser):
 
         while i < len(lines):
             line = lines[i]
+            i += 1
             line_text = self._get_line_text(line)
 
             if re.match(
@@ -77,9 +79,7 @@ class NewParser(INewParser):
                 self.current_section.course_type = section_type
                 continue
 
-            self._parse_line(lines[i])
-
-            i += 1
+            self._parse_line(line)
 
         self._update_section()
 
