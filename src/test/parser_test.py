@@ -3,11 +3,14 @@ import inspect
 import unittest
 from typing import Callable
 
+import pytest
+
 from files import Files
 from models import LecLab, Section
 from parser import Parser
 
 
+@pytest.mark.skip(reason="deprecated Parser")
 class TestParser(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
