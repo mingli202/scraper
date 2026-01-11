@@ -131,6 +131,8 @@ class NewParser(INewParser):
                         r"\*\*\*.*\*\*\*", text
                     ):
                         section.more += "\n"
+
+                    return
                 continue
 
             if self.columns_x.course_title <= x < self.columns_x.day:
