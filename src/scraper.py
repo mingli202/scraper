@@ -93,16 +93,14 @@ class Scraper:
                 classes: list[Section] = [Section(**d) for d in from_json(file.read())]
 
                 for cl in classes:
-                    if cl.lecture:
-                        profs.add(cl.lecture.prof)
-
-                    if cl.lab:
-                        profs.add(cl.lab.prof)
+                    for time in cl.times:
+                        if time.prof != "":
+                            profs.add(time.prof)
 
             profs.remove("")
 
             with open(self.files.professors_path, "w") as file:
-                file.write(json.dumps(list(profs), indent=2))
+                _ = file.write(json.dumps(list(profs), indent=2))
 
         professors: list[str] = []
         with open(self.files.professors_path, "r") as file:
