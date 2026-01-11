@@ -6,10 +6,10 @@ import sqlite3
 
 from pydantic import TypeAdapter
 import requests
-from files import Files
-from models import Rating
+from .files import Files
+from .models import Rating
 
-import util
+from . import util
 
 
 class Scraper:

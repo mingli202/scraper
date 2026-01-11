@@ -5,8 +5,8 @@ from typing import Any, final, override
 from abc import ABC, abstractmethod
 
 
-from files import Files
-from models import LecLab, Section, Word
+from .files import Files
+from .models import LecLab, Section, Word
 
 logger = logging.getLogger(__name__)
 

@@ -1,8 +1,8 @@
 from typing import Annotated
-from new_parser import NewParser
-import util
-from files import Files
-from scraper import Scraper
+from .new_parser import NewParser
+from . import util
+from .files import Files
+from .scraper import Scraper
 import pytest
 import typer
 

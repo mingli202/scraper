@@ -8,15 +8,15 @@ from typing import Any, final
 from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
 
-from models import ColumnsXs, LecLab, Rating, Section, Time, ViewData, Word
-import parser_utils
-from trie import Trie
+from .models import ColumnsXs, LecLab, Rating, Section, Time, ViewData, Word
+from . import parser_utils
+from .trie import Trie
 
 
 @final
 class Files:
     def __init__(self, pdf_path: Path | None = None) -> None:
-        cwd = Path(__file__).parent.parent.resolve()
+        cwd = Path(__file__).parent.parent.parent.resolve()
         self.cwd = cwd
 
         if pdf_path is not None:

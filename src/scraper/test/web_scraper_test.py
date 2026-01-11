@@ -2,10 +2,10 @@ import os
 import pytest
 
 from pydantic_core import from_json
-from files import Files
+from scraper.files import Files
 
-from models import Rating
-from scraper import Scraper
+from scraper.models import Rating
+from scraper.scraper import Scraper
 import json
 
 

@@ -2,9 +2,9 @@ from collections import OrderedDict
 from typing import Any
 from pydantic import BaseModel
 
-from files import Files
-from models import LecLab, Section, Word
-from new_parser import NewParser
+from scraper.files import Files
+from scraper.models import LecLab, Section, Word
+from scraper.new_parser import NewParser
 
 
 class ATestCase(BaseModel):

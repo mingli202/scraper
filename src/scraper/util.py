@@ -1,8 +1,8 @@
 import json
 import sqlite3
 from typing import Literal
-from files import Files
-from models import Section
+from .files import Files
+from .models import Section
 import math
 
 
