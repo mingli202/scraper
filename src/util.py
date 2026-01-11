@@ -1,5 +1,6 @@
 import json
 import sqlite3
+from typing import Literal
 from files import Files
 from models import Section
 import math
@@ -109,11 +110,13 @@ def save_sections_with_viewData(files: Files):
         )
     """)
 
+    sections_to_insert: list[tuple[int, str, str, str, str, str, str]] = []
+    times_to_insert: list[
+        tuple[int, str, str, Literal["lecture", "laboratory"] | None, str]
+    ] = []
+
     for section in sections:
-        _ = conn.execute(
-            """
-            INSERT INTO sections values (?,?,?,?,?,?,?)
-        """,
+        sections_to_insert.append(
             (
                 section.id,
                 section.course,
@@ -122,22 +125,33 @@ def save_sections_with_viewData(files: Files):
                 section.code,
                 section.more,
                 json.dumps(section.view_data),
-            ),
+            )
         )
 
         for leclab in section.times:
-            _ = conn.execute(
-                """
-                INSERT INTO times values (?,?,?,?,?)
-            """,
+            times_to_insert.append(
                 (
                     section.id,
                     leclab.prof,
                     leclab.title,
                     leclab.type,
                     json.dumps(leclab.time),
-                ),
+                )
             )
+
+    _ = conn.executemany(
+        """
+        INSERT INTO sections values (?,?,?,?,?,?,?)
+        """,
+        sections_to_insert,
+    )
+
+    _ = conn.executemany(
+        """
+        INSERT INTO times values (?,?,?,?,?)
+        """,
+        times_to_insert,
+    )
 
     conn.commit()
     conn.close()

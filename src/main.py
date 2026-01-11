@@ -16,9 +16,7 @@ def main():
 
     util.save_sections_with_viewData(files)
 
-    print(files.get_sections_from_db())
-
 
 if __name__ == "__main__":
     main()
-    # exit(pytest.main(["--no-header", "-s", "-v"]))
+    exit(pytest.main(["--no-header", "-s", "-v"]))

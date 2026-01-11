@@ -106,7 +106,7 @@ class Files:
 
         sections: list[Section] = []
 
-        for row in cursor.execute("SELECT * FROM sections"):
+        for row in cursor.execute("SELECT * FROM sections").fetchall():
             id, course, section_number, domain, code, more, view_data = row
 
             id = int(id)
@@ -126,7 +126,7 @@ class Files:
 
             for time_row in cursor.execute(
                 "SELECT * FROM times WHERE section_id = ?", (id,)
-            ):
+            ).fetchall():
                 _, prof, title, type, time = time_row
 
                 parsed_time = TypeAdapter(Time).validate_json(time)
@@ -139,6 +139,8 @@ class Files:
                 )
 
                 section.times.append(leclab)
+
+            sections.append(section)
 
         conn.close()
 
@@ -159,7 +161,7 @@ class Files:
                 status=row[6],
                 pId=row[7],
             )
-            for row in cursor.execute("SELECT * FROM ratings")
+            for row in cursor.execute("SELECT * FROM ratings").fetchall()
         ]
 
         conn.close()
