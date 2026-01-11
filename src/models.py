@@ -33,7 +33,6 @@ class LecLab(ConfiguredBasedModel):
     type: Literal["lecture", "laboratory"] | None = None
     prof: str = ""
     time: Time = {}
-    rating: Rating | None = None
 
     def update(self, tmp: Self):
         if tmp.title != "":
@@ -67,15 +66,14 @@ class LecLab(ConfiguredBasedModel):
         self.type = None
         self.prof = ""
         self.time = Time()
-        self.rating = None
 
 
 ViewData = list[dict[str, list[int]]]
 
 
 class Section(ConfiguredBasedModel):
+    id: int = 0
     course: str = ""
-    count: int = 0
     section: str = ""
     domain: str = ""
     code: str = ""

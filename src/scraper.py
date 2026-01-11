@@ -2,6 +2,7 @@ import json
 import os
 import re
 from concurrent.futures import ThreadPoolExecutor
+import sqlite3
 
 from pydantic import TypeAdapter
 import requests
@@ -34,13 +35,10 @@ class Scraper:
 
         self.scrape_ratings(professors, ratings, pids, new_pids)
 
-        with open(self.files.ratings_path, "w") as file:
-            _ = file.write(
-                json.dumps({k: v.model_dump() for k, v in ratings.items()}, indent=2)
-            )
-
         with open(self.files.pids_path, "w") as file:
             _ = file.write(json.dumps(new_pids, indent=2))
+
+        self.save_ratings(ratings)
 
     def scrape_ratings(
         self,
@@ -101,6 +99,7 @@ class Scraper:
                         id = pid[0]
                         max = c
 
+        assert id is not None
         if _r := self.get_stats_from_pid(id, prof):
             rating = _r
 
@@ -196,7 +195,44 @@ class Scraper:
 
         return None
 
+    def save_ratings(self, ratings: dict[str, Rating]):
+        conn = sqlite3.connect(self.files.all_sections_final_path)
+        cursor = conn.cursor()
+
+        _ = cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ratings (
+                prof TEXT PRIMARY KEY NOT NULL,
+                score REAL NOT NULL,
+                avg REAL NOT NULL,
+                nRating INTEGER NOT NULL,
+                takeAgain INTEGER NOT NULL,
+                difficulty REAL NOT NULL,
+                status TEXT NOT NULL,
+                pId TEXT
+            )
+        """)
+
+        rows = [
+            (
+                rating.prof,
+                rating.score,
+                rating.avg,
+                rating.nRating,
+                rating.takeAgain,
+                rating.difficulty,
+                rating.status,
+                rating.pId,
+            )
+            for rating in ratings.values()
+        ]
+
+        _ = cursor.executemany("INSERT INTO ratings VALUES (?,?,?,?,?,?,?,?)", rows)
+
+        conn.commit()
+        conn.close()
+
 
 if __name__ == "__main__":
     files = Files()
-    print(files.get_professors_file_content().get_words(""))
+    scraper = Scraper(files)
+    scraper.run()

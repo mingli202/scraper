@@ -1,4 +1,5 @@
 import json
+import sqlite3
 from typing import Any
 from files import Files
 from models import Section
@@ -18,27 +19,11 @@ def normalize_string(s: str):
     return s
 
 
-def addRating(files: Files):
-    sections = files.get_parsed_sections_file_content()
-    ratings = files.get_ratings_file_content()
-
-    sections_with_rating: list[dict[str, Any]] = []
-
-    for section in sections:
-        for time in section.times:
-            time.rating = ratings.get(time.prof)
-
-        sections_with_rating.append(section.model_dump())
-
-    with open(files.classes_file_path, "w") as file:
-        _ = file.write(json.dumps(sections_with_rating, indent=2))
-
-
-def handleViewData(targetClass: Section) -> dict:
+def handleViewData(targetClass: Section) -> Section:
     c = copy.deepcopy(targetClass)
 
     col = ["M", "T", "W", "R", "F"]
-    row = []
+    row: list[int] = []
 
     for day in range(21):
         if day % 2 == 0:
@@ -46,16 +31,15 @@ def handleViewData(targetClass: Section) -> dict:
         else:
             row.append(math.floor(day / 2) * 2 * 50 + 830)
 
-    lecture = {}
-    if targetClass.lecture:
-        lecture = targetClass.lecture.time
-    lab = {}
-    if targetClass.lab:
-        lab = targetClass.lab.time
+    days: dict[str, list[str]] = {}
 
-    days = lecture | lab
+    for leclab in targetClass.times:
+        time = leclab.time
 
-    viewData = []
+        for d, t in time.items():
+            days.setdefault(d, []).extend(t)
+
+    viewData: list[dict[str, list[int]]] = []
 
     for day in days:
         times = days[day]
@@ -81,15 +65,37 @@ def handleViewData(targetClass: Section) -> dict:
                 viewData.append({f"{colStart}": [rowStart, rowEnd]})
 
     c.view_data = viewData
-    return c.model_dump()
+    return c
 
 
 def addViewData(files: Files):
-    classes = files.get_classes_file_content()
+    sections = files.get_parsed_sections_file_content()
 
-    polished: dict[int, dict] = {}
-    for index, course in enumerate(classes):
-        polished.update({index: handleViewData(course)})
+    conn = sqlite3.connect(files.all_sections_final_path)
+    cursor = conn.cursor()
 
-    with open(files.all_classes_path, "w") as file:
-        file.write(json.dumps(polished, indent=2))
+    _ = cursor.execute("""
+        CREATE TABLE IF NOT EXISTS sections (
+            id INTEGER PRIMARY KEY,
+            course TEXT,
+            section_number TEXT,
+            domain TEXT,
+            code TEXT,
+            more TEXT,
+        );
+    """)
+
+    _ = cursor.execute("""
+        CREATE TABLE IF NOT EXISTS times (
+            id INTEGER PRIMARY KEY,
+            section_id INTEGER,
+            prof TEXT,
+            title TEXT,
+            type TEXT,
+            time TEXT,
+            FOREIGN KEY(section_id) REFERENCES sections(id)
+        )
+    """)
+
+    for section in sections:
+        pass
