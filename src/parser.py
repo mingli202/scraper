@@ -1,6 +1,8 @@
 import json
 import os
 import re
+from typing import Any
+from warnings import deprecated
 from models import Section, LecLab, Time
 
 
@@ -8,11 +10,12 @@ from files import Files
 import unittest
 
 
+@deprecated("use NewParser instead")
 class Parser:
     def __init__(self, files: Files):
         self.files = files
 
-        self.sections: list[dict] = []
+        self.sections: list[dict[str, Any]] = []
         self.currentClass = Section()
         self.tmp = {}
 
@@ -34,11 +37,11 @@ class Parser:
             exit(1)
 
     def writeToRaw(self):
-        if os.path.exists(self.files.rawFile):
+        if os.path.exists(self.files.raw_file):
             print("Raw file already exists")
             return
 
-        with open(self.files.pdfName, "rb") as file:
+        with open(self.files.pdf_name, "rb") as file:
             lines = file.read()
 
         arr = lines.decode("UTF-16").split("\n")
@@ -53,7 +56,7 @@ class Parser:
             and not re.search(r"John Abbott College", line)
         ]
 
-        with open(self.files.rawFile, "w") as file:
+        with open(self.files.raw_file, "w") as file:
             file.write(json.dumps(arr, indent=2))
 
     def updateSection(self, tmp: LecLab):
@@ -84,13 +87,13 @@ class Parser:
         tmp.time = Time()
 
     def parse(self):
-        if os.path.exists(self.files.outFile):
+        if os.path.exists(self.files.out_file_path):
             print("out_file already exists")
             return
 
         raw: list[str] = []
 
-        with open(self.files.rawFile, "r") as file:
+        with open(self.files.raw_file, "r") as file:
             raw = json.loads(file.read())
 
         tmp = LecLab()
@@ -100,7 +103,7 @@ class Parser:
 
         self.updateSection(tmp)
 
-        with open(self.files.outFile, "w") as file:
+        with open(self.files.out_file_path, "w") as file:
             file.write(json.dumps(self.sections, indent=2))
 
     def parse_row(self, row: str, tmp: LecLab):
@@ -148,11 +151,11 @@ class Parser:
         if not (any(text.find(x) != -1 for x in programs) and space >= 30):
             return False
 
-        if text != cl.program:
+        if text != cl.course:
             self.updateSection(tmp)
-            cl.course = ""
+            cl.domain = ""
 
-        cl.program = text
+        cl.course = text
         return True
 
     def parse_course_line(self, text: str, space: int, tmp: LecLab) -> bool:
@@ -161,10 +164,10 @@ class Parser:
         if not (text.isupper() and space == 0):
             return False
 
-        if text != cl.course:
+        if text != cl.domain:
             self.updateSection(tmp)
 
-        cl.course = text
+        cl.domain = text
         return True
 
     def parse_code_header(self, space: int) -> bool:
@@ -271,7 +274,7 @@ section_edge_case = [
     "00001        THEA        561-A5R-AB            Production Lab 3                                        M             1430-1730",
     "                         Lecture               Fauquembergue, Kevin                                    W             1100-1200",
     "                         ADDITIONAL FEE:       $60.00                                                  W             1800-2000",
-    "                                                                                                       F              1430-1830",
+    "                                                                                                       F             1430-1830",
 ]
 
 blended_section_case = [
@@ -281,4 +284,23 @@ blended_section_case = [
     "                         technology-mediated asynchronous lectures, labs and/or other activities and a percentage in person on ",
     "                         campus lectures. A computer, reliable internet connection, webcam, and microphone are required to ",
     "                         complete your asynchronous activities.",
+]
+
+double_title_line_and_missing_lecture_case = [
+    "00001        THEA        561-A5R-AB            Production Lab 3 bbbbbbbbbbbbbbbbbbbbbbbbbb             M             1430-1630",
+    "                                               aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa             M             1630-1830",
+    "                                               Fauquembergue, Kevin                                    W             1100-1200",
+    "                         ADDITIONAL FEE:       $60.00                                                  W             1800-2000",
+    "                                                                                                       F             1430-1830",
+]
+
+missing_lecture_case = [
+    "00001        THEA        561-A5R-AB            Production Lab 3 bbbbbbbbbbbbbbbbbbbbbbbbbb             M             1430-1630",
+    "                                               Fauquembergue, Kevin                                                           ",
+]
+
+no_teacher_and_double_title_case = [
+    "00001        THEA        561-A5R-AB            Production Lab 3 bbbbbbbbbbbbbbbbbbbbbbbbbb             M             1430-1630",
+    "                                               aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa                                            ",
+    "                         Lecture                                                                                              ",
 ]

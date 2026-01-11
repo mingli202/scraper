@@ -1,16 +1,16 @@
+from new_parser import NewParser
 import util
 from files import Files
-from parser import Parser
 from scraper import Scraper
 
 
 # TODO: 1. Change filename and semester in files.py
 def main():
     files = Files()
-    scraper = Parser(files)
+    parser = NewParser(files)
     ratings = Scraper(files)
 
-    scraper.run()
+    parser.parse()
     ratings.run()
 
     util.addRating(files)

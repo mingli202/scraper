@@ -14,7 +14,7 @@ class ScraperTest(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.files = Files()
         cls.professors: list[str] = []
-        with open(cls.files.professors, "r") as file:
+        with open(cls.files.professors_path, "r") as file:
             cls.professors = from_json(file.read())
         cls.scraper = Scraper(cls.files)
 
@@ -23,7 +23,7 @@ class ScraperTest(unittest.TestCase):
 
     def test_unique_lastname(self):
         professors: list[str] = []
-        with open(self.files.professors, "r") as file:
+        with open(self.files.professors_path, "r") as file:
             professors = from_json(file.read())
 
         not_unique_last_name: set[str] = set()
@@ -149,8 +149,8 @@ class ScraperTest(unittest.TestCase):
 
         ratings: dict[str, Rating] = self.files.get_ratings_file_content()
 
-        if os.path.exists(self.files.missingPids):
-            with open(self.files.missingPids, "r") as file:
+        if os.path.exists(self.files.missing_pids_path):
+            with open(self.files.missing_pids_path, "r") as file:
                 odd = json.loads(file.read())
 
         for rating in ratings.values():
@@ -160,7 +160,7 @@ class ScraperTest(unittest.TestCase):
         if len(odd) > 0:
             print(json.dumps(odd, indent=2))
 
-        with open(self.files.missingPids, "w") as file:
+        with open(self.files.missing_pids_path, "w") as file:
             file.write(json.dumps(odd, indent=2))
 
         self.assertEqual(len(odd), 0)
@@ -177,12 +177,12 @@ class ScraperTest(unittest.TestCase):
 
         self.assertEqual(ratings["Walker, Tara Leigh"].status, "found")
 
-        with open(self.files.ratings, "w") as file:
+        with open(self.files.ratings_path, "w") as file:
             file.write(
                 json.dumps({k: v.model_dump() for k, v in ratings.items()}, indent=2)
             )
 
-        with open(self.files.pids, "w") as file:
+        with open(self.files.pids_path, "w") as file:
             file.write(json.dumps(new_pids, indent=2))
 
     def test_special_cases(self):

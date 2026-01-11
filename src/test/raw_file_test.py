@@ -1,5 +1,5 @@
 import re
-from typing import Callable
+from typing import Callable, final
 import unittest
 
 from pydantic_core import from_json
@@ -13,7 +13,7 @@ class RawFileTest(unittest.TestCase):
         self.files = Files()
 
         self.raw: list[str] = []
-        with open(self.files.rawFile, "r") as file:
+        with open(self.files.raw_file, "r") as file:
             self.raw = from_json(file.read())
 
         self.classCodeRegex = r"\d{3}-\w{3}-\w{1,2}"
