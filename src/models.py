@@ -23,8 +23,9 @@ class Rating(ConfiguredBasedModel):
     nRating: int = 0
     takeAgain: int = 0
     difficulty: float = 0
-    status: str = "foundn't"
+    status: Literal["found", "foundn't"] = "foundn't"
     prof: str = ""
+    pId: str | None = None
 
 
 class LecLab(ConfiguredBasedModel):
