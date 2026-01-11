@@ -71,7 +71,7 @@ class ScraperTest(unittest.TestCase):
         )
         self.assertEqual(Rating(prof="Voinea, Sorin"), rating)
 
-    # NOTE: these are hardcoded values, so subject ot change
+    # NOTE: these are hardcoded values, so subject to change
     def test_valid_rating(self):
         rating = self.scraper.get_rating(
             "Trepanier, Michele", self.scraper.get_saved_pids()
