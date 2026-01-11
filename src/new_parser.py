@@ -101,9 +101,10 @@ class NewParser(INewParser):
                     self._update_section()
                     section.section = text
                 else:
-                    if section.course != text:
+                    line_text = self._get_line_text(line)
+                    if section.course != line_text:
                         self._update_section()
-                    section.course = text
+                    section.course = line_text
                 continue
 
             if self.columns_x.disc == x:
