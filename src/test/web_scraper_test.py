@@ -82,6 +82,7 @@ def test_valid_rating():
         nRating=22,
         status="found",
         score=59.2,
+        pId="2496979",
     )
 
 
@@ -95,6 +96,7 @@ def test_duplicate_rating():
         nRating=9,
         status="found",
         score=45.1,
+        pId="2713391",
     )
 
     rating = scraper.get_rating("Young, Thomas", scraper.get_saved_pids())
@@ -107,6 +109,7 @@ def test_duplicate_rating():
         difficulty=2.5,
         nRating=20,
         status="found",
+        pId="1974605",
     )
 
 
@@ -181,6 +184,7 @@ def test_special_cases():
         nRating=55,
         status="found",
         score=63.5,
+        pId="898891",
     )
 
 
