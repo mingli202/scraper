@@ -2,12 +2,11 @@ import json
 import os
 import re
 from concurrent.futures import ThreadPoolExecutor
-import unittest
 
+from pydantic import TypeAdapter
 import requests
 from files import Files
 from models import Rating
-from pydantic_core import from_json
 
 import util
 
@@ -24,13 +23,6 @@ class Scraper:
 
             if ratings.__len__() != 0:
                 print("Rating files already exists")
-
-                if not unittest.main(
-                    exit=False, module="test.web_scraper_test"
-                ).result.wasSuccessful():
-                    print("scraper test unsuccessful")
-                    exit(1)
-
                 return
 
         professors = self.files.get_professors_file_content().get_words("")
@@ -38,7 +30,7 @@ class Scraper:
         ratings: dict[str, Rating] = {}
         pids = self.get_saved_pids()
 
-        new_pids: dict[str, str] = {}
+        new_pids: dict[str, str | None] = {}
 
         self.scrape_ratings(professors, ratings, pids, new_pids)
 
@@ -50,23 +42,17 @@ class Scraper:
         with open(self.files.pids_path, "w") as file:
             _ = file.write(json.dumps(new_pids, indent=2))
 
-        if not unittest.main(
-            exit=False, module="test.web_scraper_test"
-        ).result.wasSuccessful():
-            print("scraper test unsuccessful")
-            exit(1)
-
     def scrape_ratings(
         self,
         professors: list[str],
         ratings: dict[str, Rating],
-        pids: dict[str, str],
-        new_pids: dict[str, str],
+        pids: dict[str, str | None],
+        new_pids: dict[str, str | None],
     ):
-        def fn(prof: str) -> tuple[Rating, str, str]:
-            rating, pid = self.get_rating(prof, pids)
+        def fn(prof: str) -> tuple[Rating, str]:
+            rating = self.get_rating(prof, pids)
             print(rating)
-            return rating, prof, pid
+            return rating, prof
 
         if self.debug:
             results = [fn(p) for p in professors]
@@ -74,32 +60,37 @@ class Scraper:
             with ThreadPoolExecutor() as e:
                 results = e.map(fn, professors)
 
-        for rating, prof, pid in results:
+        for rating, prof in results:
             ratings[prof] = rating
-            new_pids[prof] = pid
+            new_pids[prof] = rating.pId
 
-    def get_saved_pids(self) -> dict[str, str]:
+    def get_saved_pids(self) -> dict[str, str | None]:
         if not os.path.exists(self.files.pids_path):
             with open(self.files.pids_path, "w") as file:
                 _ = file.write(json.dumps({}))
 
         with open(self.files.pids_path, "r") as file:
-            return from_json(file.read())
+            adapter = TypeAdapter(dict[str, str | None])
+            return adapter.validate_json(file.read())
 
-    def get_rating(self, prof: str, saved_pids: dict[str, str]) -> tuple[Rating, str]:
+    def get_rating(self, prof: str, saved_pids: dict[str, str | None]) -> Rating:
         rating = Rating(prof=prof)
 
-        if prof in saved_pids and saved_pids[prof] != "":
+        if (
+            prof in saved_pids
+            and saved_pids.get(prof) is not None
+            and saved_pids[prof] != ""
+        ):
             id = saved_pids[prof]
         else:
-            _prof = util.stripAccent(prof).lower()
+            _prof = util.normalize_string(prof).lower()
 
             fname = _prof.split(", ")[1]
             lname = _prof.split(", ")[0]
 
             pids = self.get_pids(lname)
             if len(pids) == 0:
-                return rating, ""
+                return rating
 
             max = 0
             id = pids[0][0]
@@ -113,7 +104,9 @@ class Scraper:
         if _r := self.get_stats_from_pid(id, prof):
             rating = _r
 
-        return rating, id
+        rating.pId = id
+
+        return rating
 
     def closeness(self, candidate: str, target: str) -> float:
         i = 0
