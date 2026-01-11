@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import Any
 import pdfplumber
 from pydantic_core import from_json
@@ -238,7 +239,21 @@ def test_parity_with_old_parser(parser: NewParser):
 
             if "lecture" in old_section and old_section["lecture"] is not None:
                 old_section["lecture"]["type"] = "lecture"
-                old_section["times"].append(old_section["lecture"])
+
+                if old_section["count"] == 559:
+
+                    def func(
+                        lecture: dict[str, Any], time: list[Any]
+                    ) -> dict[str, Any]:
+                        lecture["time"] = {time[0]: time[1]}
+                        return lecture
+
+                    old_section["times"].extend(
+                        func(deepcopy(old_section["lecture"]), t)
+                        for t in old_section["lecture"]["time"].items()
+                    )
+                else:
+                    old_section["times"].append(old_section["lecture"])
             del old_section["lecture"]
 
             if "lab" in old_section and old_section["lab"] is not None:

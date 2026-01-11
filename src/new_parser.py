@@ -74,7 +74,8 @@ class NewParser(INewParser):
 
                 if section_type != self.current_section.course_type:
                     self._update_section()
-                    self.current_section = Section()
+                    self.current_section.course_type = ""
+                    self.current_section.course = ""
 
                 self.current_section.course_type = section_type
                 continue
@@ -135,6 +136,8 @@ class NewParser(INewParser):
                         r"\*\*\*.*\*\*\*", text
                     ):
                         section.more += "\n"
+                    else:
+                        section.more += " "
 
                     return
                 continue
@@ -170,7 +173,7 @@ class NewParser(INewParser):
 
         self._update_section_times()
 
-        self.current_section.more = self.current_section.more.strip("\n")
+        self.current_section.more = self.current_section.more.strip("\n").strip()
         self.sections.append(self.current_section.model_dump(by_alias=True))
 
         self.current_section.count += 1
