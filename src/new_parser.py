@@ -129,7 +129,7 @@ class NewParser(INewParser):
                     self._update_section_times()
                     section.code = text
                 else:
-                    section.more = self._get_line_text(line)
+                    section.more += self._get_line_text(line)
 
                     if re.match("^ADDITIONAL", text) or re.match(
                         r"\*\*\*.*\*\*\*", text
