@@ -10,7 +10,7 @@ from files import Files
 from models import LecLab, Section, Word
 from new_parser import NewParser
 from .individual_parsing_data import ATestCase, data
-from parser_utils import ParserUtils
+import util
 
 files = Files()
 width, height = 0, 0
@@ -284,11 +284,9 @@ def test_parity_with_old_parser(parser: NewParser):
             old_section["more"] = old_section["more"].strip("\n").strip()
 
             old_section = json.loads(
-                re.sub(" +", " ", ParserUtils.nomalize_string(json.dumps(old_section)))
+                re.sub(" +", " ", util.normalize_string(json.dumps(old_section)))
             )
-            new_section = json.loads(
-                ParserUtils.nomalize_string(json.dumps(new_section))
-            )
+            new_section = json.loads(util.normalize_string(json.dumps(new_section)))
 
             assert old_section == new_section
 
