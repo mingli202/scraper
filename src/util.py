@@ -79,7 +79,7 @@ def save_sections_with_viewData(files: Files):
         ).fetchone()
         is not None
     ):
-        override = input("sections table already exists, override? (y/n)")
+        override = input("Sections db already exists, override? (y/n) ")
         if override.lower() != "y":
             return
 
