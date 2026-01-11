@@ -9,13 +9,12 @@ import pytest
 def main():
     files = Files()
     parser = NewParser(files)
-    ratings = Scraper(files)
+    scraper = Scraper(files)
 
     parser.run()
-    ratings.run()
+    scraper.run()
 
-    util.add_rating(files)
-    util.addViewData(files)
+    util.save_sections_with_viewData(files)
 
 
 if __name__ == "__main__":

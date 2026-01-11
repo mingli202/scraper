@@ -1,10 +1,8 @@
 import json
 import sqlite3
-from typing import Any
 from files import Files
 from models import Section
 import math
-import copy
 
 
 def normalize_string(s: str):
@@ -19,9 +17,7 @@ def normalize_string(s: str):
     return s
 
 
-def handleViewData(targetClass: Section) -> Section:
-    c = copy.deepcopy(targetClass)
-
+def add_viewdata_to_section(targetClass: Section):
     col = ["M", "T", "W", "R", "F"]
     row: list[int] = []
 
@@ -64,15 +60,31 @@ def handleViewData(targetClass: Section) -> Section:
 
                 viewData.append({f"{colStart}": [rowStart, rowEnd]})
 
-    c.view_data = viewData
-    return c
+    targetClass.view_data = viewData
 
 
-def addViewData(files: Files):
+def save_sections_with_viewData(files: Files):
     sections = files.get_parsed_sections_file_content()
+
+    for section in sections:
+        add_viewdata_to_section(section)
 
     conn = sqlite3.connect(files.all_sections_final_path)
     cursor = conn.cursor()
+
+    if (
+        cursor.execute(
+            "SELECT name from sqlite_schema WHERE type='table' and tbl_name='sections'"
+        ).fetchone()
+        is not None
+    ):
+        override = input("sections table already exists, override? (y/n)")
+        if override.lower() != "y":
+            return
+
+        _ = cursor.execute("DROP TABLE sections")
+        _ = cursor.execute("DROP TABLE times")
+        conn.commit()
 
     _ = cursor.execute("""
         CREATE TABLE IF NOT EXISTS sections (
@@ -82,12 +94,13 @@ def addViewData(files: Files):
             domain TEXT,
             code TEXT,
             more TEXT,
+            view_data TEXT
         );
     """)
 
     _ = cursor.execute("""
         CREATE TABLE IF NOT EXISTS times (
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             section_id INTEGER,
             prof TEXT,
             title TEXT,
@@ -98,4 +111,35 @@ def addViewData(files: Files):
     """)
 
     for section in sections:
-        pass
+        _ = conn.execute(
+            """
+            INSERT INTO sections values (?,?,?,?,?,?,?)
+        """,
+            (
+                section.id,
+                section.course,
+                section.section,
+                section.domain,
+                section.code,
+                section.more,
+                json.dumps(section.view_data),
+            ),
+        )
+
+        for leclab in section.times:
+            _ = conn.execute(
+                """
+                INSERT INTO times values (?,?,?,?,?,?)
+            """,
+                (
+                    None,
+                    section.id,
+                    leclab.prof,
+                    leclab.title,
+                    leclab.type,
+                    json.dumps(leclab.time),
+                ),
+            )
+
+    conn.commit()
+    conn.close()

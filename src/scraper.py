@@ -26,7 +26,10 @@ class Scraper:
             )
             if res.fetchone() is not None:
                 print("Rating files already exists")
-                return
+
+                override = input("Rating files already exists, override? (y/n)")
+                if override.lower() != "y":
+                    return
 
         professors = self.files.get_professors_file_content().get_words("")
 
@@ -244,5 +247,3 @@ if __name__ == "__main__":
     files = Files()
     scraper = Scraper(files)
     scraper.run()
-
-    print(files.get_ratings_from_db())
