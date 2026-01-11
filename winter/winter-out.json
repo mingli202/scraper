@@ -2263,7 +2263,7 @@
     "code": "205-SNC-AB",
     "lecture": {
       "title": "Planetary Geology",
-      "prof": "Leveillé, Richard John",
+      "prof": "Leveille, Richard John",
       "time": {
         "M": [
           "1430-1630"
@@ -2273,7 +2273,7 @@
     },
     "lab": {
       "title": "Planetary Geology",
-      "prof": "Leveillé, Richard John",
+      "prof": "Leveille, Richard John",
       "time": {
         "R": [
           "0830-1030"
@@ -2302,7 +2302,7 @@
     },
     "lab": {
       "title": "Planetary Geology",
-      "prof": "Leveillé, Richard John",
+      "prof": "Leveille, Richard John",
       "time": {
         "R": [
           "1030-1230"
@@ -4527,7 +4527,7 @@
     "course": "PHYSICS",
     "code": "203-SF2-AB",
     "lecture": {
-      "title": "Electricite et magnétisme",
+      "title": "Electricite et magnetisme",
       "prof": "Camirand, Hubert",
       "time": {
         "R": [
@@ -4537,7 +4537,7 @@
       "rating": null
     },
     "lab": {
-      "title": "Electricite et magnétisme",
+      "title": "Electricite et magnetisme",
       "prof": "Camirand, Hubert",
       "time": {
         "W": [
@@ -4556,7 +4556,7 @@
     "course": "PHYSICS",
     "code": "203-SF2-AB",
     "lecture": {
-      "title": "Electricite et magnétisme",
+      "title": "Electricite et magnetisme",
       "prof": "Camirand, Hubert",
       "time": {
         "W": [
@@ -5323,7 +5323,7 @@
     "lecture": null,
     "lab": {
       "title": "Space Sciences: An Interdisciplinary Journey",
-      "prof": "Leveillé, Richard John",
+      "prof": "Leveille, Richard John",
       "time": {
         "M": [
           "0830-1030"
@@ -11788,7 +11788,7 @@
     "course": "FILM",
     "code": "530-CEF-AB",
     "lecture": {
-      "title": "Cinema engagé",
+      "title": "Cinema engage",
       "prof": "Golden, Anne",
       "time": {
         "R": [
@@ -12069,7 +12069,7 @@
     "code": "530-GMA-AB",
     "lecture": {
       "title": "Graduating Exhibition Project for Media Arts and Communication",
-      "prof": "Belzile, Fredérick A.",
+      "prof": "Belzile, Frederick A.",
       "time": {
         "F": [
           "1130-1530"
@@ -12169,7 +12169,7 @@
     "code": "530-DMA-AB",
     "lecture": {
       "title": "Introduction to Digital Media",
-      "prof": "Belzile, Fredérick A.",
+      "prof": "Belzile, Frederick A.",
       "time": {
         "W": [
           "1130-1430"
@@ -12189,7 +12189,7 @@
     "code": "530-DME-AB",
     "lecture": {
       "title": "Advanced Explorations in Digital Media (Level 2)",
-      "prof": "Belzile, Fredérick A.",
+      "prof": "Belzile, Frederick A.",
       "time": {
         "R": [
           "1430-1730"
@@ -16183,7 +16183,7 @@
     "course": "FRENCH",
     "code": "602-C01-MQ",
     "lecture": {
-      "title": "Français et societé québécoise (niveau 1)",
+      "title": "Français et societe quebecoise (niveau 1)",
       "prof": "Estime, Qualito",
       "time": {
         "MW": [
@@ -16203,7 +16203,7 @@
     "course": "FRENCH",
     "code": "602-C01-MQ",
     "lecture": {
-      "title": "Français et societé québécoise (niveau 1)",
+      "title": "Français et societe quebecoise (niveau 1)",
       "prof": "Estime, Qualito",
       "time": {
         "MW": [
@@ -16223,7 +16223,7 @@
     "course": "FRENCH",
     "code": "602-C02-MQ",
     "lecture": {
-      "title": "Français et societé québécoise (niveau 2)",
+      "title": "Français et societe quebecoise (niveau 2)",
       "prof": "Hemmati, Proshat",
       "time": {
         "MW": [
@@ -16243,7 +16243,7 @@
     "course": "FRENCH",
     "code": "602-C02-MQ",
     "lecture": {
-      "title": "Français et societé québécoise (niveau 2)",
+      "title": "Français et societe quebecoise (niveau 2)",
       "prof": "Hemmati, Proshat",
       "time": {
         "MW": [
@@ -16263,7 +16263,7 @@
     "course": "FRENCH",
     "code": "602-C02-MQ",
     "lecture": {
-      "title": "Français et societé québécoise (niveau 2)",
+      "title": "Français et societe quebecoise (niveau 2)",
       "prof": "Hemmati, Proshat",
       "time": {
         "TR": [
@@ -16623,7 +16623,7 @@
     "course": "FRENCH",
     "code": "602-UF0-MQ",
     "lecture": {
-      "title": "Litterature et univers narratif Personnages féminins",
+      "title": "Litterature et univers narratif Personnages feminins",
       "prof": "Ste-Marie, Isabelle",
       "time": {
         "M": [
@@ -16643,7 +16643,7 @@
     "course": "FRENCH",
     "code": "602-UF0-MQ",
     "lecture": {
-      "title": "Litterature et univers narratif Personnages féminins",
+      "title": "Litterature et univers narratif Personnages feminins",
       "prof": "Ste-Marie, Isabelle",
       "time": {
         "W": [
@@ -16723,7 +16723,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Tiganus Calin, Amelia",
       "time": {
         "M": [
@@ -16743,7 +16743,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Boutin, David",
       "time": {
         "M": [
@@ -16763,7 +16763,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Laganiere, Frederic",
       "time": {
         "M": [
@@ -16783,7 +16783,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Beausoleil, Jean Marc",
       "time": {
         "T": [
@@ -16803,7 +16803,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Boutin, David",
       "time": {
         "T": [
@@ -16823,7 +16823,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Michael, Minar",
       "time": {
         "T": [
@@ -16843,7 +16843,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Beausoleil, Jean Marc",
       "time": {
         "W": [
@@ -16863,7 +16863,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Sweeney, Antoine",
       "time": {
         "W": [
@@ -16883,7 +16883,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Larochelle, Claudia",
       "time": {
         "W": [
@@ -16903,7 +16903,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Limoges, Alexandre",
       "time": {
         "W": [
@@ -16923,7 +16923,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Popica, Maria",
       "time": {
         "R": [
@@ -16943,7 +16943,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Michael, Minar",
       "time": {
         "R": [
@@ -16963,7 +16963,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Bernard, Matthieu",
       "time": {
         "R": [
@@ -16983,7 +16983,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Sweeney, Antoine",
       "time": {
         "F": [
@@ -17003,7 +17003,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Bernard, Matthieu",
       "time": {
         "F": [
@@ -17023,7 +17023,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, théâtre et écriture",
+      "title": "Poesie, theâtre et ecriture",
       "prof": "Larochelle, Claudia",
       "time": {
         "F": [
@@ -17683,7 +17683,7 @@
     "course": "HUMANITIES",
     "code": "345-1F1-AB",
     "lecture": {
-      "title": "Connaissance, verité, sagesse",
+      "title": "Connaissance, verite, sagesse",
       "prof": "Young, Thomas",
       "time": {
         "TR": [
@@ -21025,7 +21025,7 @@
     "course": "",
     "code": "530-DFG-AB",
     "lecture": {
-      "title": "Cinema engagé",
+      "title": "Cinema engage",
       "prof": "Golden, Anne",
       "time": {
         "R": [
