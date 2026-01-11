@@ -11,6 +11,7 @@ dependencies = [
     "pydantic==2.12.5",
     "pytest>=9.0.2",
     "typer>=0.21.1",
+    "fastapi[standard]>=0.128.0",
 ]
 authors = [{ name = "Ming Li Liu", email = "vincentmingli@gmail.com" }]
 maintainers = [{ name = "Ming Li Liu", email = "vincentmingli@gmail.com" }]
