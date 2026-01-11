@@ -80,7 +80,7 @@ class Parser:
         section.lecture = None
         section.lab = None
         section.more = ""
-        section.count += 1
+        section.id += 1
 
         tmp.title = ""
         tmp.prof = ""

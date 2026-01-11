@@ -179,7 +179,7 @@ class NewParser(INewParser):
         self.current_section.more = self.current_section.more.strip("\n").strip()
         self.sections.append(self.current_section.model_dump(by_alias=True))
 
-        self.current_section.count += 1
+        self.current_section.id += 1
         self.current_section.section = ""
         self.current_section.code = ""
         self.current_section.times = []
