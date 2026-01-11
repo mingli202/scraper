@@ -246,8 +246,8 @@ def test_parity_with_old_parser(parser: NewParser):
             if "lecture" in old_section and old_section["lecture"] is not None:
                 old_section["lecture"]["type"] = "lecture"
 
-                count = old_section["count"]
-                if count == 559:
+                id = old_section["id"]
+                if id == 559:
 
                     def func(
                         lecture: dict[str, Any], time: list[Any]
@@ -260,7 +260,7 @@ def test_parity_with_old_parser(parser: NewParser):
                         for t in old_section["lecture"]["time"].items()
                     )
 
-                elif count == 944:
+                elif id == 944:
 
                     def func(
                         lecture: dict[str, Any], day: str, time: str
@@ -283,6 +283,9 @@ def test_parity_with_old_parser(parser: NewParser):
                 old_section["lab"]["type"] = "laboratory"
                 old_section["times"].append(old_section["lab"])
             del old_section["lab"]
+
+            for time in old_section["times"]:
+                del time["rating"]
 
             old_section["more"] = old_section["more"].strip("\n").strip()
 
