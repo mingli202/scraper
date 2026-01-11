@@ -67,13 +67,13 @@ def test_department_with_space_and_duplicate_pids():
 
 
 def test_missing_rating():
-    rating, _ = scraper.get_rating("Voinea, Sorin", scraper.get_saved_pids())
+    rating = scraper.get_rating("Voinea, Sorin", scraper.get_saved_pids())
     assert rating == Rating(prof="Voinea, Sorin")
 
 
 # NOTE: these are hardcoded values, so subject to change
 def test_valid_rating():
-    rating = scraper.get_rating("Trepanier, Michele", scraper.get_saved_pids())[0]
+    rating = scraper.get_rating("Trepanier, Michele", scraper.get_saved_pids())
     assert rating == Rating(
         prof="Trepanier, Michele",
         avg=3.0,
@@ -86,7 +86,7 @@ def test_valid_rating():
 
 
 def test_duplicate_rating():
-    rating: Rating = scraper.get_rating("Young, Ryan", scraper.get_saved_pids())[0]
+    rating: Rating = scraper.get_rating("Young, Ryan", scraper.get_saved_pids())
     assert rating == Rating(
         prof="Young, Ryan",
         avg=2.2,
@@ -97,7 +97,7 @@ def test_duplicate_rating():
         score=45.1,
     )
 
-    rating = scraper.get_rating("Young, Thomas", scraper.get_saved_pids())[0]
+    rating = scraper.get_rating("Young, Thomas", scraper.get_saved_pids())
 
     assert rating == Rating(
         prof="Young, Thomas",
@@ -115,7 +115,7 @@ def test_Klochko_Yuliya():
     if "Klochko, Yuliya" not in professors:
         return
 
-    rating: Rating = scraper.get_rating("Klochko, Yuliya", scraper.get_saved_pids())[0]
+    rating: Rating = scraper.get_rating("Klochko, Yuliya", scraper.get_saved_pids())
     assert rating == Rating(prof="Klochko, Yuliya")
 
 
@@ -154,7 +154,9 @@ def test_accuracy_of_not_found():
 
 def update_section_with_checked_pids():
     ratings = files.get_ratings_file_content()
-    pids = {k: v for k, v in files.get_missing_pids_file_content().items() if v != ""}
+    pids: dict[str, str | None] = {
+        k: v for k, v in files.get_missing_pids_file_content().items() if v != ""
+    }
     new_pids = files.get_pids_file_content()
     scraper.scrape_ratings(list(pids.keys()), ratings, pids, new_pids)
 
@@ -170,7 +172,7 @@ def update_section_with_checked_pids():
 
 
 def test_special_cases():
-    rating: Rating = scraper.get_rating("Lo Vasco, Frank", scraper.get_saved_pids())[0]
+    rating: Rating = scraper.get_rating("Lo Vasco, Frank", scraper.get_saved_pids())
     assert rating == Rating(
         prof="Lo Vasco, Frank",
         avg=3.2,

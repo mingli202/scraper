@@ -238,6 +238,9 @@ def test_parity_with_old_parser(parser: NewParser):
             old_section["course"] = old_section["program"]
             del old_section["program"]
 
+            old_section["id"] = old_section["count"]
+            del old_section["count"]
+
             old_section["times"] = []
 
             if "lecture" in old_section and old_section["lecture"] is not None:
