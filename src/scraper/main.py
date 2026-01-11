@@ -8,14 +8,14 @@ import typer
 
 
 # TODO: 1. Change filename and semester in files.py
-def main(
+def _main(
     yes: Annotated[
         bool, typer.Option(help="Answer yes to all override prompts")
     ] = False,
     run_tests: Annotated[bool, typer.Option(help="Run tests")] = False,
 ):
     """
-    Parse the schedule of classes pdf and scrape professor's ratings into an ultimate compilation of all sections
+    Parse the schedule of classes pdf and scrape professors' ratings into an ultimate compilation of all sections
     """
 
     files = Files()
@@ -31,5 +31,9 @@ def main(
         exit(pytest.main(["--no-header", "-s", "-v"]))
 
 
+def main():
+    typer.run(_main)
+
+
 if __name__ == "__main__":
-    typer.run(main)
+    main()
