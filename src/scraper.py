@@ -6,7 +6,7 @@ import unittest
 
 import requests
 from files import Files
-from models import Rating, Section
+from models import Rating
 from pydantic_core import from_json
 
 import util
@@ -18,7 +18,7 @@ class Scraper:
         self.debug = False
 
     def run(self):
-        if os.path.exists(self.files.ratings_path):
+        if self.files.ratings_path.exists():
             with open(self.files.ratings_path, "r") as file:
                 ratings = json.loads(file.read())
 
@@ -33,7 +33,7 @@ class Scraper:
 
                 return
 
-        professors = self.get_professors()
+        professors = self.files.get_professors_file_content().get_words("")
 
         ratings: dict[str, Rating] = {}
         pids = self.get_saved_pids()
@@ -85,28 +85,6 @@ class Scraper:
 
         with open(self.files.pids_path, "r") as file:
             return from_json(file.read())
-
-    def get_professors(self) -> list[str]:
-        if not os.path.exists(self.files.professors_path):
-            profs: set[str] = set()
-            with open(self.files.parsed_sections, "r") as file:
-                classes: list[Section] = [Section(**d) for d in from_json(file.read())]
-
-                for cl in classes:
-                    for time in cl.times:
-                        if time.prof != "":
-                            profs.add(time.prof)
-
-            profs.remove("")
-
-            with open(self.files.professors_path, "w") as file:
-                _ = file.write(json.dumps(list(profs), indent=2))
-
-        professors: list[str] = []
-        with open(self.files.professors_path, "r") as file:
-            professors = from_json(file.read())
-
-        return professors
 
     def get_rating(self, prof: str, saved_pids: dict[str, str]) -> tuple[Rating, str]:
         rating = Rating(prof=prof)
@@ -224,3 +202,8 @@ class Scraper:
                 return None
 
         return None
+
+
+if __name__ == "__main__":
+    scraper = Scraper(Files())
+    scraper.run()

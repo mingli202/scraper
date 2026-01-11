@@ -1,4 +1,5 @@
 import os
+from typing import override
 import unittest
 
 from pydantic_core import from_json
@@ -10,6 +11,7 @@ import json
 
 
 class ScraperTest(unittest.TestCase):
+    @override
     @classmethod
     def setUpClass(cls) -> None:
         cls.files = Files()
@@ -104,7 +106,7 @@ class ScraperTest(unittest.TestCase):
             rating,
         )
 
-        rating: Rating = self.scraper.get_rating(
+        rating = self.scraper.get_rating(
             "Young, Thomas", self.scraper.get_saved_pids()
         )[0]
         self.assertEqual(
@@ -161,7 +163,7 @@ class ScraperTest(unittest.TestCase):
             print(json.dumps(odd, indent=2))
 
         with open(self.files.missing_pids_path, "w") as file:
-            file.write(json.dumps(odd, indent=2))
+            _ = file.write(json.dumps(odd, indent=2))
 
         self.assertEqual(len(odd), 0)
 
@@ -178,12 +180,12 @@ class ScraperTest(unittest.TestCase):
         self.assertEqual(ratings["Walker, Tara Leigh"].status, "found")
 
         with open(self.files.ratings_path, "w") as file:
-            file.write(
+            _ = file.write(
                 json.dumps({k: v.model_dump() for k, v in ratings.items()}, indent=2)
             )
 
         with open(self.files.pids_path, "w") as file:
-            file.write(json.dumps(new_pids, indent=2))
+            _ = file.write(json.dumps(new_pids, indent=2))
 
     def test_special_cases(self):
         rating: Rating = self.scraper.get_rating(
@@ -204,4 +206,4 @@ class ScraperTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    _ = unittest.main()

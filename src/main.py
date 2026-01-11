@@ -10,7 +10,7 @@ def main():
     parser = NewParser(files)
     ratings = Scraper(files)
 
-    parser.parse()
+    parser.run()
     ratings.run()
 
     util.addRating(files)

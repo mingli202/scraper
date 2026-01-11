@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import itertools
 import json
 from pathlib import Path
 from typing import Any, final
@@ -8,6 +9,7 @@ from pydantic_core import from_json
 
 from models import ColumnsXs, Rating, Section, Word
 from parser_utils import ParserUtils
+from trie import Trie
 
 
 @final
@@ -94,12 +96,37 @@ class Files:
                 k: Rating.model_validate(v) for k, v in from_json(file.read()).items()
             }
 
+    def get_parsed_sections_file_content(self) -> list[Section]:
+        if not self.parsed_sections.exists():
+            return []
+
+        with open(self.parsed_sections, "r") as file:
+            return [
+                Section.model_validate(s, by_alias=True) for s in from_json(file.read())
+            ]
+
+    def get_professors_file_content(self) -> Trie:
+        if self.professors_path.exists():
+            with open(self.professors_path, "r") as file:
+                return Trie.model_validate(from_json(file.read()))
+
+        professors = itertools.chain.from_iterable(
+            [t.prof for t in section.times if t.prof != ""]
+            for section in self.get_parsed_sections_file_content()
+        )
+
+        trie = Trie()
+
+        for prof in professors:
+            trie.add(prof)
+
+        with open(self.professors_path, "w") as file:
+            _ = file.write(json.dumps(trie.model_dump(by_alias=True), indent=2))
+
+        return trie
+
     def get_missing_pids_file_content(self) -> dict[str, str]:
         with open(self.missing_pids_path, "r") as file:
-            return from_json(file.read())
-
-    def get_professors_file_content(self) -> list[str]:
-        with open(self.professors_path, "r") as file:
             return from_json(file.read())
 
     def get_pids_file_content(self) -> dict[str, str]:

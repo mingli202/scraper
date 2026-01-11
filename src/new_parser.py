@@ -12,6 +12,10 @@ logger = logging.getLogger(__name__)
 
 
 class INewParser(ABC):
+    def run(self):
+        self.parse()
+        self.cache_sections()
+
     @abstractmethod
     def parse(self):
         pass
