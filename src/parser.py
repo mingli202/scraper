@@ -151,11 +151,11 @@ class Parser:
         if not (any(text.find(x) != -1 for x in programs) and space >= 30):
             return False
 
-        if text != cl.course_type:
+        if text != cl.course:
             self.updateSection(tmp)
-            cl.course = ""
+            cl.domain = ""
 
-        cl.course_type = text
+        cl.course = text
         return True
 
     def parse_course_line(self, text: str, space: int, tmp: LecLab) -> bool:
@@ -164,10 +164,10 @@ class Parser:
         if not (text.isupper() and space == 0):
             return False
 
-        if text != cl.course:
+        if text != cl.domain:
             self.updateSection(tmp)
 
-        cl.course = text
+        cl.domain = text
         return True
 
     def parse_code_header(self, space: int) -> bool:

@@ -74,22 +74,22 @@ class TestParser(unittest.TestCase):
 
         t("ENGLISH")
         self.assertEqual(
-            self.parser.currentClass, Section(course="ENGLISH"), "should set"
+            self.parser.currentClass, Section(domain="ENGLISH"), "should set"
         )
 
         t("HUMANITIES                      ")
         self.assertEqual(
-            self.parser.currentClass, Section(course="HUMANITIES"), "should replace"
+            self.parser.currentClass, Section(domain="HUMANITIES"), "should replace"
         )
 
         t("asdfoweur023984")
         self.assertEqual(
-            self.parser.currentClass, Section(course="HUMANITIES"), "should not work"
+            self.parser.currentClass, Section(domain="HUMANITIES"), "should not work"
         )
 
         t("  FRENCH")
         self.assertEqual(
-            self.parser.currentClass, Section(course="HUMANITIES"), "should not work"
+            self.parser.currentClass, Section(domain="HUMANITIES"), "should not work"
         )
 
     def test_section_line(self):
@@ -97,7 +97,7 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(
             self.parser.currentClass,
-            Section(course="", section="", code="", lecture=None),
+            Section(domain="", section="", code="", lecture=None),
         )
 
         t(
@@ -107,7 +107,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(
             self.parser.sections[-1],
             Section(
-                course="",
+                domain="",
                 section="00001",
                 code="520-AH3-AB",
                 lecture=LecLab(
@@ -129,7 +129,7 @@ class TestParser(unittest.TestCase):
             self.parser.sections[-1],
             Section(
                 count=1,
-                course="",
+                domain="",
                 section="00001",
                 code="310-518-AB",
                 lecture=LecLab(
@@ -224,7 +224,7 @@ class TestParser(unittest.TestCase):
             self.parser.currentClass,
             Section(
                 program="Science Courses",
-                course="BIOLOGY",
+                domain="BIOLOGY",
                 count=0,
                 section="00001",
                 code="101-SN1-RE",
@@ -268,7 +268,7 @@ class TestParser(unittest.TestCase):
             self.parser.currentClass,
             Section(
                 program="Science Courses",
-                course="BIOLOGY",
+                domain="BIOLOGY",
                 count=1,
                 section="00005",
                 code="101-SN1-RE",
@@ -308,7 +308,7 @@ class TestParser(unittest.TestCase):
             self.parser.currentClass,
             Section(
                 program="Science Courses",
-                course="BIOLOGY",
+                domain="BIOLOGY",
                 count=0,
                 section="00010",
                 code="101-SN1-RE",
@@ -348,7 +348,7 @@ class TestParser(unittest.TestCase):
             self.parser.currentClass,
             Section(
                 program="Science Courses",
-                course="BIOLOGY",
+                domain="BIOLOGY",
                 count=2,
                 section="00001",
                 code="101-NYA-05",
@@ -387,7 +387,7 @@ class TestParser(unittest.TestCase):
             self.parser.currentClass,
             Section(
                 program="Science Courses",
-                course="BIOLOGY",
+                domain="BIOLOGY",
                 count=3,
                 section="00002",
                 code="101-NYA-05",

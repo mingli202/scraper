@@ -70,12 +70,12 @@ class NewParser(INewParser):
                 section_type = self._get_line_text(lines[i])
                 i += 1
 
-                if section_type != self.current_section.course_type:
+                if section_type != self.current_section.course:
                     self._update_section()
-                    self.current_section.course_type = ""
                     self.current_section.course = ""
+                    self.current_section.domain = ""
 
-                self.current_section.course_type = section_type
+                self.current_section.course = section_type
                 continue
 
             self._parse_line(line)
@@ -101,9 +101,9 @@ class NewParser(INewParser):
                     section.section = text
                 else:
                     line_text = self._get_line_text(line)
-                    if section.course != line_text:
+                    if section.domain != line_text:
                         self._update_section()
-                    section.course = line_text
+                    section.domain = line_text
                 continue
 
             if self.columns_x.disc == x:

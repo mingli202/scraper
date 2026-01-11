@@ -73,10 +73,10 @@ ViewData = list[dict[str, list[int]]]
 
 
 class Section(ConfiguredBasedModel):
-    course_type: str = ""
+    course: str = ""
     count: int = 0
     section: str = ""
-    course: str = ""
+    domain: str = ""
     code: str = ""
     times: list[LecLab] = []
     more: str = ""
