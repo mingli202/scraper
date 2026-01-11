@@ -38,8 +38,8 @@ class NewParser(INewParser):
 
     @override
     def parse(self, use_cache: bool = True):
-        if use_cache and self.files.parsed_sections.exists():
-            with open(self.files.parsed_sections, "r") as file:
+        if use_cache and self.files.parsed_sections_path.exists():
+            with open(self.files.parsed_sections_path, "r") as file:
                 self.sections = json.loads(file.read())
             return
 
@@ -216,10 +216,10 @@ class NewParser(INewParser):
 
     @override
     def cache_sections(self):
-        if self.files.parsed_sections.exists():
+        if self.files.parsed_sections_path.exists():
             return
 
-        with open(self.files.parsed_sections, "w") as file:
+        with open(self.files.parsed_sections_path, "w") as file:
             _ = file.write(json.dumps(self.sections, indent=2))
 
 

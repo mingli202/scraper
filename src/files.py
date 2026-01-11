@@ -33,8 +33,9 @@ class Files:
 
         self.sorted_lines_path = data_dir / "sorted_lines.json"
         self.section_columns_x_path = data_dir / "section_columns_x.json"
-        self.parsed_sections = data_dir / "parsed_sections.json"
+        self.parsed_sections_path = data_dir / "parsed_sections.json"
         self.ratings_path = data_dir / "ratings.json"
+        self.ratings_db_path = cwd / "data" / "ratings.db"
         self.pids_path = cwd / "data" / "pids.json"
         self.professors_path = data_dir / "professors.json"
         self.all_sections_final_path = data_dir / "all_sections_final.db"
@@ -144,7 +145,7 @@ class Files:
         return sections
 
     def get_ratings_from_db(self) -> dict[str, Rating]:
-        conn = sqlite3.connect(self.all_sections_final_path)
+        conn = sqlite3.connect(self.ratings_db_path)
         cursor = conn.cursor()
 
         rows = [
@@ -166,10 +167,10 @@ class Files:
         return {r.prof: r for r in rows}
 
     def get_parsed_sections_file_content(self) -> list[Section]:
-        if not self.parsed_sections.exists():
+        if not self.parsed_sections_path.exists():
             return []
 
-        with open(self.parsed_sections, "r") as file:
+        with open(self.parsed_sections_path, "r") as file:
             return [
                 Section.model_validate(s, by_alias=True) for s in from_json(file.read())
             ]
@@ -203,7 +204,7 @@ class Files:
             return from_json(file.read())
 
     def get_out_file_content(self) -> list[Section]:
-        with open(self.parsed_sections, "r") as file:
+        with open(self.parsed_sections_path, "r") as file:
             return [
                 Section.model_validate(s, by_alias=True) for s in from_json(file.read())
             ]

@@ -18,8 +18,8 @@ class Scraper:
         self.debug = False
 
     def run(self):
-        if self.files.all_sections_final_path.exists():
-            conn = sqlite3.connect(self.files.all_sections_final_path)
+        if self.files.ratings_db_path.exists():
+            conn = sqlite3.connect(self.files.ratings_db_path)
             cursor = conn.cursor()
             res = cursor.execute(
                 "SELECT name from sqlite_schema WHERE type='table' and tbl_name='ratings'"
