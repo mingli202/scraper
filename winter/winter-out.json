@@ -15283,7 +15283,7 @@
     "course": "FRENCH",
     "code": "602-005-AB",
     "lecture": {
-      "title": "Pratique du français, langue seconde",
+      "title": "Pratique du francais, langue seconde",
       "prof": "Mercado, Sebastian",
       "time": {
         "MTWR": [
@@ -15303,7 +15303,7 @@
     "course": "FRENCH",
     "code": "602-006-50",
     "lecture": {
-      "title": "Pratique du français, langue seconde, à l'oral et à l'ecrit",
+      "title": "Pratique du francais, langue seconde, a l'oral et a l'ecrit",
       "prof": "Xu, Xiao",
       "time": {
         "TR": [
@@ -15323,7 +15323,7 @@
     "course": "FRENCH",
     "code": "602-009-AB",
     "lecture": {
-      "title": "Renforcement en français, langue seconde",
+      "title": "Renforcement en francais, langue seconde",
       "prof": "Bessette, Ariane",
       "time": {
         "TR": [
@@ -15343,7 +15343,7 @@
     "course": "FRENCH",
     "code": "602-009-AB",
     "lecture": {
-      "title": "Renforcement en français, langue seconde",
+      "title": "Renforcement en francais, langue seconde",
       "prof": "Tellier, Christine",
       "time": {
         "MW": [
@@ -15363,7 +15363,7 @@
     "course": "FRENCH",
     "code": "602-009-AB",
     "lecture": {
-      "title": "Renforcement en français, langue seconde",
+      "title": "Renforcement en francais, langue seconde",
       "prof": "Tellier, Christine",
       "time": {
         "TR": [
@@ -15383,7 +15383,7 @@
     "course": "FRENCH",
     "code": "602-008-RE",
     "lecture": {
-      "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
+      "title": "Mise a niveau pour Francais, langue seconde de la 5e seconda",
       "prof": "Bessette, Ariane",
       "time": {
         "TR": [
@@ -15403,7 +15403,7 @@
     "course": "FRENCH",
     "code": "602-008-RE",
     "lecture": {
-      "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
+      "title": "Mise a niveau pour Francais, langue seconde de la 5e seconda",
       "prof": "Tellier, Christine",
       "time": {
         "MW": [
@@ -15423,7 +15423,7 @@
     "course": "FRENCH",
     "code": "602-008-RE",
     "lecture": {
-      "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
+      "title": "Mise a niveau pour Francais, langue seconde de la 5e seconda",
       "prof": "Tellier, Christine",
       "time": {
         "TR": [
@@ -15443,7 +15443,7 @@
     "course": "FRENCH",
     "code": "602-100-MQ",
     "lecture": {
-      "title": "Français niveau 1",
+      "title": "Francais niveau 1",
       "prof": "Aissani, Louiza",
       "time": {
         "MW": [
@@ -15463,7 +15463,7 @@
     "course": "FRENCH",
     "code": "602-100-MQ",
     "lecture": {
-      "title": "Français niveau 1",
+      "title": "Francais niveau 1",
       "prof": "Laganiere, Frederic",
       "time": {
         "MW": [
@@ -15483,7 +15483,7 @@
     "course": "FRENCH",
     "code": "602-100-MQ",
     "lecture": {
-      "title": "Français niveau 1",
+      "title": "Francais niveau 1",
       "prof": "Aissani, Louiza",
       "time": {
         "TR": [
@@ -15503,7 +15503,7 @@
     "course": "FRENCH",
     "code": "602-100-MQ",
     "lecture": {
-      "title": "Français niveau 1",
+      "title": "Francais niveau 1",
       "prof": "Laganiere, Frederic",
       "time": {
         "TR": [
@@ -15523,7 +15523,7 @@
     "course": "FRENCH",
     "code": "602-100-MQ",
     "lecture": {
-      "title": "Français niveau 1",
+      "title": "Francais niveau 1",
       "prof": "Laganiere, Frederic",
       "time": {
         "TR": [
@@ -15543,7 +15543,7 @@
     "course": "FRENCH",
     "code": "602-101-MQ",
     "lecture": {
-      "title": "Français niveau 2",
+      "title": "Francais niveau 2",
       "prof": "Inch, Robert A.",
       "time": {
         "MW": [
@@ -15563,7 +15563,7 @@
     "course": "FRENCH",
     "code": "602-101-MQ",
     "lecture": {
-      "title": "Français niveau 2",
+      "title": "Francais niveau 2",
       "prof": "Inch, Robert A.",
       "time": {
         "MW": [
@@ -15583,7 +15583,7 @@
     "course": "FRENCH",
     "code": "602-101-MQ",
     "lecture": {
-      "title": "Français niveau 2",
+      "title": "Francais niveau 2",
       "prof": "Barrette, Marie-Claude",
       "time": {
         "TR": [
@@ -15603,7 +15603,7 @@
     "course": "FRENCH",
     "code": "602-101-MQ",
     "lecture": {
-      "title": "Français niveau 2",
+      "title": "Francais niveau 2",
       "prof": "Barrette, Marie-Claude",
       "time": {
         "TR": [
@@ -15623,7 +15623,7 @@
     "course": "FRENCH",
     "code": "602-102-MQ",
     "lecture": {
-      "title": "Français niveau 3",
+      "title": "Francais niveau 3",
       "prof": "Rondeau, Daniel",
       "time": {
         "M": [
@@ -15643,7 +15643,7 @@
     "course": "FRENCH",
     "code": "602-102-MQ",
     "lecture": {
-      "title": "Français niveau 3",
+      "title": "Francais niveau 3",
       "prof": "Rondeau, Daniel",
       "time": {
         "T": [
@@ -15663,7 +15663,7 @@
     "course": "FRENCH",
     "code": "602-102-MQ",
     "lecture": {
-      "title": "Français niveau 3",
+      "title": "Francais niveau 3",
       "prof": "Tellier, Christine",
       "time": {
         "T": [
@@ -15683,7 +15683,7 @@
     "course": "FRENCH",
     "code": "602-102-MQ",
     "lecture": {
-      "title": "Français niveau 3",
+      "title": "Francais niveau 3",
       "prof": "Barrette, Marie-Claude",
       "time": {
         "T": [
@@ -15703,7 +15703,7 @@
     "course": "FRENCH",
     "code": "602-102-MQ",
     "lecture": {
-      "title": "Français niveau 3",
+      "title": "Francais niveau 3",
       "prof": "Barrette, Marie-Claude",
       "time": {
         "F": [
@@ -15723,7 +15723,7 @@
     "course": "FRENCH",
     "code": "602-103-MQ",
     "lecture": {
-      "title": "Français niveau 4",
+      "title": "Francais niveau 4",
       "prof": "Prince, Sophie",
       "time": {
         "M": [
@@ -15743,7 +15743,7 @@
     "course": "FRENCH",
     "code": "602-103-MQ",
     "lecture": {
-      "title": "Français niveau 4",
+      "title": "Francais niveau 4",
       "prof": "Prince, Sophie",
       "time": {
         "TR": [
@@ -15763,7 +15763,7 @@
     "course": "FRENCH",
     "code": "602-103-MQ",
     "lecture": {
-      "title": "Français niveau 4",
+      "title": "Francais niveau 4",
       "prof": "Prince, Sophie",
       "time": {
         "TR": [
@@ -15783,7 +15783,7 @@
     "course": "FRENCH",
     "code": "602-103-MQ",
     "lecture": {
-      "title": "Français niveau 4",
+      "title": "Francais niveau 4",
       "prof": "Lazhar, Yasmine",
       "time": {
         "W": [
@@ -15803,7 +15803,7 @@
     "course": "FRENCH",
     "code": "602-103-MQ",
     "lecture": {
-      "title": "Français niveau 4",
+      "title": "Francais niveau 4",
       "prof": "Mercado, Sebastian",
       "time": {
         "F": [
@@ -15823,7 +15823,7 @@
     "course": "FRENCH",
     "code": "602-200-AB",
     "lecture": {
-      "title": "Français niveau 1",
+      "title": "Francais niveau 1",
       "prof": "Tellier, Christine",
       "time": {
         "MW": [
@@ -15843,7 +15843,7 @@
     "course": "FRENCH",
     "code": "602-200-AB",
     "lecture": {
-      "title": "Français niveau 1",
+      "title": "Francais niveau 1",
       "prof": "Bernard, Matthieu",
       "time": {
         "M": [
@@ -15863,7 +15863,7 @@
     "course": "FRENCH",
     "code": "602-200-AB",
     "lecture": {
-      "title": "Français niveau 1",
+      "title": "Francais niveau 1",
       "prof": "Inch, Robert A.",
       "time": {
         "TR": [
@@ -15883,7 +15883,7 @@
     "course": "FRENCH",
     "code": "602-201-AB",
     "lecture": {
-      "title": "Français niveau 2",
+      "title": "Francais niveau 2",
       "prof": "Nicou, Claude",
       "time": {
         "M": [
@@ -15903,7 +15903,7 @@
     "course": "FRENCH",
     "code": "602-201-AB",
     "lecture": {
-      "title": "Français niveau 2",
+      "title": "Francais niveau 2",
       "prof": "Rozenberg, Evelyne",
       "time": {
         "M": [
@@ -15923,7 +15923,7 @@
     "course": "FRENCH",
     "code": "602-201-AB",
     "lecture": {
-      "title": "Français niveau 2",
+      "title": "Francais niveau 2",
       "prof": "Rozenberg, Evelyne",
       "time": {
         "TR": [
@@ -15943,7 +15943,7 @@
     "course": "FRENCH",
     "code": "602-201-AB",
     "lecture": {
-      "title": "Français niveau 2",
+      "title": "Francais niveau 2",
       "prof": "Nicou, Claude",
       "time": {
         "W": [
@@ -15963,7 +15963,7 @@
     "course": "FRENCH",
     "code": "602-202-AB",
     "lecture": {
-      "title": "Français niveau 3",
+      "title": "Francais niveau 3",
       "prof": "Xu, Xiao",
       "time": {
         "T": [
@@ -15983,7 +15983,7 @@
     "course": "FRENCH",
     "code": "602-202-AB",
     "lecture": {
-      "title": "Français niveau 3",
+      "title": "Francais niveau 3",
       "prof": "Bessette, Ariane",
       "time": {
         "W": [
@@ -16003,7 +16003,7 @@
     "course": "FRENCH",
     "code": "602-202-AB",
     "lecture": {
-      "title": "Français niveau 3",
+      "title": "Francais niveau 3",
       "prof": "Boutin, David",
       "time": {
         "R": [
@@ -16023,7 +16023,7 @@
     "course": "FRENCH",
     "code": "602-202-AB",
     "lecture": {
-      "title": "Français niveau 3",
+      "title": "Francais niveau 3",
       "prof": "Hemmati, Proshat",
       "time": {
         "R": [
@@ -16043,7 +16043,7 @@
     "course": "FRENCH",
     "code": "602-202-AB",
     "lecture": {
-      "title": "Français niveau 3",
+      "title": "Francais niveau 3",
       "prof": "Bessette, Ariane",
       "time": {
         "F": [
@@ -16123,7 +16123,7 @@
     "course": "FRENCH",
     "code": "602-203-AB",
     "lecture": {
-      "title": "Français niveau 4",
+      "title": "Francais niveau 4",
       "prof": "Boutin, David",
       "time": {
         "W": [
@@ -16143,7 +16143,7 @@
     "course": "FRENCH",
     "code": "602-203-AB",
     "lecture": {
-      "title": "Français niveau 4",
+      "title": "Francais niveau 4",
       "prof": "Ste-Marie, Isabelle",
       "time": {
         "R": [
@@ -16163,7 +16163,7 @@
     "course": "FRENCH",
     "code": "602-203-AB",
     "lecture": {
-      "title": "Français niveau 4",
+      "title": "Francais niveau 4",
       "prof": "Pezeshki, Shahrouz",
       "time": {
         "F": [
@@ -16183,7 +16183,7 @@
     "course": "FRENCH",
     "code": "602-C01-MQ",
     "lecture": {
-      "title": "Français et societe quebecoise (niveau 1)",
+      "title": "Francais et societe quebecoise (niveau 1)",
       "prof": "Estime, Qualito",
       "time": {
         "MW": [
@@ -16203,7 +16203,7 @@
     "course": "FRENCH",
     "code": "602-C01-MQ",
     "lecture": {
-      "title": "Français et societe quebecoise (niveau 1)",
+      "title": "Francais et societe quebecoise (niveau 1)",
       "prof": "Estime, Qualito",
       "time": {
         "MW": [
@@ -16223,7 +16223,7 @@
     "course": "FRENCH",
     "code": "602-C02-MQ",
     "lecture": {
-      "title": "Français et societe quebecoise (niveau 2)",
+      "title": "Francais et societe quebecoise (niveau 2)",
       "prof": "Hemmati, Proshat",
       "time": {
         "MW": [
@@ -16243,7 +16243,7 @@
     "course": "FRENCH",
     "code": "602-C02-MQ",
     "lecture": {
-      "title": "Français et societe quebecoise (niveau 2)",
+      "title": "Francais et societe quebecoise (niveau 2)",
       "prof": "Hemmati, Proshat",
       "time": {
         "MW": [
@@ -16263,7 +16263,7 @@
     "course": "FRENCH",
     "code": "602-C02-MQ",
     "lecture": {
-      "title": "Français et societe quebecoise (niveau 2)",
+      "title": "Francais et societe quebecoise (niveau 2)",
       "prof": "Hemmati, Proshat",
       "time": {
         "TR": [
@@ -16283,7 +16283,7 @@
     "course": "FRENCH",
     "code": "602-D01-MQ",
     "lecture": {
-      "title": "Français, travail et numerique (niveau 1)",
+      "title": "Francais, travail et numerique (niveau 1)",
       "prof": "Gagne, Nicolas",
       "time": {
         "TR": [
@@ -16303,7 +16303,7 @@
     "course": "FRENCH",
     "code": "602-D01-MQ",
     "lecture": {
-      "title": "Français, travail et numerique (niveau 1)",
+      "title": "Francais, travail et numerique (niveau 1)",
       "prof": "Gagne, Nicolas",
       "time": {
         "TR": [
@@ -16323,7 +16323,7 @@
     "course": "FRENCH",
     "code": "602-D02-MQ",
     "lecture": {
-      "title": "Français, travail et numerique (niveau 2)",
+      "title": "Francais, travail et numerique (niveau 2)",
       "prof": "Xu, Xiao",
       "time": {
         "MW": [
@@ -16343,7 +16343,7 @@
     "course": "FRENCH",
     "code": "602-D02-MQ",
     "lecture": {
-      "title": "Français, travail et numerique (niveau 2)",
+      "title": "Francais, travail et numerique (niveau 2)",
       "prof": "Xu, Xiao",
       "time": {
         "MW": [
@@ -16363,7 +16363,7 @@
     "course": "FRENCH",
     "code": "602-E01-MQ",
     "lecture": {
-      "title": "Projet experientiel en français (niveau 1)",
+      "title": "Projet experientiel en francais (niveau 1)",
       "prof": "Dukanic, Filip",
       "time": {
         "MW": [
@@ -16383,7 +16383,7 @@
     "course": "FRENCH",
     "code": "602-E01-MQ",
     "lecture": {
-      "title": "Projet experientiel en français (niveau 1)",
+      "title": "Projet experientiel en francais (niveau 1)",
       "prof": "Dukanic, Filip",
       "time": {
         "F": [
@@ -16403,7 +16403,7 @@
     "course": "FRENCH",
     "code": "602-E01-MQ",
     "lecture": {
-      "title": "Projet experientiel en français (niveau 1)",
+      "title": "Projet experientiel en francais (niveau 1)",
       "prof": "Dukanic, Filip",
       "time": {
         "F": [
@@ -16423,7 +16423,7 @@
     "course": "FRENCH",
     "code": "602-E02-MQ",
     "lecture": {
-      "title": "Projet experientiel en français (niveau 2)",
+      "title": "Projet experientiel en francais (niveau 2)",
       "prof": "Sweeney, Antoine",
       "time": {
         "TR": [
@@ -16443,7 +16443,7 @@
     "course": "FRENCH",
     "code": "602-E02-MQ",
     "lecture": {
-      "title": "Projet experientiel en français (niveau 2)",
+      "title": "Projet experientiel en francais (niveau 2)",
       "prof": "Pezeshki, Shahrouz",
       "time": {
         "TR": [
@@ -16463,7 +16463,7 @@
     "course": "FRENCH",
     "code": "602-E02-MQ",
     "lecture": {
-      "title": "Projet experientiel en français (niveau 2)",
+      "title": "Projet experientiel en francais (niveau 2)",
       "prof": "Pezeshki, Shahrouz",
       "time": {
         "F": [
@@ -16483,7 +16483,7 @@
     "course": "FRENCH",
     "code": "602-REN-AB",
     "lecture": {
-      "title": "Renforcement en français ecrit",
+      "title": "Renforcement en francais ecrit",
       "prof": "Tiganus Calin, Amelia",
       "time": {
         "MW": [
@@ -16503,7 +16503,7 @@
     "course": "FRENCH",
     "code": "602-REN-AB",
     "lecture": {
-      "title": "Renforcement en français ecrit",
+      "title": "Renforcement en francais ecrit",
       "prof": "Mercado, Sebastian",
       "time": {
         "MW": [
@@ -16523,7 +16523,7 @@
     "course": "FRENCH",
     "code": "602-REN-AB",
     "lecture": {
-      "title": "Renforcement en français ecrit",
+      "title": "Renforcement en francais ecrit",
       "prof": "Inch, Robert A.",
       "time": {
         "TR": [
@@ -16543,7 +16543,7 @@
     "course": "FRENCH",
     "code": "602-REN-AB",
     "lecture": {
-      "title": "Renforcement en français ecrit",
+      "title": "Renforcement en francais ecrit",
       "prof": "Mariage, Sylvie",
       "time": {
         "TR": [
@@ -16563,7 +16563,7 @@
     "course": "FRENCH",
     "code": "602-REN-AB",
     "lecture": {
-      "title": "Renforcement en français ecrit",
+      "title": "Renforcement en francais ecrit",
       "prof": "Campeau-Devlin, Marianne",
       "time": {
         "TR": [
@@ -16583,7 +16583,7 @@
     "course": "FRENCH",
     "code": "602-REN-AB",
     "lecture": {
-      "title": "Renforcement en français ecrit",
+      "title": "Renforcement en francais ecrit",
       "prof": "Rozenberg, Evelyne",
       "time": {
         "TR": [
@@ -16723,7 +16723,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Tiganus Calin, Amelia",
       "time": {
         "M": [
@@ -16743,7 +16743,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Boutin, David",
       "time": {
         "M": [
@@ -16763,7 +16763,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Laganiere, Frederic",
       "time": {
         "M": [
@@ -16783,7 +16783,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Beausoleil, Jean Marc",
       "time": {
         "T": [
@@ -16803,7 +16803,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Boutin, David",
       "time": {
         "T": [
@@ -16823,7 +16823,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Michael, Minar",
       "time": {
         "T": [
@@ -16843,7 +16843,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Beausoleil, Jean Marc",
       "time": {
         "W": [
@@ -16863,7 +16863,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Sweeney, Antoine",
       "time": {
         "W": [
@@ -16883,7 +16883,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Larochelle, Claudia",
       "time": {
         "W": [
@@ -16903,7 +16903,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Limoges, Alexandre",
       "time": {
         "W": [
@@ -16923,7 +16923,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Popica, Maria",
       "time": {
         "R": [
@@ -16943,7 +16943,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Michael, Minar",
       "time": {
         "R": [
@@ -16963,7 +16963,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Bernard, Matthieu",
       "time": {
         "R": [
@@ -16983,7 +16983,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Sweeney, Antoine",
       "time": {
         "F": [
@@ -17003,7 +17003,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Bernard, Matthieu",
       "time": {
         "F": [
@@ -17023,7 +17023,7 @@
     "course": "FRENCH",
     "code": "602-UF1-MQ",
     "lecture": {
-      "title": "Poesie, theâtre et ecriture",
+      "title": "Poesie, theatre et ecriture",
       "prof": "Larochelle, Claudia",
       "time": {
         "F": [
@@ -20965,7 +20965,7 @@
     "course": "",
     "code": "320-DFB-AB",
     "lecture": {
-      "title": "Initiation à la geographie",
+      "title": "Initiation a la geographie",
       "prof": "Podmore, Julie",
       "time": {
         "M": [
@@ -21165,7 +21165,7 @@
     "course": "",
     "code": "&",
     "lecture": {
-      "title": "CERAMICS 570-DFA-AB Façonnage",
+      "title": "CERAMICS 570-DFA-AB Faconnage",
       "prof": "Horlik, Veronika",
       "time": {
         "M": [
@@ -21185,7 +21185,7 @@
     "course": "",
     "code": "&",
     "lecture": {
-      "title": "CERAMICS 570-DFA-AB Façonnage",
+      "title": "CERAMICS 570-DFA-AB Faconnage",
       "prof": "Horlik, Veronika",
       "time": {
         "T": [

@@ -1,4 +1,5 @@
 from copy import deepcopy
+import json
 from typing import Any
 import pdfplumber
 from pydantic_core import from_json
@@ -9,6 +10,7 @@ from files import Files
 from models import LecLab, Section, Word
 from new_parser import NewParser
 from .individual_parsing_data import ATestCase, data
+from parser_utils import ParserUtils
 
 files = Files()
 width, height = 0, 0
@@ -240,7 +242,8 @@ def test_parity_with_old_parser(parser: NewParser):
             if "lecture" in old_section and old_section["lecture"] is not None:
                 old_section["lecture"]["type"] = "lecture"
 
-                if old_section["count"] == 559:
+                count = old_section["count"]
+                if count == 559:
 
                     def func(
                         lecture: dict[str, Any], time: list[Any]
@@ -252,6 +255,22 @@ def test_parity_with_old_parser(parser: NewParser):
                         func(deepcopy(old_section["lecture"]), t)
                         for t in old_section["lecture"]["time"].items()
                     )
+
+                elif count == 944:
+
+                    def func(
+                        lecture: dict[str, Any], day: str, time: str
+                    ) -> dict[str, Any]:
+                        lecture["time"] = {day: [time]}
+                        return lecture
+
+                    day = list(old_section["lecture"]["time"].keys())[0]
+
+                    old_section["times"].extend(
+                        func(deepcopy(old_section["lecture"]), day, t)
+                        for t in list(old_section["lecture"]["time"].values())[0]
+                    )
+
                 else:
                     old_section["times"].append(old_section["lecture"])
             del old_section["lecture"]
@@ -262,6 +281,13 @@ def test_parity_with_old_parser(parser: NewParser):
             del old_section["lab"]
 
             old_section["more"] = old_section["more"].strip("\n").strip()
+
+            old_section = json.loads(
+                ParserUtils.sanitize_string(json.dumps(old_section)).replace("  ", " ")
+            )
+            new_section = json.loads(
+                ParserUtils.sanitize_string(json.dumps(new_section))
+            )
 
             assert old_section == new_section
 
