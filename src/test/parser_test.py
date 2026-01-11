@@ -3,11 +3,14 @@ import inspect
 import unittest
 from typing import Callable
 
+import pytest
+
 from files import Files
 from models import LecLab, Section
 from parser import Parser
 
 
+@pytest.mark.skip(reason="deprecated Parser")
 class TestParser(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -128,7 +131,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(
             self.parser.sections[-1],
             Section(
-                count=1,
+                id=1,
                 domain="",
                 section="00001",
                 code="310-518-AB",
@@ -225,7 +228,7 @@ class TestParser(unittest.TestCase):
             Section(
                 program="Science Courses",
                 domain="BIOLOGY",
-                count=0,
+                id=0,
                 section="00001",
                 code="101-SN1-RE",
                 lecture=LecLab(
@@ -269,7 +272,7 @@ class TestParser(unittest.TestCase):
             Section(
                 program="Science Courses",
                 domain="BIOLOGY",
-                count=1,
+                id=1,
                 section="00005",
                 code="101-SN1-RE",
                 lecture=LecLab(
@@ -309,7 +312,7 @@ class TestParser(unittest.TestCase):
             Section(
                 program="Science Courses",
                 domain="BIOLOGY",
-                count=0,
+                id=0,
                 section="00010",
                 code="101-SN1-RE",
                 lecture=LecLab(
@@ -349,7 +352,7 @@ class TestParser(unittest.TestCase):
             Section(
                 program="Science Courses",
                 domain="BIOLOGY",
-                count=2,
+                id=2,
                 section="00001",
                 code="101-NYA-05",
                 lecture=LecLab(
@@ -388,7 +391,7 @@ class TestParser(unittest.TestCase):
             Section(
                 program="Science Courses",
                 domain="BIOLOGY",
-                count=3,
+                id=3,
                 section="00002",
                 code="101-NYA-05",
                 lecture=LecLab(
@@ -429,7 +432,7 @@ class TestParser(unittest.TestCase):
                     prof="",
                     time={"MT": ["0800-1000"]},
                 ),
-                count=0,
+                id=0,
                 section="00001",
             ),
             "should be equal",
@@ -454,7 +457,7 @@ class TestParser(unittest.TestCase):
                     prof="",
                     time={"WF": ["1530-1630"], "F": ["1330-1430"]},
                 ),
-                count=1,
+                id=1,
                 section="00011",
             ),
             "no lecture only lab tf",
@@ -489,7 +492,7 @@ class TestParser(unittest.TestCase):
                     ),
                 ).model_dump(),
                 Section(
-                    count=1,
+                    id=1,
                     program="Career Programs",
                     code="180-10D-LS",
                     section="00022",
@@ -518,7 +521,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(
             self.parser.sections[-1],
             Section(
-                count=0,
+                id=0,
                 code="561-A5R-AB",
                 lecture=LecLab(
                     title="Production Lab 3",

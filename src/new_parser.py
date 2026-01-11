@@ -13,11 +13,15 @@ logger = logging.getLogger(__name__)
 
 class INewParser(ABC):
     @abstractmethod
+    def run(self):
+        pass
+
+    @abstractmethod
     def parse(self):
         pass
 
     @abstractmethod
-    def cache_sections(self):
+    def save_sections(self):
         pass
 
 
@@ -33,12 +37,20 @@ class NewParser(INewParser):
         self.lines = self.files.get_sorted_lines_content()
 
     @override
-    def parse(self, use_cache: bool = True):
-        if use_cache and self.files.parsed_sections.exists():
-            with open(self.files.parsed_sections, "r") as file:
-                self.sections = json.loads(file.read())
-            return
+    def run(self, force_override: bool = False):
+        if not force_override and self.files.parsed_sections_path.exists():
+            override = input("Pdf already parsed, override? (y/n): ")
 
+            if override.lower() != "y":
+                with open(self.files.parsed_sections_path, "r") as file:
+                    self.sections = json.loads(file.read())
+                return
+
+        self.parse()
+        self.save_sections()
+
+    @override
+    def parse(self):
         lines = list(self.lines.values())
 
         title = self._get_line_text(lines[0])
@@ -175,7 +187,7 @@ class NewParser(INewParser):
         self.current_section.more = self.current_section.more.strip("\n").strip()
         self.sections.append(self.current_section.model_dump(by_alias=True))
 
-        self.current_section.count += 1
+        self.current_section.id += 1
         self.current_section.section = ""
         self.current_section.code = ""
         self.current_section.times = []
@@ -211,11 +223,11 @@ class NewParser(INewParser):
         self.leclab.clear()
 
     @override
-    def cache_sections(self):
-        if self.files.parsed_sections.exists():
+    def save_sections(self):
+        if self.files.parsed_sections_path.exists():
             return
 
-        with open(self.files.parsed_sections, "w") as file:
+        with open(self.files.parsed_sections_path, "w") as file:
             _ = file.write(json.dumps(self.sections, indent=2))
 
 
@@ -225,4 +237,4 @@ if __name__ == "__main__":
     files = Files()
     parser = NewParser(files)
     parser.parse()
-    parser.cache_sections()
+    parser.save_sections()

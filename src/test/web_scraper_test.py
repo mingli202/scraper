@@ -1,5 +1,5 @@
 import os
-import unittest
+import pytest
 
 from pydantic_core import from_json
 from files import Files
@@ -9,199 +9,197 @@ from scraper import Scraper
 import json
 
 
-class ScraperTest(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.files = Files()
-        cls.professors: list[str] = []
-        with open(cls.files.professors_path, "r") as file:
-            cls.professors = from_json(file.read())
-        cls.scraper = Scraper(cls.files)
+files = Files()
+professors: list[str] = []
+with open(files.professors_path, "r") as file:
+    professors = from_json(file.read())
+scraper = Scraper(files)
 
-    def test_prof_rating_regex(self):
-        self.assertIsNotNone(self.scraper.get_stats_from_pid("817818", "Grant, Grell"))
 
-    def test_unique_lastname(self):
-        professors: list[str] = []
-        with open(self.files.professors_path, "r") as file:
-            professors = from_json(file.read())
+def test_prof_rating_regex():
+    assert scraper.get_stats_from_pid("817818", "Grant, Grell") is not None
 
-        not_unique_last_name: set[str] = set()
 
-        lastnames: set[str] = set()
-        for prof in professors:
-            lname, _ = prof.split(", ")
-            if lname != "TBA-1" and lname in lastnames:
-                not_unique_last_name.add(prof)
+def test_unique_lastname():
+    professors: list[str] = files.get_professors_file_content().get_words("")
 
-            else:
-                lastnames.add(lname)
+    not_unique_last_name: set[str] = set()
 
-        if not_unique_last_name.__len__() > 0:
-            print(not_unique_last_name)
+    lastnames: set[str] = set()
+    for prof in professors:
+        lname, _ = prof.split(", ")
+        if lname != "TBA-1" and lname in lastnames:
+            not_unique_last_name.add(prof)
 
-    def test_closelness(self):
-        c = self.scraper.closeness("Grgoy", "Gregory")
-        self.assertEqual(c, 5 / 7)
+        else:
+            lastnames.add(lname)
 
-        c = self.scraper.closeness("Greg", "Gregory")
-        self.assertEqual(c, 4 / 7)
+    if not_unique_last_name.__len__() > 0:
+        print(not_unique_last_name)
 
-    def test_valid_pids(self):
-        pids = self.scraper.get_pids("wang")
-        self.assertEqual(len(pids), 1)
 
-    def test_duplicate_pids(self):
-        pids = self.scraper.get_pids("Provencher")
-        self.assertEqual(len(pids), 2)  # there are 2 provencher
+def test_closelness():
+    c = scraper.closeness("Grgoy", "Gregory")
+    assert c == 5 / 7
 
-    def test_no_pids(self):
-        pids = self.scraper.get_pids("Klochko")
-        self.assertEqual(len(pids), 0)  # reseults are N/A
+    c = scraper.closeness("Greg", "Gregory")
+    assert c == 4 / 7
 
-    def test_department_with_space_and_duplicate_pids(self):
-        pids = self.scraper.get_pids("young")
-        self.assertEqual(len(pids), 2)  # department had a space
 
-    def test_missing_rating(self):
-        rating, _ = self.scraper.get_rating(
-            "Voinea, Sorin", self.scraper.get_saved_pids()
+def test_valid_pids():
+    pids = scraper.get_pids("wang")
+    assert len(pids) == 1
+
+
+def test_duplicate_pids():
+    pids = scraper.get_pids("Provencher")
+    assert len(pids) == 2  # there are 2 provencher
+
+
+def test_no_pids():
+    pids = scraper.get_pids("Klochko")
+    assert len(pids) == 0  # results are N/A
+
+
+def test_department_with_space_and_duplicate_pids():
+    pids = scraper.get_pids("young")
+    assert len(pids) == 2  # department had a space
+
+
+def test_missing_rating():
+    rating = scraper.get_rating("Voinea, Sorin", scraper.get_saved_pids())
+    assert rating == Rating(prof="Voinea, Sorin")
+
+
+# NOTE: these are hardcoded values, so subject to change
+def test_valid_rating():
+    rating = scraper.get_rating("Trepanier, Michele", scraper.get_saved_pids())
+    assert rating == Rating(
+        prof="Trepanier, Michele",
+        avg=3.0,
+        takeAgain=50,
+        difficulty=3.5,
+        nRating=22,
+        status="found",
+        score=59.2,
+        pId="2496979",
+    )
+
+
+def test_duplicate_rating():
+    rating: Rating = scraper.get_rating("Young, Ryan", scraper.get_saved_pids())
+    assert rating == Rating(
+        prof="Young, Ryan",
+        avg=2.2,
+        takeAgain=22,
+        difficulty=2.8,
+        nRating=9,
+        status="found",
+        score=45.1,
+        pId="2713391",
+    )
+
+    rating = scraper.get_rating("Young, Thomas", scraper.get_saved_pids())
+
+    assert rating == Rating(
+        prof="Young, Thomas",
+        score=68.2,
+        avg=3.5,
+        takeAgain=53,
+        difficulty=2.5,
+        nRating=20,
+        status="found",
+        pId="1974605",
+    )
+
+
+# NOTE: belongs to Concordia
+def test_Klochko_Yuliya():
+    if "Klochko, Yuliya" not in professors:
+        return
+
+    rating: Rating = scraper.get_rating("Klochko, Yuliya", scraper.get_saved_pids())
+    assert rating == Rating(prof="Klochko, Yuliya")
+
+
+# NOTE: manually check foundn't
+# NOTE: winter2026 dec 11 schedule pdf checked!
+# NOTE: missingPids checked!
+def test_accuracy_of_not_found():
+    checked = True
+    updated = True
+
+    if checked:
+        if not updated:
+            update_section_with_checked_pids()
+        return
+
+    odd: dict[str, str] = {}
+
+    ratings: dict[str, Rating] = files.get_ratings_file_content()
+
+    if os.path.exists(files.missing_pids_path):
+        with open(files.missing_pids_path, "r") as file:
+            odd = json.loads(file.read())
+
+    for rating in ratings.values():
+        if rating.status == "foundn't":
+            odd[rating.prof] = ""
+
+    if len(odd) > 0:
+        print(json.dumps(odd, indent=2))
+
+    with open(files.missing_pids_path, "w") as file:
+        _ = file.write(json.dumps(odd, indent=2))
+
+    assert len(odd) == 0
+
+
+def update_section_with_checked_pids():
+    ratings = files.get_ratings_file_content()
+    pids: dict[str, str | None] = {
+        k: v for k, v in files.get_missing_pids_file_content().items() if v != ""
+    }
+    new_pids = files.get_pids_file_content()
+    scraper.scrape_ratings(list(pids.keys()), ratings, pids, new_pids)
+
+    assert ratings["Walker, Tara Leigh"].status == "found"
+
+    with open(files.ratings_path, "w") as file:
+        _ = file.write(
+            json.dumps({k: v.model_dump() for k, v in ratings.items()}, indent=2)
         )
-        self.assertEqual(Rating(prof="Voinea, Sorin"), rating)
 
-    # NOTE: these are hardcoded values, so subject ot change
-    def test_valid_rating(self):
-        rating = self.scraper.get_rating(
-            "Trepanier, Michele", self.scraper.get_saved_pids()
-        )[0]
-        self.assertEqual(
-            Rating(
-                prof="Trepanier, Michele",
-                avg=3.0,
-                takeAgain=52,
-                difficulty=3.4,
-                nRating=23,
-                status="found",
-                score=59.2,
-            ),
-            rating,
-        )
+    with open(files.pids_path, "w") as file:
+        _ = file.write(json.dumps(new_pids, indent=2))
 
-    def test_duplicate_rating(self):
-        rating: Rating = self.scraper.get_rating(
-            "Young, Ryan", self.scraper.get_saved_pids()
-        )[0]
-        self.assertEqual(
-            Rating(
-                prof="Young, Ryan",
-                avg=2.4,
-                takeAgain=29,
-                difficulty=2.7,
-                nRating=7,
-                status="found",
-                score=48.4,
-            ),
-            rating,
-        )
 
-        rating: Rating = self.scraper.get_rating(
-            "Young, Thomas", self.scraper.get_saved_pids()
-        )[0]
-        self.assertEqual(
-            Rating(
-                prof="Young, Thomas",
-                score=68.2,
-                avg=3.5,
-                takeAgain=53,
-                difficulty=2.5,
-                nRating=20,
-                status="found",
-            ),
-            rating,
-        )
+def test_special_cases():
+    rating: Rating = scraper.get_rating("Lo Vasco, Frank", scraper.get_saved_pids())
+    assert rating == Rating(
+        prof="Lo Vasco, Frank",
+        avg=3.2,
+        takeAgain=49,
+        difficulty=4.1,
+        nRating=55,
+        status="found",
+        score=63.5,
+        pId="898891",
+    )
 
-    # NOTE: belongs to Concordia
-    def test_Klochko_Yuliya(self):
-        if "Klochko, Yuliya" not in self.professors:
-            return
 
-        rating: Rating = self.scraper.get_rating(
-            "Klochko, Yuliya", self.scraper.get_saved_pids()
-        )[0]
-        self.assertEqual(
-            Rating(prof="Klochko, Yuliya"),
-            rating,
-        )
+def test_prof_trie():
+    professors = files.get_professors_file_content().get_words("")
+    old_professors: list[str] = []
 
-    # NOTE: manually check foundn't
-    # NOTE: winter2026 dec 11 schedule pdf checked!
-    # NOTE: missingPids checked!
-    def test_accuracy_of_not_found(self):
-        checked = True
-        updated = True
+    with open(files.cwd / "winter" / "winter-professors.json", "r") as file:
+        old_professors = from_json(file.read())
 
-        if checked:
-            if not updated:
-                self.updateSectionWithCheckedPids()
-            return
-
-        odd: dict[str, str] = {}
-
-        ratings: dict[str, Rating] = self.files.get_ratings_file_content()
-
-        if os.path.exists(self.files.missing_pids_path):
-            with open(self.files.missing_pids_path, "r") as file:
-                odd = json.loads(file.read())
-
-        for rating in ratings.values():
-            if rating.status == "foundn't":
-                odd[rating.prof] = ""
-
-        if len(odd) > 0:
-            print(json.dumps(odd, indent=2))
-
-        with open(self.files.missing_pids_path, "w") as file:
-            file.write(json.dumps(odd, indent=2))
-
-        self.assertEqual(len(odd), 0)
-
-    def updateSectionWithCheckedPids(self):
-        ratings = self.files.get_ratings_file_content()
-        pids = {
-            k: v
-            for k, v in self.files.get_missing_pids_file_content().items()
-            if v != ""
-        }
-        new_pids = self.files.get_pids_file_content()
-        self.scraper.scrape_ratings(list(pids.keys()), ratings, pids, new_pids)
-
-        self.assertEqual(ratings["Walker, Tara Leigh"].status, "found")
-
-        with open(self.files.ratings_path, "w") as file:
-            file.write(
-                json.dumps({k: v.model_dump() for k, v in ratings.items()}, indent=2)
-            )
-
-        with open(self.files.pids_path, "w") as file:
-            file.write(json.dumps(new_pids, indent=2))
-
-    def test_special_cases(self):
-        rating: Rating = self.scraper.get_rating(
-            "Lo Vasco, Frank", self.scraper.get_saved_pids()
-        )[0]
-        self.assertEqual(
-            Rating(
-                prof="Lo Vasco, Frank",
-                avg=3.2,
-                takeAgain=50,
-                difficulty=4.1,
-                nRating=54,
-                status="found",
-                score=63.5,
-            ),
-            rating,
-        )
+    professors = sorted(professors)
+    old_professors = sorted(old_professors)
+    assert len(professors) == len(old_professors)
+    assert professors == old_professors
 
 
 if __name__ == "__main__":
-    unittest.main()
+    exit(pytest.main(["--no-header", "-s", "-vvv", __file__]))

@@ -23,8 +23,9 @@ class Rating(ConfiguredBasedModel):
     nRating: int = 0
     takeAgain: int = 0
     difficulty: float = 0
-    status: str = "foundn't"
+    status: Literal["found", "foundn't"] = "foundn't"
     prof: str = ""
+    pId: str | None = None
 
 
 class LecLab(ConfiguredBasedModel):
@@ -32,7 +33,6 @@ class LecLab(ConfiguredBasedModel):
     type: Literal["lecture", "laboratory"] | None = None
     prof: str = ""
     time: Time = {}
-    rating: Rating | None = None
 
     def update(self, tmp: Self):
         if tmp.title != "":
@@ -66,15 +66,14 @@ class LecLab(ConfiguredBasedModel):
         self.type = None
         self.prof = ""
         self.time = Time()
-        self.rating = None
 
 
 ViewData = list[dict[str, list[int]]]
 
 
 class Section(ConfiguredBasedModel):
+    id: int = 0
     course: str = ""
-    count: int = 0
     section: str = ""
     domain: str = ""
     code: str = ""
@@ -141,10 +140,6 @@ class ModelsTest(unittest.TestCase):
             ValidationError,
             lambda: ColumnsXs.model_validate_json(serialized, by_alias=True),
         )
-
-
-class GenAiResponse(BaseModel):
-    answer: bool
 
 
 if __name__ == "__main__":

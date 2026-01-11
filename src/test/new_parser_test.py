@@ -10,7 +10,7 @@ from files import Files
 from models import LecLab, Section, Word
 from new_parser import NewParser
 from .individual_parsing_data import ATestCase, data
-from parser_utils import ParserUtils
+import util
 
 files = Files()
 width, height = 0, 0
@@ -219,14 +219,14 @@ def test_correct_column_x(parser: NewParser):
 def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: Section):
     print(test_case.name)
     parser.lines = test_case.lines
-    parser.parse(False)
+    parser.parse()
 
     assert len(parser.sections) == 1
     assert parser.sections[0] == expected.model_dump(by_alias=True)
 
 
 def test_parity_with_old_parser(parser: NewParser):
-    parser.parse(False)
+    parser.parse()
 
     with open(files.out_file_path, "r") as file:
         out: list[dict[str, Any]] = from_json(file.read())
@@ -234,16 +234,20 @@ def test_parity_with_old_parser(parser: NewParser):
         assert len(out) == len(parser.sections)
 
         for old_section, new_section in zip(out, parser.sections):
-            old_section["courseType"] = old_section["program"]
+            old_section["domain"] = old_section["course"]
+            old_section["course"] = old_section["program"]
             del old_section["program"]
+
+            old_section["id"] = old_section["count"]
+            del old_section["count"]
 
             old_section["times"] = []
 
             if "lecture" in old_section and old_section["lecture"] is not None:
                 old_section["lecture"]["type"] = "lecture"
 
-                count = old_section["count"]
-                if count == 559:
+                id = old_section["id"]
+                if id == 559:
 
                     def func(
                         lecture: dict[str, Any], time: list[Any]
@@ -256,7 +260,7 @@ def test_parity_with_old_parser(parser: NewParser):
                         for t in old_section["lecture"]["time"].items()
                     )
 
-                elif count == 944:
+                elif id == 944:
 
                     def func(
                         lecture: dict[str, Any], day: str, time: str
@@ -280,14 +284,15 @@ def test_parity_with_old_parser(parser: NewParser):
                 old_section["times"].append(old_section["lab"])
             del old_section["lab"]
 
+            for time in old_section["times"]:
+                del time["rating"]
+
             old_section["more"] = old_section["more"].strip("\n").strip()
 
             old_section = json.loads(
-                re.sub(" +", " ", ParserUtils.nomalize_string(json.dumps(old_section)))
+                re.sub(" +", " ", util.normalize_string(json.dumps(old_section)))
             )
-            new_section = json.loads(
-                ParserUtils.nomalize_string(json.dumps(new_section))
-            )
+            new_section = json.loads(util.normalize_string(json.dumps(new_section)))
 
             assert old_section == new_section
 

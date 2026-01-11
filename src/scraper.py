@@ -2,12 +2,12 @@ import json
 import os
 import re
 from concurrent.futures import ThreadPoolExecutor
-import unittest
+import sqlite3
 
+from pydantic import TypeAdapter
 import requests
 from files import Files
-from models import Rating, Section
-from pydantic_core import from_json
+from models import Rating
 
 import util
 
@@ -17,56 +17,43 @@ class Scraper:
         self.files = files
         self.debug = False
 
-    def run(self):
-        if os.path.exists(self.files.ratings_path):
-            with open(self.files.ratings_path, "r") as file:
-                ratings = json.loads(file.read())
+    def run(self, force_override: bool = False):
+        if not force_override and self.files.ratings_db_path.exists():
+            conn = sqlite3.connect(self.files.ratings_db_path)
+            cursor = conn.cursor()
+            res = cursor.execute(
+                "SELECT name from sqlite_schema WHERE type='table' and tbl_name='ratings'"
+            )
+            if res.fetchone() is not None:
+                override = input("Rating db already exists, override? (y/n) ")
+                if override.lower() != "y":
+                    return
 
-            if ratings.__len__() != 0:
-                print("Rating files already exists")
-
-                if not unittest.main(
-                    exit=False, module="test.web_scraper_test"
-                ).result.wasSuccessful():
-                    print("scraper test unsuccessful")
-                    exit(1)
-
-                return
-
-        professors = self.get_professors()
+        professors = self.files.get_professors_file_content().get_words("")
 
         ratings: dict[str, Rating] = {}
         pids = self.get_saved_pids()
 
-        new_pids: dict[str, str] = {}
+        new_pids: dict[str, str | None] = {}
 
         self.scrape_ratings(professors, ratings, pids, new_pids)
-
-        with open(self.files.ratings_path, "w") as file:
-            _ = file.write(
-                json.dumps({k: v.model_dump() for k, v in ratings.items()}, indent=2)
-            )
 
         with open(self.files.pids_path, "w") as file:
             _ = file.write(json.dumps(new_pids, indent=2))
 
-        if not unittest.main(
-            exit=False, module="test.web_scraper_test"
-        ).result.wasSuccessful():
-            print("scraper test unsuccessful")
-            exit(1)
+        self.save_ratings(ratings)
 
     def scrape_ratings(
         self,
         professors: list[str],
         ratings: dict[str, Rating],
-        pids: dict[str, str],
-        new_pids: dict[str, str],
+        pids: dict[str, str | None],
+        new_pids: dict[str, str | None],
     ):
-        def fn(prof: str) -> tuple[Rating, str, str]:
-            rating, pid = self.get_rating(prof, pids)
+        def fn(prof: str) -> tuple[Rating, str]:
+            rating = self.get_rating(prof, pids)
             print(rating)
-            return rating, prof, pid
+            return rating, prof
 
         if self.debug:
             results = [fn(p) for p in professors]
@@ -74,56 +61,37 @@ class Scraper:
             with ThreadPoolExecutor() as e:
                 results = e.map(fn, professors)
 
-        for rating, prof, pid in results:
+        for rating, prof in results:
             ratings[prof] = rating
-            new_pids[prof] = pid
+            new_pids[prof] = rating.pId
 
-    def get_saved_pids(self) -> dict[str, str]:
+    def get_saved_pids(self) -> dict[str, str | None]:
         if not os.path.exists(self.files.pids_path):
             with open(self.files.pids_path, "w") as file:
                 _ = file.write(json.dumps({}))
 
         with open(self.files.pids_path, "r") as file:
-            return from_json(file.read())
+            adapter = TypeAdapter(dict[str, str | None])
+            return adapter.validate_json(file.read())
 
-    def get_professors(self) -> list[str]:
-        if not os.path.exists(self.files.professors_path):
-            profs: set[str] = set()
-            with open(self.files.parsed_sections, "r") as file:
-                classes: list[Section] = [Section(**d) for d in from_json(file.read())]
-
-                for cl in classes:
-                    if cl.lecture:
-                        profs.add(cl.lecture.prof)
-
-                    if cl.lab:
-                        profs.add(cl.lab.prof)
-
-            profs.remove("")
-
-            with open(self.files.professors_path, "w") as file:
-                file.write(json.dumps(list(profs), indent=2))
-
-        professors: list[str] = []
-        with open(self.files.professors_path, "r") as file:
-            professors = from_json(file.read())
-
-        return professors
-
-    def get_rating(self, prof: str, saved_pids: dict[str, str]) -> tuple[Rating, str]:
+    def get_rating(self, prof: str, saved_pids: dict[str, str | None]) -> Rating:
         rating = Rating(prof=prof)
 
-        if prof in saved_pids and saved_pids[prof] != "":
+        if (
+            prof in saved_pids
+            and saved_pids.get(prof) is not None
+            and saved_pids[prof] != ""
+        ):
             id = saved_pids[prof]
         else:
-            _prof = util.stripAccent(prof).lower()
+            _prof = util.normalize_string(prof).lower()
 
             fname = _prof.split(", ")[1]
             lname = _prof.split(", ")[0]
 
             pids = self.get_pids(lname)
             if len(pids) == 0:
-                return rating, ""
+                return rating
 
             max = 0
             id = pids[0][0]
@@ -134,10 +102,13 @@ class Scraper:
                         id = pid[0]
                         max = c
 
+        assert id is not None
         if _r := self.get_stats_from_pid(id, prof):
             rating = _r
 
-        return rating, id
+        rating.pId = id
+
+        return rating
 
     def closeness(self, candidate: str, target: str) -> float:
         i = 0
@@ -226,3 +197,51 @@ class Scraper:
                 return None
 
         return None
+
+    def save_ratings(self, ratings: dict[str, Rating]):
+        conn = sqlite3.connect(self.files.ratings_db_path)
+        cursor = conn.cursor()
+
+        _ = cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ratings (
+                prof TEXT PRIMARY KEY NOT NULL,
+                score REAL NOT NULL,
+                avg REAL NOT NULL,
+                nRating INTEGER NOT NULL,
+                takeAgain INTEGER NOT NULL,
+                difficulty REAL NOT NULL,
+                status TEXT NOT NULL,
+                pId TEXT
+            )
+        """)
+
+        rows = [
+            (
+                rating.prof,
+                rating.score,
+                rating.avg,
+                rating.nRating,
+                rating.takeAgain,
+                rating.difficulty,
+                rating.status,
+                rating.pId,
+            )
+            for rating in ratings.values()
+        ]
+
+        _ = cursor.executemany(
+            """
+            INSERT INTO ratings VALUES (?,?,?,?,?,?,?,?)
+            ON CONFLICT(prof) DO UPDATE SET score=excluded.score, avg=excluded.avg, nRating=excluded.nRating, takeAgain=excluded.takeAgain, difficulty=excluded.difficulty, status=excluded.status, pId=excluded.pId
+        """,
+            rows,
+        )
+
+        conn.commit()
+        conn.close()
+
+
+if __name__ == "__main__":
+    files = Files()
+    scraper = Scraper(files)
+    scraper.run()

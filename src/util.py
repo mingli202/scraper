@@ -1,46 +1,26 @@
 import json
+import sqlite3
+from typing import Literal
 from files import Files
 from models import Section
 import math
-import copy
 
 
-def stripAccent(s: str):
-    s = s.replace("\u00e9", "e")  # * removes é
-    s = s.replace("\u00e8", "e")  # * removes è
-    s = s.replace("\u00e2", "a")  # * removes â
-    s = s.replace("\u00e7", "c")  # * removes ç
-    s = s.replace("\u00e0", "a")  # * removes à
-    s = s.replace("\u0000", "")  # * removes null character
+def normalize_string(s: str):
+    s = s.replace("\u00e9", "e").replace("é", "e")  #  removes é
+    s = s.replace("\u00c9", "E").replace("É", "E")  #  removes É
+    s = s.replace("\u00e8", "e").replace("è", "e")  #  removes è
+    s = s.replace("\u00e2", "a").replace("â", "a")  #  removes â
+    s = s.replace("\u00e7", "c").replace("ç", "c")  #  removes ç
+    s = s.replace("\u00e0", "a").replace("à", "a")  #  removes à
+    s = s.replace("\u0000", "")  #  removes null character
 
     return s
 
 
-def addRating(files: Files):
-    sections = files.get_out_file_content()
-    ratings = files.get_ratings_file_content()
-    sections_with_rating: list[dict] = []
-
-    for section in sections:
-        if section.lecture:
-            prof = section.lecture.prof
-            section.lecture.rating = ratings.get(prof)
-
-        if section.lab:
-            prof = section.lab.prof
-            section.lab.rating = ratings.get(prof)
-
-        sections_with_rating.append(section.model_dump())
-
-    with open(files.classes_file_path, "w") as file:
-        file.write(json.dumps(sections_with_rating, indent=2))
-
-
-def handleViewData(targetClass: Section) -> dict:
-    c = copy.deepcopy(targetClass)
-
+def add_viewdata_to_section(targetClass: Section):
     col = ["M", "T", "W", "R", "F"]
-    row = []
+    row: list[int] = []
 
     for day in range(21):
         if day % 2 == 0:
@@ -48,16 +28,15 @@ def handleViewData(targetClass: Section) -> dict:
         else:
             row.append(math.floor(day / 2) * 2 * 50 + 830)
 
-    lecture = {}
-    if targetClass.lecture:
-        lecture = targetClass.lecture.time
-    lab = {}
-    if targetClass.lab:
-        lab = targetClass.lab.time
+    days: dict[str, list[str]] = {}
 
-    days = lecture | lab
+    for leclab in targetClass.times:
+        time = leclab.time
 
-    viewData = []
+        for d, t in time.items():
+            days.setdefault(d, []).extend(t)
+
+    viewData: list[dict[str, list[int]]] = []
 
     for day in days:
         times = days[day]
@@ -82,16 +61,98 @@ def handleViewData(targetClass: Section) -> dict:
 
                 viewData.append({f"{colStart}": [rowStart, rowEnd]})
 
-    c.view_data = viewData
-    return c.model_dump()
+    targetClass.view_data = viewData
 
 
-def addViewData(files: Files):
-    classes = files.get_classes_file_content()
+def save_sections_with_viewData(files: Files, force_override: bool = False):
+    sections = files.get_parsed_sections_file_content()
 
-    polished: dict[int, dict] = {}
-    for index, course in enumerate(classes):
-        polished.update({index: handleViewData(course)})
+    for section in sections:
+        add_viewdata_to_section(section)
 
-    with open(files.all_classes_path, "w") as file:
-        file.write(json.dumps(polished, indent=2))
+    conn = sqlite3.connect(files.all_sections_final_path)
+    cursor = conn.cursor()
+
+    if (
+        cursor.execute(
+            "SELECT name from sqlite_schema WHERE type='table' and tbl_name='sections'"
+        ).fetchone()
+        is not None
+    ):
+        if not force_override:
+            override = input("Sections db already exists, override? (y/n) ")
+            if override.lower() != "y":
+                return
+
+        _ = cursor.execute("DROP TABLE sections")
+        _ = cursor.execute("DROP TABLE times")
+        conn.commit()
+
+    _ = cursor.execute("""
+        CREATE TABLE IF NOT EXISTS sections (
+            id INTEGER PRIMARY KEY,
+            course TEXT,
+            section_number TEXT,
+            domain TEXT,
+            code TEXT,
+            more TEXT,
+            view_data TEXT
+        );
+    """)
+
+    _ = cursor.execute("""
+        CREATE TABLE IF NOT EXISTS times (
+            section_id INTEGER,
+            prof TEXT,
+            title TEXT,
+            type TEXT,
+            time TEXT,
+            FOREIGN KEY(section_id) REFERENCES sections(id)
+        )
+    """)
+
+    sections_to_insert: list[tuple[int, str, str, str, str, str, str]] = []
+    times_to_insert: list[
+        tuple[int, str, str, Literal["lecture", "laboratory"] | None, str]
+    ] = []
+
+    for section in sections:
+        sections_to_insert.append(
+            (
+                section.id,
+                section.course,
+                section.section,
+                section.domain,
+                section.code,
+                section.more,
+                json.dumps(section.view_data),
+            )
+        )
+
+        for leclab in section.times:
+            times_to_insert.append(
+                (
+                    section.id,
+                    leclab.prof,
+                    leclab.title,
+                    leclab.type,
+                    json.dumps(leclab.time),
+                )
+            )
+
+    _ = conn.executemany(
+        """
+        INSERT INTO sections values (?,?,?,?,?,?,?)
+        """,
+        sections_to_insert,
+    )
+
+    _ = conn.executemany(
+        """
+        INSERT INTO times values (?,?,?,?,?)
+        """,
+        times_to_insert,
+    )
+
+    conn.commit()
+    conn.close()
