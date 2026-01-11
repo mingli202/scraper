@@ -234,7 +234,8 @@ def test_parity_with_old_parser(parser: NewParser):
         assert len(out) == len(parser.sections)
 
         for old_section, new_section in zip(out, parser.sections):
-            old_section["courseType"] = old_section["program"]
+            old_section["domain"] = old_section["course"]
+            old_section["course"] = old_section["program"]
             del old_section["program"]
 
             old_section["times"] = []
