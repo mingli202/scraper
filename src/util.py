@@ -1,4 +1,5 @@
 import json
+from typing import Any
 from files import Files
 from models import Section
 import math
@@ -18,23 +19,19 @@ def normalize_string(s: str):
 
 
 def addRating(files: Files):
-    sections = files.get_out_file_content()
+    sections = files.get_parsed_sections_file_content()
     ratings = files.get_ratings_file_content()
-    sections_with_rating: list[dict] = []
+
+    sections_with_rating: list[dict[str, Any]] = []
 
     for section in sections:
-        if section.lecture:
-            prof = section.lecture.prof
-            section.lecture.rating = ratings.get(prof)
-
-        if section.lab:
-            prof = section.lab.prof
-            section.lab.rating = ratings.get(prof)
+        for time in section.times:
+            time.rating = ratings.get(time.prof)
 
         sections_with_rating.append(section.model_dump())
 
     with open(files.classes_file_path, "w") as file:
-        file.write(json.dumps(sections_with_rating, indent=2))
+        _ = file.write(json.dumps(sections_with_rating, indent=2))
 
 
 def handleViewData(targetClass: Section) -> dict:
