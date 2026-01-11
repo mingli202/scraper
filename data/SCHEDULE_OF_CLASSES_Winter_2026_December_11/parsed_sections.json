@@ -1311,13 +1311,6 @@
     "code": "202-SN1-RE",
     "times": [
       {
-        "title": "(70% or higher in High School Chemistry",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "General Chemistry",
         "type": "lecture",
         "prof": "Mandl, Gabrielle",
@@ -1339,13 +1332,6 @@
     "course": "CHEMISTRY",
     "code": "202-SN1-RE",
     "times": [
-      {
-        "title": "(70% or higher in High School Chemistry",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
       {
         "title": "General Chemistry",
         "type": "laboratory",
@@ -1573,7 +1559,7 @@
         "rating": null
       },
       {
-        "title": "General Chemistry in EUF or EEE-B grid.",
+        "title": "General Chemistry",
         "type": "laboratory",
         "prof": "Perez Quintana, German Miguel",
         "time": {
@@ -2365,7 +2351,7 @@
         "rating": null
       },
       {
-        "title": "Chemistry of Solutions or 202-SF2-AB",
+        "title": "Chemistry of Solutions",
         "type": "laboratory",
         "prof": "Lautman, Michael",
         "time": {
@@ -2486,7 +2472,7 @@
     "code": "202-SNU-RE",
     "times": [
       {
-        "title": "Organic Chemistry or 202-SF2-AB",
+        "title": "Organic Chemistry",
         "type": "lecture",
         "prof": "Iyer, Rekha",
         "time": {
@@ -2585,13 +2571,6 @@
     "code": "205-SNC-AB",
     "times": [
       {
-        "title": "203-SN1-RE",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "Planetary Geology",
         "type": "lecture",
         "prof": "Leveille, Richard John",
@@ -2636,7 +2615,7 @@
         "rating": null
       },
       {
-        "title": "Planetary Geology 203-SN1-RE",
+        "title": "Planetary Geology",
         "type": "laboratory",
         "prof": "Leveille, Richard John",
         "time": {
@@ -2691,13 +2670,6 @@
     "code": "205-SNM-AB",
     "times": [
       {
-        "title": "203-SN1-RE",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "Understanding Planet Earth",
         "type": "lecture",
         "prof": "Dos Santos Junior, Angelo Geovani",
@@ -2709,7 +2681,7 @@
         "rating": null
       },
       {
-        "title": "Understanding Planet Earth 203-SN1-RE",
+        "title": "Understanding Planet Earth",
         "type": "laboratory",
         "prof": "Dos Santos Junior, Angelo Geovani",
         "time": {
@@ -3061,13 +3033,6 @@
     "code": "201-SN2-RE",
     "times": [
       {
-        "title": "6. Prerequisites: (70% or higher in High School Math",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "Differential Calculus",
         "type": "lecture",
         "prof": "Mokhtarian, Faranak",
@@ -3142,13 +3107,6 @@
     "course": "MATHEMATICS",
     "code": "201-SN2-RE",
     "times": [
-      {
-        "title": "6. Prerequisites: (70% or higher in High School Math",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
       {
         "title": "Differential Calculus",
         "type": "lecture",
@@ -3278,7 +3236,7 @@
     "code": "201-SN2-RE",
     "times": [
       {
-        "title": "Differential Calculus in EUF or EEE-B grid",
+        "title": "Differential Calculus",
         "type": "lecture",
         "prof": "Lo Vasco, Frank",
         "time": {
@@ -4466,13 +4424,6 @@
     "code": "203-SN1-RE",
     "times": [
       {
-        "title": "(70% or higher in High School Physics 534 OR TS5 or SN5 or 201-015).",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "Mechanics",
         "type": "lecture",
         "prof": "Hackett, Kieran",
@@ -4659,13 +4610,6 @@
     "course": "PHYSICS",
     "code": "203-SN1-RE",
     "times": [
-      {
-        "title": "(70% or higher in High School Physics 534 OR TS5 or SN5 or 201-015).",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
       {
         "title": "Mechanics",
         "type": "laboratory",
@@ -5118,7 +5062,7 @@
         "rating": null
       },
       {
-        "title": "Electricity and Magnetism in EUF or EEE-B grid.",
+        "title": "Electricity and Magnetism",
         "type": "laboratory",
         "prof": "Pare, Nanouk",
         "time": {
@@ -5704,7 +5648,7 @@
         "rating": null
       },
       {
-        "title": "Waves and Modern Physics and Math 201-NYA-05. and Math 201-NYA-05.",
+        "title": "Waves and Modern Physics",
         "type": "laboratory",
         "prof": "Rezaee Asl, Mandana",
         "time": {
@@ -5902,7 +5846,7 @@
         "rating": null
       },
       {
-        "title": "Astronomy and Astrophysics AND Math 201-NYA-05",
+        "title": "Astronomy and Astrophysics",
         "type": "laboratory",
         "prof": "Jaffer, Karim M.",
         "time": {
@@ -5989,13 +5933,6 @@
     "course": "MULTIDISCIPLINARY",
     "code": "360-PR0-AB",
     "times": [
-      {
-        "title": "graduating semester. Choose from ONE of the project",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
       {
         "title": "Gone with the Wind: The Science of Soaring Seeds",
         "type": "laboratory",
@@ -6171,13 +6108,6 @@
     "course": "MULTIDISCIPLINARY",
     "code": "360-PR0-AB",
     "times": [
-      {
-        "title": "graduating semester. Choose from ONE of the project",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
       {
         "title": "Energy in Motion: Measuring Life\u2019s Power Costs",
         "type": "laboratory",
@@ -8324,13 +8254,6 @@
     "code": "201-SH2-AB",
     "times": [
       {
-        "title": "Math & Commerce. Math placement level 6. Prerequisite:",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "Calculus 1 for Social Science",
         "type": "lecture",
         "prof": "Solsten, Karen",
@@ -8725,7 +8648,7 @@
     "code": "201-SH3-AB",
     "times": [
       {
-        "title": "Calculus 2 for Social Science or 201-NYA-05",
+        "title": "Calculus 2 for Social Science",
         "type": "lecture",
         "prof": "Connor, Cameron James",
         "time": {
@@ -8934,13 +8857,6 @@
     "course": "METHODOLOGY",
     "code": "300-10F-AB",
     "times": [
-      {
-        "title": "grid",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
       {
         "title": "Methodes de travail intellectuel",
         "type": "lecture",
@@ -10334,7 +10250,7 @@
     "code": "300-222-AB",
     "times": [
       {
-        "title": "Research and Qualitative Methods semester",
+        "title": "Research and Qualitative Methods",
         "type": "lecture",
         "prof": "Ziliotti, Roberto",
         "time": {
@@ -10532,7 +10448,7 @@
     "code": "300-303-AB",
     "times": [
       {
-        "title": "Social Science Integrative Project semester",
+        "title": "Social Science Integrative Project",
         "type": "lecture",
         "prof": "TBA-2, Methodology",
         "time": {
@@ -10730,13 +10646,6 @@
     "code": "360-223-AB",
     "times": [
       {
-        "title": "or 300-10F-AB.",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "Quantitative Methods",
         "type": "lecture",
         "prof": "Caouette, Julie",
@@ -10802,13 +10711,6 @@
     "course": "MULTIDISCIPLINARY",
     "code": "360-223-AB",
     "times": [
-      {
-        "title": "or 300-10F-AB.",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
       {
         "title": "Quantitative Methods",
         "type": "lecture",
@@ -11019,7 +10921,7 @@
         "rating": null
       },
       {
-        "title": "Quantitative Methods or 300-10F-AB.",
+        "title": "Quantitative Methods",
         "type": "laboratory",
         "prof": "Harrar, Vanessa",
         "time": {
@@ -13010,13 +12912,6 @@
     "code": "300-SLA-AB",
     "times": [
       {
-        "title": "semester",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "Integrating Project",
         "type": "lecture",
         "prof": "Goodyear, Jamie Wilson",
@@ -13490,14 +13385,7 @@
     "code": "502-CFC-AB",
     "times": [
       {
-        "title": "students in EUF or EEE-B grid.",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
-        "title": "Arts et cultures du Quebec semester.",
+        "title": "Arts et cultures du Quebec",
         "type": "lecture",
         "prof": "Hage, Merdad",
         "time": {
@@ -13519,7 +13407,7 @@
     "code": "502-GEG-AB",
     "times": [
       {
-        "title": "Graduating Exhibition Project for Multidisciplinary (Blended) semester.",
+        "title": "Graduating Exhibition Project for Multidisciplinary (Blended)",
         "type": "lecture",
         "prof": "Vella, Angela",
         "time": {
@@ -14378,13 +14266,6 @@
     "code": "201-016-RE",
     "times": [
       {
-        "title": "Math Sequence Chart",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "Remedial Activities for Secondary IV Mathematics: Technical",
         "type": "lecture",
         "prof": "Masters, Richard",
@@ -14435,7 +14316,7 @@
     "code": "201-016-RE",
     "times": [
       {
-        "title": "Remedial Activities for Secondary IV Mathematics: Technical Math Sequence Chart",
+        "title": "Remedial Activities for Secondary IV Mathematics: Technical",
         "type": "lecture",
         "prof": "McLeod, Alice",
         "time": {
@@ -14526,13 +14407,6 @@
     "code": "201-015-RE",
     "times": [
       {
-        "title": "Math Sequence Chart",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "Remedial Activities for Secondary V Mathematics: Technical a",
         "type": "lecture",
         "prof": "Connor, Cameron James",
@@ -14602,13 +14476,6 @@
     "code": "360-103-AB",
     "times": [
       {
-        "title": "program (081.CR)",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "Career Explorations",
         "type": "lecture",
         "prof": "Fahmy, Magda",
@@ -14652,13 +14519,6 @@
     "course": "PHYSICS",
     "code": "203-001-RE",
     "times": [
-      {
-        "title": "(High school physical science 436 or 555-404 AND (Math 536 orTS5 or SN5) OR (201-015",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
       {
         "title": "Remedial Activities for Secondary V Physics",
         "type": "lecture",
@@ -14714,13 +14574,6 @@
     "course": "POLICE",
     "code": "310-171-AB",
     "times": [
-      {
-        "title": "(High school physical science 436 or 555-404 AND (Math 536 orTS5 or SN5) OR (201-015",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
       {
         "title": "Remedial Activities for Secondary V Physics",
         "type": "lecture",
@@ -17145,13 +16998,6 @@
     "code": "602-005-AB",
     "times": [
       {
-        "title": "for students who have studied outside of Quebec,",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "Pratique du francais, langue seconde",
         "type": "lecture",
         "prof": "Mercado, Sebastian",
@@ -17174,7 +17020,7 @@
     "code": "602-006-50",
     "times": [
       {
-        "title": "Pratique du francais, langue seconde, a l'oral et a l'ecrit for students who have studied in Quebec, based",
+        "title": "Pratique du francais, langue seconde, a l'oral et a l'ecrit",
         "type": "lecture",
         "prof": "Xu, Xiao",
         "time": {
@@ -17240,7 +17086,7 @@
     "code": "602-009-AB",
     "times": [
       {
-        "title": "Renforcement en francais, langue seconde for students who have studied outside of Quebec,",
+        "title": "Renforcement en francais, langue seconde",
         "type": "lecture",
         "prof": "Tellier, Christine",
         "time": {
@@ -17724,7 +17570,7 @@
     "code": "602-103-MQ",
     "times": [
       {
-        "title": "Francais niveau 4 or 602-100-MQ",
+        "title": "Francais niveau 4",
         "type": "lecture",
         "prof": "Mercado, Sebastian",
         "time": {
@@ -17790,7 +17636,7 @@
     "code": "602-200-AB",
     "times": [
       {
-        "title": "Francais niveau 1 or 602-101-MQ",
+        "title": "Francais niveau 1",
         "type": "lecture",
         "prof": "Inch, Robert A.",
         "time": {
@@ -17878,7 +17724,7 @@
     "code": "602-201-AB",
     "times": [
       {
-        "title": "Francais niveau 2 or 602-102-MQ",
+        "title": "Francais niveau 2",
         "type": "lecture",
         "prof": "Nicou, Claude",
         "time": {
@@ -17988,7 +17834,7 @@
     "code": "602-202-AB",
     "times": [
       {
-        "title": "Francais niveau 3 or 602-103-MQ",
+        "title": "Francais niveau 3",
         "type": "lecture",
         "prof": "Bessette, Ariane",
         "time": {
@@ -18032,7 +17878,7 @@
     "code": "602-203-AB",
     "times": [
       {
-        "title": "Le Modernisme et le reel or 602-103-MQ",
+        "title": "Le Modernisme et le reel",
         "type": "lecture",
         "prof": "Limoges, Alexandre",
         "time": {
@@ -18120,7 +17966,7 @@
     "code": "602-203-AB",
     "times": [
       {
-        "title": "Francais niveau 4 grid with French placement 1",
+        "title": "Francais niveau 4",
         "type": "lecture",
         "prof": "Pezeshki, Shahrouz",
         "time": {
@@ -18164,7 +18010,7 @@
     "code": "602-C01-MQ",
     "times": [
       {
-        "title": "Francais et societe quebecoise (niveau 1) grid with French placement 2",
+        "title": "Francais et societe quebecoise (niveau 1)",
         "type": "lecture",
         "prof": "Estime, Qualito",
         "time": {
@@ -18230,7 +18076,7 @@
     "code": "602-C02-MQ",
     "times": [
       {
-        "title": "Francais et societe quebecoise (niveau 2) grid with French placement 1 grid with French placement 1",
+        "title": "Francais et societe quebecoise (niveau 2)",
         "type": "lecture",
         "prof": "Hemmati, Proshat",
         "time": {
@@ -18274,7 +18120,7 @@
     "code": "602-D01-MQ",
     "times": [
       {
-        "title": "Francais, travail et numerique (niveau 1) grid with French placement 2",
+        "title": "Francais, travail et numerique (niveau 1)",
         "type": "lecture",
         "prof": "Gagne, Nicolas",
         "time": {
@@ -18318,7 +18164,7 @@
     "code": "602-D02-MQ",
     "times": [
       {
-        "title": "Francais, travail et numerique (niveau 2) grid with French placement 1",
+        "title": "Francais, travail et numerique (niveau 2)",
         "type": "lecture",
         "prof": "Xu, Xiao",
         "time": {
@@ -18384,7 +18230,7 @@
     "code": "602-E01-MQ",
     "times": [
       {
-        "title": "Projet experientiel en francais (niveau 1) grid with French placement 2",
+        "title": "Projet experientiel en francais (niveau 1)",
         "type": "lecture",
         "prof": "Dukanic, Filip",
         "time": {
@@ -18450,7 +18296,7 @@
     "code": "602-E02-MQ",
     "times": [
       {
-        "title": "Projet experientiel en francais (niveau 2) in Quebec or outside of Quebec and who must write to take the first preparatory course 602-UF0-AB.",
+        "title": "Projet experientiel en francais (niveau 2)",
         "type": "lecture",
         "prof": "Pezeshki, Shahrouz",
         "time": {
@@ -18582,7 +18428,7 @@
     "code": "602-REN-AB",
     "times": [
       {
-        "title": "Renforcement en francais ecrit courses for students who must write the French Exit DEC.",
+        "title": "Renforcement en francais ecrit",
         "type": "lecture",
         "prof": "Rozenberg, Evelyne",
         "time": {
@@ -18692,7 +18538,7 @@
     "code": "602-UF0-MQ",
     "times": [
       {
-        "title": "Litterature et univers narratif courses for students who must write the French Exit DEC.",
+        "title": "Litterature et univers narratif",
         "type": "lecture",
         "prof": "Michael, Minar",
         "time": {
@@ -18714,7 +18560,7 @@
     "code": "602-UF0-MQ",
     "times": [
       {
-        "title": "Litterature et univers narratif of three French preparatory courses for students in order to complete their DEC",
+        "title": "Litterature et univers narratif",
         "type": "lecture",
         "prof": "Estime, Qualito",
         "time": {
@@ -18934,7 +18780,7 @@
     "code": "602-UF1-MQ",
     "times": [
       {
-        "title": "Poesie, theatre et ecriture of three French preparatory courses for students in order to complete their DEC",
+        "title": "Poesie, theatre et ecriture",
         "type": "lecture",
         "prof": "Limoges, Alexandre",
         "time": {
@@ -19066,7 +18912,7 @@
     "code": "602-UF1-MQ",
     "times": [
       {
-        "title": "Poesie, theatre et ecriture of three French preparatory courses for students who in order to complete their DEC",
+        "title": "Poesie, theatre et ecriture",
         "type": "lecture",
         "prof": "Larochelle, Claudia",
         "time": {
@@ -19176,7 +19022,7 @@
     "code": "602-UF2-MQ",
     "times": [
       {
-        "title": "Comparaison d'oeuvres litteraires of three French preparatory courses for students who in order to complete their DEC",
+        "title": "Comparaison d'oeuvres litteraires",
         "type": "lecture",
         "prof": "Dukanic, Filip",
         "time": {
@@ -19770,7 +19616,7 @@
     "code": "345-101-MQ",
     "times": [
       {
-        "title": "Where Did God Go? (Blended) in EEE-B or EUF grid",
+        "title": "Where Did God Go? (Blended)",
         "type": "lecture",
         "prof": "Tiflati, Hicham",
         "time": {
@@ -20386,7 +20232,7 @@
     "code": "345-102-MQ",
     "times": [
       {
-        "title": "World Views on the Environment in EEE-B grid or EUF grid.",
+        "title": "World Views on the Environment",
         "type": "lecture",
         "prof": "McKinney, Kelly",
         "time": {
@@ -20958,13 +20804,6 @@
     "code": "109-101-MQ",
     "times": [
       {
-        "title": "& NUTRITION",
-        "type": null,
-        "prof": "",
-        "time": {},
-        "rating": null
-      },
-      {
         "title": "Introduction to Outdoor Activities",
         "type": "lecture",
         "prof": "Berkers, Anthony",
@@ -21163,7 +21002,7 @@
     "code": "109-101-MQ",
     "times": [
       {
-        "title": "Racquets & NUTRITION",
+        "title": "Racquets",
         "type": "lecture",
         "prof": "Lloyd-Hughes, Bronwen",
         "time": {
@@ -21427,7 +21266,7 @@
     "code": "109-101-MQ",
     "times": [
       {
-        "title": "Spin Circuit & NUTRITION",
+        "title": "Spin Circuit",
         "type": "lecture",
         "prof": "Mumme, Benjamin",
         "time": {
@@ -21669,7 +21508,7 @@
     "code": "109-101-MQ",
     "times": [
       {
-        "title": "Adapted PE & NUTRITION",
+        "title": "Adapted PE",
         "type": "lecture",
         "prof": "Matthew, Valerie Anne",
         "time": {
@@ -21889,7 +21728,7 @@
     "code": "109-102-MQ",
     "times": [
       {
-        "title": "Yoga & NUTRITION",
+        "title": "Yoga",
         "type": "lecture",
         "prof": "Healey, Monica",
         "time": {
@@ -22109,7 +21948,7 @@
     "code": "109-102-MQ",
     "times": [
       {
-        "title": "Badminton & NUTRITION",
+        "title": "Badminton",
         "type": "lecture",
         "prof": "Matthew, Valerie Anne",
         "time": {
@@ -22351,7 +22190,7 @@
     "code": "109-102-MQ",
     "times": [
       {
-        "title": "Weight Training Techniques & NUTRITION",
+        "title": "Weight Training Techniques",
         "type": "lecture",
         "prof": "Privee, Chelsea",
         "time": {
@@ -22549,7 +22388,7 @@
     "code": "109-102-MQ",
     "times": [
       {
-        "title": "Adpapted PE 109-104-02 or 109-102-MQ",
+        "title": "Adpapted PE",
         "type": "lecture",
         "prof": "Matthew, Valerie Anne",
         "time": {
@@ -22571,7 +22410,7 @@
     "code": "109-103-MQ",
     "times": [
       {
-        "title": "Canoe Camping & NUTRITION 109-104-02 or 109-102-MQ",
+        "title": "Canoe Camping",
         "type": "lecture",
         "prof": "Berkers, Anthony",
         "time": {
@@ -22769,7 +22608,7 @@
     "code": "109-103-MQ",
     "times": [
       {
-        "title": "Dance Activities & NUTRITION 109-104-02 or 109-102-MQ",
+        "title": "Dance Activities",
         "type": "lecture",
         "prof": "Lloyd-Hughes, Bronwen",
         "time": {
@@ -23033,7 +22872,7 @@
     "code": "109-103-MQ",
     "times": [
       {
-        "title": "Urban Outdoor Activities & NUTRITION 109-104-02 or 109-102-MQ",
+        "title": "Urban Outdoor Activities",
         "type": "lecture",
         "prof": "Plimer, Andrew Ian",
         "time": {
@@ -23242,7 +23081,7 @@
     "code": "109-103-MQ",
     "times": [
       {
-        "title": "Martial Arts & NUTRITION 109-104-02 or 109-102-MQ",
+        "title": "Martial Arts",
         "type": "lecture",
         "prof": "Zimerman, Mikhail",
         "time": {
@@ -23661,7 +23500,7 @@
     "code": "570-DFA-AB",
     "times": [
       {
-        "title": "Faconnage Horlik, Veronika in Sec IV or V and received a grade of 70% or higher II 607-DBA-03).",
+        "title": "Faconnage Horlik, Veronika",
         "type": "lecture",
         "prof": "",
         "time": {

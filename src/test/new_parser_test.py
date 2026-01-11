@@ -1,4 +1,6 @@
+from typing import Any
 import pdfplumber
+from pydantic_core import from_json
 import pytest
 import re
 
@@ -214,15 +216,40 @@ def test_correct_column_x(parser: NewParser):
 def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: Section):
     print(test_case.name)
     parser.lines = test_case.lines
-    parser.parse()
+    parser.parse(False)
 
     assert len(parser.sections) == 1
     assert parser.sections[0] == expected.model_dump(by_alias=True)
 
 
 def test_parity_with_old_parser(parser: NewParser):
-    pass
+    parser.parse(False)
+
+    with open(files.out_file_path, "r") as file:
+        out: list[dict[str, Any]] = from_json(file.read())
+
+        assert len(out) == len(parser.sections)
+
+        for old_section, new_section in zip(out, parser.sections):
+            old_section["courseType"] = old_section["program"]
+            del old_section["program"]
+
+            old_section["times"] = []
+
+            if "lecture" in old_section and old_section["lecture"] is not None:
+                old_section["lecture"]["type"] = "lecture"
+                old_section["times"].append(old_section["lecture"])
+            del old_section["lecture"]
+
+            if "lab" in old_section and old_section["lab"] is not None:
+                old_section["lab"]["type"] = "laboratory"
+                old_section["times"].append(old_section["lab"])
+            del old_section["lab"]
+
+            old_section["more"] = old_section["more"].strip("\n").strip()
+
+            assert old_section == new_section
 
 
 if __name__ == "__main__":
-    exit(pytest.main(["--no-header", "-s", "-v", __file__]))
+    exit(pytest.main(["--no-header", "-s", "-vvv", __file__]))

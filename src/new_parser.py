@@ -69,8 +69,8 @@ class NewParser(INewParser):
                 continue
 
             if line_text == title:
-                i += 1
                 section_type = self._get_line_text(lines[i])
+                i += 1
 
                 if section_type != self.current_section.course_type:
                     self._update_section()
@@ -93,7 +93,10 @@ class NewParser(INewParser):
             x = word.x0
             text = word.text
 
-            if self.columns_x.section == x:
+            if self.columns_x.section <= x < self.columns_x.disc:
+                if x != self.columns_x.section:
+                    return
+
                 if re.match(r"^\d{5}$", text):
                     self._update_section()
                     section.section = text
