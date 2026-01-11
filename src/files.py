@@ -8,7 +8,7 @@ from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
 
 from models import ColumnsXs, Rating, Section, Word
-from parser_utils import ParserUtils
+import parser_utils
 from trie import Trie
 
 
@@ -57,7 +57,7 @@ class Files:
                 except ValidationError as e:
                     print(e)
 
-        lines: OrderedDict[int, list[Word]] = ParserUtils.compute_sorted_lines(
+        lines: OrderedDict[int, list[Word]] = parser_utils.compute_sorted_lines(
             self.pdf_path
         )
 
@@ -82,7 +82,7 @@ class Files:
                 except ValidationError as e:
                     print(e)
 
-        columns_x: ColumnsXs = ParserUtils.compute_columns_x(
+        columns_x: ColumnsXs = parser_utils.compute_columns_x(
             self.get_sorted_lines_content()
         )
 
