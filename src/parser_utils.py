@@ -36,7 +36,7 @@ class ParserUtils:
 
     @staticmethod
     def __get_sorted_words(page_number: int, page: Page) -> list[Word]:
-        words = page.extract_words(x_tolerance=1.789)
+        words = page.extract_words(x_tolerance=0.1, y_tolerance=0.1)
 
         sorted_words = sorted(
             (

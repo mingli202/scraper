@@ -8,7 +8,6 @@ from abc import ABC, abstractmethod
 from files import Files
 from models import LecLab, Section, Word
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -41,7 +40,6 @@ class NewParser(INewParser):
             return
 
         lines = list(self.lines.values())
-        print("line count", len(lines))
 
         title = self._get_line_text(lines[0])
 
@@ -110,6 +108,7 @@ class NewParser(INewParser):
 
             if self.columns_x.disc == x:
                 if "Lecture" in text:
+                    logger.info("lecture in disc")
                     is_leclab_line = True
                     self.leclab.type = "lecture"
                 elif "Laboratory" in text:
@@ -221,6 +220,8 @@ class NewParser(INewParser):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+
     files = Files()
     parser = NewParser(files)
     parser.parse()

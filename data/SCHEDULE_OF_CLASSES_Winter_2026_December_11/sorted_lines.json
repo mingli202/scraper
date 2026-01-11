@@ -169177,8 +169177,15 @@
     },
     {
       "pageNumber": 113,
-      "text": "areoutside",
+      "text": "are",
       "x0": 336,
+      "top": 151,
+      "doctop": 89519
+    },
+    {
+      "pageNumber": 113,
+      "text": "outside",
+      "x0": 349,
       "top": 151,
       "doctop": 89519
     },
@@ -169228,8 +169235,15 @@
     },
     {
       "pageNumber": 113,
-      "text": "theprogram",
+      "text": "the",
       "x0": 135,
+      "top": 162,
+      "doctop": 89530
+    },
+    {
+      "pageNumber": 113,
+      "text": "program",
+      "x0": 147,
       "top": 162,
       "doctop": 89530
     },
@@ -169430,8 +169444,15 @@
   "89553": [
     {
       "pageNumber": 113,
-      "text": "fromtwo",
+      "text": "from",
       "x0": 116,
+      "top": 185,
+      "doctop": 89553
+    },
+    {
+      "pageNumber": 113,
+      "text": "two",
+      "x0": 133,
       "top": 185,
       "doctop": 89553
     },
@@ -170076,8 +170097,15 @@
     },
     {
       "pageNumber": 113,
-      "text": "theModern",
+      "text": "the",
       "x0": 379,
+      "top": 276,
+      "doctop": 89644
+    },
+    {
+      "pageNumber": 113,
+      "text": "Modern",
+      "x0": 391,
       "top": 276,
       "doctop": 89644
     },
@@ -172556,13 +172584,20 @@
   "90748": [
     {
       "pageNumber": 114,
-      "text": "CERAMICSLecture",
+      "text": "CERAMICS",
       "x0": 117,
       "top": 589,
       "doctop": 90748
     }
   ],
   "90749": [
+    {
+      "pageNumber": 114,
+      "text": "Lecture",
+      "x0": 159,
+      "top": 590,
+      "doctop": 90749
+    },
     {
       "pageNumber": 114,
       "text": "Macaulay,",
@@ -172662,13 +172697,20 @@
   "90792": [
     {
       "pageNumber": 114,
-      "text": "CERAMICSLecture",
+      "text": "CERAMICS",
       "x0": 117,
       "top": 633,
       "doctop": 90792
     }
   ],
   "90793": [
+    {
+      "pageNumber": 114,
+      "text": "Lecture",
+      "x0": 159,
+      "top": 634,
+      "doctop": 90793
+    },
     {
       "pageNumber": 114,
       "text": "Macaulay,",
@@ -173325,13 +173367,20 @@
   "91231": [
     {
       "pageNumber": 115,
-      "text": "CERAMICSLecture",
+      "text": "CERAMICS",
       "x0": 117,
       "top": 281,
       "doctop": 91231
     }
   ],
   "91232": [
+    {
+      "pageNumber": 115,
+      "text": "Lecture",
+      "x0": 159,
+      "top": 282,
+      "doctop": 91232
+    },
     {
       "pageNumber": 115,
       "text": "Lupien,",
@@ -173424,13 +173473,20 @@
   "91274": [
     {
       "pageNumber": 115,
-      "text": "CERAMICSLecture",
+      "text": "CERAMICS",
       "x0": 117,
       "top": 325,
       "doctop": 91274
     }
   ],
   "91275": [
+    {
+      "pageNumber": 115,
+      "text": "Lecture",
+      "x0": 159,
+      "top": 326,
+      "doctop": 91275
+    },
     {
       "pageNumber": 115,
       "text": "Horlik,",
@@ -173537,13 +173593,20 @@
   "91323": [
     {
       "pageNumber": 115,
-      "text": "CERAMICSLecture",
+      "text": "CERAMICS",
       "x0": 117,
       "top": 373,
       "doctop": 91323
     }
   ],
   "91324": [
+    {
+      "pageNumber": 115,
+      "text": "Lecture",
+      "x0": 159,
+      "top": 374,
+      "doctop": 91324
+    },
     {
       "pageNumber": 115,
       "text": "Horlik,",
@@ -173650,13 +173713,20 @@
   "91371": [
     {
       "pageNumber": 115,
-      "text": "CERAMICSLecture",
+      "text": "CERAMICS",
       "x0": 117,
       "top": 422,
       "doctop": 91371
     }
   ],
   "91372": [
+    {
+      "pageNumber": 115,
+      "text": "Lecture",
+      "x0": 159,
+      "top": 423,
+      "doctop": 91372
+    },
     {
       "pageNumber": 115,
       "text": "Horlik,",
@@ -173763,13 +173833,20 @@
   "91420": [
     {
       "pageNumber": 115,
-      "text": "CERAMICSLecture",
+      "text": "CERAMICS",
       "x0": 117,
       "top": 470,
       "doctop": 91420
     }
   ],
   "91421": [
+    {
+      "pageNumber": 115,
+      "text": "Lecture",
+      "x0": 159,
+      "top": 471,
+      "doctop": 91421
+    },
     {
       "pageNumber": 115,
       "text": "Horlik,",
