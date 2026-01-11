@@ -205,5 +205,5 @@ class Scraper:
 
 
 if __name__ == "__main__":
-    scraper = Scraper(Files())
-    scraper.run()
+    files = Files()
+    print(files.get_professors_file_content().get_words(""))

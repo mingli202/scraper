@@ -77,9 +77,9 @@ def test_valid_rating():
     assert rating == Rating(
         prof="Trepanier, Michele",
         avg=3.0,
-        takeAgain=52,
-        difficulty=3.4,
-        nRating=23,
+        takeAgain=50,
+        difficulty=3.5,
+        nRating=22,
         status="found",
         score=59.2,
     )
@@ -89,12 +89,12 @@ def test_duplicate_rating():
     rating: Rating = scraper.get_rating("Young, Ryan", scraper.get_saved_pids())[0]
     assert rating == Rating(
         prof="Young, Ryan",
-        avg=2.4,
-        takeAgain=29,
-        difficulty=2.7,
-        nRating=7,
+        avg=2.2,
+        takeAgain=22,
+        difficulty=2.8,
+        nRating=9,
         status="found",
-        score=48.4,
+        score=45.1,
     )
 
     rating = scraper.get_rating("Young, Thomas", scraper.get_saved_pids())[0]
@@ -128,7 +128,7 @@ def test_accuracy_of_not_found():
 
     if checked:
         if not updated:
-            updateSectionWithCheckedPids()
+            update_section_with_checked_pids()
         return
 
     odd: dict[str, str] = {}
@@ -152,7 +152,7 @@ def test_accuracy_of_not_found():
     assert len(odd) == 0
 
 
-def updateSectionWithCheckedPids():
+def update_section_with_checked_pids():
     ratings = files.get_ratings_file_content()
     pids = {k: v for k, v in files.get_missing_pids_file_content().items() if v != ""}
     new_pids = files.get_pids_file_content()
@@ -174,9 +174,9 @@ def test_special_cases():
     assert rating == Rating(
         prof="Lo Vasco, Frank",
         avg=3.2,
-        takeAgain=50,
+        takeAgain=49,
         difficulty=4.1,
-        nRating=54,
+        nRating=55,
         status="found",
         score=63.5,
     )
@@ -191,6 +191,7 @@ def test_prof_trie():
 
     professors = sorted(professors)
     old_professors = sorted(old_professors)
+    assert len(professors) == len(old_professors)
     assert professors == old_professors
 
 

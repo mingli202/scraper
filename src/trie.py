@@ -24,7 +24,6 @@ class Trie(BaseModel):
             node = node.children[char]
         return node.word == word
 
-    @cache
     def get_words(self, prefix: str) -> list[str]:
         node = self.root
         for char in prefix:
