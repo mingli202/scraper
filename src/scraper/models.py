@@ -14,7 +14,7 @@ class ConfiguredBasedModel(BaseModel):
     )
 
 
-Time = dict[str, list[str]]
+Time = dict[str, list[str]]  # day: list["HHMM-HHMM"]
 
 
 class Rating(ConfiguredBasedModel):
