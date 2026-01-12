@@ -1,8 +1,8 @@
 import logging
 import unittest
-from typing import Literal, Self, override
+from typing import Any, Literal, Self, override
 
-from pydantic import BaseModel, ConfigDict, ValidationError
+from pydantic import BaseModel, ConfigDict, TypeAdapter, ValidationError
 from pydantic.alias_generators import to_camel, to_snake
 
 logger = logging.getLogger(__name__)
@@ -67,6 +67,20 @@ class LecLab(ConfiguredBasedModel):
         self.prof = ""
         self.time = Time()
 
+    @classmethod
+    def validate_db_response(cls, db_response: Any) -> LecLab:
+        adapter = TypeAdapter(
+            tuple[int, str, str, Literal["lecture", "laboratory"] | None, str]
+        )
+        _, prof, title, type, time = adapter.validate_python(db_response)
+
+        return LecLab(
+            title=title,
+            type=type,
+            prof=prof,
+            time=TypeAdapter(Time).validate_json(time),
+        )
+
 
 ViewData = list[dict[str, list[int]]]
 
@@ -80,6 +94,24 @@ class Section(ConfiguredBasedModel):
     times: list[LecLab] = []
     more: str = ""
     view_data: ViewData = []
+
+    @classmethod
+    def validate_db_response(cls, db_response: Any) -> Section:
+        adapter = TypeAdapter(tuple[int, str, str, str, str, str, str])
+
+        id, course, section_number, domain, code, more, view_data = (
+            adapter.validate_python(db_response)
+        )
+
+        return Section(
+            id=id,
+            course=course,
+            section=section_number,
+            domain=domain,
+            code=code,
+            more=more,
+            view_data=TypeAdapter(ViewData).validate_json(view_data),
+        )
 
 
 class ColumnsXs(ConfiguredBasedModel):
