@@ -27,6 +27,34 @@ class Rating(ConfiguredBasedModel):
     prof: str = ""
     pId: str | None = None
 
+    @classmethod
+    def validate_db_response(cls, db_response: Any) -> Rating:
+        adapter = TypeAdapter(
+            tuple[
+                str,
+                float,
+                float,
+                int,
+                int,
+                float,
+                Literal["found", "foundn't"],
+                str | None,
+            ]
+        )
+        prof, score, avg, nRating, takeAgain, difficulty, status, pId = (
+            adapter.validate_python(db_response)
+        )
+        return Rating(
+            prof=prof,
+            score=score,
+            avg=avg,
+            nRating=nRating,
+            takeAgain=takeAgain,
+            difficulty=difficulty,
+            status=status,
+            pId=pId,
+        )
+
 
 class LecLab(ConfiguredBasedModel):
     title: str = ""
