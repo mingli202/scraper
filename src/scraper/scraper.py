@@ -215,6 +215,8 @@ class Scraper:
             )
         """)
 
+        _ = cursor.execute("CREATE INDEX IF NOT EXISTS idx_prof ON ratings(prof)")
+
         rows = [
             (
                 rating.prof,

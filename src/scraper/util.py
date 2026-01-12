@@ -101,6 +101,10 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
     """)
 
     _ = cursor.execute("""
+        CREATE INDEX IF NOT EXISTS idx_id ON sections(id);
+    """)
+
+    _ = cursor.execute("""
         CREATE TABLE IF NOT EXISTS times (
             section_id INTEGER,
             prof TEXT,
@@ -109,6 +113,10 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
             time TEXT,
             FOREIGN KEY(section_id) REFERENCES sections(id)
         )
+    """)
+
+    _ = cursor.execute("""
+        CREATE INDEX IF NOT EXISTS idx_section_id ON times(section_id);
     """)
 
     sections_to_insert: list[tuple[int, str, str, str, str, str, str]] = []
