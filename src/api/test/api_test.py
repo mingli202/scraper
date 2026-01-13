@@ -72,5 +72,11 @@ def test_get_section():
     )
 
 
+def test_get_section_invalid():
+    res = client.get("/sections/10000")
+    assert res.status_code == 200
+    assert res.json() is None
+
+
 if __name__ == "__main__":
     exit(pytest.main(["-s", "-v", __file__]))
