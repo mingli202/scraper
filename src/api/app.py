@@ -1,5 +1,5 @@
 import sqlite3
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import ValidationError
 from scraper.files import Files
 from scraper.models import LecLab, Rating, Section
@@ -40,7 +40,7 @@ async def get_all_sections() -> list[Section]:
 
 
 @app.get("/sections/{section_id}")
-async def get_section(section_id: int) -> Section | None:
+async def get_section(section_id: int) -> Section:
     conn = sqlite3.connect(files.all_sections_final_path)
     cursor = conn.cursor()
 
@@ -61,14 +61,11 @@ async def get_section(section_id: int) -> Section | None:
     conn.close()
 
     if section_row is None:
-        return None
+        raise HTTPException(status_code=404, detail="Section not found")
 
-    try:
-        section = Section.validate_db_response(section_row)
-        section.times = [LecLab.validate_db_response(r) for r in time_rows]
-        return section
-    except ValidationError:
-        return None
+    section = Section.validate_db_response(section_row)
+    section.times = [LecLab.validate_db_response(r) for r in time_rows]
+    return section
 
 
 @app.get("/sections/")
@@ -216,9 +213,6 @@ async def get_ratings(prof: str) -> Rating | None:
     conn.close()
 
     if row is None:
-        return None
+        raise HTTPException(status_code=404, detail=f"Rating for {prof} not found")
 
-    try:
-        return Rating.validate_db_response(row)
-    except ValidationError:
-        return None
+    return Rating.validate_db_response(row)

@@ -1,3 +1,4 @@
+from typing import Any
 import pytest
 from api.app import app
 from fastapi.testclient import TestClient
@@ -72,10 +73,10 @@ def test_get_section():
     )
 
 
-def test_get_section_invalid():
-    res = client.get("/sections/10000")
-    assert res.status_code == 200
-    assert res.json() is None
+@pytest.mark.parametrize("id", [-1, 10000, "nan"])
+def test_get_section_invalid(id: Any):
+    res = client.get(f"/sections/{id}")
+    assert res.status_code != 200
 
 
 if __name__ == "__main__":
