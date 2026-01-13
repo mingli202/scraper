@@ -102,4 +102,4 @@ def test_get_rating_invalid(prof: Any):
 
 
 if __name__ == "__main__":
-    exit(pytest.main(["-s", "-vvv", __file__]))
+    exit(pytest.main(["--no-header", "-s", "-vvv", __file__]))
