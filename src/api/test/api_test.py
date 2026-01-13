@@ -3,7 +3,7 @@ import pytest
 from api.app import app
 from fastapi.testclient import TestClient
 
-from scraper.models import LecLab, Section
+from scraper.models import LecLab, Rating, Section
 
 client = TestClient(app)
 
@@ -79,5 +79,21 @@ def test_get_section_invalid(id: Any):
     assert res.status_code != 200
 
 
+def test_get_rating():
+    res = client.get("/ratings/Hughes, Cameron")
+    assert res.status_code == 200
+    rating = Rating.model_validate(res.json())
+    assert rating == Rating(
+        prof="Hughes, Cameron",
+        avg=3.8,
+        score=71.7,
+        difficulty=3.5,
+        nRating=10,
+        takeAgain=60,
+        status="found",
+        pId="2984556",
+    )
+
+
 if __name__ == "__main__":
-    exit(pytest.main(["-s", "-v", __file__]))
+    exit(pytest.main(["-s", "-vvv", __file__]))
