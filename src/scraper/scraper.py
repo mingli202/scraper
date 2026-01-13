@@ -25,7 +25,7 @@ class Scraper:
                 "SELECT name from sqlite_schema WHERE type='table' and tbl_name='ratings'"
             )
             if res.fetchone() is not None:
-                override = input("Rating db already exists, override? (y/n) ")
+                override = input("Ratings table already exists, override? (y/n) ")
                 if override.lower() != "y":
                     return
 

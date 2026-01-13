@@ -107,36 +107,12 @@ class Files:
         sections: list[Section] = []
 
         for row in cursor.execute("SELECT * FROM sections").fetchall():
-            id, course, section_number, domain, code, more, view_data = row
-
-            id = int(id)
-            validated_view_data: ViewData = TypeAdapter(ViewData).validate_json(
-                view_data
-            )
-
-            section = Section(
-                id=id,
-                course=course,
-                section=section_number,
-                domain=domain,
-                code=code,
-                more=more,
-                view_data=validated_view_data,
-            )
+            section = Section.validate_db_response(row)
 
             for time_row in cursor.execute(
                 "SELECT * FROM times WHERE section_id = ?", (id,)
             ).fetchall():
-                _, prof, title, type, time = time_row
-
-                parsed_time = TypeAdapter(Time).validate_json(time)
-
-                leclab = LecLab(
-                    title=title,
-                    type=type,
-                    prof=prof,
-                    time=parsed_time,
-                )
+                leclab = LecLab.validate_db_response(time_row)
 
                 section.times.append(leclab)
 
@@ -151,16 +127,7 @@ class Files:
         cursor = conn.cursor()
 
         rows = [
-            Rating(
-                prof=row[0],
-                score=row[1],
-                avg=row[2],
-                nRating=row[3],
-                takeAgain=row[4],
-                difficulty=row[5],
-                status=row[6],
-                pId=row[7],
-            )
+            Rating.validate_db_response(row)
             for row in cursor.execute("SELECT * FROM ratings").fetchall()
         ]
 

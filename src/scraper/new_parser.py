@@ -184,14 +184,9 @@ class NewParser(INewParser):
 
         self._update_section_times()
 
-        try:
-            title = next(
-                leclab.title
-                for leclab in self.current_section.times
-                if leclab.title != ""
-            )
-        except StopIteration:
-            title = ""
+        title = next(
+            leclab.title for leclab in self.current_section.times if leclab.title != ""
+        )
 
         self.current_section.title = title
 
@@ -235,9 +230,6 @@ class NewParser(INewParser):
 
     @override
     def save_sections(self):
-        if self.files.parsed_sections_path.exists():
-            return
-
         with open(self.files.parsed_sections_path, "w") as file:
             _ = file.write(json.dumps(self.sections, indent=2))
 
