@@ -73,7 +73,7 @@ def test_get_section():
     )
 
 
-@pytest.mark.parametrize("id", [-1, 10000, "nan"])
+@pytest.mark.parametrize("id", [-1, 10000, "nan", None])
 def test_get_section_invalid(id: Any):
     res = client.get(f"/sections/{id}")
     assert res.status_code != 200
@@ -93,6 +93,12 @@ def test_get_rating():
         status="found",
         pId="2984556",
     )
+
+
+@pytest.mark.parametrize("prof", [123, "oweiruoweiurjl", None])
+def test_get_rating_invalid(prof: Any):
+    res = client.get(f"/ratings/{prof}")
+    assert res.status_code != 200
 
 
 if __name__ == "__main__":
