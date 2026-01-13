@@ -13,7 +13,7 @@ async def root():
     return {"message": "Hello World!"}
 
 
-@app.get("/all_sections")
+@app.get("/sections/")
 async def get_all_sections() -> list[Section]:
     conn = sqlite3.connect(files.all_sections_final_path)
     cursor = conn.cursor()
