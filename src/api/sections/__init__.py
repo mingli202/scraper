@@ -10,63 +10,6 @@ files = Files()
 
 
 @router.get("/")
-async def get_all_sections() -> list[Section]:
-    print("get all sections")
-
-    conn = sqlite3.connect(files.all_sections_final_path)
-    cursor = conn.cursor()
-
-    row = cursor.execute("""
-        SELECT * FROM sections
-    """).fetchall()
-
-    sections = [Section.validate_db_response(r) for r in row]
-
-    for section in sections:
-        time_rows = cursor.execute(
-            """
-            SELECT * FROM times WHERE section_id = ?
-        """,
-            (section.id,),
-        ).fetchall()
-
-        section.times = [LecLab.validate_db_response(r) for r in time_rows]
-
-    conn.close()
-
-    return sections
-
-
-@router.get("/{section_id}")
-async def get_section(section_id: int) -> Section:
-    conn = sqlite3.connect(files.all_sections_final_path)
-    cursor = conn.cursor()
-
-    section_row = cursor.execute(
-        """
-        SELECT * FROM sections WHERE id = ?
-    """,
-        (section_id,),
-    ).fetchone()
-
-    time_rows = cursor.execute(
-        """
-        SELECT * FROM times WHERE section_id = ?
-    """,
-        (section_id,),
-    ).fetchall()
-
-    conn.close()
-
-    if section_row is None:
-        raise HTTPException(status_code=404, detail="Section not found")
-
-    section = Section.validate_db_response(section_row)
-    section.times = [LecLab.validate_db_response(r) for r in time_rows]
-    return section
-
-
-@router.get("/")
 async def get_sections(
     q: str | None = None,
     course: str | None = None,
@@ -84,24 +27,41 @@ async def get_sections(
     blended: bool = False,
     honours: bool = False,
 ) -> list[Section]:
+    print(f"q: {q}")
+    print(f"course: {course}")
+    print(f"domain: {domain}")
+    print(f"code: {code}")
+    print(f"title: {title}")
+    print(f"teacher: {teacher}")
+    print(f"min_rating: {min_rating}")
+    print(f"max_rating: {max_rating}")
+    print(f"min_score: {min_score}")
+    print(f"max_score: {max_score}")
+    print(f"days_off: {days_off}")
+    print(f"time_start: {time_start}")
+    print(f"time_end: {time_end}")
+    print(f"blended: {blended}")
+    print(f"honours: {honours}")
     query = "SELECT * from sections WHERE 1=1"
     params: list[str] = []
 
     if q is not None:
-        query += " AND (course LIKE %?% OR title domain %?% or code %?%)"
-        params.extend([q, q, q])
+        # Use '?' without quotes. Combine wildcards in the Python string.
+        query += " AND (course LIKE ? OR domain LIKE ? OR code LIKE ?)"
+        # We apply lower/upper in Python and wrap with %
+        params.extend([f"%{q.lower()}%", f"%{q.lower()}%", f"%{q.upper()}%"])
 
     if course is not None:
-        query += " AND course LIKE %?%"
-        params.append(course)
+        query += " AND course LIKE ?"
+        params.append(f"%{course.lower()}%")
 
     if domain is not None:
-        query += " AND domain LIKE %?%"
-        params.append(domain)
+        query += " AND domain LIKE ?"
+        params.append(f"%{domain.lower()}%")
 
     if code is not None:
-        query += " AND code LIKE %?%"
-        params.append(code)
+        query += " AND code LIKE ?"
+        params.append(f"%{code.upper()}%")
 
     if blended:
         query += " AND more LIKE 'BLENDED%'"
@@ -114,6 +74,9 @@ async def get_sections(
 
     rating_conn = sqlite3.connect(files.ratings_db_path)
     rating_cursor = rating_conn.cursor()
+
+    print(query)
+    print(params)
 
     rows = cursor.execute(query, params).fetchall()
 
@@ -194,3 +157,32 @@ async def get_sections(
     conn.close()
 
     return valid_sections
+
+
+@router.get("/{section_id}")
+async def get_section(section_id: int) -> Section:
+    conn = sqlite3.connect(files.all_sections_final_path)
+    cursor = conn.cursor()
+
+    section_row = cursor.execute(
+        """
+        SELECT * FROM sections WHERE id = ?
+    """,
+        (section_id,),
+    ).fetchone()
+
+    time_rows = cursor.execute(
+        """
+        SELECT * FROM times WHERE section_id = ?
+    """,
+        (section_id,),
+    ).fetchall()
+
+    conn.close()
+
+    if section_row is None:
+        raise HTTPException(status_code=404, detail="Section not found")
+
+    section = Section.validate_db_response(section_row)
+    section.times = [LecLab.validate_db_response(r) for r in time_rows]
+    return section
