@@ -1,5 +1,6 @@
 import sqlite3
-from fastapi import APIRouter, HTTPException
+from typing import Annotated
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import ValidationError
 
 from scraper.files import Files
@@ -21,9 +22,9 @@ async def get_sections(
     max_rating: int | None = None,
     min_score: int | None = None,
     max_score: int | None = None,
-    days_off: str | None = None,
-    time_start: str | None = None,
-    time_end: str | None = None,
+    days_off: Annotated[str | None, Query(pattern="^[MWTRF]{1,5}$")] = None,
+    time_start: Annotated[str | None, Query(pattern=r"^\d{4}$")] = None,
+    time_end: Annotated[str | None, Query(pattern=r"^\d{4}$")] = None,
     blended: bool = False,
     honours: bool = False,
 ) -> list[Section]:
@@ -47,21 +48,25 @@ async def get_sections(
 
     if q is not None:
         # Use '?' without quotes. Combine wildcards in the Python string.
-        query += " AND (course LIKE ? OR domain LIKE ? OR code LIKE ?)"
+        query += " AND (title LIKE ? OR course LIKE ? OR domain LIKE ? OR code LIKE ?)"
         # We apply lower/upper in Python and wrap with %
-        params.extend([f"{q.lower()}%", f"{q.lower()}%", f"%{q.upper()}%"])
+        params.extend([f"%{q}%", f"{q}%", f"{q}%", f"%{q}%"])
+
+    if title is not None:
+        query += " AND title LIKE ?"
+        params.append(f"%{title}%")
 
     if course is not None:
         query += " AND course LIKE ?"
-        params.append(f"{course.lower()}%")
+        params.append(f"{course}%")
 
     if domain is not None:
         query += " AND domain LIKE ?"
-        params.append(f"{domain.lower()}%")
+        params.append(f"{domain}%")
 
     if code is not None:
         query += " AND code LIKE ?"
-        params.append(f"%{code.upper()}%")
+        params.append(f"%{code}%")
 
     if blended:
         query += " AND more LIKE 'BLENDED%'"
@@ -74,9 +79,6 @@ async def get_sections(
 
     rating_conn = sqlite3.connect(files.ratings_db_path)
     rating_cursor = rating_conn.cursor()
-
-    print(query)
-    print(params)
 
     rows = cursor.execute(query, params).fetchall()
 
@@ -96,10 +98,6 @@ async def get_sections(
         valid_time = True
 
         for time in times:
-            if title is not None and title not in time.title:
-                valid_time = False
-                break
-
             if teacher is not None and teacher not in time.prof:
                 valid_time = False
                 break
@@ -112,7 +110,7 @@ async def get_sections(
             ).fetchone()
 
             for d, t in time.time.items():
-                if days_off is not None and d in days_off:
+                if days_off is not None and any(_d in days_off for _d in d):
                     valid_time = False
                     break
 
