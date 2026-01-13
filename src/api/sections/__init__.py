@@ -11,6 +11,8 @@ files = Files()
 
 @router.get("/")
 async def get_all_sections() -> list[Section]:
+    print("get all sections")
+
     conn = sqlite3.connect(files.all_sections_final_path)
     cursor = conn.cursor()
 

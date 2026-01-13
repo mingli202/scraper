@@ -1,6 +1,6 @@
 import sqlite3
 from fastapi import FastAPI, HTTPException
-from . import sections
+from api import sections
 from scraper.files import Files
 from scraper.models import Rating
 
