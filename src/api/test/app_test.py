@@ -25,6 +25,7 @@ def test_get_all_sections():
         section="00001",
         domain="BIOLOGY",
         code="101-SN1-RE",
+        title="Cellular Biology",
         times=[
             LecLab(
                 title="Cellular Biology",
@@ -54,6 +55,7 @@ def test_get_section():
         section="00002",
         domain="BIOLOGY",
         code="101-SN1-RE",
+        title="Cellular Biology",
         times=[
             LecLab(
                 title="Cellular Biology",

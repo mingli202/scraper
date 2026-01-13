@@ -245,6 +245,7 @@ def test_parity_with_old_parser(parser: NewParser):
 
             if "lecture" in old_section and old_section["lecture"] is not None:
                 old_section["lecture"]["type"] = "lecture"
+                old_section["title"] = old_section["lecture"]["title"]
 
                 id = old_section["id"]
                 if id == 559:
@@ -280,6 +281,7 @@ def test_parity_with_old_parser(parser: NewParser):
             del old_section["lecture"]
 
             if "lab" in old_section and old_section["lab"] is not None:
+                old_section["title"] = old_section["lab"]["title"]
                 old_section["lab"]["type"] = "laboratory"
                 old_section["times"].append(old_section["lab"])
             del old_section["lab"]

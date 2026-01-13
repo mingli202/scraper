@@ -95,6 +95,7 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
             section_number TEXT,
             domain TEXT,
             code TEXT,
+            title TEXt,
             more TEXT,
             view_data TEXT
         );
@@ -119,7 +120,7 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
         CREATE INDEX IF NOT EXISTS idx_section_id ON times(section_id);
     """)
 
-    sections_to_insert: list[tuple[int, str, str, str, str, str, str]] = []
+    sections_to_insert: list[tuple[int, str, str, str, str, str, str, str]] = []
     times_to_insert: list[
         tuple[int, str, str, Literal["lecture", "laboratory"] | None, str]
     ] = []
@@ -132,6 +133,7 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
                 section.section,
                 section.domain,
                 section.code,
+                section.title,
                 section.more,
                 json.dumps(section.view_data),
             )
@@ -150,7 +152,7 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
 
     _ = conn.executemany(
         """
-        INSERT INTO sections values (?,?,?,?,?,?,?)
+        INSERT INTO sections values (?,?,?,?,?,?,?,?)
         """,
         sections_to_insert,
     )

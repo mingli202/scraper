@@ -49,15 +49,15 @@ async def get_sections(
         # Use '?' without quotes. Combine wildcards in the Python string.
         query += " AND (course LIKE ? OR domain LIKE ? OR code LIKE ?)"
         # We apply lower/upper in Python and wrap with %
-        params.extend([f"%{q.lower()}%", f"%{q.lower()}%", f"%{q.upper()}%"])
+        params.extend([f"{q.lower()}%", f"{q.lower()}%", f"%{q.upper()}%"])
 
     if course is not None:
         query += " AND course LIKE ?"
-        params.append(f"%{course.lower()}%")
+        params.append(f"{course.lower()}%")
 
     if domain is not None:
         query += " AND domain LIKE ?"
-        params.append(f"%{domain.lower()}%")
+        params.append(f"{domain.lower()}%")
 
     if code is not None:
         query += " AND code LIKE ?"

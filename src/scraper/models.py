@@ -119,15 +119,16 @@ class Section(ConfiguredBasedModel):
     section: str = ""
     domain: str = ""
     code: str = ""
+    title: str = ""
     times: list[LecLab] = []
     more: str = ""
     view_data: ViewData = []
 
     @classmethod
     def validate_db_response(cls, db_response: Any) -> Section:
-        adapter = TypeAdapter(tuple[int, str, str, str, str, str, str])
+        adapter = TypeAdapter(tuple[int, str, str, str, str, str, str, str])
 
-        id, course, section_number, domain, code, more, view_data = (
+        id, course, section_number, domain, code, title, more, view_data = (
             adapter.validate_python(db_response)
         )
 
@@ -137,6 +138,7 @@ class Section(ConfiguredBasedModel):
             section=section_number,
             domain=domain,
             code=code,
+            title=title,
             more=more,
             view_data=TypeAdapter(ViewData).validate_json(view_data),
         )

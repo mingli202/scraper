@@ -184,6 +184,17 @@ class NewParser(INewParser):
 
         self._update_section_times()
 
+        try:
+            title = next(
+                leclab.title
+                for leclab in self.current_section.times
+                if leclab.title != ""
+            )
+        except StopIteration:
+            title = ""
+
+        self.current_section.title = title
+
         self.current_section.more = self.current_section.more.strip("\n").strip()
         self.sections.append(self.current_section.model_dump(by_alias=True))
 
