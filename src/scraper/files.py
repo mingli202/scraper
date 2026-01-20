@@ -110,7 +110,7 @@ class Files:
             section = Section.validate_db_response(row)
 
             for time_row in cursor.execute(
-                "SELECT * FROM times WHERE section_id = ?", (id,)
+                "SELECT * FROM times WHERE section_id = ?", (section.id,)
             ).fetchall():
                 leclab = LecLab.validate_db_response(time_row)
 

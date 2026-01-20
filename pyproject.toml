@@ -24,4 +24,5 @@ requires-python = ">=3.14"
 dev = ["ruff", "mypy"]
 
 [project.scripts]
+app = "api.app:app"
 scraper = "scraper.main:main"

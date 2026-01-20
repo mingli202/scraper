@@ -153,6 +153,7 @@ async def get_sections(
             valid_sections.append(section)
 
     conn.close()
+    rating_conn.close()
 
     return valid_sections
 
