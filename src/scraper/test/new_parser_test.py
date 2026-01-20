@@ -6,11 +6,11 @@ from pydantic_core import from_json
 import pytest
 import re
 
-from files import Files
-from models import LecLab, Section, Word
-from new_parser import NewParser
+from scraper.files import Files
+from scraper.models import LecLab, Section, Word
+from scraper.new_parser import NewParser
 from .individual_parsing_data import ATestCase, data
-import util
+from scraper import util
 
 files = Files()
 width, height = 0, 0
@@ -245,6 +245,7 @@ def test_parity_with_old_parser(parser: NewParser):
 
             if "lecture" in old_section and old_section["lecture"] is not None:
                 old_section["lecture"]["type"] = "lecture"
+                old_section["title"] = old_section["lecture"]["title"]
 
                 id = old_section["id"]
                 if id == 559:
@@ -280,6 +281,7 @@ def test_parity_with_old_parser(parser: NewParser):
             del old_section["lecture"]
 
             if "lab" in old_section and old_section["lab"] is not None:
+                old_section["title"] = old_section["lab"]["title"]
                 old_section["lab"]["type"] = "laboratory"
                 old_section["times"].append(old_section["lab"])
             del old_section["lab"]

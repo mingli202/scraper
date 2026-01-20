@@ -5,8 +5,8 @@ from typing import Any, final, override
 from abc import ABC, abstractmethod
 
 
-from files import Files
-from models import LecLab, Section, Word
+from .files import Files
+from .models import LecLab, Section, Word
 
 logger = logging.getLogger(__name__)
 
@@ -184,6 +184,12 @@ class NewParser(INewParser):
 
         self._update_section_times()
 
+        title = next(
+            leclab.title for leclab in self.current_section.times if leclab.title != ""
+        )
+
+        self.current_section.title = title
+
         self.current_section.more = self.current_section.more.strip("\n").strip()
         self.sections.append(self.current_section.model_dump(by_alias=True))
 
@@ -224,9 +230,6 @@ class NewParser(INewParser):
 
     @override
     def save_sections(self):
-        if self.files.parsed_sections_path.exists():
-            return
-
         with open(self.files.parsed_sections_path, "w") as file:
             _ = file.write(json.dumps(self.sections, indent=2))
 

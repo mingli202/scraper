@@ -4,7 +4,7 @@ import unittest
 
 from pydantic_core import from_json
 
-from files import Files
+from scraper.files import Files
 
 
 class RawFileTest(unittest.TestCase):

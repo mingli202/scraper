@@ -5,9 +5,9 @@ from typing import Callable
 
 import pytest
 
-from files import Files
-from models import LecLab, Section
-from parser import Parser
+from scraper.files import Files
+from scraper.models import LecLab, Section
+from scraper.parser import Parser
 
 
 @pytest.mark.skip(reason="deprecated Parser")

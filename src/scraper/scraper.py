@@ -6,10 +6,10 @@ import sqlite3
 
 from pydantic import TypeAdapter
 import requests
-from files import Files
-from models import Rating
+from .files import Files
+from .models import Rating
 
-import util
+from . import util
 
 
 class Scraper:
@@ -25,7 +25,7 @@ class Scraper:
                 "SELECT name from sqlite_schema WHERE type='table' and tbl_name='ratings'"
             )
             if res.fetchone() is not None:
-                override = input("Rating db already exists, override? (y/n) ")
+                override = input("Ratings table already exists, override? (y/n) ")
                 if override.lower() != "y":
                     return
 
@@ -214,6 +214,8 @@ class Scraper:
                 pId TEXT
             )
         """)
+
+        _ = cursor.execute("CREATE INDEX IF NOT EXISTS idx_prof ON ratings(prof)")
 
         rows = [
             (

@@ -5,7 +5,7 @@ import re
 
 import pdfplumber
 from pdfplumber.page import Page
-from models import ColumnsXs, Word
+from .models import ColumnsXs, Word
 
 
 def compute_sorted_lines(pdf_path: Path) -> OrderedDict[int, list[Word]]:

@@ -1,8 +1,8 @@
 import json
 import sqlite3
 from typing import Literal
-from files import Files
-from models import Section
+from .files import Files
+from .models import Section
 import math
 
 
@@ -80,7 +80,7 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
         is not None
     ):
         if not force_override:
-            override = input("Sections db already exists, override? (y/n) ")
+            override = input("Sections table already exists, override? (y/n) ")
             if override.lower() != "y":
                 return
 
@@ -95,9 +95,14 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
             section_number TEXT,
             domain TEXT,
             code TEXT,
+            title TEXt,
             more TEXT,
             view_data TEXT
         );
+    """)
+
+    _ = cursor.execute("""
+        CREATE INDEX IF NOT EXISTS idx_id ON sections(id);
     """)
 
     _ = cursor.execute("""
@@ -111,7 +116,11 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
         )
     """)
 
-    sections_to_insert: list[tuple[int, str, str, str, str, str, str]] = []
+    _ = cursor.execute("""
+        CREATE INDEX IF NOT EXISTS idx_section_id ON times(section_id);
+    """)
+
+    sections_to_insert: list[tuple[int, str, str, str, str, str, str, str]] = []
     times_to_insert: list[
         tuple[int, str, str, Literal["lecture", "laboratory"] | None, str]
     ] = []
@@ -124,6 +133,7 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
                 section.section,
                 section.domain,
                 section.code,
+                section.title,
                 section.more,
                 json.dumps(section.view_data),
             )
@@ -142,7 +152,7 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
 
     _ = conn.executemany(
         """
-        INSERT INTO sections values (?,?,?,?,?,?,?)
+        INSERT INTO sections values (?,?,?,?,?,?,?,?)
         """,
         sections_to_insert,
     )

@@ -1,8 +1,8 @@
 import logging
 import unittest
-from typing import Literal, Self, override
+from typing import Any, Literal, Self, override
 
-from pydantic import BaseModel, ConfigDict, ValidationError
+from pydantic import BaseModel, ConfigDict, TypeAdapter, ValidationError
 from pydantic.alias_generators import to_camel, to_snake
 
 logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ class ConfiguredBasedModel(BaseModel):
     )
 
 
-Time = dict[str, list[str]]
+Time = dict[str, list[str]]  # day: list["HHMM-HHMM"]
 
 
 class Rating(ConfiguredBasedModel):
@@ -26,6 +26,34 @@ class Rating(ConfiguredBasedModel):
     status: Literal["found", "foundn't"] = "foundn't"
     prof: str = ""
     pId: str | None = None
+
+    @classmethod
+    def validate_db_response(cls, db_response: Any) -> Rating:
+        adapter = TypeAdapter(
+            tuple[
+                str,
+                float,
+                float,
+                int,
+                int,
+                float,
+                Literal["found", "foundn't"],
+                str | None,
+            ]
+        )
+        prof, score, avg, nRating, takeAgain, difficulty, status, pId = (
+            adapter.validate_python(db_response)
+        )
+        return Rating(
+            prof=prof,
+            score=score,
+            avg=avg,
+            nRating=nRating,
+            takeAgain=takeAgain,
+            difficulty=difficulty,
+            status=status,
+            pId=pId,
+        )
 
 
 class LecLab(ConfiguredBasedModel):
@@ -67,6 +95,20 @@ class LecLab(ConfiguredBasedModel):
         self.prof = ""
         self.time = Time()
 
+    @classmethod
+    def validate_db_response(cls, db_response: Any) -> LecLab:
+        adapter = TypeAdapter(
+            tuple[int, str, str, Literal["lecture", "laboratory"] | None, str]
+        )
+        _, prof, title, type, time = adapter.validate_python(db_response)
+
+        return LecLab(
+            title=title,
+            type=type,
+            prof=prof,
+            time=TypeAdapter(Time).validate_json(time),
+        )
+
 
 ViewData = list[dict[str, list[int]]]
 
@@ -77,9 +119,29 @@ class Section(ConfiguredBasedModel):
     section: str = ""
     domain: str = ""
     code: str = ""
+    title: str = ""
     times: list[LecLab] = []
     more: str = ""
     view_data: ViewData = []
+
+    @classmethod
+    def validate_db_response(cls, db_response: Any) -> Section:
+        adapter = TypeAdapter(tuple[int, str, str, str, str, str, str, str])
+
+        id, course, section_number, domain, code, title, more, view_data = (
+            adapter.validate_python(db_response)
+        )
+
+        return Section(
+            id=id,
+            course=course,
+            section=section_number,
+            domain=domain,
+            code=code,
+            title=title,
+            more=more,
+            view_data=TypeAdapter(ViewData).validate_json(view_data),
+        )
 
 
 class ColumnsXs(ConfiguredBasedModel):

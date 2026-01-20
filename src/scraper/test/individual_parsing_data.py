@@ -2,9 +2,9 @@ from collections import OrderedDict
 from typing import Any
 from pydantic import BaseModel
 
-from files import Files
-from models import LecLab, Section, Word
-from new_parser import NewParser
+from scraper.files import Files
+from scraper.models import LecLab, Section, Word
+from scraper.new_parser import NewParser
 
 
 class ATestCase(BaseModel):
@@ -24,6 +24,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="609-DAA-03",
+            title="German I",
             times=[
                 LecLab(
                     title="German I",
@@ -46,6 +47,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="609-DAA-03",
+            title="German I",
             times=[
                 LecLab(
                     title="German I",
@@ -68,6 +70,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="609-DAA-03",
+            title="German I",
             times=[
                 LecLab(
                     title="German I",
@@ -91,6 +94,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="101-SN1-AB",
+            title="Cellular Biology",
             times=[
                 LecLab(
                     title="Cellular Biology",
@@ -119,6 +123,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="609-DAA-03",
+            title="German I",
             times=[
                 LecLab(
                     title="German I",
@@ -141,6 +146,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Design",
             times=[
                 LecLab(
                     title="Design",
@@ -171,6 +177,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Art oratoire en public pour des présentations puissantes et",
             times=[
                 LecLab(
                     title="Art oratoire en public pour des présentations puissantes et",
@@ -194,6 +201,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Design Design",
             times=[
                 LecLab(
                     title="Design Design",
@@ -224,6 +232,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Art oratoire en public pour des présentations puissantes",
             times=[
                 LecLab(
                     title="Art oratoire en public pour des présentations puissantes",
@@ -254,6 +263,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Art oratoire en public pour des présentations puissantes et",
             times=[
                 LecLab(
                     title="Art oratoire en public pour des présentations puissantes et",
@@ -282,6 +292,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Art oratoire en public pour des présentations puissantes",
             times=[
                 LecLab(
                     title="Art oratoire en public pour des présentations puissantes",
@@ -310,6 +321,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Art oratoire en public pour des présentations puissantes et",
             times=[
                 LecLab(
                     title="Art oratoire en public pour des présentations puissantes et",
@@ -337,6 +349,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Art oratoire en public pour des présentations puissantes",
             times=[
                 LecLab(
                     title="Art oratoire en public pour des présentations puissantes",
@@ -364,6 +377,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Art oratoire en public pour des présentations puissantes",
             times=[
                 LecLab(
                     title="Art oratoire en public pour des présentations puissantes",
@@ -391,6 +405,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Art oratoire en public pour des présentations puissantes et",
             times=[
                 LecLab(
                     title="Art oratoire en public pour des présentations puissantes et",
@@ -417,6 +432,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Art oratoire en public pour des présentations puissantes",
             times=[
                 LecLab(
                     title="Art oratoire en public pour des présentations puissantes",
@@ -440,6 +456,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Design",
             times=[
                 LecLab(
                     title="Design",
@@ -471,6 +488,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
         Section(
             section="00001",
             code="511-DBA-03",
+            title="Design",
             times=[
                 LecLab(
                     title="Design",
