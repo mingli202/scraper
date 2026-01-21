@@ -5,7 +5,6 @@ steps:
       - "-c"
       - |
         docker login --username=$$USERNAME --password=$$PASSWORD
-        DOCKER_BUILDKIT=1 docker build -t $$USERNAME/schedule-maker-scraper:$COMMIT_SHA .
     secretEnv: ["USERNAME", "PASSWORD"]
 
   - name: "gcr.io/cloud-builders/docker"
