@@ -1,0 +1,53 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        docker login --username=$$USERNAME --password=$$PASSWORD
+        DOCKER_BUILDKIT=1 docker build -t $$USERNAME/schedule-maker-scraper:$COMMIT_SHA .
+    secretEnv: ["USERNAME", "PASSWORD"]
+
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        DOCKER_BUILDKIT=1 docker build -t $$USERNAME/schedule-maker-scraper:$COMMIT_SHA .
+    secretEnv: ["USERNAME"]
+
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        docker push $$USERNAME/schedule-maker-scraper:$COMMIT_SHA
+    secretEnv: ["USERNAME"]
+
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "$_SERVICE_NAME"
+      - "--image"
+      - "$$USERNAME/schedule-maker-scraper:$COMMIT_SHA"
+      - "--region"
+      - "$_REGION"
+      - "--platform"
+      - "managed"
+    secretEnv: ["USERNAME"]
+
+options:
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/docker-username/versions/1
+      env: "USERNAME"
+    - versionName: projects/$PROJECT_ID/secrets/docker-password/versions/1
+      env: "PASSWORD"
+
+substitutions:
+  _SERVICE_NAME: scraper
+  _REGION: us-central1
