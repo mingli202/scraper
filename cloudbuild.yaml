@@ -4,7 +4,7 @@ steps:
     args:
       - "-c"
       - |
-        docker login --username=$$USERNAME --password=$$PASSWORD
+        echo "$$PASSWORD" | docker login --username=$$USERNAME --password-stdin
     secretEnv: ["USERNAME", "PASSWORD"]
 
   - name: "gcr.io/cloud-builders/docker"
