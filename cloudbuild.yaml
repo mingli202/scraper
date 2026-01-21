@@ -31,7 +31,7 @@ steps:
       - "deploy"
       - "$_SERVICE_NAME"
       - "--image"
-      - "$$USERNAME/schedule-maker-scraper:$COMMIT_SHA"
+      - "docker.io/$$USERNAME/schedule-maker-scraper:$COMMIT_SHA"
       - "--region"
       - "$_REGION"
       - "--platform"
