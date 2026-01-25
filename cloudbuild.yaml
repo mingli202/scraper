@@ -27,16 +27,11 @@ steps:
     entrypoint: "bash"
     args:
       - "-c"
-      - "gcloud"
-      - "run"
-      - "deploy"
-      - "$_SERVICE_NAME"
-      - "--image"
-      - "docker.io/$$USERNAME/$_IMAGE_NAME:$COMMIT_SHA"
-      - "--region"
-      - "$_REGION"
-      - "--platform"
-      - "managed"
+      - |
+        gcloud run deploy $_SERVICE_NAME \
+        --image docker.io/$$USERNAME/$_IMAGE_NAME:$COMMIT_SHA \
+        --region $_REGION \
+        --platform managed
     secretEnv: ["USERNAME"]
 
 options:
