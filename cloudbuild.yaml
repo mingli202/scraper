@@ -4,7 +4,7 @@ steps:
     args:
       - "-c"
       - |
-        docker login --username=$$USERNAME --password=$$PASSWORD
+        echo "$$PASSWORD" | docker login --username=$$USERNAME --password-stdin
     secretEnv: ["USERNAME", "PASSWORD"]
 
   - name: "gcr.io/cloud-builders/docker"
@@ -12,7 +12,7 @@ steps:
     args:
       - "-c"
       - |
-        DOCKER_BUILDKIT=1 docker build -t $$USERNAME/schedule-maker-scraper:$COMMIT_SHA .
+        DOCKER_BUILDKIT=1 docker build -t $$USERNAME/$_IMAGE_NAME:$COMMIT_SHA .
     secretEnv: ["USERNAME"]
 
   - name: "gcr.io/cloud-builders/docker"
@@ -20,17 +20,18 @@ steps:
     args:
       - "-c"
       - |
-        docker push $$USERNAME/schedule-maker-scraper:$COMMIT_SHA
+        docker push $$USERNAME/$_IMAGE_NAME:$COMMIT_SHA
     secretEnv: ["USERNAME"]
 
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"
     args:
       - "run"
-      - "deploy"
+      - "services"
+      - "update"
       - "$_SERVICE_NAME"
       - "--image"
-      - "docker.io/$$USERNAME/schedule-maker-scraper:$COMMIT_SHA"
+      - "$$USERNAME/$_IMAGE_NAME:$COMMIT_SHA"
       - "--region"
       - "$_REGION"
       - "--platform"
@@ -50,3 +51,4 @@ availableSecrets:
 substitutions:
   _SERVICE_NAME: scraper
   _REGION: us-central1
+  _IMAGE_NAME: schedule-maker-scraper
