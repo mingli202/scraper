@@ -24,14 +24,15 @@ steps:
     secretEnv: ["USERNAME"]
 
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    entrypoint: "gcloud"
+    entrypoint: "bash"
     args:
+      - "-c"
+      - "gcloud"
       - "run"
-      - "services"
-      - "update"
+      - "deploy"
       - "$_SERVICE_NAME"
       - "--image"
-      - "$$USERNAME/$_IMAGE_NAME:$COMMIT_SHA"
+      - "docker.io/$$USERNAME/$_IMAGE_NAME:$COMMIT_SHA"
       - "--region"
       - "$_REGION"
       - "--platform"
