@@ -27,10 +27,11 @@ steps:
     entrypoint: "gcloud"
     args:
       - "run"
-      - "deploy"
+      - "services"
+      - "update"
       - "$_SERVICE_NAME"
       - "--image"
-      - "docker.io/$$USERNAME/$_IMAGE_NAME:$COMMIT_SHA"
+      - "$$USERNAME/$_IMAGE_NAME:$COMMIT_SHA"
       - "--region"
       - "$_REGION"
       - "--platform"
