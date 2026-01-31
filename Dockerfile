@@ -48,4 +48,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application.
-CMD ["fastapi", "run", "--host", "0.0.0.0", "src/api/app.py", "--port", "8000"]
+CMD ["fastapi", "run", "--host", "0.0.0.0", "src/api/app.py", "--port", "8080"]
