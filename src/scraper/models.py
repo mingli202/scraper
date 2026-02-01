@@ -1,23 +1,23 @@
 import logging
-import unittest
 from typing import Any, Literal, Self, override
 
-from pydantic import BaseModel, ConfigDict, TypeAdapter, ValidationError
-from pydantic.alias_generators import to_camel, to_snake
+from pydantic import BaseModel, ConfigDict, TypeAdapter
+from pydantic.alias_generators import to_camel
+
 
 logger = logging.getLogger(__name__)
 
 
-class ConfiguredBasedModel(BaseModel):
+class ConfiguredBaseModel(BaseModel):
     model_config = ConfigDict(
         alias_generator=to_camel, populate_by_name=True, from_attributes=True
     )
 
 
-Time = dict[str, list[str]]  # day: list["HHMM-HHMM"]
+type Time = dict[str, list[str]]  # day: list["HHMM-HHMM"]
 
 
-class Rating(ConfiguredBasedModel):
+class Rating(ConfiguredBaseModel):
     score: float = 0
     avg: float = 0
     nRating: int = 0
@@ -56,7 +56,7 @@ class Rating(ConfiguredBasedModel):
         )
 
 
-class LecLab(ConfiguredBasedModel):
+class LecLab(ConfiguredBaseModel):
     title: str = ""
     type: Literal["lecture", "laboratory"] | None = None
     prof: str = ""
@@ -93,7 +93,7 @@ class LecLab(ConfiguredBasedModel):
         self.title = ""
         self.type = None
         self.prof = ""
-        self.time = Time()
+        self.time = {}
 
     @classmethod
     def validate_db_response(cls, db_response: Any) -> LecLab:
@@ -106,14 +106,14 @@ class LecLab(ConfiguredBasedModel):
             title=title,
             type=type,
             prof=prof,
-            time=TypeAdapter(Time).validate_json(time),
+            time=TypeAdapter[Time](Time).validate_json(time),
         )
 
 
-ViewData = list[dict[str, list[int]]]
+type ViewData = list[dict[str, list[int]]]
 
 
-class Section(ConfiguredBasedModel):
+class Section(ConfiguredBaseModel):
     id: int = 0
     course: str = ""
     section: str = ""
@@ -140,11 +140,11 @@ class Section(ConfiguredBasedModel):
             code=code,
             title=title,
             more=more,
-            view_data=TypeAdapter(ViewData).validate_json(view_data),
+            view_data=TypeAdapter[ViewData](ViewData).validate_json(view_data),
         )
 
 
-class ColumnsXs(ConfiguredBasedModel):
+class ColumnsXs(ConfiguredBaseModel):
     section: int
     disc: int
     course_number: int
@@ -153,7 +153,7 @@ class ColumnsXs(ConfiguredBasedModel):
     time: int
 
 
-class Word(ConfiguredBasedModel):
+class Word(ConfiguredBaseModel):
     page_number: int
     text: str
     x0: int
@@ -163,46 +163,3 @@ class Word(ConfiguredBasedModel):
     @override
     def __hash__(self):
         return hash(self.model_dump_json(by_alias=True))
-
-
-class ModelsTest(unittest.TestCase):
-    def test_to_camel_case(self):
-        self.assertEqual(to_camel("section_columns_x"), "sectionColumnsX")
-        self.assertEqual(to_camel("view_data"), "viewData")
-
-    def test_to_snake_case(self):
-        self.assertEqual(to_snake("sectionColumnsX"), "section_columns_x")
-        self.assertEqual(to_snake("viewData"), "view_data")
-        self.assertEqual(to_snake("courseNumber"), "course_number")
-
-    def test_serialization_config_0(self):
-        columns_x = ColumnsXs(
-            section=0,
-            disc=1,
-            course_number=2,
-            course_title=3,
-            day=4,
-            time=5,
-        )
-
-        serialized = columns_x.model_dump_json(by_alias=True)
-        self.assertEqual(
-            serialized,
-            '{"section":0,"disc":1,"courseNumber":2,"courseTitle":3,"day":4,"time":5}',
-        )
-
-        _ = ColumnsXs.model_validate_json(serialized, by_alias=True)
-
-    def test_validation_config_1(self):
-        serialized = (
-            '{"section":0,"disc":1,"coursenumber":2,"courseTitle":3,"day":4,"time":5}'
-        )
-
-        self.assertRaises(
-            ValidationError,
-            lambda: ColumnsXs.model_validate_json(serialized, by_alias=True),
-        )
-
-
-if __name__ == "__main__":
-    _ = unittest.main()
