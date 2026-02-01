@@ -1,4 +1,5 @@
 import ast
+import json
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -101,8 +102,11 @@ def handle_subscript(subscript: ast.Subscript) -> str:
             return f"z.array({handle_type_annotation(args)})"
         case "tuple":
             return f"z.tuple([{handle_type_annotation(args)}])"
+        case "Literal":
+            assert isinstance(args, ast.Tuple)
+            return f"z.literal([{', '.join(handle_constant(e) for e in args.elts if isinstance(e, ast.Constant))}])"
         case _:
-            raise Exception(f"Unhandled name id {id}")
+            raise Exception(f"Unhandled name id {name.id}")
 
 
 def get_zod_string_from_type(type: str) -> str:
@@ -126,7 +130,7 @@ def handle_constant(constant: ast.Constant) -> str:
         case None:
             return "z.null()"
         case _:
-            raise Exception(f"Unhandled constant {constant}")
+            return json.dumps(constant.value)
 
 
 def search_alias_type_definition(type: str) -> str:

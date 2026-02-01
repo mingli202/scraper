@@ -12,6 +12,8 @@ from scraper.codegen import (
     "input,expected",
     [
         ("None", "z.null()"),
+        ("'asdf'", '"asdf"'),
+        ("123", "123"),
     ],
 )
 def test_handle_constant(input: str, expected: str):
@@ -49,7 +51,7 @@ def test_get_zod_string_from_type(input: str, expected: str):
         ("an_union: str | None", "z.union([z.string(), z.null()])"),
         (
             'a_literal_union1: Literal["found", "foundn\'t"]',
-            'z.literal(["found", "found\'nt"])',
+            'z.literal(["found", "foundn\'t"])',
         ),
         ("a_literal_union2: Literal[1, 2, 3]", "z.literal([1, 2, 3])"),
         (
