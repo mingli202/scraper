@@ -20,14 +20,14 @@ def main():
     with open(models_filepath, "r") as file:
         tree = ast.parse(file.read())
 
-        codegen: list[str] = []
+        codegen: list[str] = ['import z from "zod";']
 
         for node in tree.body:
             if isinstance(node, ast.ClassDef) and any(
                 isinstance(exp, ast.Name) and "ConfiguredBaseModel" == exp.id
                 for exp in node.bases
             ):
-                a_zod_type: list[str] = [f"const {node.name} = v.object({{"]
+                a_zod_type: list[str] = [f"export const {node.name} = z.object({{"]
 
                 for body_node in node.body:
                     if isinstance(body_node, ast.AnnAssign):
@@ -39,7 +39,9 @@ def main():
                         a_zod_type.append(f"{to_camel(var_name)}: {zod_type},")
 
                 a_zod_type.append("});")
-                a_zod_type.append(f"type {node.name} = z.infer<{node.name}>;")
+                a_zod_type.append(
+                    f"export type {node.name} = z.infer<typeof {node.name}>;"
+                )
 
                 codegen.append("\n".join(a_zod_type))
 
@@ -47,8 +49,8 @@ def main():
                 name = node.name.id
                 zod_type = handle_type_annotation(node.value)
 
-                codegen.append(f"const {name} = {zod_type};")
-                codegen.append(f"type {name} = z.infer<{name}>;")
+                codegen.append(f"export const {name} = {zod_type};")
+                codegen.append(f"export type {name} = z.infer<typeof {name}>;")
 
         all_types = "\n\n".join(codegen)
 
