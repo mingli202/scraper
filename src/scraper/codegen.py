@@ -64,6 +64,9 @@ def handle_type_annotation(expr: ast.expr) -> str:
 
 
 def handle_binop(binop: ast.BinOp, in_another_binop: bool = False) -> str:
+    """
+    Returns the zod equivalent of BinOp ast
+    """
     match binop.left:
         case ast.BinOp():
             left = handle_binop(binop.left, True)
