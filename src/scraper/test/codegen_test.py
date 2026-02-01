@@ -66,7 +66,7 @@ def test_get_zod_string_from_type(input: str, expected: str):
         ),
         (
             "a_mix_of_types3: tuple[list[str], dict[str, tuple[int, int]], str]",
-            "z.tuple([z.array(z.string()), z.record(z.string(), z.tuple([z.number(), z.number(), z.string()]))])",
+            "z.tuple([z.array(z.string()), z.record(z.string(), z.tuple([z.number(), z.number()])), z.string()])",
         ),
         (
             "a_mix_of_types4: list[str] | int | None",
