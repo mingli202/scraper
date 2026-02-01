@@ -1,9 +1,8 @@
 import logging
-import unittest
 from typing import Any, Literal, Self, override
 
-from pydantic import BaseModel, ConfigDict, TypeAdapter, ValidationError
-from pydantic.alias_generators import to_camel, to_snake
+from pydantic import BaseModel, ConfigDict, TypeAdapter
+from pydantic.alias_generators import to_camel
 
 logger = logging.getLogger(__name__)
 
