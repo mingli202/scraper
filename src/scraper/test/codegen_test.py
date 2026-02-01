@@ -46,7 +46,7 @@ def test_get_zod_string_from_type(input: str, expected: str):
         ("a_dict: dict[int, str]", "z.record(z.number(), z.string())"),
         ("a_list: list[str]", "z.array(z.string())"),
         ("a_tuple: tuple[int]", "z.tuple([z.number()])"),
-        ("an_union: str | None", "z.union(z.number(), z.null())"),
+        ("an_union: str | None", "z.union([z.string(), z.null()])"),
         (
             'a_literal_union1: Literal["found", "foundn\'t"]',
             'z.literal(["found", "found\'nt"])',
@@ -70,7 +70,7 @@ def test_get_zod_string_from_type(input: str, expected: str):
         ),
         (
             "a_mix_of_types4: list[str] | int | None",
-            "z.union([z.array(z.number()), z.number(), z.null()])",
+            "z.union([z.array(z.string()), z.number(), z.null()])",
         ),
         ("a_value: int = 5", "z.number()"),
         ("a_reference_to_another_type: list[MyType]", "z.array(MyType)"),

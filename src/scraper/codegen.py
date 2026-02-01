@@ -49,15 +49,34 @@ def main():
 def handle_type_annotation(expr: ast.expr) -> str:
     match expr:
         case ast.BinOp():
-            return ""
+            return handle_binop(expr)
         case ast.Subscript():
             return handle_subscript(expr)
         case ast.Name(id):
             return get_zod_string_from_type(id)
         case ast.Tuple(elts):
             return ", ".join(handle_type_annotation(e) for e in elts)
+        case ast.Constant():
+            return handle_constant(expr)
         case _:
             raise Exception(f"Unhandled expr: {expr}")
+
+
+def handle_binop(binop: ast.BinOp, in_another_binop: bool = False) -> str:
+    match binop.left:
+        case ast.BinOp():
+            left = handle_binop(binop.left, True)
+        case _:
+            left = handle_type_annotation(binop.left)
+
+    right = handle_type_annotation(binop.right)
+
+    string = f"{left}, {right}"
+
+    if in_another_binop:
+        return string
+
+    return f"z.union([{string}])"
 
 
 def handle_subscript(subscript: ast.Subscript) -> str:
