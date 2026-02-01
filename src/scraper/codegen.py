@@ -31,20 +31,21 @@ def main():
             ):
                 a_zod_type: list[str] = [f"const {node.name} = v.object({{"]
 
-                for node in node.body:
-                    if isinstance(node, ast.AnnAssign):
-                        assert isinstance(node.target, ast.Name)
-                        var_name = node.target.id
+                for body_node in node.body:
+                    if isinstance(body_node, ast.AnnAssign):
+                        assert isinstance(body_node.target, ast.Name)
+                        var_name = body_node.target.id
 
-                        zod_type = handle_type_annotation(node.annotation)
+                        zod_type = handle_type_annotation(body_node.annotation)
 
-                        a_zod_type.append(f"{var_name}: {zod_type},")
+                        a_zod_type.append(f"{to_camel(var_name)}: {zod_type},")
 
                 a_zod_type.append("});")
+                a_zod_type.append(f"type {node.name} = z.infer<{node.name}>;")
 
                 codegen.append("\n".join(a_zod_type))
 
-        print(codegen)
+        print("\n".join(codegen))
 
 
 def handle_type_annotation(expr: ast.expr) -> str:

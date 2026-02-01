@@ -14,7 +14,7 @@ class ConfiguredBaseModel(BaseModel):
     )
 
 
-Time = dict[str, list[str]]  # day: list["HHMM-HHMM"]
+type Time = dict[str, list[str]]  # day: list["HHMM-HHMM"]
 
 
 class Rating(ConfiguredBaseModel):
@@ -93,7 +93,7 @@ class LecLab(ConfiguredBaseModel):
         self.title = ""
         self.type = None
         self.prof = ""
-        self.time = Time()
+        self.time = {}
 
     @classmethod
     def validate_db_response(cls, db_response: Any) -> LecLab:
@@ -106,11 +106,11 @@ class LecLab(ConfiguredBaseModel):
             title=title,
             type=type,
             prof=prof,
-            time=TypeAdapter(Time).validate_json(time),
+            time=TypeAdapter[Time](Time).validate_json(time),
         )
 
 
-ViewData = list[dict[str, list[int]]]
+type ViewData = list[dict[str, list[int]]]
 
 
 class Section(ConfiguredBaseModel):
@@ -140,7 +140,7 @@ class Section(ConfiguredBaseModel):
             code=code,
             title=title,
             more=more,
-            view_data=TypeAdapter(ViewData).validate_json(view_data),
+            view_data=TypeAdapter[ViewData](ViewData).validate_json(view_data),
         )
 
 
