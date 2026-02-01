@@ -4,10 +4,11 @@ from typing import Any, Literal, Self, override
 from pydantic import BaseModel, ConfigDict, TypeAdapter
 from pydantic.alias_generators import to_camel
 
+
 logger = logging.getLogger(__name__)
 
 
-class ConfiguredBasedModel(BaseModel):
+class ConfiguredBaseModel(BaseModel):
     model_config = ConfigDict(
         alias_generator=to_camel, populate_by_name=True, from_attributes=True
     )
@@ -16,7 +17,7 @@ class ConfiguredBasedModel(BaseModel):
 Time = dict[str, list[str]]  # day: list["HHMM-HHMM"]
 
 
-class Rating(ConfiguredBasedModel):
+class Rating(ConfiguredBaseModel):
     score: float = 0
     avg: float = 0
     nRating: int = 0
@@ -55,7 +56,7 @@ class Rating(ConfiguredBasedModel):
         )
 
 
-class LecLab(ConfiguredBasedModel):
+class LecLab(ConfiguredBaseModel):
     title: str = ""
     type: Literal["lecture", "laboratory"] | None = None
     prof: str = ""
@@ -112,7 +113,7 @@ class LecLab(ConfiguredBasedModel):
 ViewData = list[dict[str, list[int]]]
 
 
-class Section(ConfiguredBasedModel):
+class Section(ConfiguredBaseModel):
     id: int = 0
     course: str = ""
     section: str = ""
@@ -143,7 +144,7 @@ class Section(ConfiguredBasedModel):
         )
 
 
-class ColumnsXs(ConfiguredBasedModel):
+class ColumnsXs(ConfiguredBaseModel):
     section: int
     disc: int
     course_number: int
@@ -152,7 +153,7 @@ class ColumnsXs(ConfiguredBasedModel):
     time: int
 
 
-class Word(ConfiguredBasedModel):
+class Word(ConfiguredBaseModel):
     page_number: int
     text: str
     x0: int
