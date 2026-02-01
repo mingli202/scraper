@@ -2,6 +2,7 @@ import ast
 import json
 from pathlib import Path
 import os
+import subprocess
 from dotenv import load_dotenv
 from pydantic.alias_generators import to_camel
 
@@ -57,6 +58,8 @@ def main():
     codegen_file = Path(codegen_dir).resolve() / "src" / "types" / "generated.ts"
     with open(codegen_file, "w") as file:
         _ = file.write(all_types)
+
+    _ = subprocess.run(["biome", "format", "--write", codegen_file])
 
 
 def handle_type_annotation(expr: ast.expr) -> str:
