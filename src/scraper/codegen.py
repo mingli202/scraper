@@ -5,20 +5,18 @@ import os
 from dotenv import load_dotenv
 from pydantic.alias_generators import to_camel
 
-codegen_dir = os.environ.get("CODEGEN_DIR")
-did_load_env = load_dotenv()
-
-if codegen_dir is None and (
-    not load_dotenv() or (codegen_dir := os.environ.get("CODEGEN_DIR") is None)
-):
-    print("Please set the environment variable CODEGEN_DIR")
-    exit(1)
-
-cur_dir = Path(__file__).resolve().parent.resolve()
-models_filepath = cur_dir / "models.py"
-
 
 def main():
+    _ = load_dotenv()
+    codegen_dir = os.environ.get("CODEGEN_DIR")
+
+    if codegen_dir is None:
+        print("Please set the environment variable CODEGEN_DIR")
+        exit(1)
+
+    cur_dir = Path(__file__).resolve().parent.resolve()
+    models_filepath = cur_dir / "models.py"
+
     with open(models_filepath, "r") as file:
         tree = ast.parse(file.read())
 
@@ -45,7 +43,18 @@ def main():
 
                 codegen.append("\n".join(a_zod_type))
 
-        print("\n".join(codegen))
+            if isinstance(node, ast.TypeAlias):
+                name = node.name.id
+                zod_type = handle_type_annotation(node.value)
+
+                codegen.append(f"const {name} = {zod_type};")
+                codegen.append(f"type {name} = z.infer<{name}>;")
+
+        all_types = "\n\n".join(codegen)
+
+    codegen_file = Path(codegen_dir).resolve() / "src" / "types" / "generated.ts"
+    with open(codegen_file, "w") as file:
+        _ = file.write(all_types)
 
 
 def handle_type_annotation(expr: ast.expr) -> str:
@@ -135,10 +144,6 @@ def handle_constant(constant: ast.Constant) -> str:
             return "z.null()"
         case _:
             return json.dumps(constant.value)
-
-
-def search_alias_type_definition(type: str) -> str:
-    return ""
 
 
 if __name__ == "__main__":
