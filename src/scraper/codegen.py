@@ -59,7 +59,7 @@ def main():
     with open(codegen_file, "w") as file:
         _ = file.write(all_types)
 
-    _ = subprocess.run(["biome", "format", "--write", codegen_file])
+    _ = subprocess.run(["bunx", "@biomejs/biome", "format", "--write", codegen_file])
 
 
 def handle_type_annotation(expr: ast.expr) -> str:
