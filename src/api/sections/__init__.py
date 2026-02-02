@@ -23,26 +23,11 @@ async def get_sections(
     min_score: int | None = None,
     max_score: int | None = None,
     days_off: Annotated[str | None, Query(pattern="^[MWTRF]{1,5}$")] = None,
-    time_start: Annotated[str | None, Query(pattern=r"^\d{4}$")] = None,
-    time_end: Annotated[str | None, Query(pattern=r"^\d{4}$")] = None,
+    time_start_query: Annotated[str | None, Query(pattern=r"^\d{4}$")] = None,
+    time_end_query: Annotated[str | None, Query(pattern=r"^\d{4}$")] = None,
     blended: bool = False,
     honours: bool = False,
 ) -> list[Section]:
-    print(f"q: {q}")
-    print(f"course: {course}")
-    print(f"domain: {domain}")
-    print(f"code: {code}")
-    print(f"title: {title}")
-    print(f"teacher: {teacher}")
-    print(f"min_rating: {min_rating}")
-    print(f"max_rating: {max_rating}")
-    print(f"min_score: {min_score}")
-    print(f"max_score: {max_score}")
-    print(f"days_off: {days_off}")
-    print(f"time_start: {time_start}")
-    print(f"time_end: {time_end}")
-    print(f"blended: {blended}")
-    print(f"honours: {honours}")
     query = "SELECT * from sections WHERE 1=1"
     params: list[str] = []
 
@@ -93,23 +78,22 @@ async def get_sections(
             (section.id,),
         ).fetchall()
 
-        times = [LecLab.validate_db_response(r) for r in time_rows]
+        leclabs = [LecLab.validate_db_response(r) for r in time_rows]
 
         valid_time = True
 
-        for time in times:
-            if teacher is not None and teacher not in time.prof:
-                valid_time = False
-                break
+        if teacher is not None:
+            valid_time = False
+            for leclab in leclabs:
+                if teacher.lower() in leclab.prof.lower():
+                    valid_time = True
+                    break
 
-            rating_row = rating_cursor.execute(
-                """
-                SELECT * FROM ratings WHERE prof = ?
-            """,
-                (time.prof,),
-            ).fetchone()
+        if not valid_time:
+            continue
 
-            for d, t in time.time.items():
+        for leclab in leclabs:
+            for d, t in leclab.time.items():
                 if days_off is not None and any(_d in days_off for _d in d):
                     valid_time = False
                     break
@@ -117,12 +101,29 @@ async def get_sections(
                 for t in t:
                     start_str, end_str = t.split("-")
 
-                    if time_start is not None and int(time_start) < int(start_str):
+                    if time_start_query is not None and int(start_str) < int(
+                        time_start_query
+                    ):
                         valid_time = False
                         break
-                    if time_end is not None and int(time_end) > int(end_str):
+                    if time_end_query is not None and int(end_str) > int(
+                        time_end_query
+                    ):
                         valid_time = False
                         break
+
+                if not valid_time:
+                    break
+
+            if not valid_time:
+                break
+
+            rating_row = rating_cursor.execute(
+                """
+                SELECT * FROM ratings WHERE prof = ?
+            """,
+                (leclab.prof,),
+            ).fetchone()
 
             if rating_row is None:
                 valid_time = False
@@ -134,22 +135,38 @@ async def get_sections(
                 valid_time = False
                 break
 
-            if min_rating is not None and rating.avg < min_rating:
+            if (
+                min_rating is not None
+                and rating.status == "found"
+                and rating.avg < min_rating
+            ):
                 valid_time = False
                 break
-            if max_rating is not None and rating.avg > max_rating:
+            if (
+                max_rating is not None
+                and rating.status == "found"
+                and rating.avg > max_rating
+            ):
                 valid_time = False
                 break
 
-            if min_score is not None and rating.score < min_score:
+            if (
+                min_score is not None
+                and rating.status == "found"
+                and rating.score < min_score
+            ):
                 valid_time = False
                 break
-            if max_score is not None and rating.score > max_score:
+            if (
+                max_score is not None
+                and rating.status == "found"
+                and rating.score > max_score
+            ):
                 valid_time = False
                 break
 
         if valid_time:
-            section.times = times
+            section.times = leclabs
             valid_sections.append(section)
 
     conn.close()
