@@ -32,9 +32,7 @@ async def get_sections(
     params: list[str] = []
 
     if q is not None:
-        # Use '?' without quotes. Combine wildcards in the Python string.
         query += " AND (title LIKE ? OR course LIKE ? OR domain LIKE ? OR code LIKE ?)"
-        # We apply lower/upper in Python and wrap with %
         params.extend([f"%{q}%", f"{q}%", f"{q}%", f"%{q}%"])
 
     if title is not None:
