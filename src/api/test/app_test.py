@@ -102,6 +102,8 @@ def test_get_rating_invalid(prof: Any):
     res = client.get(f"/ratings/{prof}")
     assert res.status_code != 200
 
+def test_get_sections_with_filter_1()
+
 
 if __name__ == "__main__":
     exit(pytest.main(["--no-header", "-s", "-vvv", __file__]))
