@@ -5,7 +5,6 @@ from typing import Any, Literal, Self, override
 from pydantic import BaseModel, TypeAdapter
 from sqlmodel import Field, SQLModel
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -14,13 +13,13 @@ type ViewData = list[dict[str, list[int]]]
 
 
 class Rating(SQLModel, table=True):
+    prof: str = Field(default="", primary_key=True, index=True)
     score: float = Field(default=0.0)
     avg: float = Field(default=0)
     nRating: int = Field(default=0)
     takeAgain: int = Field(default=0)
     difficulty: float = Field(default=0)
     status: Literal["found", "foundn't"] = Field(default="foundn't")
-    prof: str = Field(default="", primary_key=True, index=True)
     pId: str | None = Field(default=None)
 
     @classmethod
@@ -53,11 +52,11 @@ class Rating(SQLModel, table=True):
 
 
 class LecLab(SQLModel, table=True):
-    section_id: int = Field(index=True, foreign_key="section.id")
-    title: str = Field("")
-    type: Literal["lecture", "laboratory"] | None = Field(None)
-    prof: str = Field("")
-    time: Time = Field({})
+    section_id: int = Field(default=-1, index=True, foreign_key="section.id")
+    title: str = Field(default="")
+    type: Literal["lecture", "laboratory"] | None = Field(default=None)
+    prof: str = Field(default="")
+    time: Time = Field(default={})
 
     def update(self, tmp: Self):
         if tmp.title != "":
@@ -107,29 +106,17 @@ class LecLab(SQLModel, table=True):
             time=TypeAdapter[Time](Time).validate_json(time),
         )
 
-    @classmethod
-    def get_db_rows_for_section_id(
-        cls, cursor: Cursor, section_id: str
-    ) -> list[LecLab]:
-        time_rows = cursor.execute(
-            """
-            SELECT * FROM times WHERE section_id = ?
-        """,
-            (section_id,),
-        ).fetchall()
-
-        return [LecLab.validate_db_response(time) for time in time_rows]
-
 
 class Section(SQLModel, table=True):
-    id: int = Field(primary_key=True, index=True)
-    course: str = Field()
-    section: str = Field()
-    domain: str = Field()
-    code: str = Field()
-    title: str = Field()
-    more: str = Field()
-    view_data: ViewData = Field()
+    id: int = Field(default=-1, primary_key=True, index=True)
+    course: str = Field(default="")
+    section: str = Field(default="")
+    domain: str = Field(default="")
+    code: str = Field(default="")
+    title: str = Field(default="")
+    more: str = Field(default="")
+    view_data: ViewData = Field(default=[])
+    times: list[LecLab] = []
 
     @classmethod
     def validate_db_response(cls, db_response: Any) -> Section:

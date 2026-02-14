@@ -140,9 +140,7 @@ class Files:
             return []
 
         with open(self.parsed_sections_path, "r") as file:
-            return [
-                Section.model_validate(s, by_alias=True) for s in from_json(file.read())
-            ]
+            return [Section.model_validate(s) for s in from_json(file.read())]
 
     def get_professors_file_content(self) -> Trie:
         if self.professors_path.exists():
@@ -174,6 +172,4 @@ class Files:
 
     def get_out_file_content(self) -> list[Section]:
         with open(self.parsed_sections_path, "r") as file:
-            return [
-                Section.model_validate(s, by_alias=True) for s in from_json(file.read())
-            ]
+            return [Section.model_validate(s) for s in from_json(file.read())]
