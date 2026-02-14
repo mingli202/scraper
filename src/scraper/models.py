@@ -2,31 +2,26 @@ import logging
 from sqlite3 import Cursor
 from typing import Any, Literal, Self, override
 
-from pydantic import BaseModel, ConfigDict, TypeAdapter
-from pydantic.alias_generators import to_camel
+from pydantic import BaseModel, TypeAdapter
+from sqlmodel import Field, SQLModel
 
 
 logger = logging.getLogger(__name__)
 
 
-class ConfiguredBaseModel(BaseModel):
-    model_config = ConfigDict(
-        alias_generator=to_camel, populate_by_name=True, from_attributes=True
-    )
-
-
 type Time = dict[str, list[str]]  # day: list["HHMM-HHMM"]
+type ViewData = list[dict[str, list[int]]]
 
 
-class Rating(ConfiguredBaseModel):
-    score: float = 0
-    avg: float = 0
-    nRating: int = 0
-    takeAgain: int = 0
-    difficulty: float = 0
-    status: Literal["found", "foundn't"] = "foundn't"
-    prof: str = ""
-    pId: str | None = None
+class Rating(SQLModel, table=True):
+    score: float = Field(default=0.0)
+    avg: float = Field(default=0)
+    nRating: int = Field(default=0)
+    takeAgain: int = Field(default=0)
+    difficulty: float = Field(default=0)
+    status: Literal["found", "foundn't"] = Field(default="foundn't")
+    prof: str = Field(default="", primary_key=True, index=True)
+    pId: str | None = Field(default=None)
 
     @classmethod
     def validate_db_response(cls, db_response: Any) -> Rating:
@@ -57,11 +52,12 @@ class Rating(ConfiguredBaseModel):
         )
 
 
-class LecLab(ConfiguredBaseModel):
-    title: str = ""
-    type: Literal["lecture", "laboratory"] | None = None
-    prof: str = ""
-    time: Time = {}
+class LecLab(SQLModel, table=True):
+    section_id: int = Field(index=True, foreign_key="section.id")
+    title: str = Field("")
+    type: Literal["lecture", "laboratory"] | None = Field(None)
+    prof: str = Field("")
+    time: Time = Field({})
 
     def update(self, tmp: Self):
         if tmp.title != "":
@@ -101,9 +97,10 @@ class LecLab(ConfiguredBaseModel):
         adapter = TypeAdapter(
             tuple[int, str, str, Literal["lecture", "laboratory"] | None, str]
         )
-        _, prof, title, type, time = adapter.validate_python(db_response)
+        section_id, prof, title, type, time = adapter.validate_python(db_response)
 
         return LecLab(
+            section_id=section_id,
             title=title,
             type=type,
             prof=prof,
@@ -124,19 +121,15 @@ class LecLab(ConfiguredBaseModel):
         return [LecLab.validate_db_response(time) for time in time_rows]
 
 
-type ViewData = list[dict[str, list[int]]]
-
-
-class Section(ConfiguredBaseModel):
-    id: int = 0
-    course: str = ""
-    section: str = ""
-    domain: str = ""
-    code: str = ""
-    title: str = ""
-    times: list[LecLab] = []
-    more: str = ""
-    view_data: ViewData = []
+class Section(SQLModel, table=True):
+    id: int = Field(primary_key=True, index=True)
+    course: str = Field()
+    section: str = Field()
+    domain: str = Field()
+    code: str = Field()
+    title: str = Field()
+    more: str = Field()
+    view_data: ViewData = Field()
 
     @classmethod
     def validate_db_response(cls, db_response: Any) -> Section:
@@ -158,7 +151,7 @@ class Section(ConfiguredBaseModel):
         )
 
 
-class ColumnsXs(ConfiguredBaseModel):
+class ColumnsXs(BaseModel):
     section: int
     disc: int
     course_number: int
@@ -167,7 +160,7 @@ class ColumnsXs(ConfiguredBaseModel):
     time: int
 
 
-class Word(ConfiguredBaseModel):
+class Word(BaseModel):
     page_number: int
     text: str
     x0: int
