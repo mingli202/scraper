@@ -15,6 +15,7 @@ dependencies = [
     "pytest-asyncio>=1.3.0",
     "httpx>=0.28.1",
     "python-dotenv>=1.2.1",
+    "sqlmodel>=0.0.33",
 ]
 authors = [{ name = "Ming Li Liu", email = "vincentmingli@gmail.com" }]
 maintainers = [{ name = "Ming Li Liu", email = "vincentmingli@gmail.com" }]
