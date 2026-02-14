@@ -11,7 +11,7 @@ files = Files()
 
 
 @router.get("/")
-async def get_sections(
+def get_sections(
     q: str | None = None,
     course: str | None = None,
     domain: str | None = None,
@@ -48,7 +48,7 @@ async def get_sections(
 
 
 @router.get("/{section_id}")
-async def get_section(section_id: int) -> Section:
+def get_section(section_id: int) -> Section:
     conn = sqlite3.connect(files.all_sections_final_path)
     cursor = conn.cursor()
 
@@ -77,7 +77,7 @@ async def get_section(section_id: int) -> Section:
 
 
 @router.post("/")
-async def get_many(ids: list[int]) -> list[Section]:
+def get_many(ids: list[int]) -> list[Section]:
     conn = sqlite3.connect(files.all_sections_final_path)
     cursor = conn.cursor()
 
@@ -105,3 +105,5 @@ async def get_many(ids: list[int]) -> list[Section]:
     sections = [
         section.model_copy(update={"times": []}) for section in sections_without_time
     ]
+
+    return sections

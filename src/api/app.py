@@ -16,7 +16,7 @@ async def root():
 
 
 @app.get("/ratings/{prof}")
-async def get_ratings(prof: str) -> Rating | None:
+def get_ratings(prof: str) -> Rating | None:
     conn = sqlite3.connect(files.ratings_db_path)
     cursor = conn.cursor()
 
