@@ -74,3 +74,34 @@ async def get_section(section_id: int) -> Section:
     section = Section.validate_db_response(section_row)
     section.times = [LecLab.validate_db_response(r) for r in time_rows]
     return section
+
+
+@router.post("/")
+async def get_many(ids: list[int]) -> list[Section]:
+    conn = sqlite3.connect(files.all_sections_final_path)
+    cursor = conn.cursor()
+
+    if len(ids) == 0:
+        return []
+
+    section_rows = cursor.execute(
+        f"""
+        SELECT * FROM sections WHERE {" OR ".join("id = ?" for _ in range(len(ids)))}
+        """,
+        ids,
+    ).fetchall()
+
+    sections_without_time = [
+        Section.validate_db_response(section_row) for section_row in section_rows
+    ]
+
+    time_rows = cursor.execute(
+        f"""
+        SELECT * FROM times WHERE {" OR ".join("id = ?" for _ in range(len(ids)))}
+        """,
+        ids,
+    ).fetchall()
+
+    sections = [
+        section.model_copy(update={"times": []}) for section in sections_without_time
+    ]

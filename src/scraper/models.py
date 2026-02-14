@@ -1,4 +1,5 @@
 import logging
+from sqlite3 import Cursor
 from typing import Any, Literal, Self, override
 
 from pydantic import BaseModel, ConfigDict, TypeAdapter
@@ -108,6 +109,19 @@ class LecLab(ConfiguredBaseModel):
             prof=prof,
             time=TypeAdapter[Time](Time).validate_json(time),
         )
+
+    @classmethod
+    def get_db_rows_for_section_id(
+        cls, cursor: Cursor, section_id: str
+    ) -> list[LecLab]:
+        time_rows = cursor.execute(
+            """
+            SELECT * FROM times WHERE section_id = ?
+        """,
+            (section_id,),
+        ).fetchall()
+
+        return [LecLab.validate_db_response(time) for time in time_rows]
 
 
 type ViewData = list[dict[str, list[int]]]
