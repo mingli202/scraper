@@ -24,7 +24,7 @@ class LecLabType(str, Enum):
 
 
 class Section(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True, index=True)
+    id: int = Field(default=0, primary_key=True, index=True)
 
     course: str = Field(default="")
     section: str = Field(default="")
@@ -54,12 +54,12 @@ class Rating(SQLModel, table=True):
 class LecLab(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
 
-    title: str = Field(default=None)
+    title: str = Field(default="")
     type: LecLabType | None = Field(default=None)
     time: Time = Field(default_factory=dict, sa_type=JSON)
 
     section_id: int = Field(default=None, index=True, foreign_key="section.id")
-    prof: str = Field(default=None, foreign_key="rating.prof")
+    prof: str = Field(default="", foreign_key="rating.prof")
 
     section: Section = Relationship(back_populates="times")
     rating: Rating = Relationship(back_populates="leclabs")
