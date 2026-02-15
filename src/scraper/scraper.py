@@ -23,7 +23,7 @@ class Scraper:
         if not force_override and self.files.ratings_db_path.exists():
             insp = inspect(engine)
 
-            if insp.has_table("ratings"):
+            if insp.has_table("rating"):
                 override = input("Ratings table already exists, override? (y/n) ")
                 if override.lower() != "y":
                     return
