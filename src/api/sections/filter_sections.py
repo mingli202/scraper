@@ -1,6 +1,6 @@
 from sqlmodel import select
 from scraper.db import SessionDep
-from scraper.models import Section
+from scraper.models import Section, Status
 
 
 def filter_sections(
@@ -97,14 +97,14 @@ def filter_sections(
 
             if (
                 min_rating is not None
-                and rating.status == "found"
+                and rating.status == Status.FOUND
                 and rating.avg < min_rating
             ):
                 valid_time = False
                 break
             if (
                 max_rating is not None
-                and rating.status == "found"
+                and rating.status == Status.FOUND
                 and rating.avg > max_rating
             ):
                 valid_time = False
@@ -112,14 +112,14 @@ def filter_sections(
 
             if (
                 min_score is not None
-                and rating.status == "found"
+                and rating.status == Status.FOUND
                 and rating.score < min_score
             ):
                 valid_time = False
                 break
             if (
                 max_score is not None
-                and rating.status == "found"
+                and rating.status == Status.FOUND
                 and rating.score > max_score
             ):
                 valid_time = False
