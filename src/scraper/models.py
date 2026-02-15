@@ -1,5 +1,4 @@
 import logging
-from sqlite3 import Cursor
 from typing import Any, Literal, Self, override
 
 from pydantic import BaseModel, TypeAdapter
