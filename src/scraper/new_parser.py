@@ -5,13 +5,13 @@ import re
 from typing import final, override
 from abc import ABC, abstractmethod
 
-from sqlmodel import SQLModel, Session, text
+from sqlmodel import Session, inspect, select
 
 from .db import engine
 
 
 from .files import Files
-from .models import LecLab, LecLabType, Section, Word
+from .models import LecLab, LecLabType, Rating, Section, Word
 
 logger = logging.getLogger(__name__)
 
@@ -43,12 +43,13 @@ class NewParser(INewParser):
 
     @override
     def run(self, force_override: bool = False):
-        if not force_override and self.files.parsed_sections_path.exists():
+        insp = inspect(engine)
+        if not force_override and insp.has_table("section"):
             override = input("Pdf already parsed, override? (y/n): ")
 
             if override.lower() != "y":
-                with open(self.files.parsed_sections_path, "r") as file:
-                    self.sections = json.loads(file.read())
+                with Session(engine) as ses:
+                    self.sections = list(ses.exec(select(Section)))
                 return
 
         self.parse()
@@ -192,6 +193,13 @@ class NewParser(INewParser):
         title = next(
             leclab.title for leclab in self.current_section.times if leclab.title != ""
         )
+
+        for leclab in self.current_section.times:
+            with Session(engine) as session:
+                rating = session.get(Rating, leclab.prof)
+
+                if rating is not None:
+                    leclab.rating = rating
 
         self.current_section.title = title
 
