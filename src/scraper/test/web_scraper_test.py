@@ -2,9 +2,11 @@ import os
 import pytest
 
 from pydantic_core import from_json
+from sqlmodel import Session, select
+from scraper.db import engine
 from scraper.files import Files
 
-from scraper.models import Rating
+from scraper.models import Rating, Status
 from scraper.scraper import Scraper
 import json
 
@@ -21,7 +23,7 @@ def test_prof_rating_regex():
 
 
 def test_unique_lastname():
-    professors: list[str] = files.get_professors_file_content().get_words("")
+    professors: list[str] = files.get_professors_file_content(engine).get_words("")
 
     not_unique_last_name: set[str] = set()
 
@@ -80,7 +82,7 @@ def test_valid_rating():
         takeAgain=50,
         difficulty=3.5,
         nRating=22,
-        status="found",
+        status=Status.FOUND,
         score=59.2,
         pId="2496979",
     )
@@ -94,7 +96,7 @@ def test_duplicate_rating():
         takeAgain=22,
         difficulty=2.8,
         nRating=9,
-        status="found",
+        status=Status.FOUND,
         score=45.1,
         pId="2713391",
     )
@@ -103,12 +105,12 @@ def test_duplicate_rating():
 
     assert rating == Rating(
         prof="Young, Thomas",
-        score=68.2,
+        score=68.3,
         avg=3.5,
-        takeAgain=53,
-        difficulty=2.5,
-        nRating=20,
-        status="found",
+        takeAgain=55,
+        difficulty=2.4,
+        nRating=21,
+        status=Status.FOUND,
         pId="1974605",
     )
 
@@ -136,14 +138,15 @@ def test_accuracy_of_not_found():
 
     odd: dict[str, str] = {}
 
-    ratings: dict[str, Rating] = files.get_ratings_file_content()
+    with Session(engine) as session:
+        ratings = session.exec(select(Rating)).all()
 
     if os.path.exists(files.missing_pids_path):
         with open(files.missing_pids_path, "r") as file:
             odd = json.loads(file.read())
 
-    for rating in ratings.values():
-        if rating.status == "foundn't":
+    for rating in ratings:
+        if rating.status == Status.FOUNDNT:
             odd[rating.prof] = ""
 
     if len(odd) > 0:
@@ -156,7 +159,11 @@ def test_accuracy_of_not_found():
 
 
 def update_section_with_checked_pids():
-    ratings = files.get_ratings_file_content()
+    with Session(engine) as session:
+        ratings_list = session.exec(select(Rating)).all()
+
+        ratings: dict[str, Rating] = {rating.prof: rating for rating in ratings_list}
+
     pids: dict[str, str | None] = {
         k: v for k, v in files.get_missing_pids_file_content().items() if v != ""
     }
@@ -165,10 +172,9 @@ def update_section_with_checked_pids():
 
     assert ratings["Walker, Tara Leigh"].status == "found"
 
-    with open(files.ratings_path, "w") as file:
-        _ = file.write(
-            json.dumps({k: v.model_dump() for k, v in ratings.items()}, indent=2)
-        )
+    with Session(engine) as session:
+        session.add_all(ratings.values())
+        session.commit()
 
     with open(files.pids_path, "w") as file:
         _ = file.write(json.dumps(new_pids, indent=2))
@@ -180,16 +186,16 @@ def test_special_cases():
         prof="Lo Vasco, Frank",
         avg=3.2,
         takeAgain=49,
-        difficulty=4.1,
-        nRating=55,
-        status="found",
+        difficulty=4.2,
+        nRating=59,
+        status=Status.FOUND,
         score=63.5,
         pId="898891",
     )
 
 
 def test_prof_trie():
-    professors = files.get_professors_file_content().get_words("")
+    professors = files.get_professors_file_content(engine).get_words("")
     old_professors: list[str] = []
 
     with open(files.cwd / "winter" / "winter-professors.json", "r") as file:
