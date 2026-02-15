@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Annotated
 
 from dotenv import load_dotenv
@@ -22,9 +23,14 @@ def _main(
     db.init_db()
     _ = load_dotenv()
 
-    files = Files()
-    parser = NewParser(files)
+    files = Files(
+        Path(
+            "/Users/vincentliu/Downloads/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
+        )
+    )
+
     scraper = Scraper(files)
+    parser = NewParser(files)
 
     scraper.run(yes)
     parser.run(yes)

@@ -43,14 +43,16 @@ class NewParser(INewParser):
 
     @override
     def run(self, force_override: bool = False):
-        insp = inspect(engine)
-        if not force_override and insp.has_table("section"):
-            override = input("Pdf already parsed, override? (y/n): ")
+        with Session(engine) as session:
+            sections = session.exec(select(Section))
+            count = len(sections.all())
 
-            if override.lower() != "y":
-                with Session(engine) as ses:
-                    self.sections = list(ses.exec(select(Section)))
-                return
+            if not force_override and count > 0:
+                override = input("Section table already populated, override? (y/n): ")
+
+                if override.lower() != "y":
+                    self.sections = list(sections)
+                    return
 
         self.parse()
         self.save_sections()
@@ -89,9 +91,7 @@ class NewParser(INewParser):
                 i += 1
 
                 if section_type != self.current_section.course:
-                    self._update_section()
-                    self.current_section.course = ""
-                    self.current_section.domain = ""
+                    self._update_section(False)
 
                 self.current_section.course = section_type
                 continue
@@ -184,7 +184,7 @@ class NewParser(INewParser):
     def _get_line_text(self, line: list[Word]) -> str:
         return " ".join([word.text for word in line])
 
-    def _update_section(self):
+    def _update_section(self, keep_course: bool = True):
         if self.current_section.section == "":
             return
 
@@ -194,8 +194,8 @@ class NewParser(INewParser):
             leclab.title for leclab in self.current_section.times if leclab.title != ""
         )
 
-        for leclab in self.current_section.times:
-            with Session(engine) as session:
+        with Session(engine) as session:
+            for leclab in self.current_section.times:
                 rating = session.get(Rating, leclab.prof)
 
                 if rating is not None:
@@ -208,10 +208,14 @@ class NewParser(INewParser):
 
         self.sections.append(self.current_section)
 
-        self.current_section = Section(
-            course=self.current_section.course,
-            domain=self.current_section.domain,
-        )
+        if keep_course:
+            self.current_section = Section(
+                id=self.current_section.id + 1,
+                course=self.current_section.course,
+                domain=self.current_section.domain,
+            )
+        else:
+            self.current_section = Section()
 
     def _update_section_times(self):
         if self.leclab.title == "":
@@ -238,7 +242,6 @@ class NewParser(INewParser):
         if not updated_title:
             self.leclab.title = " ".join(title_lines)
 
-        self.leclab.section_id = self.current_section.id
         self.current_section.times.append(self.leclab)
         self.leclab = LecLab()
 

@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from pydantic import TypeAdapter
 import requests
-from sqlmodel import Session, inspect
+from sqlmodel import Session, select
 
 from .db import engine
 from .files import Files
@@ -21,12 +21,15 @@ class Scraper:
 
     def run(self, force_override: bool = False):
         if not force_override and self.files.all_sections_final_path.exists():
-            insp = inspect(engine)
+            with Session(engine) as session:
+                count = len(session.exec(select(Rating)).all())
 
-            if insp.has_table("rating"):
-                override = input("Ratings table already exists, override? (y/n) ")
-                if override.lower() != "y":
-                    return
+                if count > 0:
+                    override = input(
+                        "Ratings table already populated, override? (y/n) "
+                    )
+                    if override.lower() != "y":
+                        return
 
         professors = self.files.get_professors_file_content().get_words("")
 
