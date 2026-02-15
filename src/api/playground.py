@@ -1,11 +1,12 @@
 from sqlmodel import Session, select
 from scraper.db import engine
-from scraper.models import Section
+from scraper.models import Rating, Section
 
 
 if __name__ == "__main__":
     with Session(engine) as session:
-        print([section.section for section in session.exec(select(Section))])
+        print(session.exec(select(Section.section)).all())
+        # print(session.exec(select(Rating)).all())
 
         # section = session.get(Section, 0)
         #

@@ -11,13 +11,13 @@ from .db import engine
 from .files import Files
 from .models import Rating, Status
 
-from . import util
+from . import util, db
 
 
 class Scraper:
     def __init__(self, files: Files):
         self.files = files
-        self.debug = False
+        self.debug = True
 
     def run(self, force_override: bool = False):
         if not force_override and self.files.all_sections_final_path.exists():
@@ -52,6 +52,8 @@ class Scraper:
         pids: dict[str, str | None],
         new_pids: dict[str, str | None],
     ):
+        print("SCRAPING RATINGS")
+
         def fn(prof: str) -> tuple[Rating, str]:
             rating = self.get_rating(prof, pids)
             print(rating)
@@ -67,6 +69,8 @@ class Scraper:
             ratings[prof] = rating
             new_pids[prof] = rating.pId
 
+        print("FINISHED SCRAPING")
+
     def get_saved_pids(self) -> dict[str, str | None]:
         if not os.path.exists(self.files.pids_path):
             with open(self.files.pids_path, "w") as file:
@@ -77,6 +81,7 @@ class Scraper:
             return adapter.validate_json(file.read())
 
     def get_rating(self, prof: str, saved_pids: dict[str, str | None]) -> Rating:
+        print("GETTING RATING")
         rating = Rating(prof=prof)
 
         if (
@@ -201,12 +206,15 @@ class Scraper:
         return None
 
     def save_ratings(self, ratings: dict[str, Rating]):
+        print("SAVING RATINGS")
+        print(ratings)
         with Session(engine) as session:
             session.add_all(ratings.values())
             session.commit()
 
 
 if __name__ == "__main__":
+    db.init_db()
     files = Files()
     scraper = Scraper(files)
     scraper.run()

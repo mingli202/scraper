@@ -5,13 +5,13 @@ import re
 from typing import final, override
 from abc import ABC, abstractmethod
 
-from sqlmodel import Session, inspect, select
+from sqlmodel import Session, delete, select
 
 from .db import engine
 
 
 from .files import Files
-from .models import LecLab, LecLabType, Rating, Section, Word
+from .models import LecLab, LecLabType, Section, Word
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +37,7 @@ class NewParser(INewParser):
         self.columns_x = self.files.get_section_columns_x_content()
 
         self.sections: list[Section] = []
+        self.leclabs: list[LecLab] = []
         self.current_section: Section = Section()
         self.leclab: LecLab = LecLab()
         self.lines = self.files.get_sorted_lines_content()
@@ -53,6 +54,11 @@ class NewParser(INewParser):
                 if override.lower() != "y":
                     self.sections = list(sections)
                     return
+
+                _ = session.exec(delete(Section))
+                _ = session.exec(delete(LecLab))
+
+                session.commit()
 
         self.parse()
         self.save_sections()
@@ -101,8 +107,6 @@ class NewParser(INewParser):
         self._update_section()
 
     def _parse_line(self, line: list[Word]):
-        section = self.current_section
-
         did_update_title = False
         is_leclab_line = False
 
@@ -116,12 +120,12 @@ class NewParser(INewParser):
 
                 if re.match(r"^\d{5}$", text):
                     self._update_section()
-                    section.section = text
+                    self.current_section.section = text
                 else:
                     line_text = self._get_line_text(line)
-                    if section.domain != line_text:
+                    if self.current_section.domain != line_text:
                         self._update_section()
-                    section.domain = line_text
+                    self.current_section.domain = line_text
                 continue
 
             if self.columns_x.disc == x:
@@ -145,16 +149,16 @@ class NewParser(INewParser):
                     continue
                 elif re.match(r"^\d{3}-[A-Z0-9]{3}-[A-Z0-9]{1,2}$", text):
                     self._update_section_times()
-                    section.code = text
+                    self.current_section.code = text
                 else:
-                    section.more += self._get_line_text(line)
+                    self.current_section.more += self._get_line_text(line)
 
                     if re.match("^ADDITIONAL", text) or re.match(
                         r"\*\*\*.*\*\*\*", text
                     ):
-                        section.more += "\n"
+                        self.current_section.more += "\n"
                     else:
-                        section.more += " "
+                        self.current_section.more += " "
 
                     return
                 continue
@@ -190,19 +194,6 @@ class NewParser(INewParser):
 
         self._update_section_times()
 
-        title = next(
-            leclab.title for leclab in self.current_section.times if leclab.title != ""
-        )
-
-        with Session(engine) as session:
-            for leclab in self.current_section.times:
-                rating = session.get(Rating, leclab.prof)
-
-                if rating is not None:
-                    leclab.rating = rating
-
-        self.current_section.title = title
-
         self.current_section.more = self.current_section.more.strip("\n").strip()
         self._add_viewdata_to_current_section()
 
@@ -215,7 +206,9 @@ class NewParser(INewParser):
                 domain=self.current_section.domain,
             )
         else:
-            self.current_section = Section()
+            self.current_section = Section(
+                id=self.current_section.id + 1,
+            )
 
     def _update_section_times(self):
         if self.leclab.title == "":
@@ -242,7 +235,10 @@ class NewParser(INewParser):
         if not updated_title:
             self.leclab.title = " ".join(title_lines)
 
-        self.current_section.times.append(self.leclab)
+        self.current_section.title = self.leclab.title
+        self.leclab.section_id = self.current_section.id
+
+        self.leclabs.append(self.leclab)
         self.leclab = LecLab()
 
     def _add_viewdata_to_current_section(self):
@@ -293,7 +289,11 @@ class NewParser(INewParser):
     @override
     def save_sections(self):
         with Session(engine) as session:
+            if len(session.exec(select(Section)).all()) != 0:
+                raise Exception("rows not deleted")
+
             session.add_all(self.sections)
+            session.add_all(self.leclabs)
             session.commit()
 
 

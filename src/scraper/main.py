@@ -29,11 +29,11 @@ def _main(
         )
     )
 
-    scraper = Scraper(files)
     parser = NewParser(files)
+    scraper = Scraper(files)
 
-    scraper.run(yes)
     parser.run(yes)
+    scraper.run(yes)
 
     if run_tests:
         exit(pytest.main(["--no-header", "-s", "-v"]))
