@@ -1,13 +1,10 @@
-import sqlite3
-
-from pydantic import ValidationError
-from scraper.files import Files
+from sqlmodel import select
+from scraper.db import SessionDep
 from scraper.models import LecLab, Rating, Section
-
-files = Files()
 
 
 def filter_sections(
+    session: SessionDep,
     q: str | None = None,
     course: str | None = None,
     domain: str | None = None,
@@ -24,55 +21,39 @@ def filter_sections(
     blended: bool = False,
     honours: bool = False,
 ) -> list[Section]:
-    query = "SELECT * from sections WHERE 1=1"
-    params: list[str] = []
+    statement = select(Section)
 
     if q is not None:
-        query += " AND (title LIKE ? OR course LIKE ? OR domain LIKE ? OR code LIKE ?)"
-        params.extend([f"%{q}%", f"{q}%", f"{q}%", f"%{q}%"])
+        statement = statement.where(
+            q in Section.title
+            or q in Section.course
+            or q in Section.domain
+            or q in Section.code
+        )
 
     if title is not None:
-        query += " AND title LIKE ?"
-        params.append(f"%{title}%")
+        statement = statement.where(title in Section.title)
 
     if course is not None:
-        query += " AND course LIKE ?"
-        params.append(f"{course}%")
+        statement = statement.where(course in Section.course)
 
     if domain is not None:
-        query += " AND domain LIKE ?"
-        params.append(f"{domain}%")
+        statement = statement.where(domain in Section.domain)
 
     if code is not None:
-        query += " AND code LIKE ?"
-        params.append(f"%{code}%")
+        statement = statement.where(code in Section.code)
 
     if blended:
-        query += " AND more LIKE 'BLENDED%'"
+        statement = statement.where(Section.more.startswith("BLENDED"))
 
     if honours:
-        query += " AND more LIKE 'For Honours%'"
+        statement = statement.where(Section.more.startswith("For Honours"))
 
-    conn = sqlite3.connect(files.all_sections_final_path)
-    cursor = conn.cursor()
-
-    rating_conn = sqlite3.connect(files.ratings_db_path)
-    rating_cursor = rating_conn.cursor()
-
-    rows = cursor.execute(query, params).fetchall()
-
-    sections = [Section.validate_db_response(r) for r in rows]
+    sections = session.exec(statement)
     valid_sections: list[Section] = []
 
     for section in sections:
-        time_rows = cursor.execute(
-            """
-            SELECT * FROM times WHERE section_id = ?
-        """,
-            (section.id,),
-        ).fetchall()
-
-        leclabs = [LecLab.validate_db_response(r) for r in time_rows]
+        leclabs = session.exec(select(LecLab).where(LecLab.section_id == section.id))
 
         valid_time = True
 
@@ -112,20 +93,9 @@ def filter_sections(
             if not valid_time:
                 break
 
-            rating_row = rating_cursor.execute(
-                """
-                SELECT * FROM ratings WHERE prof = ?
-            """,
-                (leclab.prof,),
-            ).fetchone()
+            rating = session.get(Rating, leclab.prof)
 
-            if rating_row is None:
-                valid_time = False
-                break
-
-            try:
-                rating = Rating.validate_db_response(rating_row)
-            except ValidationError:
+            if rating is None:
                 valid_time = False
                 break
 
@@ -160,10 +130,7 @@ def filter_sections(
                 break
 
         if valid_time:
-            section.times = leclabs
+            section.times = list(leclabs)
             valid_sections.append(section)
-
-    conn.close()
-    rating_conn.close()
 
     return valid_sections

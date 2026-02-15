@@ -13,6 +13,7 @@ files = Files()
 
 @router.get("/")
 def get_sections(
+    session: SessionDep,
     q: str | None = None,
     course: str | None = None,
     domain: str | None = None,
@@ -30,6 +31,7 @@ def get_sections(
     honours: bool = False,
 ) -> list[Section]:
     return filter_sections(
+        session,
         q,
         course,
         domain,
