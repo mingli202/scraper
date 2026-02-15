@@ -12,7 +12,6 @@ from scraper.files import Files
 from scraper.models import LecLab, LecLabType, Section, Word
 from scraper.new_parser import NewParser
 from .individual_parsing_data import ATestCase, data
-from scraper import util
 
 files = Files()
 width, height = 0, 0
