@@ -1,7 +1,9 @@
+from enum import Enum
 import logging
-from typing import Literal, Self, override
+from typing import Self, override
 
 from pydantic import BaseModel
+from sqlalchemy import JSON
 from sqlmodel import Field, SQLModel
 
 logger = logging.getLogger(__name__)
@@ -9,6 +11,16 @@ logger = logging.getLogger(__name__)
 
 type Time = dict[str, list[str]]  # day: list["HHMM-HHMM"]
 type ViewData = list[dict[str, list[int]]]
+
+
+class Status(str, Enum):
+    FOUND = "found"
+    FOUNDNT = "foundn't"
+
+
+class LecLabType(str, Enum):
+    LECTURE = "lecture"
+    LAB = "laboratory"
 
 
 class Rating(SQLModel, table=True):
@@ -19,16 +31,16 @@ class Rating(SQLModel, table=True):
     nRating: int = Field(default=0)
     takeAgain: int = Field(default=0)
     difficulty: float = Field(default=0)
-    status: Literal["found", "foundn't"] = Field(default="foundn't")
+    status: Status = Field(default=Status.FOUNDNT)
     pId: str | None = Field(default=None)
 
 
 class LecLab(SQLModel, table=True):
     section_id: int = Field(default=-1, index=True, foreign_key="section.id")
     title: str = Field(default="")
-    type: Literal["lecture", "laboratory"] | None = Field(default=None)
+    type: LecLabType | None = Field(default=None)
     prof: str = Field(default="")
-    time: Time = Field(default={})
+    time: Time = Field(default_factory=dict, sa_type=JSON)
 
     def update(self, tmp: Self):
         if tmp.title != "":
@@ -72,7 +84,7 @@ class Section(SQLModel, table=True):
     code: str = Field(default="")
     title: str = Field(default="")
     more: str = Field(default="")
-    view_data: ViewData = Field(default=[])
+    view_data: ViewData = Field(default=[], sa_type=JSON)
     times: list[LecLab] = []
 
 

@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from api.sections.router import router as section_router
 from scraper.db import SessionDep, init_db
@@ -8,6 +9,7 @@ from scraper.models import Rating
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
+    _ = load_dotenv()
     init_db()
     yield
 

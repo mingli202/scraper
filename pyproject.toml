@@ -16,6 +16,7 @@ dependencies = [
     "httpx>=0.28.1",
     "python-dotenv>=1.2.1",
     "sqlmodel>=0.0.33",
+    "dotenv>=0.9.9",
 ]
 authors = [{ name = "Ming Li Liu", email = "vincentmingli@gmail.com" }]
 maintainers = [{ name = "Ming Li Liu", email = "vincentmingli@gmail.com" }]

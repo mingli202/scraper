@@ -1,4 +1,6 @@
 from typing import Annotated
+
+from dotenv import load_dotenv
 from .new_parser import NewParser
 from . import util, db
 from .files import Files
@@ -18,6 +20,7 @@ def _main(
     Parse the schedule of classes pdf and scrape professors' ratings into an ultimate compilation of all sections
     """
     db.init_db()
+    _ = load_dotenv()
 
     files = Files()
     parser = NewParser(files)

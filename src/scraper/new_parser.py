@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 
 
 from .files import Files
-from .models import LecLab, Section, Word
+from .models import LecLab, LecLabType, Section, Word
 
 logger = logging.getLogger(__name__)
 
@@ -122,20 +122,20 @@ class NewParser(INewParser):
                 if "Lecture" in text:
                     logger.info("lecture in disc")
                     is_leclab_line = True
-                    self.leclab.type = "lecture"
+                    self.leclab.type = LecLabType.LECTURE
                 elif "Laboratory" in text:
                     is_leclab_line = True
-                    self.leclab.type = "laboratory"
+                    self.leclab.type = LecLabType.LAB
                 continue
 
             if self.columns_x.course_number == x:
                 if "Lecture" == text:
                     is_leclab_line = True
-                    self.leclab.type = "lecture"
+                    self.leclab.type = LecLabType.LECTURE
                     continue
                 elif "Laboratory" == text:
                     is_leclab_line = True
-                    self.leclab.type = "laboratory"
+                    self.leclab.type = LecLabType.LAB
                     continue
                 elif re.match(r"^\d{3}-[A-Z0-9]{3}-[A-Z0-9]{1,2}$", text):
                     self._update_section_times()
