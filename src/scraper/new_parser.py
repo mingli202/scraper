@@ -198,16 +198,16 @@ class NewParser(INewParser):
         self.sections.append(self.current_section)
 
         if keep_course:
-            self.current_section = Section(
-                **Section.default().model_dump(),
-                id=self.current_section.id + 1,
-                course=self.current_section.course,
-                domain=self.current_section.domain,
+            self.current_section = Section.default().sqlmodel_update(
+                {
+                    "id": self.current_section.id + 1,
+                    "course": self.current_section.course,
+                    "domain": self.current_section.domain,
+                }
             )
         else:
-            self.current_section = Section(
-                **Section.default().model_dump(),
-                id=self.current_section.id + 1,
+            self.current_section = Section.default().sqlmodel_update(
+                {"id": self.current_section.id + 1}
             )
 
     def _update_section_times(self):
@@ -293,6 +293,7 @@ class NewParser(INewParser):
             if len(session.exec(select(Section)).all()) != 0:
                 raise Exception("rows not deleted")
 
+            print(self.sections)
             session.add_all(self.sections)
             session.commit()
 

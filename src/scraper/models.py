@@ -47,6 +47,7 @@ class Section(SQLModel, table=True):
             title="",
             more="",
             view_data=[],
+            times=[],
         )
 
 
@@ -74,6 +75,7 @@ class Rating(SQLModel, table=True):
             difficulty=0,
             status=Status.FOUNDNT,
             pId=None,
+            leclabs=[],
         )
 
 
