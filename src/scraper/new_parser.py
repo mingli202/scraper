@@ -36,7 +36,6 @@ class NewParser(INewParser):
         self.columns_x = self.files.get_section_columns_x_content()
 
         self.sections: list[Section] = []
-        self.leclabs: list[LecLab] = []
         self.current_section: Section = Section()
         self.leclab: LecLab = LecLab()
         self.lines = self.files.get_sorted_lines_content()
@@ -235,9 +234,10 @@ class NewParser(INewParser):
             self.leclab.title = " ".join(title_lines)
 
         self.current_section.title = self.leclab.title
-        self.leclab.section_id = self.current_section.id
 
-        self.leclabs.append(self.leclab)
+        self.leclab.section_id = self.current_section.id
+        self.current_section.times.append(self.leclab)
+
         self.leclab = LecLab()
 
     def _add_viewdata_to_current_section(self):
@@ -292,7 +292,6 @@ class NewParser(INewParser):
                 raise Exception("rows not deleted")
 
             session.add_all(self.sections)
-            session.add_all(self.leclabs)
             session.commit()
 
 

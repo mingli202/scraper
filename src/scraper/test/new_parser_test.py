@@ -234,7 +234,6 @@ def test_parity_with_old_parser(parser: NewParser):
 
     with Session(engine) as session:
         session.add_all(parser.sections)
-        session.add_all(parser.leclabs)
         session.commit()
 
     with open(files.out_file_path, "r") as file:

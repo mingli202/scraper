@@ -8,8 +8,8 @@ if __name__ == "__main__":
         section = session.get(Section, 0)
 
         if section is not None:
-            # print(section)
-            # print(section.times)
+            print(section)
+            print(section.times)
 
-            for time in section.times:
-                print(time.rating)
+            # for time in section.times:
+            #     print(time.rating)
