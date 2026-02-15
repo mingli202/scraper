@@ -4,7 +4,7 @@ from typing import Self, override
 
 from pydantic import BaseModel
 from sqlalchemy import JSON
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +23,22 @@ class LecLabType(str, Enum):
     LAB = "laboratory"
 
 
+class Section(SQLModel, table=True):
+    id: int = Field(default=None, primary_key=True, index=True)
+
+    course: str = Field(default="")
+    section: str = Field(default="")
+    domain: str = Field(default="")
+    code: str = Field(default="")
+    title: str = Field(default="")
+    more: str = Field(default="")
+    view_data: ViewData = Field(default_factory=list, sa_type=JSON)
+
+    times: list["LecLab"] = Relationship(back_populates="section")
+
+
 class Rating(SQLModel, table=True):
-    prof: str = Field(default="", primary_key=True, index=True)
+    prof: str = Field(default=None, primary_key=True, index=True)
 
     score: float = Field(default=0.0)
     avg: float = Field(default=0)
@@ -34,13 +48,21 @@ class Rating(SQLModel, table=True):
     status: Status = Field(default=Status.FOUNDNT)
     pId: str | None = Field(default=None)
 
+    leclabs: list["LecLab"] = Relationship(back_populates="rating")
+
 
 class LecLab(SQLModel, table=True):
-    section_id: int = Field(default=-1, index=True, foreign_key="section.id")
-    title: str = Field(default="")
+    id: int = Field(default=None, primary_key=True)
+
+    title: str = Field(default=None)
     type: LecLabType | None = Field(default=None)
-    prof: str = Field(default="")
     time: Time = Field(default_factory=dict, sa_type=JSON)
+
+    section_id: int = Field(default=None, index=True, foreign_key="section.id")
+    prof: str = Field(default=None, foreign_key="rating.prof")
+
+    section: Section = Relationship(back_populates="leclabs_sections")
+    rating: Rating = Relationship(back_populates="leclabs_ratings")
 
     def update(self, tmp: Self):
         if tmp.title != "":
@@ -74,18 +96,6 @@ class LecLab(SQLModel, table=True):
         self.type = None
         self.prof = ""
         self.time = {}
-
-
-class Section(SQLModel, table=True):
-    id: int = Field(default=-1, primary_key=True, index=True)
-    course: str = Field(default="")
-    section: str = Field(default="")
-    domain: str = Field(default="")
-    code: str = Field(default="")
-    title: str = Field(default="")
-    more: str = Field(default="")
-    view_data: ViewData = Field(default=[], sa_type=JSON)
-    times: list[LecLab] = []
 
 
 class ColumnsXs(BaseModel):

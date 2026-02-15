@@ -72,7 +72,7 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
 
     insp = inspect(engine)
 
-    if insp.has_table("sections"):
+    if insp.has_table("section"):
         if not force_override:
             override = input("Sections table already exists, override? (y/n) ")
             if override.lower() != "y":
