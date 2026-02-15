@@ -9,7 +9,7 @@ from sqlmodel import Session, inspect
 
 from scraper.db import engine
 from .files import Files
-from .models import Rating
+from .models import Rating, Status
 
 from . import util
 
@@ -181,7 +181,7 @@ class Scraper:
                     avg=round(float(avgRating), 1),
                     takeAgain=round(float((takeAgain))),
                     difficulty=round(float(difficulty), 1),
-                    status="found",
+                    status=Status.FOUND,
                 )
 
                 rating.score = round(

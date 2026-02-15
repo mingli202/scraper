@@ -1,3 +1,4 @@
+import os
 from typing import Annotated
 from fastapi import Depends
 from sqlmodel import SQLModel, Session, create_engine
@@ -8,7 +9,10 @@ file = Files()
 
 sqlite_url = f"sqlite:///{file.all_sections_final_path}"
 connect_args = {"check_same_thread": False}
-engine = create_engine(sqlite_url, connect_args=connect_args, echo=True)
+
+engine = create_engine(
+    sqlite_url, connect_args=connect_args, echo=os.environ.get("ENV", "DEV") != "PROD"
+)
 
 
 def init_db():
