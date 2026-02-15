@@ -53,7 +53,7 @@ def filter_sections(
     valid_sections: list[Section] = []
 
     for section in sections:
-        leclabs = session.exec(select(LecLab).where(LecLab.section_id == section.id))
+        leclabs = section.times
 
         valid_time = True
 
@@ -93,11 +93,7 @@ def filter_sections(
             if not valid_time:
                 break
 
-            rating = session.get(Rating, leclab.prof)
-
-            if rating is None:
-                valid_time = False
-                break
+            rating = leclab.rating
 
             if (
                 min_rating is not None
