@@ -1,6 +1,6 @@
 from typing import Annotated
 from .new_parser import NewParser
-from . import util
+from . import util, db
 from .files import Files
 from .scraper import Scraper
 import pytest
@@ -17,6 +17,7 @@ def _main(
     """
     Parse the schedule of classes pdf and scrape professors' ratings into an ultimate compilation of all sections
     """
+    db.init_db()
 
     files = Files()
     parser = NewParser(files)

@@ -10,7 +10,9 @@ sqlite_url = f"sqlite:///{file.all_sections_final_path}"
 connect_args = {"check_same_thread": False}
 engine = create_engine(sqlite_url, connect_args=connect_args, echo=True)
 
-SQLModel.metadata.create_all(engine)
+
+def init_db():
+    SQLModel.metadata.create_all(engine)
 
 
 def get_session():

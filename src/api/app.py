@@ -1,10 +1,18 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from api.sections.router import router as section_router
-from scraper.db import SessionDep
+from scraper.db import SessionDep, init_db
 from scraper.files import Files
 from scraper.models import Rating
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    init_db()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 files = Files()
 
 app.include_router(section_router)
