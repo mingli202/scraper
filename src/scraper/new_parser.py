@@ -36,8 +36,8 @@ class NewParser(INewParser):
         self.columns_x = self.files.get_section_columns_x_content()
 
         self.sections: list[Section] = []
-        self.current_section: Section = Section()
-        self.leclab: LecLab = LecLab()
+        self.current_section: Section = Section.default()
+        self.leclab: LecLab = LecLab.default()
         self.lines = self.files.get_sorted_lines_content()
 
     @override
@@ -199,12 +199,14 @@ class NewParser(INewParser):
 
         if keep_course:
             self.current_section = Section(
+                **Section.default().model_dump(),
                 id=self.current_section.id + 1,
                 course=self.current_section.course,
                 domain=self.current_section.domain,
             )
         else:
             self.current_section = Section(
+                **Section.default().model_dump(),
                 id=self.current_section.id + 1,
             )
 
@@ -238,7 +240,7 @@ class NewParser(INewParser):
         self.leclab.section_id = self.current_section.id
         self.current_section.times.append(self.leclab)
 
-        self.leclab = LecLab()
+        self.leclab = LecLab.default()
 
     def _add_viewdata_to_current_section(self):
         col = ["M", "T", "W", "R", "F"]

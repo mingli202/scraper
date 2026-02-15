@@ -24,45 +24,75 @@ class LecLabType(str, Enum):
 
 
 class Section(SQLModel, table=True):
-    id: int = Field(default=0, primary_key=True, index=True)
+    id: int = Field(primary_key=True, index=True)
 
-    course: str = Field(default="")
-    section: str = Field(default="")
-    domain: str = Field(default="")
-    code: str = Field(default="")
-    title: str = Field(default="")
-    more: str = Field(default="")
-    view_data: ViewData = Field(default_factory=list, sa_type=JSON)
+    course: str = Field()
+    section: str = Field()
+    domain: str = Field()
+    code: str = Field()
+    title: str = Field()
+    more: str = Field()
+    view_data: ViewData = Field(sa_type=JSON)
 
     times: list["LecLab"] = Relationship(back_populates="section")
 
+    @classmethod
+    def default(cls) -> Section:
+        return Section(
+            id=0,
+            course="",
+            section="",
+            domain="",
+            code="",
+            title="",
+            more="",
+            view_data=[],
+        )
+
 
 class Rating(SQLModel, table=True):
-    prof: str = Field(default=None, primary_key=True, index=True)
+    prof: str = Field(primary_key=True, index=True)
 
-    score: float = Field(default=0.0)
-    avg: float = Field(default=0)
-    nRating: int = Field(default=0)
-    takeAgain: int = Field(default=0)
-    difficulty: float = Field(default=0)
-    status: Status = Field(default=Status.FOUNDNT)
-    pId: str | None = Field(default=None)
+    score: float = Field()
+    avg: float = Field()
+    nRating: int = Field()
+    takeAgain: int = Field()
+    difficulty: float = Field()
+    status: Status = Field()
+    pId: str | None = Field()
 
     leclabs: list["LecLab"] = Relationship(back_populates="rating")
+
+    @classmethod
+    def default(cls) -> Rating:
+        return Rating(
+            prof="",
+            score=0,
+            avg=0,
+            nRating=0,
+            takeAgain=0,
+            difficulty=0,
+            status=Status.FOUNDNT,
+            pId=None,
+        )
 
 
 class LecLab(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
 
-    title: str = Field(default="")
-    type: LecLabType | None = Field(default=None)
-    time: Time = Field(default_factory=dict, sa_type=JSON)
+    title: str = Field()
+    type: LecLabType | None = Field()
+    time: Time = Field(sa_type=JSON)
 
-    section_id: int = Field(default=None, index=True, foreign_key="section.id")
-    prof: str = Field(default="", foreign_key="rating.prof")
+    section_id: int = Field(index=True, foreign_key="section.id")
+    prof: str = Field(foreign_key="rating.prof")
 
     section: Section = Relationship(back_populates="times")
     rating: Rating = Relationship(back_populates="leclabs")
+
+    @classmethod
+    def default(cls) -> LecLab:
+        return LecLab(title="", type=None, time=dict(), section_id=0, prof="")
 
     def update(self, tmp: Self):
         if tmp.title != "":

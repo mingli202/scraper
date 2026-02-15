@@ -85,7 +85,7 @@ class Scraper:
 
     def get_rating(self, prof: str, saved_pids: dict[str, str | None]) -> Rating:
         print("GETTING RATING")
-        rating = Rating(prof=prof)
+        rating = Rating(**Rating.default().model_dump(), prof=prof)
 
         if (
             prof in saved_pids
@@ -187,6 +187,7 @@ class Scraper:
 
             try:
                 rating = Rating(
+                    **Rating.default().model_dump(),
                     prof=prof,
                     nRating=round(float(numRating)),
                     avg=round(float(avgRating), 1),
