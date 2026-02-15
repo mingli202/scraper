@@ -24,7 +24,7 @@ class LecLabType(str, Enum):
 
 
 class Section(SQLModel, table=True):
-    id: int = Field(default=0, primary_key=True, index=True)
+    id: int = Field(default=None, primary_key=True, index=True)
 
     course: str = Field(default="")
     section: str = Field(default="")

@@ -26,8 +26,8 @@ def _main(
     parser = NewParser(files)
     scraper = Scraper(files)
 
-    parser.run(yes)
     scraper.run(yes)
+    parser.run(yes)
 
     if run_tests:
         exit(pytest.main(["--no-header", "-s", "-v"]))

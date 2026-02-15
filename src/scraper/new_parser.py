@@ -5,7 +5,7 @@ import re
 from typing import final, override
 from abc import ABC, abstractmethod
 
-from sqlmodel import Session, insert
+from sqlmodel import SQLModel, Session, text
 
 from .db import engine
 
@@ -201,7 +201,6 @@ class NewParser(INewParser):
         self.sections.append(self.current_section)
 
         self.current_section = Section(
-            id=self.current_section.id + 1,
             course=self.current_section.course,
             domain=self.current_section.domain,
         )
