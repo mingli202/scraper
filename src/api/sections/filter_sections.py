@@ -1,6 +1,6 @@
 from sqlmodel import select
 from scraper.db import SessionDep
-from scraper.models import LecLab, Rating, Section
+from scraper.models import Section
 
 
 def filter_sections(
