@@ -36,8 +36,8 @@ def parser():
     yield parser
 
     parser.sections = []
-    parser.current_section = Section()
-    parser.leclab = LecLab()
+    parser.current_section = Section.default()
+    parser.leclab = LecLab.default()
 
 
 def test_optimal_x_tolerance() -> None:
@@ -225,12 +225,18 @@ def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: S
     parser.lines = test_case.lines
     parser.parse()
 
+    for section in parser.sections:
+        section.view_data = []
+
     assert len(parser.sections) == 1
     assert parser.sections[0] == expected
 
 
 def test_parity_with_old_parser(parser: NewParser):
     parser.parse()
+
+    for section in parser.sections:
+        section.view_data = []
 
     with Session(engine) as session:
         session.add_all(parser.sections)
