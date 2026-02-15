@@ -80,5 +80,4 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
 
     with Session(engine) as session:
         session.add_all(sections)
-        session.add_all(section.times for section in sections)
         session.commit()
