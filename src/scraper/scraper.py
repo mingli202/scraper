@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from pydantic import TypeAdapter
 import requests
-from sqlmodel import Session, select
+from sqlmodel import Session, delete, select
 
 from .db import engine
 from .files import Files
@@ -30,6 +30,9 @@ class Scraper:
                     )
                     if override.lower() != "y":
                         return
+
+                    _ = session.exec(delete(Rating))
+                    session.commit()
 
         professors = self.files.get_professors_file_content(engine).get_words("")
 
