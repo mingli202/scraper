@@ -5,7 +5,7 @@ from sqlmodel import select
 from api.sections.filter_sections import filter_sections
 from scraper.db import SessionDep
 from scraper.files import Files
-from scraper.models import LecLab, Section
+from scraper.models import Section
 
 router = APIRouter(prefix="/sections", tags=["Sections"])
 files = Files()
