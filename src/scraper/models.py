@@ -61,8 +61,8 @@ class LecLab(SQLModel, table=True):
     section_id: int = Field(default=None, index=True, foreign_key="section.id")
     prof: str = Field(default=None, foreign_key="rating.prof")
 
-    section: Section = Relationship(back_populates="leclabs_sections")
-    rating: Rating = Relationship(back_populates="leclabs_ratings")
+    section: Section = Relationship(back_populates="times")
+    rating: Rating = Relationship(back_populates="leclabs")
 
     def update(self, tmp: Self):
         if tmp.title != "":
