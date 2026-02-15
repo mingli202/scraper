@@ -21,18 +21,22 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "Lecture", "Siderova, Spaska", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="609-DAA-03",
-            title="German I",
-            times=[
-                LecLab(
-                    title="German I",
-                    prof="Siderova, Spaska",
-                    time={"TR": ["1300-1430"]},
-                    type=LecLabType.LECTURE,
-                )
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "609-DAA-03",
+                "title": "German I",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "German I",
+                            "prof": "Siderova, Spaska",
+                            "time": {"TR": ["1300-1430"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    )
+                ],
+            }
         ),
     ),
     (
@@ -44,19 +48,23 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "BLENDED LEARNING", "", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="609-DAA-03",
-            title="German I",
-            times=[
-                LecLab(
-                    title="German I",
-                    prof="Siderova, Spaska",
-                    time={"TR": ["1300-1430"]},
-                    type=LecLabType.LECTURE,
-                )
-            ],
-            more="BLENDED LEARNING",
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "609-DAA-03",
+                "title": "German I",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "German I",
+                            "prof": "Siderova, Spaska",
+                            "time": {"TR": ["1300-1430"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    )
+                ],
+                "more": "BLENDED LEARNING",
+            }
         ),
     ),
     (
@@ -67,18 +75,22 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "Laboratory", "Siderova, Spaska", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="609-DAA-03",
-            title="German I",
-            times=[
-                LecLab(
-                    title="German I",
-                    prof="Siderova, Spaska",
-                    time={"TR": ["1300-1430"]},
-                    type=LecLabType.LAB,
-                )
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "609-DAA-03",
+                "title": "German I",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "German I",
+                            "prof": "Siderova, Spaska",
+                            "time": {"TR": ["1300-1430"]},
+                            "type": LecLabType.LAB,
+                        }
+                    )
+                ],
+            }
         ),
     ),
     (
@@ -91,24 +103,30 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "Laboratory", "Hughes, Cameron", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="101-SN1-AB",
-            title="Cellular Biology",
-            times=[
-                LecLab(
-                    title="Cellular Biology",
-                    prof="Dupont, Sarah",
-                    time={"R": ["0930-1130"]},
-                    type=LecLabType.LECTURE,
-                ),
-                LecLab(
-                    title="Cellular Biology",
-                    prof="Hughes, Cameron",
-                    time={"T": ["1230-1430"]},
-                    type=LecLabType.LAB,
-                ),
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "101-SN1-AB",
+                "title": "Cellular Biology",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Cellular Biology",
+                            "prof": "Dupont, Sarah",
+                            "time": {"R": ["0930-1130"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    ),
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Cellular Biology",
+                            "prof": "Hughes, Cameron",
+                            "time": {"T": ["1230-1430"]},
+                            "type": LecLabType.LAB,
+                        }
+                    ),
+                ],
+            }
         ),
     ),
     (
@@ -120,18 +138,26 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "", "", "W", "0900-1000"],
             ],
         },
-        Section(
-            section="00001",
-            code="609-DAA-03",
-            title="German I",
-            times=[
-                LecLab(
-                    title="German I",
-                    prof="Siderova, Spaska",
-                    time={"TR": ["1300-1430"], "M": ["0900-1000"], "W": ["0900-1000"]},
-                    type=LecLabType.LAB,
-                )
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "609-DAA-03",
+                "title": "German I",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "German I",
+                            "prof": "Siderova, Spaska",
+                            "time": {
+                                "TR": ["1300-1430"],
+                                "M": ["0900-1000"],
+                                "W": ["0900-1000"],
+                            },
+                            "type": LecLabType.LAB,
+                        }
+                    )
+                ],
+            }
         ),
     ),
     (
@@ -143,19 +169,23 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "ADDITIONAL FEE: $80.00", "", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Design",
-            times=[
-                LecLab(
-                    title="Design",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1300-1600"]},
-                    type=LecLabType.LECTURE,
-                )
-            ],
-            more="ADDITIONAL FEE: $80.00",
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Design",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Design",
+                            "prof": "Lupien, Jennifer",
+                            "time": {"R": ["1300-1600"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    )
+                ],
+                "more": "ADDITIONAL FEE: $80.00",
+            }
         ),
     ),
     (
@@ -174,18 +204,22 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "Lecture", "Lupien, Jennifer", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Art oratoire en public pour des présentations puissantes et",
-            times=[
-                LecLab(
-                    title="Art oratoire en public pour des présentations puissantes et",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1300-1600"]},
-                    type=LecLabType.LECTURE,
-                )
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Art oratoire en public pour des présentations puissantes et",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Art oratoire en public pour des présentations puissantes et",
+                            "prof": "Lupien, Jennifer",
+                            "time": {"R": ["1300-1600"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    )
+                ],
+            }
         ),
     ),
     (
@@ -198,19 +232,23 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "ADDITIONAL FEE: $80.00", "", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Design Design",
-            times=[
-                LecLab(
-                    title="Design Design",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1300-1600"]},
-                    type=LecLabType.LECTURE,
-                )
-            ],
-            more="ADDITIONAL FEE: $80.00",
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Design Design",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Design Design",
+                            "prof": "Lupien, Jennifer",
+                            "time": {"R": ["1300-1600"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    )
+                ],
+                "more": "ADDITIONAL FEE: $80.00",
+            }
         ),
     ),
     (
@@ -229,18 +267,22 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "*** Not open. May open during registration. ***", "", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Art oratoire en public pour des présentations puissantes",
-            times=[
-                LecLab(
-                    title="Art oratoire en public pour des présentations puissantes",
-                    time={"R": ["1300-1600"]},
-                    type=LecLabType.LECTURE,
-                )
-            ],
-            more="*** Not open. May open during registration. ***",
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Art oratoire en public pour des présentations puissantes",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Art oratoire en public pour des présentations puissantes",
+                            "time": {"R": ["1300-1600"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    )
+                ],
+                "more": "*** Not open. May open during registration. ***",
+            }
         ),
     ),
     (
@@ -260,18 +302,22 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "*** Not open. May open during registration. ***", "", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Art oratoire en public pour des présentations puissantes et",
-            times=[
-                LecLab(
-                    title="Art oratoire en public pour des présentations puissantes et",
-                    time={"R": ["1300-1600"]},
-                    type=LecLabType.LECTURE,
-                )
-            ],
-            more="*** Not open. May open during registration. ***",
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Art oratoire en public pour des présentations puissantes et",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Art oratoire en public pour des présentations puissantes et",
+                            "time": {"R": ["1300-1600"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    )
+                ],
+                "more": "*** Not open. May open during registration. ***",
+            }
         ),
     ),
     (
@@ -289,17 +335,21 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "", "Lupien, Jennifer", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Art oratoire en public pour des présentations puissantes",
-            times=[
-                LecLab(
-                    title="Art oratoire en public pour des présentations puissantes",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1300-1600"]},
-                )
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Art oratoire en public pour des présentations puissantes",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Art oratoire en public pour des présentations puissantes",
+                            "prof": "Lupien, Jennifer",
+                            "time": {"R": ["1300-1600"]},
+                        }
+                    )
+                ],
+            }
         ),
     ),
     (
@@ -318,17 +368,21 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "", "Lupien, Jennifer", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Art oratoire en public pour des présentations puissantes et",
-            times=[
-                LecLab(
-                    title="Art oratoire en public pour des présentations puissantes et",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1300-1600"]},
-                )
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Art oratoire en public pour des présentations puissantes et",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Art oratoire en public pour des présentations puissantes et",
+                            "prof": "Lupien, Jennifer",
+                            "time": {"R": ["1300-1600"]},
+                        }
+                    )
+                ],
+            }
         ),
     ),
     (
@@ -346,17 +400,21 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "", "Lupien, Jennifer", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Art oratoire en public pour des présentations puissantes",
-            times=[
-                LecLab(
-                    title="Art oratoire en public pour des présentations puissantes",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1300-1600"]},
-                )
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Art oratoire en public pour des présentations puissantes",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Art oratoire en public pour des présentations puissantes",
+                            "prof": "Lupien, Jennifer",
+                            "time": {"R": ["1300-1600"]},
+                        }
+                    )
+                ],
+            }
         ),
     ),
     (
@@ -374,17 +432,21 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "", "TBA-1, English", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Art oratoire en public pour des présentations puissantes",
-            times=[
-                LecLab(
-                    title="Art oratoire en public pour des présentations puissantes",
-                    prof="TBA-1, English",
-                    time={"R": ["1300-1600"]},
-                )
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Art oratoire en public pour des présentations puissantes",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Art oratoire en public pour des présentations puissantes",
+                            "prof": "TBA-1, English",
+                            "time": {"R": ["1300-1600"]},
+                        }
+                    )
+                ],
+            }
         ),
     ),
     (
@@ -402,16 +464,20 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "", "et", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Art oratoire en public pour des présentations puissantes et",
-            times=[
-                LecLab(
-                    title="Art oratoire en public pour des présentations puissantes et",
-                    time={"R": ["1300-1600"]},
-                )
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Art oratoire en public pour des présentations puissantes et",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Art oratoire en public pour des présentations puissantes et",
+                            "time": {"R": ["1300-1600"]},
+                        }
+                    )
+                ],
+            }
         ),
     ),
     (
@@ -429,18 +495,22 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "Lecture", "Lupien, Jennifer", "R", "1500-1600"],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Art oratoire en public pour des présentations puissantes",
-            times=[
-                LecLab(
-                    title="Art oratoire en public pour des présentations puissantes",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1300-1500", "1500-1600"]},
-                    type=LecLabType.LECTURE,
-                )
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Art oratoire en public pour des présentations puissantes",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Art oratoire en public pour des présentations puissantes",
+                            "prof": "Lupien, Jennifer",
+                            "time": {"R": ["1300-1500", "1500-1600"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    )
+                ],
+            }
         ),
     ),
     (
@@ -453,24 +523,30 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "Lecture", "Lupien, Jennifer", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Design",
-            times=[
-                LecLab(
-                    title="Design",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1300-1500"]},
-                    type=LecLabType.LECTURE,
-                ),
-                LecLab(
-                    title="Design",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1500-1600"]},
-                    type=LecLabType.LECTURE,
-                ),
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Design",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Design",
+                            "prof": "Lupien, Jennifer",
+                            "time": {"R": ["1300-1500"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    ),
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Design",
+                            "prof": "Lupien, Jennifer",
+                            "time": {"R": ["1500-1600"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    ),
+                ],
+            }
         ),
     ),
     (
@@ -485,30 +561,38 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 ["", "", "Lecture", "Lupien, Jennifer", "", ""],
             ],
         },
-        Section(
-            section="00001",
-            code="511-DBA-03",
-            title="Design",
-            times=[
-                LecLab(
-                    title="Design",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1300-1500"]},
-                    type=LecLabType.LECTURE,
-                ),
-                LecLab(
-                    title="Design",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1500-1600"]},
-                    type=LecLabType.LECTURE,
-                ),
-                LecLab(
-                    title="Design",
-                    prof="Lupien, Jennifer",
-                    time={"R": ["1600-1700"]},
-                    type=LecLabType.LECTURE,
-                ),
-            ],
+        Section.default().sqlmodel_update(
+            {
+                "section": "00001",
+                "code": "511-DBA-03",
+                "title": "Design",
+                "times": [
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Design",
+                            "prof": "Lupien, Jennifer",
+                            "time": {"R": ["1300-1500"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    ),
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Design",
+                            "prof": "Lupien, Jennifer",
+                            "time": {"R": ["1500-1600"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    ),
+                    LecLab.default().sqlmodel_update(
+                        {
+                            "title": "Design",
+                            "prof": "Lupien, Jennifer",
+                            "time": {"R": ["1600-1700"]},
+                            "type": LecLabType.LECTURE,
+                        }
+                    ),
+                ],
+            }
         ),
     ),
 ]
