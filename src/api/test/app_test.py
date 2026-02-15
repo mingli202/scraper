@@ -28,12 +28,14 @@ def test_get_all_sections():
         title="Cellular Biology",
         times=[
             LecLab(
+                section_id=0,
                 title="Cellular Biology",
                 type=LecLabType.LECTURE,
                 prof="Dupont, Sarah",
                 time={"R": ["0930-1130"]},
             ),
             LecLab(
+                section_id=0,
                 title="Cellular Biology",
                 type=LecLabType.LAB,
                 prof="Hughes, Cameron",
@@ -58,12 +60,14 @@ def test_get_section():
         title="Cellular Biology",
         times=[
             LecLab(
+                section_id=1,
                 title="Cellular Biology",
                 type=LecLabType.LAB,
                 prof="Dupont, Sarah",
                 time={"R": ["0930-1130"]},
             ),
             LecLab(
+                section_id=1,
                 title="Cellular Biology",
                 type=LecLabType.LECTURE,
                 prof="Rioux, Marie-Claire",
