@@ -1,16 +1,10 @@
-import sqlite3
-
-from scraper import files
+from sqlmodel import Session, select
+from scraper.db import engine
+from scraper.models import Section
 
 
 if __name__ == "__main__":
-    files = files.Files()
-    conn = sqlite3.connect(files.all_sections_final_path)
-    cursor = conn.cursor()
+    with Session(engine) as session:
+        sections = session.exec(select(Section)).all()
 
-    rows = cursor.execute("""
-        SELECT * FROM sections
-        INNER JOIN times ON sections.id = times.section_id
-    """).fetchmany(5)
-
-    print(rows)
+        print(sections)

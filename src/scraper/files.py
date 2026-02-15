@@ -2,7 +2,6 @@ from collections import OrderedDict
 import itertools
 import json
 from pathlib import Path
-import sqlite3
 from typing import Any, final
 
 from pydantic import TypeAdapter, ValidationError
@@ -99,41 +98,6 @@ class Files:
             return {
                 k: Rating.model_validate(v) for k, v in from_json(file.read()).items()
             }
-
-    def get_sections_from_db(self) -> list[Section]:
-        conn = sqlite3.connect(self.all_sections_final_path)
-        cursor = conn.cursor()
-
-        sections: list[Section] = []
-
-        for row in cursor.execute("SELECT * FROM sections").fetchall():
-            section = Section.validate_db_response(row)
-
-            for time_row in cursor.execute(
-                "SELECT * FROM times WHERE section_id = ?", (section.id,)
-            ).fetchall():
-                leclab = LecLab.validate_db_response(time_row)
-
-                section.times.append(leclab)
-
-            sections.append(section)
-
-        conn.close()
-
-        return sections
-
-    def get_ratings_from_db(self) -> dict[str, Rating]:
-        conn = sqlite3.connect(self.ratings_db_path)
-        cursor = conn.cursor()
-
-        rows = [
-            Rating.validate_db_response(row)
-            for row in cursor.execute("SELECT * FROM ratings").fetchall()
-        ]
-
-        conn.close()
-
-        return {r.prof: r for r in rows}
 
     def get_parsed_sections_file_content(self) -> list[Section]:
         if not self.parsed_sections_path.exists():
