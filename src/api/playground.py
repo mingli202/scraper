@@ -1,6 +1,6 @@
-from sqlmodel import Session, select
+from sqlmodel import Session
 from scraper.db import engine
-from scraper.models import LecLab, Rating, Section
+from scraper.models import Section
 
 
 if __name__ == "__main__":

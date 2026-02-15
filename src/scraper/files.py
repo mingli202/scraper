@@ -1,5 +1,4 @@
 from collections import OrderedDict
-import itertools
 import json
 from pathlib import Path
 from typing import Any, final
