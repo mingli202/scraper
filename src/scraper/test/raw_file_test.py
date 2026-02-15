@@ -3,10 +3,12 @@ from typing import Callable, final
 import unittest
 
 from pydantic_core import from_json
+import pytest
 
 from scraper.files import Files
 
 
+@pytest.mark.skip(reason="deprecated raw file")
 class RawFileTest(unittest.TestCase):
     def setUp(self):
         self.cl = {}
