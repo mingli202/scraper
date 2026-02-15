@@ -57,24 +57,11 @@ def get_section(section_id: int, session: SessionDep) -> Section:
     if section is None:
         raise HTTPException(status_code=404, detail=f"Section {section_id} not found")
 
-    times = session.exec(select(LecLab).where(LecLab.section_id == section.id))
-
-    section.times = list(times)
     return section
 
 
 @router.post("/")
 def get_many(ids: list[int], session: SessionDep) -> list[Section]:
     sections = session.exec(select(Section).where(Section.id in ids)).all()
-    sections = [
-        section.sqlmodel_update(
-            {
-                "times": list(
-                    session.exec(select(LecLab).where(LecLab.section_id == section.id))
-                )
-            }
-        )
-        for section in sections
-    ]
 
-    return sections
+    return list(sections)
