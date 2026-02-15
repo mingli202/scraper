@@ -17,7 +17,7 @@ from . import util, db
 class Scraper:
     def __init__(self, files: Files):
         self.files = files
-        self.debug = True
+        self.debug = False
 
     def run(self, force_override: bool = False):
         if not force_override and self.files.all_sections_final_path.exists():
@@ -31,7 +31,7 @@ class Scraper:
                     if override.lower() != "y":
                         return
 
-        professors = self.files.get_professors_file_content().get_words("")
+        professors = self.files.get_professors_file_content(engine).get_words("")
 
         ratings: dict[str, Rating] = {}
         pids = self.get_saved_pids()

@@ -6,8 +6,10 @@ from typing import Any, final
 
 from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
+from sqlalchemy import Engine
+from sqlmodel import Session, select
 
-from .models import ColumnsXs, Section, Word
+from .models import ColumnsXs, LecLab, Section, Word
 from . import parser_utils
 from .trie import Trie
 
@@ -98,15 +100,16 @@ class Files:
         with open(self.parsed_sections_path, "r") as file:
             return [Section.model_validate(s) for s in from_json(file.read())]
 
-    def get_professors_file_content(self) -> Trie:
+    def get_professors_file_content(self, engine: Engine) -> Trie:
         if self.professors_path.exists():
             with open(self.professors_path, "r") as file:
                 return Trie.model_validate(from_json(file.read()))
 
-        professors = itertools.chain.from_iterable(
-            [t.prof for t in section.times if t.prof != ""]
-            for section in self.get_parsed_sections_file_content()
-        )
+        professors: set[str] = set()
+
+        with Session(engine) as session:
+            statement = select(LecLab.prof).where(LecLab.prof != "")
+            professors = set(session.exec(statement).all())
 
         trie = Trie()
 
