@@ -7,7 +7,7 @@ from typing import Any, final
 from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
 
-from .models import ColumnsXs, LecLab, Rating, Section, Word
+from .models import ColumnsXs, Rating, Section, Word
 from . import parser_utils
 from .trie import Trie
 
