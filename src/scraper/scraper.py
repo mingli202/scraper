@@ -2,10 +2,12 @@ import json
 import os
 import re
 from concurrent.futures import ThreadPoolExecutor
-import sqlite3
 
 from pydantic import TypeAdapter
 import requests
+from sqlmodel import Session, inspect
+
+from scraper.db import engine
 from .files import Files
 from .models import Rating
 
@@ -19,12 +21,9 @@ class Scraper:
 
     def run(self, force_override: bool = False):
         if not force_override and self.files.ratings_db_path.exists():
-            conn = sqlite3.connect(self.files.ratings_db_path)
-            cursor = conn.cursor()
-            res = cursor.execute(
-                "SELECT name from sqlite_schema WHERE type='table' and tbl_name='ratings'"
-            )
-            if res.fetchone() is not None:
+            insp = inspect(engine)
+
+            if insp.has_table("ratings"):
                 override = input("Ratings table already exists, override? (y/n) ")
                 if override.lower() != "y":
                     return
@@ -199,48 +198,9 @@ class Scraper:
         return None
 
     def save_ratings(self, ratings: dict[str, Rating]):
-        conn = sqlite3.connect(self.files.ratings_db_path)
-        cursor = conn.cursor()
-
-        _ = cursor.execute("""
-            CREATE TABLE IF NOT EXISTS ratings (
-                prof TEXT PRIMARY KEY NOT NULL,
-                score REAL NOT NULL,
-                avg REAL NOT NULL,
-                nRating INTEGER NOT NULL,
-                takeAgain INTEGER NOT NULL,
-                difficulty REAL NOT NULL,
-                status TEXT NOT NULL,
-                pId TEXT
-            )
-        """)
-
-        _ = cursor.execute("CREATE INDEX IF NOT EXISTS idx_prof ON ratings(prof)")
-
-        rows = [
-            (
-                rating.prof,
-                rating.score,
-                rating.avg,
-                rating.nRating,
-                rating.takeAgain,
-                rating.difficulty,
-                rating.status,
-                rating.pId,
-            )
-            for rating in ratings.values()
-        ]
-
-        _ = cursor.executemany(
-            """
-            INSERT INTO ratings VALUES (?,?,?,?,?,?,?,?)
-            ON CONFLICT(prof) DO UPDATE SET score=excluded.score, avg=excluded.avg, nRating=excluded.nRating, takeAgain=excluded.takeAgain, difficulty=excluded.difficulty, status=excluded.status, pId=excluded.pId
-        """,
-            rows,
-        )
-
-        conn.commit()
-        conn.close()
+        with Session(engine) as session:
+            session.add_all(ratings.values())
+            session.commit()
 
 
 if __name__ == "__main__":

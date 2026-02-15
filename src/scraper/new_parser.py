@@ -225,6 +225,7 @@ class NewParser(INewParser):
         if not updated_title:
             self.leclab.title = " ".join(title_lines)
 
+        self.leclab.section_id = self.current_section.id
         self.current_section.times.append(self.leclab.__deepcopy__())
         self.leclab.clear()
 

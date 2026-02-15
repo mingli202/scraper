@@ -14,6 +14,7 @@ type ViewData = list[dict[str, list[int]]]
 
 class Rating(SQLModel, table=True):
     prof: str = Field(default="", primary_key=True, index=True)
+
     score: float = Field(default=0.0)
     avg: float = Field(default=0)
     nRating: int = Field(default=0)

@@ -1,6 +1,6 @@
-import json
-import sqlite3
-from typing import Literal
+from sqlmodel import Session, inspect
+
+from scraper.db import engine
 from .files import Files
 from .models import Section
 import math
@@ -70,99 +70,15 @@ def save_sections_with_viewData(files: Files, force_override: bool = False):
     for section in sections:
         add_viewdata_to_section(section)
 
-    conn = sqlite3.connect(files.all_sections_final_path)
-    cursor = conn.cursor()
+    insp = inspect(engine)
 
-    if (
-        cursor.execute(
-            "SELECT name from sqlite_schema WHERE type='table' and tbl_name='sections'"
-        ).fetchone()
-        is not None
-    ):
+    if insp.has_table("sections"):
         if not force_override:
             override = input("Sections table already exists, override? (y/n) ")
             if override.lower() != "y":
                 return
 
-        _ = cursor.execute("DROP TABLE sections")
-        _ = cursor.execute("DROP TABLE times")
-        conn.commit()
-
-    _ = cursor.execute("""
-        CREATE TABLE IF NOT EXISTS sections (
-            id INTEGER PRIMARY KEY,
-            course TEXT,
-            section_number TEXT,
-            domain TEXT,
-            code TEXT,
-            title TEXt,
-            more TEXT,
-            view_data TEXT
-        );
-    """)
-
-    _ = cursor.execute("""
-        CREATE INDEX IF NOT EXISTS idx_id ON sections(id);
-    """)
-
-    _ = cursor.execute("""
-        CREATE TABLE IF NOT EXISTS times (
-            section_id INTEGER,
-            prof TEXT,
-            title TEXT,
-            type TEXT,
-            time TEXT,
-            FOREIGN KEY(section_id) REFERENCES sections(id)
-        )
-    """)
-
-    _ = cursor.execute("""
-        CREATE INDEX IF NOT EXISTS idx_section_id ON times(section_id);
-    """)
-
-    sections_to_insert: list[tuple[int, str, str, str, str, str, str, str]] = []
-    times_to_insert: list[
-        tuple[int, str, str, Literal["lecture", "laboratory"] | None, str]
-    ] = []
-
-    for section in sections:
-        sections_to_insert.append(
-            (
-                section.id,
-                section.course,
-                section.section,
-                section.domain,
-                section.code,
-                section.title,
-                section.more,
-                json.dumps(section.view_data),
-            )
-        )
-
-        for leclab in section.times:
-            times_to_insert.append(
-                (
-                    section.id,
-                    leclab.prof,
-                    leclab.title,
-                    leclab.type,
-                    json.dumps(leclab.time),
-                )
-            )
-
-    _ = conn.executemany(
-        """
-        INSERT INTO sections values (?,?,?,?,?,?,?,?)
-        """,
-        sections_to_insert,
-    )
-
-    _ = conn.executemany(
-        """
-        INSERT INTO times values (?,?,?,?,?)
-        """,
-        times_to_insert,
-    )
-
-    conn.commit()
-    conn.close()
+    with Session(engine) as session:
+        session.add_all(sections)
+        session.add_all(section.times for section in sections)
+        session.commit()

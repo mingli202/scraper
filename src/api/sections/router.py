@@ -1,8 +1,9 @@
-import sqlite3
 from typing import Annotated
 from fastapi import APIRouter, HTTPException, Query
+from sqlmodel import select
 
 from api.sections.filter_sections import filter_sections
+from scraper.db import SessionDep
 from scraper.files import Files
 from scraper.models import LecLab, Section
 
@@ -48,62 +49,30 @@ def get_sections(
 
 
 @router.get("/{section_id}")
-def get_section(section_id: int) -> Section:
-    conn = sqlite3.connect(files.all_sections_final_path)
-    cursor = conn.cursor()
+def get_section(section_id: int, session: SessionDep) -> Section:
+    section = session.get(Section, section_id)
 
-    section_row = cursor.execute(
-        """
-        SELECT * FROM sections WHERE id = ?
-    """,
-        (section_id,),
-    ).fetchone()
+    if section is None:
+        raise HTTPException(status_code=404, detail=f"Section {section_id} not found")
 
-    time_rows = cursor.execute(
-        """
-        SELECT * FROM times WHERE section_id = ?
-    """,
-        (section_id,),
-    ).fetchall()
+    times = session.exec(select(LecLab).where(LecLab.section_id == section.id))
 
-    conn.close()
-
-    if section_row is None:
-        raise HTTPException(status_code=404, detail="Section not found")
-
-    section = Section.validate_db_response(section_row)
-    section.times = [LecLab.validate_db_response(r) for r in time_rows]
+    section.times = list(times)
     return section
 
 
 @router.post("/")
-def get_many(ids: list[int]) -> list[Section]:
-    conn = sqlite3.connect(files.all_sections_final_path)
-    cursor = conn.cursor()
-
-    if len(ids) == 0:
-        return []
-
-    section_rows = cursor.execute(
-        f"""
-        SELECT * FROM sections WHERE {" OR ".join("id = ?" for _ in range(len(ids)))}
-        """,
-        ids,
-    ).fetchall()
-
-    sections_without_time = [
-        Section.validate_db_response(section_row) for section_row in section_rows
-    ]
-
-    time_rows = cursor.execute(
-        f"""
-        SELECT * FROM times WHERE {" OR ".join("id = ?" for _ in range(len(ids)))}
-        """,
-        ids,
-    ).fetchall()
-
+def get_many(ids: list[int], session: SessionDep) -> list[Section]:
+    sections = session.exec(select(Section).where(Section.id in ids)).all()
     sections = [
-        section.model_copy(update={"times": []}) for section in sections_without_time
+        section.sqlmodel_update(
+            {
+                "times": list(
+                    session.exec(select(LecLab).where(LecLab.section_id == section.id))
+                )
+            }
+        )
+        for section in sections
     ]
 
     return sections
