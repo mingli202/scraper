@@ -20,7 +20,7 @@ class Scraper:
         self.debug = False
 
     def run(self, force_override: bool = False):
-        if not force_override and self.files.ratings_db_path.exists():
+        if not force_override and self.files.all_sections_final_path.exists():
             insp = inspect(engine)
 
             if insp.has_table("rating"):

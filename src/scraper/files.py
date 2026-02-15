@@ -7,7 +7,7 @@ from typing import Any, final
 from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
 
-from .models import ColumnsXs, Rating, Section, Word
+from .models import ColumnsXs, Section, Word
 from . import parser_utils
 from .trie import Trie
 
@@ -33,8 +33,6 @@ class Files:
         self.sorted_lines_path = data_dir / "sorted_lines.json"
         self.section_columns_x_path = data_dir / "section_columns_x.json"
         self.parsed_sections_path = data_dir / "parsed_sections.json"
-        self.ratings_path = data_dir / "ratings.json"
-        self.ratings_db_path = cwd / "data" / "ratings.db"
         self.pids_path = cwd / "data" / "pids.json"
         self.professors_path = data_dir / "professors.json"
         self.all_sections_final_path = data_dir / "all_sections_final.db"
@@ -93,12 +91,6 @@ class Files:
 
         return columns_x
 
-    def get_ratings_file_content(self) -> dict[str, Rating]:
-        with open(self.ratings_path, "r") as file:
-            return {
-                k: Rating.model_validate(v) for k, v in from_json(file.read()).items()
-            }
-
     def get_parsed_sections_file_content(self) -> list[Section]:
         if not self.parsed_sections_path.exists():
             return []
@@ -133,7 +125,3 @@ class Files:
     def get_pids_file_content(self) -> dict[str, str | None]:
         with open(self.pids_path, "r") as file:
             return from_json(file.read())
-
-    def get_out_file_content(self) -> list[Section]:
-        with open(self.parsed_sections_path, "r") as file:
-            return [Section.model_validate(s) for s in from_json(file.read())]

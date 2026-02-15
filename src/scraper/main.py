@@ -2,7 +2,7 @@ from typing import Annotated
 
 from dotenv import load_dotenv
 from .new_parser import NewParser
-from . import util, db
+from . import db
 from .files import Files
 from .scraper import Scraper
 import pytest
@@ -28,8 +28,6 @@ def _main(
 
     parser.run(yes)
     scraper.run(yes)
-
-    util.save_sections_with_viewData(files, yes)
 
     if run_tests:
         exit(pytest.main(["--no-header", "-s", "-v"]))

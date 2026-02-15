@@ -1,8 +1,13 @@
 import json
 import logging
+import math
 import re
-from typing import Any, final, override
+from typing import final, override
 from abc import ABC, abstractmethod
+
+from sqlmodel import Session, insert
+
+from .db import engine
 
 
 from .files import Files
@@ -31,7 +36,7 @@ class NewParser(INewParser):
         self.files = files
         self.columns_x = self.files.get_section_columns_x_content()
 
-        self.sections: list[dict[str, Any]] = []
+        self.sections: list[Section] = []
         self.current_section: Section = Section()
         self.leclab: LecLab = LecLab()
         self.lines = self.files.get_sorted_lines_content()
@@ -191,14 +196,15 @@ class NewParser(INewParser):
         self.current_section.title = title
 
         self.current_section.more = self.current_section.more.strip("\n").strip()
-        self.sections.append(self.current_section.model_dump(by_alias=True))
+        self._add_viewdata_to_current_section()
 
-        self.current_section.id += 1
-        self.current_section.section = ""
-        self.current_section.code = ""
-        self.current_section.times = []
-        self.current_section.more = ""
-        self.current_section.view_data = []
+        self.sections.append(self.current_section)
+
+        self.current_section = Section(
+            id=self.current_section.id + 1,
+            course=self.current_section.course,
+            domain=self.current_section.domain,
+        )
 
     def _update_section_times(self):
         if self.leclab.title == "":
@@ -226,13 +232,59 @@ class NewParser(INewParser):
             self.leclab.title = " ".join(title_lines)
 
         self.leclab.section_id = self.current_section.id
-        self.current_section.times.append(self.leclab.__deepcopy__())
-        self.leclab.clear()
+        self.current_section.times.append(self.leclab)
+        self.leclab = LecLab()
+
+    def _add_viewdata_to_current_section(self):
+        col = ["M", "T", "W", "R", "F"]
+        row: list[int] = []
+
+        for day in range(21):
+            if day % 2 == 0:
+                row.append(day * 50 + 800)
+            else:
+                row.append(math.floor(day / 2) * 2 * 50 + 830)
+
+        days: dict[str, list[str]] = {}
+
+        for leclab in self.current_section.times:
+            time = leclab.time
+
+            for d, t in time.items():
+                days.setdefault(d, []).extend(t)
+
+        viewData: list[dict[str, list[int]]] = []
+
+        for day in days:
+            times = days[day]
+            for t in times:
+                t = t.split("-")
+
+                try:
+                    rowStart = row.index(int(t[0])) + 1
+                except ValueError:
+                    rowStart = 1
+
+                try:
+                    rowEnd = row.index(int(t[1])) + 1
+                except ValueError:
+                    rowEnd = 21
+
+                for d in day:
+                    if d == "S":
+                        continue
+
+                    colStart = col.index(d) + 1
+
+                    viewData.append({f"{colStart}": [rowStart, rowEnd]})
+
+        self.current_section.view_data = viewData
 
     @override
     def save_sections(self):
-        with open(self.files.parsed_sections_path, "w") as file:
-            _ = file.write(json.dumps(self.sections, indent=2))
+        with Session(engine) as session:
+            session.add_all(self.sections)
+            session.commit()
 
 
 if __name__ == "__main__":
