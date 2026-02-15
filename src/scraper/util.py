@@ -1,6 +1,6 @@
 from sqlmodel import Session, inspect
 
-from scraper.db import engine
+from .db import engine
 from .files import Files
 from .models import Section
 import math

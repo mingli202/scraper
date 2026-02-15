@@ -2,7 +2,7 @@ import os
 from typing import Annotated
 from fastapi import Depends
 from sqlmodel import SQLModel, Session, create_engine
-from scraper.files import Files
+from .files import Files
 
 
 file = Files()
