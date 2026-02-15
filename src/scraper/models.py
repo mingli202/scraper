@@ -1,7 +1,7 @@
 import logging
-from typing import Any, Literal, Self, override
+from typing import Literal, Self, override
 
-from pydantic import BaseModel, TypeAdapter
+from pydantic import BaseModel
 from sqlmodel import Field, SQLModel
 
 logger = logging.getLogger(__name__)
@@ -21,34 +21,6 @@ class Rating(SQLModel, table=True):
     difficulty: float = Field(default=0)
     status: Literal["found", "foundn't"] = Field(default="foundn't")
     pId: str | None = Field(default=None)
-
-    @classmethod
-    def validate_db_response(cls, db_response: Any) -> Rating:
-        adapter = TypeAdapter(
-            tuple[
-                str,
-                float,
-                float,
-                int,
-                int,
-                float,
-                Literal["found", "foundn't"],
-                str | None,
-            ]
-        )
-        prof, score, avg, nRating, takeAgain, difficulty, status, pId = (
-            adapter.validate_python(db_response)
-        )
-        return Rating(
-            prof=prof,
-            score=score,
-            avg=avg,
-            nRating=nRating,
-            takeAgain=takeAgain,
-            difficulty=difficulty,
-            status=status,
-            pId=pId,
-        )
 
 
 class LecLab(SQLModel, table=True):
@@ -91,21 +63,6 @@ class LecLab(SQLModel, table=True):
         self.prof = ""
         self.time = {}
 
-    @classmethod
-    def validate_db_response(cls, db_response: Any) -> LecLab:
-        adapter = TypeAdapter(
-            tuple[int, str, str, Literal["lecture", "laboratory"] | None, str]
-        )
-        section_id, prof, title, type, time = adapter.validate_python(db_response)
-
-        return LecLab(
-            section_id=section_id,
-            title=title,
-            type=type,
-            prof=prof,
-            time=TypeAdapter[Time](Time).validate_json(time),
-        )
-
 
 class Section(SQLModel, table=True):
     id: int = Field(default=-1, primary_key=True, index=True)
@@ -117,25 +74,6 @@ class Section(SQLModel, table=True):
     more: str = Field(default="")
     view_data: ViewData = Field(default=[])
     times: list[LecLab] = []
-
-    @classmethod
-    def validate_db_response(cls, db_response: Any) -> Section:
-        adapter = TypeAdapter(tuple[int, str, str, str, str, str, str, str])
-
-        id, course, section_number, domain, code, title, more, view_data = (
-            adapter.validate_python(db_response)
-        )
-
-        return Section(
-            id=id,
-            course=course,
-            section=section_number,
-            domain=domain,
-            code=code,
-            title=title,
-            more=more,
-            view_data=TypeAdapter[ViewData](ViewData).validate_json(view_data),
-        )
 
 
 class ColumnsXs(BaseModel):
