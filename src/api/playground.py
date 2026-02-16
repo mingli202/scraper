@@ -1,15 +1,8 @@
-from sqlmodel import Session
+from sqlmodel import Session, select
 from scraper.db import engine
-from scraper.models import Section
+from scraper.models import LecLab
 
 
 if __name__ == "__main__":
     with Session(engine) as session:
-        section = session.get(Section, 0)
-
-        if section is not None:
-            print(section)
-            print(section.times)
-
-            # for time in section.times:
-            #     print(time.rating)
+        print(list(session.exec(select(LecLab).where(LecLab.section_id == 0))))
