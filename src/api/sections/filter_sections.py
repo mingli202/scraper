@@ -63,6 +63,33 @@ def filter_sections(
             )
         )
 
+    if max_rating:
+        statement = statement.where(
+            ~Section.times.any(
+                ~LecLab.rating.has(
+                    and_(Rating.status == Status.FOUND, Rating.avg > max_rating)
+                )
+            )
+        )
+
+    if min_score:
+        statement = statement.where(
+            ~Section.times.any(
+                ~LecLab.rating.has(
+                    and_(Rating.status == Status.FOUND, Rating.score < min_score)
+                )
+            )
+        )
+
+    if max_score:
+        statement = statement.where(
+            ~Section.times.any(
+                ~LecLab.rating.has(
+                    and_(Rating.status == Status.FOUND, Rating.score > max_score)
+                )
+            )
+        )
+
     sections = session.exec(statement)
     valid_sections: list[Section] = []
 
@@ -95,41 +122,6 @@ def filter_sections(
                     break
 
             if not valid_time:
-                break
-
-            rating = leclab.rating
-            if rating is None:
-                valid_time = False
-                break
-
-            if (
-                min_rating is not None
-                and rating.status == Status.FOUND
-                and rating.avg < min_rating
-            ):
-                valid_time = False
-                break
-            if (
-                max_rating is not None
-                and rating.status == Status.FOUND
-                and rating.avg > max_rating
-            ):
-                valid_time = False
-                break
-
-            if (
-                min_score is not None
-                and rating.status == Status.FOUND
-                and rating.score < min_score
-            ):
-                valid_time = False
-                break
-            if (
-                max_score is not None
-                and rating.status == Status.FOUND
-                and rating.score > max_score
-            ):
-                valid_time = False
                 break
 
         if valid_time:
