@@ -4,6 +4,7 @@ from typing import Self, override
 
 from pydantic import BaseModel
 from sqlalchemy import JSON
+from sqlalchemy.orm import Mapped
 from sqlmodel import Field, Relationship, SQLModel
 
 logger = logging.getLogger(__name__)
@@ -24,17 +25,17 @@ class LecLabType(str, Enum):
 
 
 class Section(SQLModel, table=True):
-    id: int = Field(primary_key=True, index=True)
+    id: Mapped[int] = Field(primary_key=True, index=True)
 
-    course: str = Field()
-    section: str = Field()
-    domain: str = Field()
-    code: str = Field()
-    title: str = Field()
-    more: str = Field()
-    view_data: ViewData = Field(sa_type=JSON)
+    course: Mapped[str] = Field()
+    section: Mapped[str] = Field()
+    domain: Mapped[str] = Field()
+    code: Mapped[str] = Field()
+    title: Mapped[str] = Field()
+    more: Mapped[str] = Field()
+    view_data: Mapped[ViewData] = Field(sa_type=JSON)
 
-    times: list["LecLab"] = Relationship(back_populates="section")
+    times: Mapped[list["LecLab"]] = Relationship(back_populates="section")
 
     @classmethod
     def default(cls) -> Section:
@@ -52,17 +53,17 @@ class Section(SQLModel, table=True):
 
 
 class Rating(SQLModel, table=True):
-    prof: str = Field(primary_key=True, index=True)
+    prof: Mapped[str] = Field(primary_key=True, index=True)
 
-    score: float = Field()
-    avg: float = Field()
-    nRating: int = Field()
-    takeAgain: int = Field()
-    difficulty: float = Field()
-    status: Status = Field()
-    pId: str | None = Field()
+    score: Mapped[float] = Field()
+    avg: Mapped[float] = Field()
+    nRating: Mapped[int] = Field()
+    takeAgain: Mapped[int] = Field()
+    difficulty: Mapped[float] = Field()
+    status: Mapped[Status] = Field()
+    pId: Mapped[str | None] = Field()
 
-    leclabs: list["LecLab"] = Relationship(back_populates="rating")
+    leclabs: Mapped[list["LecLab"]] = Relationship(back_populates="rating")
 
     @classmethod
     def default(cls) -> Rating:
@@ -80,17 +81,17 @@ class Rating(SQLModel, table=True):
 
 
 class LecLab(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
+    id: Mapped[int] = Field(default=None, primary_key=True)
 
-    title: str = Field()
-    type: LecLabType | None = Field()
-    time: Time = Field(sa_type=JSON)
+    title: Mapped[str] = Field()
+    type: Mapped[LecLabType | None] = Field()
+    time: Mapped[Time] = Field(sa_type=JSON)
 
-    section_id: int = Field(index=True, foreign_key="section.id")
-    prof: str = Field(foreign_key="rating.prof")
+    section_id: Mapped[int] = Field(index=True, foreign_key="section.id")
+    prof: Mapped[str] = Field(foreign_key="rating.prof")
 
-    section: Section = Relationship(back_populates="times")
-    rating: Rating = Relationship(back_populates="leclabs")
+    section: Mapped[Section] = Relationship(back_populates="times")
+    rating: Mapped[Rating] = Relationship(back_populates="leclabs")
 
     @classmethod
     def default(cls) -> LecLab:
