@@ -96,6 +96,9 @@ def filter_sections(
                 break
 
             rating = leclab.rating
+            if rating is None:
+                valid_time = False
+                break
 
             if (
                 min_rating is not None

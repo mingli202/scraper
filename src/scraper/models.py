@@ -91,7 +91,7 @@ class LecLab(SQLModel, table=True):
     prof: Mapped[str] = Field(foreign_key="rating.prof")
 
     section: Mapped[Section] = Relationship(back_populates="times")
-    rating: Mapped[Rating] = Relationship(back_populates="leclabs")
+    rating: Mapped[Rating | None] = Relationship(back_populates="leclabs")
 
     @classmethod
     def default(cls) -> LecLab:
