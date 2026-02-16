@@ -53,10 +53,10 @@ class NewParser(INewParser):
                     self.sections = list(sections)
                     return
 
-                _ = session.exec(delete(Section))
-                _ = session.exec(delete(LecLab))
+            _ = session.exec(delete(Section))
+            _ = session.exec(delete(LecLab))
 
-                session.commit()
+            session.commit()
 
         self.parse()
         self.save_sections()

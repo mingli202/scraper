@@ -62,6 +62,6 @@ def get_section(section_id: int, session: SessionDep) -> Section:
 
 @router.post("/")
 def get_many(ids: list[int], session: SessionDep) -> list[Section]:
-    sections = session.exec(select(Section).where(Section.id in ids))
+    sections = session.exec(select(Section).where(Section.id.in_(ids)))
 
     return list(sections)

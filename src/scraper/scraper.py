@@ -20,8 +20,8 @@ class Scraper:
         self.debug = False
 
     def run(self, force_override: bool = False):
-        if not force_override and self.files.all_sections_final_path.exists():
-            with Session(engine) as session:
+        with Session(engine) as session:
+            if not force_override and self.files.all_sections_final_path.exists():
                 count = len(session.exec(select(Rating)).all())
 
                 if count > 0:
@@ -31,8 +31,8 @@ class Scraper:
                     if override.lower() != "y":
                         return
 
-                    _ = session.exec(delete(Rating))
-                    session.commit()
+            _ = session.exec(delete(Rating))
+            session.commit()
 
         professors = self.files.get_professors_file_content(engine).get_words("")
 
