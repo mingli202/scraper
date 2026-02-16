@@ -1,6 +1,6 @@
-from sqlmodel import or_, select
+from sqlmodel import and_, or_, select
 from scraper.db import SessionDep
-from scraper.models import Section, Status
+from scraper.models import LecLab, Rating, Section, Status
 
 
 def filter_sections(
@@ -51,6 +51,18 @@ def filter_sections(
     if honours:
         statement = statement.where(Section.more.ilike("For Honours%"))
 
+    if teacher:
+        statement = statement.where(Section.times.any(LecLab.prof.ilike(f"{teacher}%")))
+
+    if min_rating:
+        statement = statement.where(
+            ~Section.times.any(
+                ~LecLab.rating.has(
+                    and_(Rating.status == Status.FOUND, Rating.avg < min_rating)
+                )
+            )
+        )
+
     sections = session.exec(statement)
     valid_sections: list[Section] = []
 
@@ -58,16 +70,6 @@ def filter_sections(
         leclabs = section.times
 
         valid_time = True
-
-        if teacher is not None:
-            valid_time = False
-            for leclab in leclabs:
-                if teacher.lower() in leclab.prof.lower():
-                    valid_time = True
-                    break
-
-        if not valid_time:
-            continue
 
         for leclab in leclabs:
             for d, t in leclab.time.items():
