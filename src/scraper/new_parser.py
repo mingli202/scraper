@@ -43,8 +43,8 @@ class NewParser(INewParser):
     @override
     def run(self, force_override: bool = False):
         with Session(engine) as session:
-            sections = session.exec(select(Section))
-            count = len(sections.all())
+            sections = session.exec(select(Section)).all()
+            count = len(sections)
 
             if not force_override and count > 0:
                 override = input("Section table already populated, override? (y/n): ")
@@ -53,8 +53,8 @@ class NewParser(INewParser):
                     self.sections = list(sections)
                     return
 
-            _ = session.exec(delete(Section))
             _ = session.exec(delete(LecLab))
+            _ = session.exec(delete(Section))
 
             session.commit()
 
