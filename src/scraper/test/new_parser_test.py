@@ -6,14 +6,18 @@ from pydantic_core import from_json
 import pytest
 import re
 
+from sqlmodel import SQLModel, Session, create_engine, select
+
 from scraper.files import Files
-from scraper.models import LecLab, Section, Word
+from scraper.models import LecLab, LecLabType, Section, Word
 from scraper.new_parser import NewParser
 from .individual_parsing_data import ATestCase, data
-from scraper import util
 
 files = Files()
 width, height = 0, 0
+
+engine = create_engine("sqlite://")
+SQLModel.metadata.create_all(engine)
 
 with pdfplumber.open(files.pdf_path) as pdf:
     page = pdf.pages[0]
@@ -32,8 +36,8 @@ def parser():
     yield parser
 
     parser.sections = []
-    parser.current_section = Section()
-    parser.leclab = LecLab()
+    parser.current_section = Section.default()
+    parser.leclab = LecLab.default()
 
 
 def test_optimal_x_tolerance() -> None:
@@ -221,19 +225,29 @@ def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: S
     parser.lines = test_case.lines
     parser.parse()
 
+    for section in parser.sections:
+        section.view_data = []
+
     assert len(parser.sections) == 1
-    assert parser.sections[0] == expected.model_dump(by_alias=True)
+    assert parser.sections[0] == expected
 
 
 def test_parity_with_old_parser(parser: NewParser):
     parser.parse()
+
+    for section in parser.sections:
+        section.view_data = []
+
+    with Session(engine) as session:
+        session.add_all(parser.sections)
+        session.commit()
 
     with open(files.out_file_path, "r") as file:
         out: list[dict[str, Any]] = from_json(file.read())
 
         assert len(out) == len(parser.sections)
 
-        for old_section, new_section in zip(out, parser.sections):
+        for old_section in out:
             old_section["domain"] = old_section["course"]
             old_section["course"] = old_section["program"]
             del old_section["program"]
@@ -241,14 +255,19 @@ def test_parity_with_old_parser(parser: NewParser):
             old_section["id"] = old_section["count"]
             del old_section["count"]
 
+            old_section["view_data"] = old_section["viewData"]
+            del old_section["viewData"]
+
             old_section["times"] = []
 
+            section_id = old_section["id"]
+
             if "lecture" in old_section and old_section["lecture"] is not None:
-                old_section["lecture"]["type"] = "lecture"
+                old_section["lecture"]["section_id"] = section_id
+                old_section["lecture"]["type"] = LecLabType.LECTURE
                 old_section["title"] = old_section["lecture"]["title"]
 
-                id = old_section["id"]
-                if id == 559:
+                if section_id == 559:
 
                     def func(
                         lecture: dict[str, Any], time: list[Any]
@@ -261,7 +280,7 @@ def test_parity_with_old_parser(parser: NewParser):
                         for t in old_section["lecture"]["time"].items()
                     )
 
-                elif id == 944:
+                elif section_id == 944:
 
                     def func(
                         lecture: dict[str, Any], day: str, time: str
@@ -282,7 +301,8 @@ def test_parity_with_old_parser(parser: NewParser):
 
             if "lab" in old_section and old_section["lab"] is not None:
                 old_section["title"] = old_section["lab"]["title"]
-                old_section["lab"]["type"] = "laboratory"
+                old_section["lab"]["type"] = LecLabType.LAB
+                old_section["lab"]["section_id"] = section_id
                 old_section["times"].append(old_section["lab"])
             del old_section["lab"]
 
@@ -291,10 +311,23 @@ def test_parity_with_old_parser(parser: NewParser):
 
             old_section["more"] = old_section["more"].strip("\n").strip()
 
-            old_section = json.loads(
-                re.sub(" +", " ", util.normalize_string(json.dumps(old_section)))
-            )
-            new_section = json.loads(util.normalize_string(json.dumps(new_section)))
+            old_section_str = json.dumps(old_section)
+            old_section = json.loads(re.sub(" +", " ", old_section_str))
+
+            with Session(engine) as session:
+                new_section = session.get(Section, section_id)
+                times = session.exec(
+                    select(LecLab).where(LecLab.section_id == section_id)
+                ).all()
+
+            assert new_section is not None
+
+            new_section = new_section.model_dump()
+            times = [leclab.model_dump() for leclab in times]
+
+            for time in times:
+                del time["id"]
+            new_section["times"] = times
 
             assert old_section == new_section
 

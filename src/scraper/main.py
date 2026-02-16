@@ -1,6 +1,9 @@
+from pathlib import Path
 from typing import Annotated
+
+from dotenv import load_dotenv
 from .new_parser import NewParser
-from . import util
+from . import db
 from .files import Files
 from .scraper import Scraper
 import pytest
@@ -17,15 +20,20 @@ def _main(
     """
     Parse the schedule of classes pdf and scrape professors' ratings into an ultimate compilation of all sections
     """
+    db.init_db()
+    _ = load_dotenv()
 
-    files = Files()
+    files = Files(
+        Path(
+            "/Users/vincentliu/Downloads/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
+        )
+    )
+
     parser = NewParser(files)
     scraper = Scraper(files)
 
     parser.run(yes)
     scraper.run(yes)
-
-    util.save_sections_with_viewData(files, yes)
 
     if run_tests:
         exit(pytest.main(["--no-header", "-s", "-v"]))

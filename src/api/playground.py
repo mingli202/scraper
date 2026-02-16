@@ -1,16 +1,15 @@
-import sqlite3
+from sqlmodel import Session, select
+from scraper.db import engine
+from scraper.models import LecLab, Section
 
-from scraper import files
+
+def main():
+    with Session(engine) as session:
+        section = session.get(Section, 0)
+
+        if section is None:
+            return
 
 
 if __name__ == "__main__":
-    files = files.Files()
-    conn = sqlite3.connect(files.all_sections_final_path)
-    cursor = conn.cursor()
-
-    rows = cursor.execute("""
-        SELECT * FROM sections
-        INNER JOIN times ON sections.id = times.section_id
-    """).fetchmany(5)
-
-    print(rows)
+    main()

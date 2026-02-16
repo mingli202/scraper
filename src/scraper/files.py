@@ -1,14 +1,14 @@
 from collections import OrderedDict
-import itertools
 import json
 from pathlib import Path
-import sqlite3
 from typing import Any, final
 
 from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
+from sqlalchemy import Engine
+from sqlmodel import Session, select
 
-from .models import ColumnsXs, LecLab, Rating, Section, Time, ViewData, Word
+from .models import ColumnsXs, LecLab, Section, Word
 from . import parser_utils
 from .trie import Trie
 
@@ -34,8 +34,6 @@ class Files:
         self.sorted_lines_path = data_dir / "sorted_lines.json"
         self.section_columns_x_path = data_dir / "section_columns_x.json"
         self.parsed_sections_path = data_dir / "parsed_sections.json"
-        self.ratings_path = data_dir / "ratings.json"
-        self.ratings_db_path = cwd / "data" / "ratings.db"
         self.pids_path = cwd / "data" / "pids.json"
         self.professors_path = data_dir / "professors.json"
         self.all_sections_final_path = data_dir / "all_sections_final.db"
@@ -94,65 +92,23 @@ class Files:
 
         return columns_x
 
-    def get_ratings_file_content(self) -> dict[str, Rating]:
-        with open(self.ratings_path, "r") as file:
-            return {
-                k: Rating.model_validate(v) for k, v in from_json(file.read()).items()
-            }
-
-    def get_sections_from_db(self) -> list[Section]:
-        conn = sqlite3.connect(self.all_sections_final_path)
-        cursor = conn.cursor()
-
-        sections: list[Section] = []
-
-        for row in cursor.execute("SELECT * FROM sections").fetchall():
-            section = Section.validate_db_response(row)
-
-            for time_row in cursor.execute(
-                "SELECT * FROM times WHERE section_id = ?", (section.id,)
-            ).fetchall():
-                leclab = LecLab.validate_db_response(time_row)
-
-                section.times.append(leclab)
-
-            sections.append(section)
-
-        conn.close()
-
-        return sections
-
-    def get_ratings_from_db(self) -> dict[str, Rating]:
-        conn = sqlite3.connect(self.ratings_db_path)
-        cursor = conn.cursor()
-
-        rows = [
-            Rating.validate_db_response(row)
-            for row in cursor.execute("SELECT * FROM ratings").fetchall()
-        ]
-
-        conn.close()
-
-        return {r.prof: r for r in rows}
-
     def get_parsed_sections_file_content(self) -> list[Section]:
         if not self.parsed_sections_path.exists():
             return []
 
         with open(self.parsed_sections_path, "r") as file:
-            return [
-                Section.model_validate(s, by_alias=True) for s in from_json(file.read())
-            ]
+            return [Section.model_validate(s) for s in from_json(file.read())]
 
-    def get_professors_file_content(self) -> Trie:
+    def get_professors_file_content(self, engine: Engine) -> Trie:
         if self.professors_path.exists():
             with open(self.professors_path, "r") as file:
                 return Trie.model_validate(from_json(file.read()))
 
-        professors = itertools.chain.from_iterable(
-            [t.prof for t in section.times if t.prof != ""]
-            for section in self.get_parsed_sections_file_content()
-        )
+        professors: set[str] = set()
+
+        with Session(engine) as session:
+            statement = select(LecLab.prof).where(LecLab.prof != "")
+            professors = set(session.exec(statement).all())
 
         trie = Trie()
 
@@ -171,9 +127,3 @@ class Files:
     def get_pids_file_content(self) -> dict[str, str | None]:
         with open(self.pids_path, "r") as file:
             return from_json(file.read())
-
-    def get_out_file_content(self) -> list[Section]:
-        with open(self.parsed_sections_path, "r") as file:
-            return [
-                Section.model_validate(s, by_alias=True) for s in from_json(file.read())
-            ]

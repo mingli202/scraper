@@ -1,12 +1,16 @@
-import json
 import logging
+import math
 import re
-from typing import Any, final, override
+from typing import final, override
 from abc import ABC, abstractmethod
+
+from sqlmodel import Session, delete, select
+
+from .db import engine
 
 
 from .files import Files
-from .models import LecLab, Section, Word
+from .models import LecLab, LecLabType, Section, Word
 
 logger = logging.getLogger(__name__)
 
@@ -31,20 +35,28 @@ class NewParser(INewParser):
         self.files = files
         self.columns_x = self.files.get_section_columns_x_content()
 
-        self.sections: list[dict[str, Any]] = []
-        self.current_section: Section = Section()
-        self.leclab: LecLab = LecLab()
+        self.sections: list[Section] = []
+        self.current_section: Section = Section.default()
+        self.leclab: LecLab = LecLab.default()
         self.lines = self.files.get_sorted_lines_content()
 
     @override
     def run(self, force_override: bool = False):
-        if not force_override and self.files.parsed_sections_path.exists():
-            override = input("Pdf already parsed, override? (y/n): ")
+        with Session(engine) as session:
+            sections = session.exec(select(Section)).all()
+            count = len(sections)
 
-            if override.lower() != "y":
-                with open(self.files.parsed_sections_path, "r") as file:
-                    self.sections = json.loads(file.read())
-                return
+            if not force_override and count > 0:
+                override = input("Section table already populated, override? (y/n): ")
+
+                if override.lower() != "y":
+                    self.sections = list(sections)
+                    return
+
+            _ = session.exec(delete(LecLab))
+            _ = session.exec(delete(Section))
+
+            session.commit()
 
         self.parse()
         self.save_sections()
@@ -83,9 +95,7 @@ class NewParser(INewParser):
                 i += 1
 
                 if section_type != self.current_section.course:
-                    self._update_section()
-                    self.current_section.course = ""
-                    self.current_section.domain = ""
+                    self._update_section(False)
 
                 self.current_section.course = section_type
                 continue
@@ -95,8 +105,6 @@ class NewParser(INewParser):
         self._update_section()
 
     def _parse_line(self, line: list[Word]):
-        section = self.current_section
-
         did_update_title = False
         is_leclab_line = False
 
@@ -110,45 +118,45 @@ class NewParser(INewParser):
 
                 if re.match(r"^\d{5}$", text):
                     self._update_section()
-                    section.section = text
+                    self.current_section.section = text
                 else:
                     line_text = self._get_line_text(line)
-                    if section.domain != line_text:
+                    if self.current_section.domain != line_text:
                         self._update_section()
-                    section.domain = line_text
+                    self.current_section.domain = line_text
                 continue
 
             if self.columns_x.disc == x:
                 if "Lecture" in text:
                     logger.info("lecture in disc")
                     is_leclab_line = True
-                    self.leclab.type = "lecture"
+                    self.leclab.type = LecLabType.LECTURE
                 elif "Laboratory" in text:
                     is_leclab_line = True
-                    self.leclab.type = "laboratory"
+                    self.leclab.type = LecLabType.LAB
                 continue
 
             if self.columns_x.course_number == x:
                 if "Lecture" == text:
                     is_leclab_line = True
-                    self.leclab.type = "lecture"
+                    self.leclab.type = LecLabType.LECTURE
                     continue
                 elif "Laboratory" == text:
                     is_leclab_line = True
-                    self.leclab.type = "laboratory"
+                    self.leclab.type = LecLabType.LAB
                     continue
                 elif re.match(r"^\d{3}-[A-Z0-9]{3}-[A-Z0-9]{1,2}$", text):
                     self._update_section_times()
-                    section.code = text
+                    self.current_section.code = text
                 else:
-                    section.more += self._get_line_text(line)
+                    self.current_section.more += self._get_line_text(line)
 
                     if re.match("^ADDITIONAL", text) or re.match(
                         r"\*\*\*.*\*\*\*", text
                     ):
-                        section.more += "\n"
+                        self.current_section.more += "\n"
                     else:
-                        section.more += " "
+                        self.current_section.more += " "
 
                     return
                 continue
@@ -178,27 +186,29 @@ class NewParser(INewParser):
     def _get_line_text(self, line: list[Word]) -> str:
         return " ".join([word.text for word in line])
 
-    def _update_section(self):
+    def _update_section(self, keep_course: bool = True):
         if self.current_section.section == "":
             return
 
         self._update_section_times()
 
-        title = next(
-            leclab.title for leclab in self.current_section.times if leclab.title != ""
-        )
-
-        self.current_section.title = title
-
         self.current_section.more = self.current_section.more.strip("\n").strip()
-        self.sections.append(self.current_section.model_dump(by_alias=True))
+        self._add_viewdata_to_current_section()
 
-        self.current_section.id += 1
-        self.current_section.section = ""
-        self.current_section.code = ""
-        self.current_section.times = []
-        self.current_section.more = ""
-        self.current_section.view_data = []
+        self.sections.append(self.current_section)
+
+        if keep_course:
+            self.current_section = Section.default().sqlmodel_update(
+                {
+                    "id": self.current_section.id + 1,
+                    "course": self.current_section.course,
+                    "domain": self.current_section.domain,
+                }
+            )
+        else:
+            self.current_section = Section.default().sqlmodel_update(
+                {"id": self.current_section.id + 1}
+            )
 
     def _update_section_times(self):
         if self.leclab.title == "":
@@ -225,13 +235,67 @@ class NewParser(INewParser):
         if not updated_title:
             self.leclab.title = " ".join(title_lines)
 
-        self.current_section.times.append(self.leclab.__deepcopy__())
-        self.leclab.clear()
+        self.current_section.title = self.leclab.title
+
+        self.leclab.section_id = self.current_section.id
+        self.current_section.times.append(self.leclab)
+
+        self.leclab = LecLab.default()
+
+    def _add_viewdata_to_current_section(self):
+        col = ["M", "T", "W", "R", "F"]
+        row: list[int] = []
+
+        for day in range(21):
+            if day % 2 == 0:
+                row.append(day * 50 + 800)
+            else:
+                row.append(math.floor(day / 2) * 2 * 50 + 830)
+
+        days: dict[str, list[str]] = {}
+
+        for leclab in self.current_section.times:
+            time = leclab.time
+
+            for d, t in time.items():
+                days.setdefault(d, []).extend(t)
+
+        viewData: list[dict[str, list[int]]] = []
+
+        for day in days:
+            times = days[day]
+            for t in times:
+                t = t.split("-")
+
+                try:
+                    rowStart = row.index(int(t[0])) + 1
+                except ValueError:
+                    rowStart = 1
+
+                try:
+                    rowEnd = row.index(int(t[1])) + 1
+                except ValueError:
+                    rowEnd = 21
+
+                for d in day:
+                    if d == "S":
+                        continue
+
+                    colStart = col.index(d) + 1
+
+                    viewData.append({f"{colStart}": [rowStart, rowEnd]})
+
+        self.current_section.view_data = viewData
 
     @override
     def save_sections(self):
-        with open(self.files.parsed_sections_path, "w") as file:
-            _ = file.write(json.dumps(self.sections, indent=2))
+        with Session(engine) as session:
+            if len(session.exec(select(Section)).all()) != 0:
+                raise Exception("rows not deleted")
+
+            print(self.sections)
+            session.add_all(self.sections)
+            session.commit()
 
 
 if __name__ == "__main__":

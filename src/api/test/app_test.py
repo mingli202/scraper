@@ -3,7 +3,7 @@ import pytest
 from api.app import app
 from fastapi.testclient import TestClient
 
-from scraper.models import LecLab, Rating, Section
+from scraper.models import LecLab, LecLabType, Rating, Section, Status
 
 client = TestClient(app)
 
@@ -28,14 +28,16 @@ def test_get_all_sections():
         title="Cellular Biology",
         times=[
             LecLab(
+                section_id=0,
                 title="Cellular Biology",
-                type="lecture",
+                type=LecLabType.LECTURE,
                 prof="Dupont, Sarah",
                 time={"R": ["0930-1130"]},
             ),
             LecLab(
+                section_id=0,
                 title="Cellular Biology",
-                type="laboratory",
+                type=LecLabType.LAB,
                 prof="Hughes, Cameron",
                 time={"T": ["1230-1430"]},
             ),
@@ -58,14 +60,16 @@ def test_get_section():
         title="Cellular Biology",
         times=[
             LecLab(
+                section_id=1,
                 title="Cellular Biology",
-                type="lecture",
+                type=LecLabType.LAB,
                 prof="Dupont, Sarah",
                 time={"R": ["0930-1130"]},
             ),
             LecLab(
+                section_id=1,
                 title="Cellular Biology",
-                type="laboratory",
+                type=LecLabType.LECTURE,
                 prof="Rioux, Marie-Claire",
                 time={"T": ["1430-1630"]},
             ),
@@ -92,7 +96,7 @@ def test_get_rating():
         difficulty=3.5,
         nRating=10,
         takeAgain=60,
-        status="found",
+        status=Status.FOUND,
         pId="2984556",
     )
 
@@ -101,8 +105,6 @@ def test_get_rating():
 def test_get_rating_invalid(prof: Any):
     res = client.get(f"/ratings/{prof}")
     assert res.status_code != 200
-
-def test_get_sections_with_filter_1()
 
 
 if __name__ == "__main__":

@@ -2,14 +2,16 @@ import json
 import os
 import re
 from concurrent.futures import ThreadPoolExecutor
-import sqlite3
 
 from pydantic import TypeAdapter
 import requests
-from .files import Files
-from .models import Rating
+from sqlmodel import Session, delete, select
 
-from . import util
+from .db import engine
+from .files import Files
+from .models import Rating, Status
+
+from . import util, db
 
 
 class Scraper:
@@ -18,18 +20,21 @@ class Scraper:
         self.debug = False
 
     def run(self, force_override: bool = False):
-        if not force_override and self.files.ratings_db_path.exists():
-            conn = sqlite3.connect(self.files.ratings_db_path)
-            cursor = conn.cursor()
-            res = cursor.execute(
-                "SELECT name from sqlite_schema WHERE type='table' and tbl_name='ratings'"
-            )
-            if res.fetchone() is not None:
-                override = input("Ratings table already exists, override? (y/n) ")
-                if override.lower() != "y":
-                    return
+        with Session(engine) as session:
+            if not force_override and self.files.all_sections_final_path.exists():
+                count = len(session.exec(select(Rating)).all())
 
-        professors = self.files.get_professors_file_content().get_words("")
+                if count > 0:
+                    override = input(
+                        "Ratings table already populated, override? (y/n) "
+                    )
+                    if override.lower() != "y":
+                        return
+
+            _ = session.exec(delete(Rating))
+            session.commit()
+
+        professors = self.files.get_professors_file_content(engine).get_words("")
 
         ratings: dict[str, Rating] = {}
         pids = self.get_saved_pids()
@@ -50,6 +55,8 @@ class Scraper:
         pids: dict[str, str | None],
         new_pids: dict[str, str | None],
     ):
+        print("SCRAPING RATINGS")
+
         def fn(prof: str) -> tuple[Rating, str]:
             rating = self.get_rating(prof, pids)
             print(rating)
@@ -65,6 +72,8 @@ class Scraper:
             ratings[prof] = rating
             new_pids[prof] = rating.pId
 
+        print("FINISHED SCRAPING")
+
     def get_saved_pids(self) -> dict[str, str | None]:
         if not os.path.exists(self.files.pids_path):
             with open(self.files.pids_path, "w") as file:
@@ -75,7 +84,8 @@ class Scraper:
             return adapter.validate_json(file.read())
 
     def get_rating(self, prof: str, saved_pids: dict[str, str | None]) -> Rating:
-        rating = Rating(prof=prof)
+        print("GETTING RATING")
+        rating = Rating.default().sqlmodel_update({"prof": prof})
 
         if (
             prof in saved_pids
@@ -176,13 +186,15 @@ class Scraper:
             ) = matches.groups()
 
             try:
-                rating = Rating(
-                    prof=prof,
-                    nRating=round(float(numRating)),
-                    avg=round(float(avgRating), 1),
-                    takeAgain=round(float((takeAgain))),
-                    difficulty=round(float(difficulty), 1),
-                    status="found",
+                rating = Rating.default().sqlmodel_update(
+                    {
+                        "prof": prof,
+                        "nRating": round(float(numRating)),
+                        "avg": round(float(avgRating), 1),
+                        "takeAgain": round(float((takeAgain))),
+                        "difficulty": round(float(difficulty), 1),
+                        "status": Status.FOUND,
+                    }
                 )
 
                 rating.score = round(
@@ -199,51 +211,15 @@ class Scraper:
         return None
 
     def save_ratings(self, ratings: dict[str, Rating]):
-        conn = sqlite3.connect(self.files.ratings_db_path)
-        cursor = conn.cursor()
-
-        _ = cursor.execute("""
-            CREATE TABLE IF NOT EXISTS ratings (
-                prof TEXT PRIMARY KEY NOT NULL,
-                score REAL NOT NULL,
-                avg REAL NOT NULL,
-                nRating INTEGER NOT NULL,
-                takeAgain INTEGER NOT NULL,
-                difficulty REAL NOT NULL,
-                status TEXT NOT NULL,
-                pId TEXT
-            )
-        """)
-
-        _ = cursor.execute("CREATE INDEX IF NOT EXISTS idx_prof ON ratings(prof)")
-
-        rows = [
-            (
-                rating.prof,
-                rating.score,
-                rating.avg,
-                rating.nRating,
-                rating.takeAgain,
-                rating.difficulty,
-                rating.status,
-                rating.pId,
-            )
-            for rating in ratings.values()
-        ]
-
-        _ = cursor.executemany(
-            """
-            INSERT INTO ratings VALUES (?,?,?,?,?,?,?,?)
-            ON CONFLICT(prof) DO UPDATE SET score=excluded.score, avg=excluded.avg, nRating=excluded.nRating, takeAgain=excluded.takeAgain, difficulty=excluded.difficulty, status=excluded.status, pId=excluded.pId
-        """,
-            rows,
-        )
-
-        conn.commit()
-        conn.close()
+        print("SAVING RATINGS")
+        print(ratings)
+        with Session(engine) as session:
+            session.add_all(ratings.values())
+            session.commit()
 
 
 if __name__ == "__main__":
+    db.init_db()
     files = Files()
     scraper = Scraper(files)
     scraper.run()
