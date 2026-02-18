@@ -10,7 +10,6 @@ from sqlmodel import Field, Relationship, SQLModel
 logger = logging.getLogger(__name__)
 
 
-type Time = dict[str, list[str]]  # day: list["HHMM-HHMM"]
 type ViewData = list[dict[str, list[int]]]
 
 
@@ -35,7 +34,7 @@ class Section(SQLModel, table=True):
     more: Mapped[str] = Field()
     view_data: Mapped[ViewData] = Field(sa_type=JSON)
 
-    times: Mapped[list["LecLab"]] = Relationship(back_populates="section")
+    leclabs: Mapped[list["LecLab"]] = Relationship(back_populates="section")
 
     @classmethod
     def default(cls) -> Section:
@@ -48,7 +47,7 @@ class Section(SQLModel, table=True):
             title="",
             more="",
             view_data=[],
-            times=[],
+            leclabs=[],
         )
 
 
@@ -85,17 +84,17 @@ class LecLab(SQLModel, table=True):
 
     title: Mapped[str] = Field()
     type: Mapped[LecLabType | None] = Field()
-    time: Mapped[Time] = Field(sa_type=JSON)
 
     section_id: Mapped[int] = Field(index=True, foreign_key="section.id")
     prof: Mapped[str] = Field(foreign_key="rating.prof")
 
-    section: Mapped[Section] = Relationship(back_populates="times")
+    section: Mapped[Section] = Relationship(back_populates="leclabs")
     rating: Mapped[Rating | None] = Relationship(back_populates="leclabs")
+    day_times: Mapped[list[DayTime]] = Relationship(back_populates="leclab")
 
     @classmethod
     def default(cls) -> LecLab:
-        return LecLab(title="", type=None, time=dict(), section_id=0, prof="")
+        return LecLab(title="", type=None, section_id=0, prof="")
 
     def update(self, tmp: Self):
         if tmp.title != "":
@@ -104,31 +103,27 @@ class LecLab(SQLModel, table=True):
         if tmp.prof != "":
             self.prof = tmp.prof
 
-        self.update_time(tmp.time)
+        self.day_times.extend(tmp.day_times)
 
-    def update_time(self, tmp: Time):
-        for k, v in tmp.items():
-            self.time.setdefault(k, []).extend(v)
+    def update_time(self, day: str, start_time: str, end_time: str):
+        day_time = DayTime(
+            day=day,
+            start_time_hhmm=start_time,
+            end_time_hhmm=end_time,
+        )
 
-        for times in self.time.values():
-            for i, time1 in enumerate(times):
-                start1, end1 = time1.split("-")
-                start1 = int(start1)
-                end1 = int(end1)
+        self.day_times.append(day_time)
 
-                for times2 in times[i + 1 :]:
-                    start2, end2 = times2.split("-")
-                    start2 = int(start2)
-                    end2 = int(end2)
 
-                    if start1 > end2 or start2 > end1:
-                        logger.warning("overlapping times")
+class DayTime(SQLModel, table=True):
+    id: Mapped[int] = Field(default=None, primary_key=True)
 
-    def clear(self):
-        self.title = ""
-        self.type = None
-        self.prof = ""
-        self.time = {}
+    leclab_id: Mapped[int] = Field(default=None, foreign_key="leclab.id", index=True)
+    leclab: Mapped[LecLab] = Relationship(back_populates="times")
+
+    day: Mapped[str] = Field()
+    start_time_hhmm: Mapped[str] = Field()
+    end_time_hhmm: Mapped[str] = Field()
 
 
 class ColumnsXs(BaseModel):
