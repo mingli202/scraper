@@ -24,17 +24,17 @@ class LecLabType(str, Enum):
 
 
 class Section(SQLModel, table=True):
-    id: Mapped[int] = Field(primary_key=True, index=True)
+    id: int = Field(primary_key=True, index=True)
 
-    course: Mapped[str] = Field()
-    section: Mapped[str] = Field()
-    domain: Mapped[str] = Field()
-    code: Mapped[str] = Field()
-    title: Mapped[str] = Field()
-    more: Mapped[str] = Field()
-    view_data: Mapped[ViewData] = Field(sa_type=JSON)
+    course: str = Field()
+    section: str = Field()
+    domain: str = Field()
+    code: str = Field()
+    title: str = Field()
+    more: str = Field()
+    view_data: ViewData = Field(sa_type=JSON)
 
-    leclabs: Mapped[list["LecLab"]] = Relationship(back_populates="section")
+    leclabs: list["LecLab"] = Relationship(back_populates="section")
 
     @classmethod
     def default(cls) -> Section:
@@ -52,17 +52,17 @@ class Section(SQLModel, table=True):
 
 
 class Rating(SQLModel, table=True):
-    prof: Mapped[str] = Field(primary_key=True, index=True)
+    prof: str = Field(primary_key=True, index=True)
 
-    score: Mapped[float] = Field()
-    avg: Mapped[float] = Field()
-    nRating: Mapped[int] = Field()
-    takeAgain: Mapped[int] = Field()
-    difficulty: Mapped[float] = Field()
-    status: Mapped[Status] = Field()
-    pId: Mapped[str | None] = Field()
+    score: float = Field()
+    avg: float = Field()
+    nRating: int = Field()
+    takeAgain: int = Field()
+    difficulty: float = Field()
+    status: Status = Field()
+    pId: str | None = Field()
 
-    leclabs: Mapped[list["LecLab"]] = Relationship(back_populates="rating")
+    leclabs: list["LecLab"] = Relationship(back_populates="rating")
 
     @classmethod
     def default(cls) -> Rating:
@@ -80,17 +80,17 @@ class Rating(SQLModel, table=True):
 
 
 class LecLab(SQLModel, table=True):
-    id: Mapped[int] = Field(default=None, primary_key=True)
+    id: int = Field(default=None, primary_key=True)
 
-    title: Mapped[str] = Field()
-    type: Mapped[LecLabType | None] = Field()
+    title: str = Field()
+    type: LecLabType | None = Field()
 
-    section_id: Mapped[int] = Field(index=True, foreign_key="section.id")
-    prof: Mapped[str] = Field(foreign_key="rating.prof")
+    section_id: int = Field(index=True, foreign_key="section.id")
+    prof: str = Field(foreign_key="rating.prof")
 
-    section: Mapped[Section] = Relationship(back_populates="leclabs")
-    rating: Mapped[Rating | None] = Relationship(back_populates="leclabs")
-    day_times: Mapped[list[DayTime]] = Relationship(back_populates="leclab")
+    section: Section = Relationship(back_populates="leclabs")
+    rating: Rating | None = Relationship(back_populates="leclabs")
+    day_times: list[DayTime] = Relationship(back_populates="leclab")
 
     @classmethod
     def default(cls) -> LecLab:
@@ -116,14 +116,14 @@ class LecLab(SQLModel, table=True):
 
 
 class DayTime(SQLModel, table=True):
-    id: Mapped[int] = Field(default=None, primary_key=True)
+    id: int = Field(default=None, primary_key=True)
 
-    leclab_id: Mapped[int] = Field(default=None, foreign_key="leclab.id", index=True)
-    leclab: Mapped[LecLab] = Relationship(back_populates="times")
+    leclab_id: int = Field(default=None, foreign_key="leclab.id", index=True)
+    leclab: LecLab = Relationship(back_populates="times")
 
-    day: Mapped[str] = Field()
-    start_time_hhmm: Mapped[str] = Field()
-    end_time_hhmm: Mapped[str] = Field()
+    day: str = Field()
+    start_time_hhmm: str = Field()
+    end_time_hhmm: str = Field()
 
 
 class ColumnsXs(BaseModel):
