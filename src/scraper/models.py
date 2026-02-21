@@ -4,7 +4,6 @@ from typing import Self, override
 
 from pydantic import BaseModel
 from sqlalchemy import JSON
-from sqlalchemy.orm import Mapped
 from sqlmodel import Field, Relationship, SQLModel
 
 logger = logging.getLogger(__name__)
@@ -34,20 +33,33 @@ class Section(SQLModel, table=True):
     more: str = Field()
     view_data: ViewData = Field(sa_type=JSON)
 
-    leclabs: list["LecLab"] = Relationship(back_populates="section")
+    leclabs: list[LecLab] = Relationship(
+        back_populates="section", sa_relationship_kwargs={"lazy": "selectin"}
+    )
 
     @classmethod
-    def default(cls) -> Section:
+    def default(
+        cls,
+        id: int = 0,
+        course: str = "",
+        section: str = "",
+        domain: str = "",
+        code: str = "",
+        title: str = "",
+        more: str = "",
+        view_data: ViewData | None = None,
+        leclabs: list[LecLab] | None = None,
+    ) -> Section:
         return Section(
-            id=0,
-            course="",
-            section="",
-            domain="",
-            code="",
-            title="",
-            more="",
-            view_data=[],
-            leclabs=[],
+            id=id,
+            course=course,
+            section=section,
+            domain=domain,
+            code=code,
+            title=title,
+            more=more,
+            view_data=view_data if view_data is not None else [],
+            leclabs=leclabs if leclabs is not None else [],
         )
 
 
@@ -62,20 +74,31 @@ class Rating(SQLModel, table=True):
     status: Status = Field()
     pId: str | None = Field()
 
-    leclabs: list["LecLab"] = Relationship(back_populates="rating")
+    leclabs: list[LecLab] = Relationship(back_populates="rating")
 
     @classmethod
-    def default(cls) -> Rating:
+    def default(
+        cls,
+        prof: str = "",
+        score: int = 0,
+        avg: float = 0.0,
+        nRating: int = 0,
+        takeAgain: int = 0,
+        difficulty: float = 0.0,
+        status: Status = Status.FOUNDNT,
+        pId: str | None = None,
+        leclabs: list[LecLab] | None = None,
+    ) -> Rating:
         return Rating(
-            prof="",
-            score=0,
-            avg=0,
-            nRating=0,
-            takeAgain=0,
-            difficulty=0,
-            status=Status.FOUNDNT,
-            pId=None,
-            leclabs=[],
+            prof=prof,
+            score=score,
+            avg=avg,
+            nRating=nRating,
+            takeAgain=takeAgain,
+            difficulty=difficulty,
+            status=status,
+            pId=pId,
+            leclabs=leclabs if leclabs is not None else [],
         )
 
 
@@ -93,8 +116,21 @@ class LecLab(SQLModel, table=True):
     day_times: list[DayTime] = Relationship(back_populates="leclab")
 
     @classmethod
-    def default(cls) -> LecLab:
-        return LecLab(title="", type=None, section_id=0, prof="")
+    def default(
+        cls,
+        title: str = "",
+        type: LecLabType | None = None,
+        section_id: int = 0,
+        prof: str = "",
+        day_times: list[DayTime] | None = None,
+    ) -> LecLab:
+        return LecLab(
+            title=title,
+            type=type,
+            section_id=section_id,
+            prof=prof,
+            day_times=day_times if day_times is not None else [],
+        )
 
     def update(self, tmp: Self):
         if tmp.title != "":
@@ -118,12 +154,12 @@ class LecLab(SQLModel, table=True):
 class DayTime(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
 
-    leclab_id: int = Field(default=None, foreign_key="leclab.id", index=True)
-    leclab: LecLab = Relationship(back_populates="times")
-
     day: str = Field()
     start_time_hhmm: str = Field()
     end_time_hhmm: str = Field()
+    leclab_id: int = Field(default=None, foreign_key="leclab.id", index=True)
+
+    leclab: LecLab = Relationship(back_populates="day_times")
 
 
 class ColumnsXs(BaseModel):
