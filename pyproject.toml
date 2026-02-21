@@ -29,3 +29,9 @@ dev = ["ruff", "mypy"]
 [project.scripts]
 app = "api.app:app"
 scraper = "scraper.main:main"
+
+[dependency-groups]
+dev = [
+    "black>=26.1.0",
+    "mypy>=1.19.1",
+]
