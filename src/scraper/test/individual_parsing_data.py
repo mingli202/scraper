@@ -3,7 +3,7 @@ from typing import Any
 from pydantic import BaseModel
 
 from scraper.files import Files
-from scraper.models import LecLab, LecLabType, Section, Word
+from scraper.models import DayTime, LecLab, LecLabType, Section, Word
 from scraper.new_parser import NewParser
 
 
@@ -26,12 +26,18 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
                 "section": "00001",
                 "code": "609-DAA-03",
                 "title": "German I",
-                "times": [
+                "leclabs": [
                     LecLab.default().sqlmodel_update(
                         {
                             "title": "German I",
                             "prof": "Siderova, Spaska",
-                            "time": {"TR": ["1300-1430"]},
+                            "day_times": [
+                                DayTime(
+                                    day="TR",
+                                    start_time_hhmm="1300",
+                                    end_time_hhmm="1430",
+                                )
+                            ],
                             "type": LecLabType.LECTURE,
                         }
                     )
