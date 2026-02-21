@@ -1,4 +1,4 @@
-from sqlmodel import and_, or_, select
+from sqlmodel import and_, col, or_, select
 from scraper.db import SessionDep
 from scraper.models import LecLab, Rating, Section, Status
 
@@ -26,38 +26,40 @@ def filter_sections(
     if q is not None:
         statement = statement.where(
             or_(
-                Section.title.ilike(f"%{q}%"),
-                Section.course.ilike(f"{q}%"),
-                Section.domain.ilike(f"{q}%"),
-                Section.code.ilike(f"%{q}%"),
+                col(Section.title).ilike(f"%{q}%"),
+                col(Section.course).ilike(f"{q}%"),
+                col(Section.domain).ilike(f"{q}%"),
+                col(Section.code).ilike(f"%{q}%"),
             )
         )
 
     if title is not None:
-        statement = statement.where(Section.title.ilike(f"%{title}%"))
+        statement = statement.where(col(Section.title).ilike(f"%{title}%"))
 
     if course is not None:
-        statement = statement.where(Section.course.ilike(f"{course}%"))
+        statement = statement.where(col(Section.course).ilike(f"{course}%"))
 
     if domain is not None:
-        statement = statement.where(Section.domain.ilike(f"{domain}%"))
+        statement = statement.where(col(Section.domain).ilike(f"{domain}%"))
 
     if code is not None:
-        statement = statement.where(Section.code.ilike(f"%{code}%"))
+        statement = statement.where(col(Section.code).ilike(f"%{code}%"))
 
     if blended:
-        statement = statement.where(Section.more.ilike("BLENDED%"))
+        statement = statement.where(col(Section.more).ilike("BLENDED%"))
 
     if honours:
-        statement = statement.where(Section.more.ilike("For Honours%"))
+        statement = statement.where(col(Section.more).ilike("For Honours%"))
 
     if teacher:
-        statement = statement.where(Section.times.any(LecLab.prof.ilike(f"{teacher}%")))
+        statement = statement.where(
+            col(Section.leclabs).any(col(LecLab.prof).ilike(f"{teacher}%"))
+        )
 
     if min_rating:
         statement = statement.where(
-            ~Section.times.any(
-                ~LecLab.rating.has(
+            ~col(Section.leclabs).any(
+                ~col(LecLab.rating).has(
                     and_(Rating.status == Status.FOUND, Rating.avg < min_rating)
                 )
             )
@@ -65,8 +67,8 @@ def filter_sections(
 
     if max_rating:
         statement = statement.where(
-            ~Section.times.any(
-                ~LecLab.rating.has(
+            ~col(Section.leclabs).any(
+                ~col(LecLab.rating).has(
                     and_(Rating.status == Status.FOUND, Rating.avg > max_rating)
                 )
             )
@@ -74,8 +76,8 @@ def filter_sections(
 
     if min_score:
         statement = statement.where(
-            ~Section.times.any(
-                ~LecLab.rating.has(
+            ~col(Section.leclabs).any(
+                ~col(LecLab.rating).has(
                     and_(Rating.status == Status.FOUND, Rating.score < min_score)
                 )
             )
@@ -83,8 +85,8 @@ def filter_sections(
 
     if max_score:
         statement = statement.where(
-            ~Section.times.any(
-                ~LecLab.rating.has(
+            ~col(Section.leclabs).any(
+                ~col(LecLab.rating).has(
                     and_(Rating.status == Status.FOUND, Rating.score > max_score)
                 )
             )
@@ -94,7 +96,7 @@ def filter_sections(
     valid_sections: list[Section] = []
 
     for section in sections:
-        leclabs = section.times
+        leclabs = section.leclabs
 
         valid_time = True
 
@@ -125,7 +127,7 @@ def filter_sections(
                 break
 
         if valid_time:
-            section.times = list(leclabs)
+            section.leclabs = list(leclabs)
             valid_sections.append(section)
 
     return valid_sections
