@@ -5,7 +5,7 @@ from sqlmodel import select
 from api.sections.router import router as section_router
 from scraper.db import SessionDep, init_db
 from scraper.files import Files
-from scraper.models import LecLab, Rating
+from scraper.models import LecLab, LecLabResponse, Rating, RatingResponse
 
 
 @asynccontextmanager
@@ -31,7 +31,7 @@ async def health():
     return {"status": "ok"}
 
 
-@app.get("/ratings/{prof}")
+@app.get("/ratings/{prof}", response_model=RatingResponse)
 def get_ratings(prof: str, session: SessionDep) -> Rating | None:
     rating = session.get(Rating, prof)
 
@@ -41,6 +41,6 @@ def get_ratings(prof: str, session: SessionDep) -> Rating | None:
     return rating
 
 
-@app.get("/leclab/{section_id}")
+@app.get("/leclab/{section_id}", response_model=list[LecLabResponse])
 def get_leclab(section_id: int, session: SessionDep) -> list[LecLab]:
     return list(session.exec(select(LecLab).where(LecLab.section_id == section_id)))

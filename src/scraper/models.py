@@ -1,16 +1,15 @@
 from enum import Enum
 import logging
-from typing import Self, override
+from typing import override
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from pydantic.alias_generators import to_camel
 from sqlalchemy import JSON
-from sqlalchemy.orm import Mapped
 from sqlmodel import Field, Relationship, SQLModel
 
 logger = logging.getLogger(__name__)
 
 
-type Time = dict[str, list[str]]  # day: list["HHMM-HHMM"]
 type ViewData = list[dict[str, list[int]]]
 
 
@@ -25,110 +24,179 @@ class LecLabType(str, Enum):
 
 
 class Section(SQLModel, table=True):
-    id: Mapped[int] = Field(primary_key=True, index=True)
+    id: int = Field(primary_key=True, index=True)
 
-    course: Mapped[str] = Field()
-    section: Mapped[str] = Field()
-    domain: Mapped[str] = Field()
-    code: Mapped[str] = Field()
-    title: Mapped[str] = Field()
-    more: Mapped[str] = Field()
-    view_data: Mapped[ViewData] = Field(sa_type=JSON)
+    course: str = Field()
+    domain: str = Field()
+    section: str = Field()
+    code: str = Field()
+    title: str = Field()
+    more: str = Field()
+    view_data: ViewData = Field(sa_type=JSON)
 
-    times: Mapped[list["LecLab"]] = Relationship(back_populates="section")
+    leclabs: list[LecLab] = Relationship(back_populates="section")
 
     @classmethod
-    def default(cls) -> Section:
+    def default(
+        cls,
+        id: int = 0,
+        course: str = "",
+        section: str = "",
+        domain: str = "",
+        code: str = "",
+        title: str = "",
+        more: str = "",
+        view_data: ViewData | None = None,
+        leclabs: list[LecLab] | None = None,
+    ) -> Section:
         return Section(
-            id=0,
-            course="",
-            section="",
-            domain="",
-            code="",
-            title="",
-            more="",
-            view_data=[],
-            times=[],
+            id=id,
+            course=course,
+            section=section,
+            domain=domain,
+            code=code,
+            title=title,
+            more=more,
+            view_data=view_data if view_data is not None else [],
+            leclabs=leclabs if leclabs is not None else [],
         )
 
 
 class Rating(SQLModel, table=True):
-    prof: Mapped[str] = Field(primary_key=True, index=True)
+    prof: str = Field(primary_key=True, index=True)
 
-    score: Mapped[float] = Field()
-    avg: Mapped[float] = Field()
-    nRating: Mapped[int] = Field()
-    takeAgain: Mapped[int] = Field()
-    difficulty: Mapped[float] = Field()
-    status: Mapped[Status] = Field()
-    pId: Mapped[str | None] = Field()
+    score: float = Field()
+    avg: float = Field()
+    nRating: int = Field()
+    takeAgain: int = Field()
+    difficulty: float = Field()
+    status: Status = Field()
+    pId: str | None = Field()
 
-    leclabs: Mapped[list["LecLab"]] = Relationship(back_populates="rating")
+    leclabs: list[LecLab] = Relationship(back_populates="rating")
 
     @classmethod
-    def default(cls) -> Rating:
+    def default(
+        cls,
+        prof: str = "",
+        score: int = 0,
+        avg: float = 0.0,
+        nRating: int = 0,
+        takeAgain: int = 0,
+        difficulty: float = 0.0,
+        status: Status = Status.FOUNDNT,
+        pId: str | None = None,
+        leclabs: list[LecLab] | None = None,
+    ) -> Rating:
         return Rating(
-            prof="",
-            score=0,
-            avg=0,
-            nRating=0,
-            takeAgain=0,
-            difficulty=0,
-            status=Status.FOUNDNT,
-            pId=None,
-            leclabs=[],
+            prof=prof,
+            score=score,
+            avg=avg,
+            nRating=nRating,
+            takeAgain=takeAgain,
+            difficulty=difficulty,
+            status=status,
+            pId=pId,
+            leclabs=leclabs if leclabs is not None else [],
         )
 
 
 class LecLab(SQLModel, table=True):
-    id: Mapped[int] = Field(default=None, primary_key=True)
+    id: int = Field(default=None, primary_key=True)
 
-    title: Mapped[str] = Field()
-    type: Mapped[LecLabType | None] = Field()
-    time: Mapped[Time] = Field(sa_type=JSON)
+    title: str = Field()
+    type: LecLabType | None = Field()
 
-    section_id: Mapped[int] = Field(index=True, foreign_key="section.id")
-    prof: Mapped[str] = Field(foreign_key="rating.prof")
+    section_id: int = Field(index=True, foreign_key="section.id")
+    prof: str = Field(foreign_key="rating.prof")
 
-    section: Mapped[Section] = Relationship(back_populates="times")
-    rating: Mapped[Rating | None] = Relationship(back_populates="leclabs")
+    section: Section = Relationship(back_populates="leclabs")
+    rating: Rating | None = Relationship(back_populates="leclabs")
+    day_times: list[DayTime] = Relationship(back_populates="leclab")
 
     @classmethod
-    def default(cls) -> LecLab:
-        return LecLab(title="", type=None, time=dict(), section_id=0, prof="")
+    def default(
+        cls,
+        title: str = "",
+        type: LecLabType | None = None,
+        section_id: int = 0,
+        prof: str = "",
+        day_times: list[DayTime] | None = None,
+    ) -> LecLab:
+        return LecLab(
+            title=title,
+            type=type,
+            section_id=section_id,
+            prof=prof,
+            day_times=day_times if day_times is not None else [],
+        )
 
-    def update(self, tmp: Self):
-        if tmp.title != "":
-            self.title = tmp.title
+    def update_time(self, day: str, start_time: str, end_time: str):
+        day_time = DayTime(
+            day=day,
+            start_time_hhmm=start_time,
+            end_time_hhmm=end_time,
+        )
 
-        if tmp.prof != "":
-            self.prof = tmp.prof
+        self.day_times.append(day_time)
 
-        self.update_time(tmp.time)
 
-    def update_time(self, tmp: Time):
-        for k, v in tmp.items():
-            self.time.setdefault(k, []).extend(v)
+class DayTime(SQLModel, table=True):
+    id: int = Field(default=None, primary_key=True)
 
-        for times in self.time.values():
-            for i, time1 in enumerate(times):
-                start1, end1 = time1.split("-")
-                start1 = int(start1)
-                end1 = int(end1)
+    day: str = Field()
+    start_time_hhmm: str = Field()
+    end_time_hhmm: str = Field()
+    leclab_id: int = Field(default=None, foreign_key="leclab.id", index=True)
 
-                for times2 in times[i + 1 :]:
-                    start2, end2 = times2.split("-")
-                    start2 = int(start2)
-                    end2 = int(end2)
+    leclab: LecLab = Relationship(back_populates="day_times")
 
-                    if start1 > end2 or start2 > end1:
-                        logger.warning("overlapping times")
 
-    def clear(self):
-        self.title = ""
-        self.type = None
-        self.prof = ""
-        self.time = {}
+class ConfiguredBaseModel(BaseModel):
+    model_config = ConfigDict(
+        alias_generator=to_camel, populate_by_name=True, from_attributes=True
+    )
+
+
+class SectionResponse(ConfiguredBaseModel):
+    id: int
+    course: str
+    section: str
+    domain: str
+    code: str
+    title: str
+    leclabs: list[LecLabResponse]
+    more: str
+    view_data: ViewData
+
+
+class RatingResponse(ConfiguredBaseModel):
+    prof: str
+    score: float
+    avg: float
+    nRating: int
+    takeAgain: int
+    difficulty: float
+    status: Status
+    pId: str | None
+
+
+class LecLabResponse(ConfiguredBaseModel):
+    id: int
+    title: str
+    type: LecLabType | None
+    section_id: int
+    prof: str
+    rating: RatingResponse | None
+    day_times: list[DayTimeResponse]
+
+
+class DayTimeResponse(ConfiguredBaseModel):
+    id: int
+    day: str
+    start_time_hhmm: str
+    end_time_hhmm: str
+    leclab_id: int
 
 
 class ColumnsXs(BaseModel):

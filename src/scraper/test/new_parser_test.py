@@ -1,5 +1,4 @@
-from copy import deepcopy
-import json
+import itertools
 from typing import Any
 import pdfplumber
 from pydantic_core import from_json
@@ -9,7 +8,7 @@ import re
 from sqlmodel import SQLModel, Session, create_engine, select
 
 from scraper.files import Files
-from scraper.models import LecLab, LecLabType, Section, Word
+from scraper.models import DayTime, LecLab, LecLabType, Section, Word
 from scraper.new_parser import NewParser
 from .individual_parsing_data import ATestCase, data
 
@@ -229,10 +228,19 @@ def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: S
         section.view_data = []
 
     assert len(parser.sections) == 1
-    assert parser.sections[0] == expected
+
+    section = parser.sections[0]
+    assert section == expected
+    assert section.leclabs == expected.leclabs
+    assert [leclab.day_times for leclab in section.leclabs] == [
+        leclab.day_times for leclab in expected.leclabs
+    ]
 
 
 def test_parity_with_old_parser(parser: NewParser):
+    def remove_double_space(s: str) -> str:
+        return re.sub(" +", " ", s)
+
     parser.parse()
 
     for section in parser.sections:
@@ -248,88 +256,118 @@ def test_parity_with_old_parser(parser: NewParser):
         assert len(out) == len(parser.sections)
 
         for old_section in out:
-            old_section["domain"] = old_section["course"]
-            old_section["course"] = old_section["program"]
-            del old_section["program"]
+            old = Section.default(
+                id=old_section["count"],
+                domain=old_section["course"],
+                course=old_section["program"],
+                view_data=old_section["viewData"],
+                code=old_section["code"],
+                section=old_section["section"],
+            )
 
-            old_section["id"] = old_section["count"]
-            del old_section["count"]
-
-            old_section["view_data"] = old_section["viewData"]
-            del old_section["viewData"]
-
-            old_section["times"] = []
-
-            section_id = old_section["id"]
+            section_id = old_section["count"]
 
             if "lecture" in old_section and old_section["lecture"] is not None:
-                old_section["lecture"]["section_id"] = section_id
-                old_section["lecture"]["type"] = LecLabType.LECTURE
-                old_section["title"] = old_section["lecture"]["title"]
+                lecture = old_section["lecture"]
+                title = lecture["title"]
 
-                if section_id == 559:
+                leclab = LecLab.default(
+                    title=title,
+                    type=LecLabType.LECTURE,
+                    section_id=section_id,
+                    prof=lecture["prof"],
+                    day_times=list(
+                        itertools.chain.from_iterable(
+                            [
+                                DayTime(
+                                    day=lecture_times[0],
+                                    start_time_hhmm=t.split("-")[0],
+                                    end_time_hhmm=t.split("-")[1],
+                                )
+                                for t in lecture_times[1]
+                            ]
+                            for lecture_times in lecture["time"].items()
+                        )
+                    ),
+                )
 
-                    def func(
-                        lecture: dict[str, Any], time: list[Any]
-                    ) -> dict[str, Any]:
-                        lecture["time"] = {time[0]: time[1]}
-                        return lecture
-
-                    old_section["times"].extend(
-                        func(deepcopy(old_section["lecture"]), t)
-                        for t in old_section["lecture"]["time"].items()
-                    )
-
-                elif section_id == 944:
-
-                    def func(
-                        lecture: dict[str, Any], day: str, time: str
-                    ) -> dict[str, Any]:
-                        lecture["time"] = {day: [time]}
-                        return lecture
-
-                    day = list(old_section["lecture"]["time"].keys())[0]
-
-                    old_section["times"].extend(
-                        func(deepcopy(old_section["lecture"]), day, t)
-                        for t in list(old_section["lecture"]["time"].values())[0]
-                    )
-
-                else:
-                    old_section["times"].append(old_section["lecture"])
-            del old_section["lecture"]
+                match section_id:
+                    case 559 | 944:
+                        day_times = [day_time for day_time in leclab.day_times]
+                        leclabs = [
+                            LecLab.default(
+                                title=leclab.title,
+                                type=leclab.type,
+                                section_id=leclab.section_id,
+                                prof=leclab.prof,
+                                day_times=[day_time],
+                            )
+                            for day_time in day_times
+                        ]
+                        old.leclabs.extend(leclabs)
+                    case _:
+                        old.leclabs.append(leclab)
+                old.title = title
 
             if "lab" in old_section and old_section["lab"] is not None:
-                old_section["title"] = old_section["lab"]["title"]
-                old_section["lab"]["type"] = LecLabType.LAB
-                old_section["lab"]["section_id"] = section_id
-                old_section["times"].append(old_section["lab"])
-            del old_section["lab"]
+                lab = old_section["lab"]
+                title = lab["title"]
 
-            for time in old_section["times"]:
-                del time["rating"]
+                leclab = LecLab.default(
+                    title=title,
+                    type=LecLabType.LAB,
+                    section_id=section_id,
+                    prof=lab["prof"],
+                    day_times=list(
+                        itertools.chain.from_iterable(
+                            [
+                                DayTime(
+                                    day=lab_times[0],
+                                    start_time_hhmm=t.split("-")[0],
+                                    end_time_hhmm=t.split("-")[1],
+                                )
+                                for t in lab_times[1]
+                            ]
+                            for lab_times in lab["time"].items()
+                        )
+                    ),
+                )
 
-            old_section["more"] = old_section["more"].strip("\n").strip()
+                old.leclabs.append(leclab)
+                old.title = title
 
-            old_section_str = json.dumps(old_section)
-            old_section = json.loads(re.sub(" +", " ", old_section_str))
+            old.more = old_section["more"].strip("\n").strip()
+            old.more = remove_double_space(old.more)
+            old.domain = remove_double_space(old.domain)
 
             with Session(engine) as session:
                 new_section = session.get(Section, section_id)
-                times = session.exec(
-                    select(LecLab).where(LecLab.section_id == section_id)
-                ).all()
 
-            assert new_section is not None
+                assert new_section is not None
 
-            new_section = new_section.model_dump()
-            times = [leclab.model_dump() for leclab in times]
+                new_section.leclabs = [
+                    LecLab(
+                        title=leclab.title,
+                        section_id=leclab.section_id,
+                        prof=leclab.prof,
+                        type=leclab.type,
+                        day_times=[
+                            DayTime(
+                                day=daytime.day,
+                                start_time_hhmm=daytime.start_time_hhmm,
+                                end_time_hhmm=daytime.end_time_hhmm,
+                            )
+                            for daytime in leclab.day_times
+                        ],
+                    )
+                    for leclab in new_section.leclabs
+                ]
 
-            for time in times:
-                del time["id"]
-            new_section["times"] = times
-
-            assert old_section == new_section
+                assert old == new_section
+                assert old.leclabs == new_section.leclabs
+                assert [leclab.day_times for leclab in old.leclabs] == [
+                    leclab.day_times for leclab in new_section.leclabs
+                ]
 
 
 if __name__ == "__main__":

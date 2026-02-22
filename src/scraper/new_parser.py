@@ -10,7 +10,7 @@ from .db import engine
 
 
 from .files import Files
-from .models import LecLab, LecLabType, Section, Word
+from .models import DayTime, LecLab, LecLabType, Section, Word
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +53,7 @@ class NewParser(INewParser):
                     self.sections = list(sections)
                     return
 
+            _ = session.exec(delete(DayTime))
             _ = session.exec(delete(LecLab))
             _ = session.exec(delete(Section))
 
@@ -172,8 +173,9 @@ class NewParser(INewParser):
             if self.columns_x.day == x:
                 day = text
                 time = line[i + 1].text
+                start, end = time.split("-")
 
-                self.leclab.update_time({day: [time]})
+                self.leclab.update_time(day, start, end)
                 continue
 
         if did_update_title:
@@ -198,16 +200,14 @@ class NewParser(INewParser):
         self.sections.append(self.current_section)
 
         if keep_course:
-            self.current_section = Section.default().sqlmodel_update(
-                {
-                    "id": self.current_section.id + 1,
-                    "course": self.current_section.course,
-                    "domain": self.current_section.domain,
-                }
+            self.current_section = Section.default(
+                id=self.current_section.id + 1,
+                course=self.current_section.course,
+                domain=self.current_section.domain,
             )
         else:
-            self.current_section = Section.default().sqlmodel_update(
-                {"id": self.current_section.id + 1}
+            self.current_section = Section.default(
+                id=self.current_section.id + 1,
             )
 
     def _update_section_times(self):
@@ -238,7 +238,7 @@ class NewParser(INewParser):
         self.current_section.title = self.leclab.title
 
         self.leclab.section_id = self.current_section.id
-        self.current_section.times.append(self.leclab)
+        self.current_section.leclabs.append(self.leclab)
 
         self.leclab = LecLab.default()
 
@@ -252,28 +252,27 @@ class NewParser(INewParser):
             else:
                 row.append(math.floor(day / 2) * 2 * 50 + 830)
 
-        days: dict[str, list[str]] = {}
+        days: dict[str, list[tuple[str, str]]] = {}
 
-        for leclab in self.current_section.times:
-            time = leclab.time
-
-            for d, t in time.items():
-                days.setdefault(d, []).extend(t)
+        for leclab in self.current_section.leclabs:
+            for day_time in leclab.day_times:
+                days.setdefault(day_time.day, []).append(
+                    (day_time.start_time_hhmm, day_time.end_time_hhmm)
+                )
 
         viewData: list[dict[str, list[int]]] = []
 
         for day in days:
             times = days[day]
             for t in times:
-                t = t.split("-")
-
+                start_time, end_time = t
                 try:
-                    rowStart = row.index(int(t[0])) + 1
+                    rowStart = row.index(int(start_time)) + 1
                 except ValueError:
                     rowStart = 1
 
                 try:
-                    rowEnd = row.index(int(t[1])) + 1
+                    rowEnd = row.index(int(end_time)) + 1
                 except ValueError:
                     rowEnd = 21
 
@@ -293,7 +292,6 @@ class NewParser(INewParser):
             if len(session.exec(select(Section)).all()) != 0:
                 raise Exception("rows not deleted")
 
-            print(self.sections)
             session.add_all(self.sections)
             session.commit()
 

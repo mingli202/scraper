@@ -70,7 +70,7 @@ def test_department_with_space_and_duplicate_pids():
 
 def test_missing_rating():
     rating = scraper.get_rating("Voinea, Sorin", scraper.get_saved_pids())
-    assert rating == Rating.default().sqlmodel_update({"prof": "Voinea, Sorin"})
+    assert rating == Rating.default(prof="Voinea, Sorin")
 
 
 # NOTE: these are hardcoded values, so subject to change
@@ -121,7 +121,7 @@ def test_Klochko_Yuliya():
         return
 
     rating: Rating = scraper.get_rating("Klochko, Yuliya", scraper.get_saved_pids())
-    assert rating == Rating.default().sqlmodel_update({"prof": "Klochko, Yuliya"})
+    assert rating == Rating.default(prof="Klochko, Yuliya")
 
 
 # NOTE: manually check foundn't

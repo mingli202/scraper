@@ -85,7 +85,7 @@ class Scraper:
 
     def get_rating(self, prof: str, saved_pids: dict[str, str | None]) -> Rating:
         print("GETTING RATING")
-        rating = Rating.default().sqlmodel_update({"prof": prof})
+        rating = Rating.default(prof=prof)
 
         if (
             prof in saved_pids
@@ -186,15 +186,13 @@ class Scraper:
             ) = matches.groups()
 
             try:
-                rating = Rating.default().sqlmodel_update(
-                    {
-                        "prof": prof,
-                        "nRating": round(float(numRating)),
-                        "avg": round(float(avgRating), 1),
-                        "takeAgain": round(float((takeAgain))),
-                        "difficulty": round(float(difficulty), 1),
-                        "status": Status.FOUND,
-                    }
+                rating = Rating.default(
+                    prof=prof,
+                    nRating=round(float(numRating)),
+                    avg=round(float(avgRating), 1),
+                    takeAgain=round(float((takeAgain))),
+                    difficulty=round(float(difficulty), 1),
+                    status=Status.FOUND,
                 )
 
                 rating.score = round(
