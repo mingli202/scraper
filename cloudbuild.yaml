@@ -31,7 +31,13 @@ steps:
         gcloud run deploy $_SERVICE_NAME \
         --image docker.io/$$USERNAME/$_IMAGE_NAME:$COMMIT_SHA \
         --region $_REGION \
-        --platform managed
+        --platform managed \
+        --cpu $_CPU \
+        --memory $_MEMORY \
+        --concurrency $_CONCURRENCY \
+        --min-instances $_MIN_INSTANCES \
+        --max-instances $_MAX_INSTANCES \
+        --set-env-vars ENV=PROD,ENABLE_SECTION_CACHE=1,WEB_CONCURRENCY=$_WEB_CONCURRENCY
     secretEnv: ["USERNAME"]
 
 options:
@@ -48,3 +54,9 @@ substitutions:
   _SERVICE_NAME: scraper
   _REGION: us-central1
   _IMAGE_NAME: schedule-maker-scraper
+  _CPU: "2"
+  _MEMORY: "1Gi"
+  _CONCURRENCY: "120"
+  _MIN_INSTANCES: "0"
+  _MAX_INSTANCES: "20"
+  _WEB_CONCURRENCY: "1"

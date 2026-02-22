@@ -2,9 +2,9 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from sqlmodel import select
+from api.sections.cache import load_section_cache
 from api.sections.router import router as section_router
 from scraper.db import SessionDep, init_db
-from scraper.files import Files
 from scraper.models import LecLab, LecLabResponse, Rating, RatingResponse
 
 
@@ -12,11 +12,11 @@ from scraper.models import LecLab, LecLabResponse, Rating, RatingResponse
 async def lifespan(_app: FastAPI):
     _ = load_dotenv()
     init_db()
+    _app.state.section_cache = load_section_cache()
     yield
 
 
 app = FastAPI(lifespan=lifespan)
-files = Files()
 
 app.include_router(section_router)
 

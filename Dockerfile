@@ -15,6 +15,9 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Keeps Python from buffering stdout and stderr to avoid situations where
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
+ENV ENV=PROD
+ENV ENABLE_SECTION_CACHE=1
+ENV WEB_CONCURRENCY=1
 
 WORKDIR /app
 
@@ -45,7 +48,7 @@ USER appuser
 COPY . .
 
 # Expose the port that the application listens on.
-EXPOSE 8000
+EXPOSE 8080
 
 # Run the application.
-CMD ["fastapi", "run", "--host", "0.0.0.0", "src/api/app.py", "--port", "8080"]
+CMD ["sh", "-c", "fastapi run --host 0.0.0.0 --port ${PORT:-8080} --workers ${WEB_CONCURRENCY:-1} src/api/app.py"]

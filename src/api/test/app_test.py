@@ -19,10 +19,10 @@ def test_root():
     assert res.json() == {"message": "Hello World!"}
 
 
-def test_get_all_sections():
+def test_get_all_sections_without_filters_returns_empty():
     res = client.get("/sections/")
     assert res.status_code == 200
-    assert len(res.json()) > 900
+    assert res.json() == []
 
 
 def test_get_section():

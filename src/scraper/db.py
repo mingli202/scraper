@@ -9,9 +9,13 @@ file = Files()
 
 sqlite_url = f"sqlite:///{file.all_sections_final_path}"
 connect_args = {"check_same_thread": False}
+env = os.environ.get("ENV", "PROD").upper()
 
 engine = create_engine(
-    sqlite_url, connect_args=connect_args, echo=os.environ.get("ENV", "DEV") != "PROD"
+    sqlite_url,
+    connect_args=connect_args,
+    echo=env in {"DEV", "DEBUG"},
+    pool_pre_ping=True,
 )
 
 
