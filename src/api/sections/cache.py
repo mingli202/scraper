@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
-from sqlmodel import Session, select
+from sqlmodel import Session, col, select
 
 from api.sections.queries import with_section_relationships
 from scraper.db import engine
@@ -25,7 +25,9 @@ def load_section_cache() -> SectionCache | None:
         return None
 
     with Session(engine) as session:
-        statement = with_section_relationships(select(Section))
+        statement = with_section_relationships(
+            select(Section).order_by(col(Section.id))
+        )
         sections = session.exec(statement).all()
 
     all_sections = tuple(
