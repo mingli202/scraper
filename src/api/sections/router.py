@@ -20,7 +20,9 @@ def get_all(request: Request) -> list[SectionResponse]:
         return list(section_cache.all_sections)
 
     with Session(engine) as session:
-        statement = with_section_relationships(select(Section))
+        statement = with_section_relationships(select(Section)).order_by(
+            col(Section.id)
+        )
         sections = session.exec(statement).all()
 
     return [SectionResponse.model_validate(section) for section in sections]
