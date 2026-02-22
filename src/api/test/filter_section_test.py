@@ -10,6 +10,13 @@ from scraper.models import SectionResponse
 client = TestClient(app)
 
 
+def _fetch_sections(params: dict[str, str | int]) -> list[SectionResponse]:
+    res = client.get("/sections/", params=params)
+    assert res.status_code == 200
+
+    return TypeAdapter(list[SectionResponse]).validate_python(res.json())
+
+
 @pytest.mark.parametrize(
     "q",
     [
@@ -251,6 +258,73 @@ def test_filter_by_time_end(time_end: str):
 
     for day_time in day_times:
         assert day_time.end_time_hhmm <= time_end
+
+
+@pytest.mark.parametrize(
+    "query_steps",
+    [
+        [
+            {"course": "science"},
+            {"course": "science", "domain": "biology"},
+            {"course": "science", "domain": "biology", "min_rating": 2},
+            {"course": "science", "domain": "biology", "min_rating": 2, "days_off": "M"},
+            {
+                "course": "science",
+                "domain": "biology",
+                "min_rating": 2,
+                "days_off": "M",
+                "time_start": "0900",
+            },
+            {
+                "course": "science",
+                "domain": "biology",
+                "min_rating": 2,
+                "days_off": "M",
+                "time_start": "0900",
+                "time_end": "1800",
+            },
+        ],
+        [
+            {"q": "calculus"},
+            {"q": "calculus", "course": "science"},
+            {"q": "calculus", "course": "science", "domain": "mathematics"},
+            {
+                "q": "calculus",
+                "course": "science",
+                "domain": "mathematics",
+                "min_score": 39,
+            },
+            {
+                "q": "calculus",
+                "course": "science",
+                "domain": "mathematics",
+                "min_score": 39,
+                "days_off": "F",
+            },
+            {
+                "q": "calculus",
+                "course": "science",
+                "domain": "mathematics",
+                "min_score": 39,
+                "days_off": "F",
+                "time_end": "1700",
+            },
+        ],
+    ],
+)
+def test_filter_by_multiple_params_narrows_progressively(
+    query_steps: list[dict[str, str | int]],
+):
+    result_ids = [{section.id for section in _fetch_sections(params)} for params in query_steps]
+
+    for previous, current in zip(result_ids, result_ids[1:]):
+        assert current.issubset(previous)
+
+    assert any(
+        len(current) < len(previous)
+        for previous, current in zip(result_ids, result_ids[1:])
+    )
+    assert len(result_ids[-1]) > 0
 
 
 if __name__ == "__main__":
