@@ -53,7 +53,7 @@ def filter_sections(
 
     if teacher is not None:
         statement = statement.where(
-            col(Section.leclabs).any(col(LecLab.prof).ilike(f"{teacher}%"))
+            col(Section.leclabs).any(col(LecLab.prof).ilike(f"%{teacher}%"))
         )
 
     # there does not exist a leclab such that
