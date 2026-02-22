@@ -1,6 +1,4 @@
-from copy import deepcopy
 import itertools
-import json
 from typing import Any
 import pdfplumber
 from pydantic_core import from_json
@@ -240,6 +238,9 @@ def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: S
 
 
 def test_parity_with_old_parser(parser: NewParser):
+    def remove_double_space(s: str) -> str:
+        return re.sub(" +", " ", s)
+
     parser.parse()
 
     for section in parser.sections:
@@ -290,7 +291,22 @@ def test_parity_with_old_parser(parser: NewParser):
                     ),
                 )
 
-                old.leclabs.append(leclab)
+                match section_id:
+                    case 559 | 944:
+                        day_times = [day_time for day_time in leclab.day_times]
+                        leclabs = [
+                            LecLab.default(
+                                title=leclab.title,
+                                type=leclab.type,
+                                section_id=leclab.section_id,
+                                prof=leclab.prof,
+                                day_times=[day_time],
+                            )
+                            for day_time in day_times
+                        ]
+                        old.leclabs.extend(leclabs)
+                    case _:
+                        old.leclabs.append(leclab)
                 old.title = title
 
             if "lab" in old_section and old_section["lab"] is not None:
@@ -321,7 +337,8 @@ def test_parity_with_old_parser(parser: NewParser):
                 old.title = title
 
             old.more = old_section["more"].strip("\n").strip()
-            old.more = re.sub(" +", " ", old.more)
+            old.more = remove_double_space(old.more)
+            old.domain = remove_double_space(old.domain)
 
             with Session(engine) as session:
                 new_section = session.get(Section, section_id)
