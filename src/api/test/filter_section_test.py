@@ -135,5 +135,123 @@ def test_filter_by_teacher(teacher: str):
         assert any(teacher in leclab.prof.lower() for leclab in section.leclabs)
 
 
+@pytest.mark.parametrize(
+    "min_rating",
+    [0, 2, 4, 5, 9, -1, pytest.param(3.1, marks=pytest.mark.xfail)],
+)
+def test_filter_by_min_rating(min_rating: int):
+    res = client.get(f"/sections/?min_rating={min_rating}")
+    assert res.status_code == 200
+    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
+    ratings = [leclab.rating for leclab in leclabs]
+
+    assert all(rating is not None and rating.avg >= min_rating for rating in ratings)
+
+
+@pytest.mark.parametrize(
+    "max_rating",
+    [0, 2, 4, 5, 9, -1, pytest.param(3.1, marks=pytest.mark.xfail)],
+)
+def test_filter_by_max_rating(max_rating: int):
+    res = client.get(f"/sections/?max_rating={max_rating}")
+    assert res.status_code == 200
+    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
+    ratings = [leclab.rating for leclab in leclabs]
+
+    assert all(rating is not None and rating.avg <= max_rating for rating in ratings)
+
+
+@pytest.mark.parametrize(
+    "min_score",
+    [0, 21, 39, 54, 95, -1, pytest.param(3.1, marks=pytest.mark.xfail)],
+)
+def test_filter_by_min_score(min_score: int):
+    res = client.get(f"/sections/?min_score={min_score}")
+    assert res.status_code == 200
+    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
+    ratings = [leclab.rating for leclab in leclabs]
+
+    assert all(rating is not None and rating.score >= min_score for rating in ratings)
+
+
+@pytest.mark.parametrize(
+    "max_score",
+    [0, 21, 39, 54, 95, -1, pytest.param(3.1, marks=pytest.mark.xfail)],
+)
+def test_filter_by_max_score(max_score: int):
+    res = client.get(f"/sections/?max_score={max_score}")
+    assert res.status_code == 200
+    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
+    ratings = [leclab.rating for leclab in leclabs]
+
+    assert all(rating is not None and rating.score <= max_score for rating in ratings)
+
+
+@pytest.mark.parametrize(
+    "days_off", ["M", "MTW", "MF", "WR", pytest.param("", marks=pytest.mark.xfail)]
+)
+def test_filter_by_days_off(days_off: str):
+    res = client.get(f"/sections/?days_off={days_off}")
+    assert res.status_code == 200
+    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
+    day_times = itertools.chain.from_iterable(leclab.day_times for leclab in leclabs)
+
+    assert all(
+        not any(day_off in day_time.day for day_off in days_off)
+        for day_time in day_times
+    )
+
+
+@pytest.mark.parametrize(
+    "time_start",
+    [
+        "0900",
+        "0000",
+        "2400",
+        "1200",
+        "1030",
+        "1449",
+        pytest.param("", marks=pytest.mark.xfail),
+    ],
+)
+def test_filter_by_time_start(time_start: str):
+    res = client.get(f"/sections/?time_start={time_start}")
+    assert res.status_code == 200
+    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
+    day_times = itertools.chain.from_iterable(leclab.day_times for leclab in leclabs)
+
+    for day_time in day_times:
+        assert day_time.start_time_hhmm >= time_start
+
+
+@pytest.mark.parametrize(
+    "time_end",
+    [
+        "0900",
+        "0000",
+        "2400",
+        "1200",
+        "1030",
+        "1449",
+        pytest.param("", marks=pytest.mark.xfail),
+    ],
+)
+def test_filter_by_time_end(time_end: str):
+    res = client.get(f"/sections/?time_end={time_end}")
+    assert res.status_code == 200
+    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
+    day_times = itertools.chain.from_iterable(leclab.day_times for leclab in leclabs)
+
+    for day_time in day_times:
+        assert day_time.end_time_hhmm <= time_end
+
+
 if __name__ == "__main__":
     exit(pytest.main(["--no-header", "-s", "-v", __file__]))

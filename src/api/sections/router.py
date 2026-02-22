@@ -25,8 +25,8 @@ def get_sections(
     min_score: int | None = None,
     max_score: int | None = None,
     days_off: Annotated[str | None, Query(pattern="^[MWTRF]{1,5}$")] = None,
-    time_start_query: Annotated[str | None, Query(pattern=r"^\d{4}$")] = None,
-    time_end_query: Annotated[str | None, Query(pattern=r"^\d{4}$")] = None,
+    time_start: Annotated[str | None, Query(pattern=r"^\d{4}$")] = None,
+    time_end: Annotated[str | None, Query(pattern=r"^\d{4}$")] = None,
     blended: bool = False,
     honours: bool = False,
 ) -> list[Section]:
@@ -43,8 +43,8 @@ def get_sections(
         min_score,
         max_score,
         days_off,
-        time_start_query,
-        time_end_query,
+        time_start,
+        time_end,
         blended,
         honours,
     )
