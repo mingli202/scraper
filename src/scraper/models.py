@@ -2,7 +2,8 @@ from enum import Enum
 import logging
 from typing import override
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from pydantic.alias_generators import to_camel
 from sqlalchemy import JSON
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -149,6 +150,53 @@ class DayTime(SQLModel, table=True):
     leclab_id: int = Field(default=None, foreign_key="leclab.id", index=True)
 
     leclab: LecLab = Relationship(back_populates="day_times")
+
+
+class ConfiguredBaseModel(BaseModel):
+    model_config = ConfigDict(
+        alias_generator=to_camel, populate_by_name=True, from_attributes=True
+    )
+
+
+class SectionResponse(ConfiguredBaseModel):
+    id: int
+    course: str
+    section: str
+    domain: str
+    code: str
+    title: str
+    leclabs: list[LecLabResponse]
+    more: str
+    view_data: ViewData
+
+
+class RatingResponse(ConfiguredBaseModel):
+    prof: str
+    score: float
+    avg: float
+    nRating: int
+    takeAgain: int
+    difficulty: float
+    status: Status
+    pId: str | None
+
+
+class LecLabResponse(ConfiguredBaseModel):
+    id: int
+    title: str
+    type: LecLabType | None
+    section_id: int
+    prof: str
+    rating: RatingResponse | None
+    day_times: list[DayTimeResponse]
+
+
+class DayTimeResponse(ConfiguredBaseModel):
+    id: int
+    day: str
+    start_time_hhmm: str
+    end_time_hhmm: str
+    leclab_id: int
 
 
 class ColumnsXs(BaseModel):
