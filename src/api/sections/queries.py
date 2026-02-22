@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from sqlalchemy.orm import selectinload
 from sqlmodel import select
+from sqlmodel.sql.expression import SelectOfScalar
 
 from scraper.models import LecLab, Section
 
 
-def with_section_relationships(statement):
+def with_section_relationships(statement: SelectOfScalar[Section]):
     return statement.options(
         selectinload(Section.leclabs).selectinload(LecLab.rating),
         selectinload(Section.leclabs).selectinload(LecLab.day_times),
