@@ -27,6 +27,6 @@ done
 
 echo "Generating types..."
 bunx @hey-api/openapi-ts -i http://localhost:8000/openapi.json -o "$CODEGEN_DIR/src/client"
-bunx @hey-api/openapi-ts -i http://localhost:8000/openapi.json -o "$CODEGEN_DIR/src/types" -p zod
+bunx @hey-api/openapi-ts -i http://localhost:8000/openapi.json -o "$CODEGEN_DIR/src/types/client" -p zod
 
 echo "Done!"
