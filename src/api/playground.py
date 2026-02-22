@@ -4,34 +4,16 @@ from scraper.models import DayTime, LecLab, LecLabType, Section
 
 
 def main():
-    section = Section.default(
-        section="00001",
-        code="609-DAA-03",
-        title="German I",
-        leclabs=[
-            LecLab.default(
-                title="German I",
-                prof="Siderova, Spaska",
-                day_times=[
-                    DayTime(
-                        day="TR",
-                        start_time_hhmm="1300",
-                        end_time_hhmm="1430",
-                    )
-                ],
-                type=LecLabType.LECTURE,
-            )
-        ],
-    )
+    with Session(engine) as session:
+        section = session.get(Section, 559)
 
-    print(section.leclabs)
+        if section is None:
+            return
 
+        print(section)
+        print(section.leclabs)
 
-# with Session(engine) as session:
-#     section = session.get(Section, 0)
-#
-#     if section is None:
-#         return
+        print([leclab.day_times for leclab in section.leclabs])
 
 
 if __name__ == "__main__":
