@@ -49,10 +49,10 @@ def filter_sections(
         statement = statement.where(col(Section.title).ilike(f"%{title}%"))
 
     if blended:
-        statement = statement.where(col(Section.more).ilike("BLENDED%"))
+        statement = statement.where(col(Section.more).like("BLENDED%"))
 
     if honours:
-        statement = statement.where(col(Section.more).ilike("For Honours%"))
+        statement = statement.where(col(Section.more).like("For Honours%"))
 
     if teacher is not None:
         statement = statement.where(
