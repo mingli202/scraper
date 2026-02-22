@@ -25,5 +25,16 @@ def test_filter_by_q(q: str):
         )
 
 
+@pytest.mark.parametrize("course", ["Science", "Social", "Arts", "Com"])
+def test_filter_by_course(course: str):
+    course = course.lower()
+    res = client.get(f"/sections/?course={course}")
+    assert res.status_code == 200
+    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+
+    for section in sections:
+        assert section.course.lower().startswith(course)
+
+
 if __name__ == "__main__":
     exit(pytest.main(["--no-header", "-s", "-vvv", __file__]))
