@@ -1,6 +1,5 @@
 from typing import Annotated
 from fastapi import APIRouter, HTTPException, Query, Request
-from pydantic import TypeAdapter
 from sqlmodel import Session, col, select
 
 from api.sections.cache import SectionCache
@@ -24,10 +23,10 @@ def get_all(request: Request) -> list[SectionResponse]:
         statement = with_section_relationships(select(Section))
         sections = session.exec(statement).all()
 
-    return TypeAdapter(list[SectionResponse]).validate_python(list(sections))
+    return [SectionResponse.model_validate(section) for section in sections]
 
 
-@router.get("/", response_model=list[SectionResponse])
+@router.get("/")
 def get_sections(
     request: Request,
     q: str | None = None,
@@ -115,7 +114,7 @@ def get_sections(
     return [SectionResponse.model_validate(section) for section in sections]
 
 
-@router.get("/{section_id}", response_model=SectionResponse)
+@router.get("/{section_id}")
 def get_section(section_id: int, request: Request) -> SectionResponse:
     section_cache = getattr(request.app.state, "section_cache", None)
     if isinstance(section_cache, SectionCache):
@@ -135,7 +134,7 @@ def get_section(section_id: int, request: Request) -> SectionResponse:
     return SectionResponse.model_validate(section)
 
 
-@router.post("/", response_model=list[SectionResponse])
+@router.post("/")
 def get_many(ids: list[int], request: Request) -> list[SectionResponse]:
     section_cache = getattr(request.app.state, "section_cache", None)
 
@@ -150,4 +149,4 @@ def get_many(ids: list[int], request: Request) -> list[SectionResponse]:
         )
         sections = session.exec(statement).all()
 
-    return TypeAdapter(list[SectionResponse]).validate_python(list(sections))
+    return [SectionResponse.model_validate(section) for section in sections]
