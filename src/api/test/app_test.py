@@ -3,7 +3,7 @@ import pytest
 from api.app import app
 from fastapi.testclient import TestClient
 
-from scraper.models import LecLab, LecLabType, Rating, Section, Status
+from scraper.models import DayTime, LecLab, LecLabType, Rating, Section, Status
 
 client = TestClient(app)
 
@@ -32,14 +32,18 @@ def test_get_all_sections():
                 title="Cellular Biology",
                 type=LecLabType.LECTURE,
                 prof="Dupont, Sarah",
-                time={"R": ["0930-1130"]},
+                day_times=[
+                    DayTime(day="R", start_time_hhmm="0930", end_time_hhmm="1130")
+                ],
             ),
             LecLab(
                 section_id=0,
                 title="Cellular Biology",
                 type=LecLabType.LAB,
                 prof="Hughes, Cameron",
-                time={"T": ["1230-1430"]},
+                day_times=[
+                    DayTime(day="T", start_time_hhmm="1230", end_time_hhmm="1430")
+                ],
             ),
         ],
         more="",
@@ -62,16 +66,20 @@ def test_get_section():
             LecLab(
                 section_id=1,
                 title="Cellular Biology",
-                type=LecLabType.LAB,
-                prof="Dupont, Sarah",
-                time={"R": ["0930-1130"]},
+                type=LecLabType.LECTURE,
+                prof="Rioux, Marie-Claire",
+                day_times=[
+                    DayTime(day="T", start_time_hhmm="1430", end_time_hhmm="1630")
+                ],
             ),
             LecLab(
                 section_id=1,
                 title="Cellular Biology",
-                type=LecLabType.LECTURE,
-                prof="Rioux, Marie-Claire",
-                time={"T": ["1430-1630"]},
+                type=LecLabType.LAB,
+                prof="Dupont, Sarah",
+                day_times=[
+                    DayTime(day="R", start_time_hhmm="0930", end_time_hhmm="1130")
+                ],
             ),
         ],
         more="",
