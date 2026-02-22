@@ -3,7 +3,7 @@ import os
 import re
 from typing import Any
 from warnings import deprecated
-from .models import Section, LecLab, Time
+from .models import Section, LecLab
 
 
 from .files import Files
