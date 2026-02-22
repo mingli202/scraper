@@ -9,7 +9,16 @@ from scraper.models import SectionResponse
 client = TestClient(app)
 
 
-@pytest.mark.parametrize("q", ["calculus", "603-", "Science / Commerce", "psycholo"])
+@pytest.mark.parametrize(
+    "q",
+    [
+        "calculus",
+        "603-",
+        "Science / Commerce",
+        "psycholo",
+        pytest.param("asdfqwer", marks=pytest.mark.xfail),
+    ],
+)
 def test_filter_by_q(q: str):
     q = q.lower()
     res = client.get(f"/sections/?q={q}")
@@ -25,7 +34,16 @@ def test_filter_by_q(q: str):
         )
 
 
-@pytest.mark.parametrize("course", ["Science", "Social", "Arts", "Com"])
+@pytest.mark.parametrize(
+    "course",
+    [
+        "Science",
+        "Social",
+        "Arts",
+        "Com",
+        pytest.param("calculus", marks=pytest.mark.xfail),
+    ],
+)
 def test_filter_by_course(course: str):
     course = course.lower()
     res = client.get(f"/sections/?course={course}")
