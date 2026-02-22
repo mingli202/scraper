@@ -54,5 +54,65 @@ def test_filter_by_course(course: str):
         assert section.course.lower().startswith(course)
 
 
+@pytest.mark.parametrize(
+    "domain",
+    [
+        "biology",
+        "psy",
+        "huma",
+        "POLITICAL",
+        pytest.param("calculus", marks=pytest.mark.xfail),
+    ],
+)
+def test_filter_by_domain(domain: str):
+    domain = domain.lower()
+    res = client.get(f"/sections/?domain={domain}")
+    assert res.status_code == 200
+    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+
+    for section in sections:
+        assert section.domain.lower().startswith(domain)
+
+
+@pytest.mark.parametrize(
+    "title",
+    [
+        "biology",
+        "psy",
+        "huma",
+        "calculus",
+        pytest.param("chinese new year", marks=pytest.mark.xfail),
+    ],
+)
+def test_filter_by_title(title: str):
+    title = title.lower()
+    res = client.get(f"/sections/?title={title}")
+    assert res.status_code == 200
+    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+
+    for section in sections:
+        assert title in section.title.lower()
+
+
+@pytest.mark.parametrize(
+    "code",
+    [
+        "603",
+        "103",
+        "MQ",
+        "300-SLA",
+        pytest.param("chinese new year", marks=pytest.mark.xfail),
+    ],
+)
+def test_filter_by_code(code: str):
+    code = code.lower()
+    res = client.get(f"/sections/?code={code}")
+    assert res.status_code == 200
+    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+
+    for section in sections:
+        assert code in section.code.lower()
+
+
 if __name__ == "__main__":
-    exit(pytest.main(["--no-header", "-s", "-vvv", __file__]))
+    exit(pytest.main(["--no-header", "-s", "-v", __file__]))
