@@ -7,10 +7,24 @@ from api.sections.cache import SectionCache
 from api.sections.filter_cached_sections import filter_cached_sections
 from api.sections.filter_sections import filter_sections
 from api.sections.queries import section_by_id_statement, with_section_relationships
-from scraper.db import SessionDep, engine
+from scraper.db import engine
 from scraper.models import Section, SectionResponse
 
 router = APIRouter(prefix="/sections", tags=["Sections"])
+
+
+@router.get("/all")
+def get_all(request: Request) -> list[SectionResponse]:
+    section_cache = getattr(request.app.state, "section_cache", None)
+
+    if isinstance(section_cache, SectionCache):
+        return list(section_cache.all_sections)
+
+    with Session(engine) as session:
+        statement = with_section_relationships(select(Section))
+        sections = session.exec(statement).all()
+
+    return TypeAdapter(list[SectionResponse]).validate_python(list(sections))
 
 
 @router.get("/", response_model=list[SectionResponse])
