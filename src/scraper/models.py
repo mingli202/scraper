@@ -26,12 +26,12 @@ class LecLabType(str, Enum):
 class Section(SQLModel, table=True):
     id: int = Field(primary_key=True, index=True)
 
-    course: str = Field()
-    domain: str = Field()
-    section: str = Field()
-    code: str = Field()
-    title: str = Field()
-    more: str = Field()
+    course: str = Field(index=True)
+    domain: str = Field(index=True)
+    section: str = Field(index=True)
+    code: str = Field(index=True)
+    title: str = Field(index=True)
+    more: str = Field(index=True)
     view_data: ViewData = Field(sa_type=JSON)
 
     leclabs: list[LecLab] = Relationship(back_populates="section")
@@ -65,12 +65,12 @@ class Section(SQLModel, table=True):
 class Rating(SQLModel, table=True):
     prof: str = Field(primary_key=True, index=True)
 
-    score: float = Field()
-    avg: float = Field()
+    score: float = Field(index=True)
+    avg: float = Field(index=True)
     nRating: int = Field()
     takeAgain: int = Field()
     difficulty: float = Field()
-    status: Status = Field()
+    status: Status = Field(index=True)
     pId: str | None = Field()
 
     leclabs: list[LecLab] = Relationship(back_populates="rating")
@@ -108,7 +108,7 @@ class LecLab(SQLModel, table=True):
     type: LecLabType | None = Field()
 
     section_id: int = Field(index=True, foreign_key="section.id")
-    prof: str = Field(foreign_key="rating.prof")
+    prof: str = Field(foreign_key="rating.prof", index=True)
 
     section: Section = Relationship(back_populates="leclabs")
     rating: Rating | None = Relationship(back_populates="leclabs")
@@ -144,9 +144,9 @@ class LecLab(SQLModel, table=True):
 class DayTime(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
 
-    day: str = Field()
-    start_time_hhmm: str = Field()
-    end_time_hhmm: str = Field()
+    day: str = Field(index=True)
+    start_time_hhmm: str = Field(index=True)
+    end_time_hhmm: str = Field(index=True)
     leclab_id: int = Field(default=None, foreign_key="leclab.id", index=True)
 
     leclab: LecLab = Relationship(back_populates="day_times")

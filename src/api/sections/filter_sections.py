@@ -1,10 +1,11 @@
 from sqlmodel import col, or_, select
-from scraper.db import SessionDep
+from api.sections.queries import with_section_relationships
+from sqlmodel import Session
 from scraper.models import DayTime, LecLab, Rating, Section, Status
 
 
 def filter_sections(
-    session: SessionDep,
+    session: Session,
     q: str | None = None,
     course: str | None = None,
     domain: str | None = None,
@@ -20,8 +21,10 @@ def filter_sections(
     time_end_query: str | None = None,
     blended: bool = False,
     honours: bool = False,
+    limit: int | None = None,
+    offset: int = 0,
 ) -> list[Section]:
-    statement = select(Section)
+    statement = with_section_relationships(select(Section)).order_by(col(Section.id))
 
     if q:
         statement = statement.where(
@@ -145,6 +148,12 @@ def filter_sections(
                 col(LecLab.day_times).any(col(DayTime.end_time_hhmm) > time_end_query)
             )
         )
+
+    if offset > 0:
+        statement = statement.offset(offset)
+
+    if limit is not None:
+        statement = statement.limit(limit)
 
     sections = session.exec(statement).all()
 

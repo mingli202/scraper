@@ -1,19 +1,20 @@
 from typing import Annotated
-from fastapi import APIRouter, HTTPException, Query
-from sqlmodel import col, select
+from fastapi import APIRouter, HTTPException, Query, Request
+from sqlmodel import Session, col, select
 
+from api.sections.cache import SectionCache
+from api.sections.filter_cached_sections import filter_cached_sections
 from api.sections.filter_sections import filter_sections
-from scraper.db import SessionDep
-from scraper.files import Files
+from api.sections.queries import section_by_id_statement
+from scraper.db import SessionDep, engine
 from scraper.models import Section, SectionResponse
 
 router = APIRouter(prefix="/sections", tags=["Sections"])
-files = Files()
 
 
 @router.get("/", response_model=list[SectionResponse])
 def get_sections(
-    session: SessionDep,
+    request: Request,
     q: str | None = None,
     course: str | None = None,
     domain: str | None = None,
@@ -29,7 +30,9 @@ def get_sections(
     time_end: Annotated[str | None, Query(pattern=r"^\d{4}$")] = None,
     blended: bool = False,
     honours: bool = False,
-) -> list[Section]:
+    limit: Annotated[int | None, Query(ge=1, le=500)] = None,
+    offset: Annotated[int, Query(ge=0)] = 0,
+) -> list[SectionResponse]:
     if (
         q is None
         and course is None
@@ -49,34 +52,72 @@ def get_sections(
     ):
         return []
 
-    return filter_sections(
-        session,
-        q,
-        course,
-        domain,
-        code,
-        title,
-        teacher,
-        min_rating,
-        max_rating,
-        min_score,
-        max_score,
-        days_off,
-        time_start,
-        time_end,
-        blended,
-        honours,
-    )
+    section_cache = getattr(request.app.state, "section_cache", None)
+    if isinstance(section_cache, SectionCache):
+        return filter_cached_sections(
+            section_cache.all_sections,
+            q,
+            course,
+            domain,
+            code,
+            title,
+            teacher,
+            min_rating,
+            max_rating,
+            min_score,
+            max_score,
+            days_off,
+            time_start,
+            time_end,
+            blended,
+            honours,
+            limit,
+            offset,
+        )
+
+    with Session(engine) as session:
+        sections = filter_sections(
+            session,
+            q,
+            course,
+            domain,
+            code,
+            title,
+            teacher,
+            min_rating,
+            max_rating,
+            min_score,
+            max_score,
+            days_off,
+            time_start,
+            time_end,
+            blended,
+            honours,
+            limit,
+            offset,
+        )
+
+    return [SectionResponse.model_validate(section) for section in sections]
 
 
 @router.get("/{section_id}", response_model=SectionResponse)
-def get_section(section_id: int, session: SessionDep) -> Section:
-    section = session.exec(select(Section).where(Section.id == section_id)).first()
+def get_section(section_id: int, request: Request) -> SectionResponse:
+    section_cache = getattr(request.app.state, "section_cache", None)
+    if isinstance(section_cache, SectionCache):
+        section = section_cache.by_id.get(section_id)
+        if section is None:
+            raise HTTPException(
+                status_code=404, detail=f"Section {section_id} not found"
+            )
+        return section
+
+    with Session(engine) as session:
+        section = session.exec(section_by_id_statement(section_id)).first()
 
     if section is None:
         raise HTTPException(status_code=404, detail=f"Section {section_id} not found")
 
-    return section
+    return SectionResponse.model_validate(section)
 
 
 @router.post("/", response_model=list[SectionResponse])
