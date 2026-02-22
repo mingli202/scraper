@@ -4,11 +4,8 @@ from api.app import app
 from fastapi.testclient import TestClient
 
 from scraper.models import (
-    DayTime,
-    LecLab,
     LecLabType,
     Rating,
-    Section,
     SectionResponse,
     Status,
 )
