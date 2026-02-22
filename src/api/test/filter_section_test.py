@@ -1,3 +1,4 @@
+import itertools
 from fastapi.testclient import TestClient
 from pydantic import TypeAdapter
 import pytest
@@ -112,6 +113,26 @@ def test_filter_by_code(code: str):
 
     for section in sections:
         assert code in section.code.lower()
+
+
+@pytest.mark.parametrize(
+    "teacher",
+    [
+        "Abray",
+        "Lawrence",
+        "Xiao",
+        "Chris",
+        pytest.param("chinese new year", marks=pytest.mark.xfail),
+    ],
+)
+def test_filter_by_teacher(teacher: str):
+    teacher = teacher.lower()
+    res = client.get(f"/sections/?teacher={teacher}")
+    assert res.status_code == 200
+    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+
+    for section in sections:
+        assert any(teacher in leclab.prof.lower() for leclab in section.leclabs)
 
 
 if __name__ == "__main__":
