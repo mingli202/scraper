@@ -30,6 +30,25 @@ def get_sections(
     blended: bool = False,
     honours: bool = False,
 ) -> list[Section]:
+    if (
+        q is None
+        and course is None
+        and domain is None
+        and code is None
+        and title is None
+        and teacher is None
+        and min_rating is None
+        and max_rating is None
+        and min_score is None
+        and max_score is None
+        and days_off is None
+        and time_start is None
+        and time_end is None
+        and not blended
+        and not honours
+    ):
+        return []
+
     return filter_sections(
         session,
         q,
