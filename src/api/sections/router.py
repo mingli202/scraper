@@ -1,11 +1,12 @@
 from typing import Annotated
 from fastapi import APIRouter, HTTPException, Query, Request
+from pydantic import TypeAdapter
 from sqlmodel import Session, col, select
 
 from api.sections.cache import SectionCache
 from api.sections.filter_cached_sections import filter_cached_sections
 from api.sections.filter_sections import filter_sections
-from api.sections.queries import section_by_id_statement
+from api.sections.queries import section_by_id_statement, with_section_relationships
 from scraper.db import SessionDep, engine
 from scraper.models import Section, SectionResponse
 
@@ -121,7 +122,18 @@ def get_section(section_id: int, request: Request) -> SectionResponse:
 
 
 @router.post("/", response_model=list[SectionResponse])
-def get_many(ids: list[int], session: SessionDep) -> list[Section]:
-    sections = session.exec(select(Section).where(col(Section.id).in_(ids)))
+def get_many(ids: list[int], request: Request) -> list[SectionResponse]:
+    section_cache = getattr(request.app.state, "section_cache", None)
 
-    return list(sections)
+    if isinstance(section_cache, SectionCache):
+        sections = [section_cache.by_id.get(id) for id in ids]
+        sections = [section for section in sections if section is not None]
+        return sections
+
+    with Session(engine) as session:
+        statement = with_section_relationships(select(Section)).where(
+            col(Section.id).in_(ids)
+        )
+        sections = session.exec(statement).all()
+
+    return TypeAdapter(list[SectionResponse]).validate_python(list(sections))
