@@ -10,7 +10,7 @@ from .db import engine
 
 
 from .files import Files
-from .models import LecLab, LecLabType, Section, Word
+from .models import DayTime, LecLab, LecLabType, Section, Word
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +53,7 @@ class NewParser(INewParser):
                     self.sections = list(sections)
                     return
 
+            _ = session.exec(delete(DayTime))
             _ = session.exec(delete(LecLab))
             _ = session.exec(delete(Section))
 

@@ -1,6 +1,6 @@
 from enum import Enum
 import logging
-from typing import Self, override
+from typing import override
 
 from pydantic import BaseModel
 from sqlalchemy import JSON
@@ -33,9 +33,7 @@ class Section(SQLModel, table=True):
     more: str = Field()
     view_data: ViewData = Field(sa_type=JSON)
 
-    leclabs: list[LecLab] = Relationship(
-        back_populates="section", sa_relationship_kwargs={"lazy": "selectin"}
-    )
+    leclabs: list[LecLab] = Relationship(back_populates="section")
 
     @classmethod
     def default(
@@ -131,15 +129,6 @@ class LecLab(SQLModel, table=True):
             prof=prof,
             day_times=day_times if day_times is not None else [],
         )
-
-    def update(self, tmp: Self):
-        if tmp.title != "":
-            self.title = tmp.title
-
-        if tmp.prof != "":
-            self.prof = tmp.prof
-
-        self.day_times.extend(tmp.day_times)
 
     def update_time(self, day: str, start_time: str, end_time: str):
         day_time = DayTime(
