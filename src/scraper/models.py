@@ -27,8 +27,8 @@ class Section(SQLModel, table=True):
     id: int = Field(primary_key=True, index=True)
 
     course: str = Field()
-    section: str = Field()
     domain: str = Field()
+    section: str = Field()
     code: str = Field()
     title: str = Field()
     more: str = Field()
