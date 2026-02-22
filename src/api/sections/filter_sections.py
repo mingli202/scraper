@@ -33,9 +33,6 @@ def filter_sections(
             )
         )
 
-    if title is not None:
-        statement = statement.where(col(Section.title).ilike(f"%{title}%"))
-
     if course is not None:
         statement = statement.where(col(Section.course).ilike(f"{course}%"))
 
@@ -44,6 +41,9 @@ def filter_sections(
 
     if code is not None:
         statement = statement.where(col(Section.code).ilike(f"%{code}%"))
+
+    if title is not None:
+        statement = statement.where(col(Section.title).ilike(f"%{title}%"))
 
     if blended:
         statement = statement.where(col(Section.more).ilike("BLENDED%"))
