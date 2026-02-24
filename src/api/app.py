@@ -30,7 +30,7 @@ origins = (
         "https://dream-builder-hazel.vercel.app/",
     ]
     if env == "PROD"
-    else ["http://localhost:3000"]
+    else "*"
 )
 
 app.add_middleware(
