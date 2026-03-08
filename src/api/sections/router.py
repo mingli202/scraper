@@ -49,20 +49,23 @@ def get_sections(
     limit: Annotated[int | None, Query(ge=1, le=500)] = None,
     offset: Annotated[int, Query(ge=0)] = 0,
 ) -> list[SectionResponse]:
+    def _is_blank(value: str | None) -> bool:
+        return value is None or value.strip() == ""
+
     if (
-        q is None
-        and course is None
-        and domain is None
-        and code is None
-        and title is None
-        and teacher is None
+        _is_blank(q)
+        and _is_blank(course)
+        and _is_blank(domain)
+        and _is_blank(code)
+        and _is_blank(title)
+        and _is_blank(teacher)
         and min_rating is None
         and max_rating is None
         and min_score is None
         and max_score is None
-        and days_off is None
-        and time_start is None
-        and time_end is None
+        and _is_blank(days_off)
+        and _is_blank(time_start)
+        and _is_blank(time_end)
         and not blended
         and not honours
     ):
