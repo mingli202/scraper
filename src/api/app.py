@@ -25,17 +25,15 @@ app = FastAPI(lifespan=lifespan)
 
 env = os.environ.get("ENV", "DEV").upper()
 
-origins = (
-    [
-        "https://dream-builder-hazel.vercel.app/",
-    ]
+origin_regex: str = (
+    r"https://dream-builder-hazel\.vercel\.app|https://dream-builder-\w+-vincents-projects-\w+\.vercel\.app|https://dream-builder-git-\w+-vincents-projects-\w+\.vercel\.app"
     if env == "PROD"
-    else "*"
+    else r"http://localhost:\d+"
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origin_regex=origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
