@@ -11,10 +11,11 @@ from api.sections.router import router as section_router
 from scraper.db import SessionDep, init_db
 from scraper.models import LecLab, LecLabResponse, Rating, RatingResponse
 
+_ = load_dotenv()
+
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    _ = load_dotenv()
     init_db()
     _app.state.section_cache = load_section_cache()
     yield
