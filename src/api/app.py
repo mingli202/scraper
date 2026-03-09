@@ -25,6 +25,7 @@ app = FastAPI(lifespan=lifespan)
 
 
 env = os.environ.get("ENV", "DEV").upper()
+print(f"env: {env}")
 
 origin_regex: str = (
     r"https://dream-builder-hazel\.vercel\.app|https://dream-builder-\w+-vincents-projects-\w+\.vercel\.app|https://dream-builder-git-\w+-vincents-projects-\w+\.vercel\.app"
