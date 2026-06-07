@@ -90,13 +90,12 @@ def get_all(request: Request) -> list[SectionResponse]:
 
 
 @router.post("/parse-pdf")
-async def parse_uploaded_pdf(file: UploadFile = File(...)) -> list[SectionResponse]:
+def parse_uploaded_pdf(file: UploadFile) -> list[SectionResponse]:
     filename = (file.filename or "").lower()
     if not filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Uploaded file must be a PDF")
 
-    content = await file.read()
-    await file.close()
+    content = file.file.read()
 
     if len(content) == 0:
         raise HTTPException(status_code=400, detail="Uploaded PDF is empty")
@@ -124,6 +123,7 @@ async def parse_uploaded_pdf(file: UploadFile = File(...)) -> list[SectionRespon
             status_code=400, detail=f"Could not parse PDF: {err}"
         ) from err
     finally:
+        file.file.close()
         if tmp_pdf_path is not None:
             tmp_pdf_path.unlink(missing_ok=True)
         if files is not None:
