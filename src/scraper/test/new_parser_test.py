@@ -1,11 +1,12 @@
 import itertools
+from pathlib import Path
 from typing import Any
 import pdfplumber
 from pydantic_core import from_json
 import pytest
 import re
 
-from sqlmodel import SQLModel, Session, create_engine, select
+from sqlmodel import SQLModel, Session, create_engine
 
 from scraper.files import Files
 from scraper.models import DayTime, LecLab, LecLabType, Section, Word
@@ -237,7 +238,14 @@ def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: S
     ]
 
 
-def test_parity_with_old_parser(parser: NewParser):
+def test_parity_with_old_parser():
+    files = Files(
+        pdf_path=Path(
+            "/Users/vincentliu/Downloads/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
+        )
+    )
+    parser = NewParser(files)
+
     def remove_double_space(s: str) -> str:
         return re.sub(" +", " ", s)
 
