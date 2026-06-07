@@ -3,7 +3,7 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Annotated
 
-from fastapi import APIRouter, File, HTTPException, Query, Request, UploadFile
+from fastapi import APIRouter, HTTPException, Query, Request, UploadFile
 from sqlmodel import Session, col, select
 
 from api.sections.cache import SectionCache
