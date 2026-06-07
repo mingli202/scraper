@@ -13,7 +13,18 @@ from scraper.models import DayTime, LecLab, LecLabType, Section, Word
 from scraper.new_parser import NewParser
 from .individual_parsing_data import ATestCase, data
 
-files = Files()
+
+pdf_path = (
+    Path(__file__).parent.parent.parent.parent
+    / "RPHOR200_-_Schedule_of_classes_June_5.pdf"
+)
+
+pre_refac_path = (
+    Path(__file__).parent.parent.parent.parent
+    / "SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
+)
+
+files = Files(pdf_path)
 width, height = 0, 0
 
 engine = create_engine("sqlite://")
@@ -41,9 +52,7 @@ def parser():
 
 
 def test_optimal_x_tolerance() -> None:
-    with pdfplumber.open(
-        "/Users/vincentliu/dev/schedule-maker/scraper/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
-    ) as pdf:
+    with pdfplumber.open(pdf_path) as pdf:
         page = pdf.pages[
             93
         ]  # this page contains (Blended)MW, which are very close to each other
@@ -59,7 +68,7 @@ def test_optimal_x_tolerance() -> None:
 
             for word in sorted_words[::-1]:
                 if "(Blended)" in word["text"]:
-                    if "MW" in word["text"]:
+                    if "TF" in word["text"]:
                         right = mid
                     else:
                         left = mid
@@ -69,9 +78,7 @@ def test_optimal_x_tolerance() -> None:
 
 
 def test_optmial_y_tolerance() -> None:
-    with pdfplumber.open(
-        "/Users/vincentliu/dev/schedule-maker/scraper/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf",
-    ) as pdf:
+    with pdfplumber.open(pdf_path) as pdf:
         page = pdf.pages[115]
 
         left = 1
@@ -239,11 +246,7 @@ def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: S
 
 
 def test_parity_with_old_parser():
-    files = Files(
-        pdf_path=Path(
-            "/Users/vincentliu/dev/schedule-maker/scraper/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
-        )
-    )
+    files = Files(pre_refac_path)
     parser = NewParser(files)
 
     def remove_double_space(s: str) -> str:
