@@ -1,5 +1,9 @@
+import shutil
+from pathlib import Path
+from tempfile import NamedTemporaryFile
 from typing import Annotated
-from fastapi import APIRouter, HTTPException, Query, Request
+
+from fastapi import APIRouter, File, HTTPException, Query, Request, UploadFile
 from sqlmodel import Session, col, select
 
 from api.sections.cache import SectionCache
@@ -7,9 +11,66 @@ from api.sections.filter_cached_sections import filter_cached_sections
 from api.sections.filter_sections import filter_sections
 from api.sections.queries import section_by_id_statement, with_section_relationships
 from scraper.db import engine
+from scraper.files import Files
 from scraper.models import Section, SectionResponse
+from scraper.new_parser import NewParser
 
 router = APIRouter(prefix="/sections", tags=["Sections"])
+
+
+def _to_section_responses(sections: list[Section]) -> list[SectionResponse]:
+    section_responses: list[SectionResponse] = []
+    leclab_id = 1
+    day_time_id = 1
+
+    for section_id, section in enumerate(sections, start=1):
+        leclabs: list[dict[str, object]] = []
+
+        for leclab in section.leclabs:
+            day_times: list[dict[str, object]] = []
+
+            for day_time in leclab.day_times:
+                day_times.append(
+                    {
+                        "id": day_time_id,
+                        "day": day_time.day,
+                        "start_time_hhmm": day_time.start_time_hhmm,
+                        "end_time_hhmm": day_time.end_time_hhmm,
+                        "leclab_id": leclab_id,
+                    }
+                )
+                day_time_id += 1
+
+            leclabs.append(
+                {
+                    "id": leclab_id,
+                    "title": leclab.title,
+                    "type": leclab.type,
+                    "section_id": section_id,
+                    "prof": leclab.prof,
+                    "rating": None,
+                    "day_times": day_times,
+                }
+            )
+            leclab_id += 1
+
+        section_responses.append(
+            SectionResponse.model_validate(
+                {
+                    "id": section_id,
+                    "course": section.course,
+                    "section": section.section,
+                    "domain": section.domain,
+                    "code": section.code,
+                    "title": section.title,
+                    "leclabs": leclabs,
+                    "more": section.more,
+                    "view_data": section.view_data,
+                }
+            )
+        )
+
+    return section_responses
 
 
 @router.get("/all")
@@ -26,6 +87,47 @@ def get_all(request: Request) -> list[SectionResponse]:
         sections = session.exec(statement).all()
 
     return [SectionResponse.model_validate(section) for section in sections]
+
+
+@router.post("/parse-pdf")
+async def parse_uploaded_pdf(file: UploadFile = File(...)) -> list[SectionResponse]:
+    filename = (file.filename or "").lower()
+    if not filename.endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Uploaded file must be a PDF")
+
+    content = await file.read()
+    await file.close()
+
+    if len(content) == 0:
+        raise HTTPException(status_code=400, detail="Uploaded PDF is empty")
+
+    if not content.startswith(b"%PDF"):
+        raise HTTPException(status_code=400, detail="Invalid PDF file")
+
+    tmp_pdf_path: Path | None = None
+    files: Files | None = None
+
+    try:
+        with NamedTemporaryFile(suffix=".pdf", delete=False) as tmp_file:
+            _ = tmp_file.write(content)
+            tmp_pdf_path = Path(tmp_file.name)
+
+        files = Files(pdf_path=tmp_pdf_path)
+        parser = NewParser(files)
+        parser.parse()
+
+        return _to_section_responses(parser.sections)
+    except HTTPException:
+        raise
+    except Exception as err:
+        raise HTTPException(
+            status_code=400, detail=f"Could not parse PDF: {err}"
+        ) from err
+    finally:
+        if tmp_pdf_path is not None:
+            tmp_pdf_path.unlink(missing_ok=True)
+        if files is not None:
+            shutil.rmtree(files.data_dir, ignore_errors=True)
 
 
 @router.get("/")

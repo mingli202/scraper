@@ -1,11 +1,15 @@
 from typing import Any
 import pytest
 from api.app import app
+from api.sections import router as section_router
 from fastapi.testclient import TestClient
 
 from scraper.models import (
+    DayTime,
+    LecLab,
     LecLabType,
     Rating,
+    Section,
     SectionResponse,
     Status,
 )
@@ -23,6 +27,64 @@ def test_get_all_sections_without_filters_returns_empty():
     res = client.get("/sections/")
     assert res.status_code == 200
     assert res.json() == []
+
+
+def test_parse_uploaded_pdf_rejects_non_pdf():
+    res = client.post(
+        "/sections/parse-pdf",
+        files={"file": ("schedule.txt", b"not a pdf", "text/plain")},
+    )
+
+    assert res.status_code == 400
+
+
+def test_parse_uploaded_pdf_returns_sections_schema(monkeypatch: pytest.MonkeyPatch):
+    class FakeFiles:
+        def __init__(self, pdf_path):
+            self.data_dir = pdf_path.parent / "fake-parser-data"
+
+    class FakeParser:
+        def __init__(self, _files: FakeFiles):
+            day_time = DayTime(
+                day="M",
+                start_time_hhmm="0900",
+                end_time_hhmm="1100",
+                leclab_id=0,
+            )
+            leclab = LecLab.default(
+                title="Calculus I",
+                type=LecLabType.LECTURE,
+                prof="Doe, Jane",
+                day_times=[day_time],
+            )
+            section = Section.default(
+                course="Science Courses",
+                section="00001",
+                domain="MATHEMATICS",
+                code="201-NYA-05",
+                title="Calculus I",
+                more="",
+                view_data=[{"0": [0, 2]}],
+                leclabs=[leclab],
+            )
+            self.sections = [section]
+
+        def parse(self):
+            return
+
+    monkeypatch.setattr(section_router, "Files", FakeFiles)
+    monkeypatch.setattr(section_router, "NewParser", FakeParser)
+
+    res = client.post(
+        "/sections/parse-pdf",
+        files={"file": ("schedule.pdf", b"%PDF-1.7\nfake", "application/pdf")},
+    )
+    assert res.status_code == 200
+
+    sections = [SectionResponse.model_validate(section) for section in res.json()]
+    assert len(sections) == 1
+    assert sections[0].code == "201-NYA-05"
+    assert sections[0].leclabs[0].day_times[0].start_time_hhmm == "0900"
 
 
 def test_get_section():
