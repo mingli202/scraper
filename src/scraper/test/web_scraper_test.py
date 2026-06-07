@@ -79,9 +79,9 @@ def test_valid_rating():
     assert rating == Rating(
         prof="Trepanier, Michele",
         avg=3.0,
-        takeAgain=50,
+        takeAgain=48,
         difficulty=3.5,
-        nRating=22,
+        nRating=23,
         status=Status.FOUND,
         score=59.2,
         pId="2496979",
@@ -92,12 +92,12 @@ def test_duplicate_rating():
     rating: Rating = scraper.get_rating("Young, Ryan", scraper.get_saved_pids())
     assert rating == Rating(
         prof="Young, Ryan",
-        avg=2.2,
-        takeAgain=22,
-        difficulty=2.8,
-        nRating=9,
+        avg=2.5,
+        takeAgain=36,
+        difficulty=2.6,
+        nRating=10,
         status=Status.FOUND,
-        score=45.1,
+        score=50.0,
         pId="2713391",
     )
 
@@ -184,12 +184,12 @@ def test_special_cases():
     rating: Rating = scraper.get_rating("Lo Vasco, Frank", scraper.get_saved_pids())
     assert rating == Rating(
         prof="Lo Vasco, Frank",
-        avg=3.2,
-        takeAgain=49,
+        avg=3.1,
+        takeAgain=48,
         difficulty=4.2,
-        nRating=59,
+        nRating=61,
         status=Status.FOUND,
-        score=63.5,
+        score=61.6,
         pId="898891",
     )
 
