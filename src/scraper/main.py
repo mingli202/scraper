@@ -2,6 +2,8 @@ from pathlib import Path
 from typing import Annotated
 
 from dotenv import load_dotenv
+
+from .util import cache_everything_into_big_json
 from .new_parser import NewParser
 from . import db
 from .files import Files
@@ -34,6 +36,7 @@ def _main(
 
     parser.run(yes)
     scraper.run(yes)
+    cache_everything_into_big_json(yes)
 
     if run_tests:
         exit(pytest.main(["--no-header", "-s", "-v"]))
