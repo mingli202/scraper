@@ -23,7 +23,7 @@ class Files:
             self.pdf_path = pdf_path
         else:
             self.pdf_path = Path(
-                "/Users/vincentliu/Downloads/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
+                "/Users/vincentliu/dev/schedule-maker/scraper/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
             )
 
         data_dir = cwd / "data" / self.pdf_path.stem

@@ -42,7 +42,7 @@ def parser():
 
 def test_optimal_x_tolerance() -> None:
     with pdfplumber.open(
-        "/Users/vincentliu/Downloads/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
+        "/Users/vincentliu/dev/schedule-maker/scraper/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
     ) as pdf:
         page = pdf.pages[
             93
@@ -70,7 +70,7 @@ def test_optimal_x_tolerance() -> None:
 
 def test_optmial_y_tolerance() -> None:
     with pdfplumber.open(
-        "/Users/vincentliu/Downloads/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf",
+        "/Users/vincentliu/dev/schedule-maker/scraper/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf",
     ) as pdf:
         page = pdf.pages[115]
 
@@ -241,7 +241,7 @@ def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: S
 def test_parity_with_old_parser():
     files = Files(
         pdf_path=Path(
-            "/Users/vincentliu/Downloads/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
+            "/Users/vincentliu/dev/schedule-maker/scraper/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
         )
     )
     parser = NewParser(files)
