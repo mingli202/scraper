@@ -32,13 +32,10 @@ class Files:
         self.parsed_sections_path = data_dir / "parsed_sections.json"
         self.pids_path = cwd / "data" / "pids.json"
         self.professors_path = data_dir / "professors.json"
-        self.all_sections_final_path = data_dir / "all_sections_final.db"
         self.all_sections_final_path_json = data_dir / "all_sections_final.json"
         self.ratings_path = data_dir / "ratings.json"
 
         self.missing_pids_path = data_dir / "missingPids.json"
-        self.classes_file_path = data_dir / "classes.json"
-        self.all_classes_path = data_dir / "allClasses.json"
 
         self.out_file_path = cwd / "winter" / "winter-out.json"  # backwards
 
