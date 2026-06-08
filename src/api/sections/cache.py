@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from sqlmodel import Session, col, select
 
 from api.sections.queries import with_section_relationships
+from scraper.files import Files
 from scraper.db import engine
 from scraper.models import Section, SectionResponse
 
@@ -23,6 +24,14 @@ def section_cache_enabled() -> bool:
 def load_section_cache() -> SectionCache | None:
     if not section_cache_enabled():
         return None
+
+    files = Files()
+
+    sections_from_json = files.read_sections_responses()
+    if sections_from_json:
+        all_sections = tuple(sections_from_json)
+        by_id = {section.id: section for section in all_sections}
+        return SectionCache(by_id=by_id, all_sections=all_sections)
 
     with Session(engine) as session:
         statement = with_section_relationships(

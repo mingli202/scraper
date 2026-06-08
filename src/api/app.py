@@ -2,13 +2,15 @@ import os
 from contextlib import asynccontextmanager
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import select
 
+from api.sections.cache import SectionCache
 from api.sections.cache import load_section_cache
 from api.sections.router import router as section_router
 from scraper.db import SessionDep, init_db
+from scraper.files import Files
 from scraper.models import LecLab, LecLabResponse, Rating, RatingResponse
 
 _ = load_dotenv()
@@ -55,8 +57,31 @@ async def health():
 
 
 @app.get("/ratings/{prof}", response_model=RatingResponse)
-def get_ratings(prof: str, session: SessionDep) -> Rating | None:
-    rating = session.get(Rating, prof)
+def get_ratings(prof: str, request: Request, session: SessionDep) -> RatingResponse:
+    files = Files()
+
+    ratings = files.read_ratings_responses()
+
+    if ratings:
+        rating = next((rating for rating in ratings if rating.prof == prof), None)
+    else:
+        section_cache = getattr(request.app.state, "section_cache", None)
+        rating = None
+
+        if isinstance(section_cache, SectionCache):
+            for section in section_cache.all_sections:
+                for leclab in section.leclabs:
+                    if leclab.prof == prof and leclab.rating is not None:
+                        rating = leclab.rating
+                        break
+
+                if rating is not None:
+                    break
+
+        if rating is None:
+            db_rating = session.get(Rating, prof)
+            if db_rating is not None:
+                rating = RatingResponse.model_validate(db_rating)
 
     if rating is None:
         raise HTTPException(status_code=404, detail=f"Rating for {prof} not found")

@@ -8,69 +8,30 @@ from sqlmodel import Session, col, select
 
 from api.sections.cache import SectionCache
 from api.sections.filter_cached_sections import filter_cached_sections
-from api.sections.filter_sections import filter_sections
 from api.sections.queries import section_by_id_statement, with_section_relationships
 from scraper.db import engine
 from scraper.files import Files
 from scraper.models import Section, SectionResponse
 from scraper.new_parser import NewParser
+from scraper.section_response_mapper import sections_to_section_responses
 
 router = APIRouter(prefix="/sections", tags=["Sections"])
 
 
-def _to_section_responses(sections: list[Section]) -> list[SectionResponse]:
-    section_responses: list[SectionResponse] = []
-    leclab_id = 1
-    day_time_id = 1
+def _load_sections_from_json() -> tuple[SectionResponse, ...]:
+    files = Files()
+    sections_from_json = files.read_sections_responses()
 
-    for section_id, section in enumerate(sections, start=1):
-        leclabs: list[dict[str, object]] = []
+    if sections_from_json:
+        return tuple(sections_from_json)
 
-        for leclab in section.leclabs:
-            day_times: list[dict[str, object]] = []
-
-            for day_time in leclab.day_times:
-                day_times.append(
-                    {
-                        "id": day_time_id,
-                        "day": day_time.day,
-                        "start_time_hhmm": day_time.start_time_hhmm,
-                        "end_time_hhmm": day_time.end_time_hhmm,
-                        "leclab_id": leclab_id,
-                    }
-                )
-                day_time_id += 1
-
-            leclabs.append(
-                {
-                    "id": leclab_id,
-                    "title": leclab.title,
-                    "type": leclab.type,
-                    "section_id": section_id,
-                    "prof": leclab.prof,
-                    "rating": None,
-                    "day_times": day_times,
-                }
-            )
-            leclab_id += 1
-
-        section_responses.append(
-            SectionResponse.model_validate(
-                {
-                    "id": section_id,
-                    "course": section.course,
-                    "section": section.section,
-                    "domain": section.domain,
-                    "code": section.code,
-                    "title": section.title,
-                    "leclabs": leclabs,
-                    "more": section.more,
-                    "view_data": section.view_data,
-                }
-            )
+    with Session(engine) as session:
+        statement = with_section_relationships(select(Section)).order_by(
+            col(Section.id)
         )
+        sections = session.exec(statement).all()
 
-    return section_responses
+    return tuple(SectionResponse.model_validate(section) for section in sections)
 
 
 @router.get("/all")
@@ -80,13 +41,7 @@ def get_all(request: Request) -> list[SectionResponse]:
     if isinstance(section_cache, SectionCache):
         return list(section_cache.all_sections)
 
-    with Session(engine) as session:
-        statement = with_section_relationships(select(Section)).order_by(
-            col(Section.id)
-        )
-        sections = session.exec(statement).all()
-
-    return [SectionResponse.model_validate(section) for section in sections]
+    return list(_load_sections_from_json())
 
 
 @router.post("/parse-pdf")
@@ -115,7 +70,7 @@ def parse_uploaded_pdf(file: UploadFile) -> list[SectionResponse]:
         parser = NewParser(files)
         parser.parse()
 
-        return _to_section_responses(parser.sections)
+        return sections_to_section_responses(parser.sections)
     except HTTPException:
         raise
     except Exception as err:
@@ -196,29 +151,26 @@ def get_sections(
             offset,
         )
 
-    with Session(engine) as session:
-        sections = filter_sections(
-            session,
-            q,
-            course,
-            domain,
-            code,
-            title,
-            teacher,
-            min_rating,
-            max_rating,
-            min_score,
-            max_score,
-            days_off,
-            time_start,
-            time_end,
-            blended,
-            honours,
-            limit,
-            offset,
-        )
-
-    return [SectionResponse.model_validate(section) for section in sections]
+    return filter_cached_sections(
+        _load_sections_from_json(),
+        q,
+        course,
+        domain,
+        code,
+        title,
+        teacher,
+        min_rating,
+        max_rating,
+        min_score,
+        max_score,
+        days_off,
+        time_start,
+        time_end,
+        blended,
+        honours,
+        limit,
+        offset,
+    )
 
 
 @router.get("/{section_id}")
@@ -232,13 +184,24 @@ def get_section(section_id: int, request: Request) -> SectionResponse:
             )
         return section
 
-    with Session(engine) as session:
-        section = session.exec(section_by_id_statement(section_id)).first()
+    files = Files()
+    sections_from_json = files.read_sections_responses()
+    if not sections_from_json:
+        with Session(engine) as session:
+            section = session.exec(section_by_id_statement(section_id)).first()
+    else:
+        section = next(
+            (section for section in sections_from_json if section.id == section_id),
+            None,
+        )
 
     if section is None:
         raise HTTPException(status_code=404, detail=f"Section {section_id} not found")
 
-    return SectionResponse.model_validate(section)
+    if isinstance(section, Section):
+        return SectionResponse.model_validate(section)
+
+    return section
 
 
 @router.post("/")
@@ -250,10 +213,5 @@ def get_many(ids: list[int], request: Request) -> list[SectionResponse]:
         sections = [section for section in sections if section is not None]
         return sections
 
-    with Session(engine) as session:
-        statement = with_section_relationships(select(Section)).where(
-            col(Section.id).in_(ids)
-        )
-        sections = session.exec(statement).all()
-
-    return [SectionResponse.model_validate(section) for section in sections]
+    sections_by_id = {section.id: section for section in _load_sections_from_json()}
+    return [section for id in ids if (section := sections_by_id.get(id)) is not None]
