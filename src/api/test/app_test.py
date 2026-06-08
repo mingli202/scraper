@@ -10,7 +10,7 @@ from scraper.models import (
     LecLabType,
     Rating,
     Section,
-    SectionResponse,
+    Section,
     Status,
 )
 
@@ -81,7 +81,7 @@ def test_parse_uploaded_pdf_returns_sections_schema(monkeypatch: pytest.MonkeyPa
     )
     assert res.status_code == 200
 
-    sections = [SectionResponse.model_validate(section) for section in res.json()]
+    sections = [Section.model_validate(section) for section in res.json()]
     assert len(sections) == 1
     assert sections[0].code == "201-NYA-05"
     assert sections[0].leclabs[0].day_times[0].start_time_hhmm == "0900"
@@ -90,7 +90,7 @@ def test_parse_uploaded_pdf_returns_sections_schema(monkeypatch: pytest.MonkeyPa
 def test_get_section():
     res = client.get("/sections/1")
     assert res.status_code == 200
-    section = SectionResponse.model_validate(res.json())
+    section = Section.model_validate(res.json())
 
     assert section.course == "Science Courses"
     assert section.section == "00002"

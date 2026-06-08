@@ -8,7 +8,7 @@ from pydantic_core import from_json
 from sqlalchemy import Engine
 from sqlmodel import Session, select
 
-from .models import ColumnsXs, LecLab, Section, SectionResponse, Word
+from .models import ColumnsXs, LecLab, Section, Section, Word
 from . import parser_utils
 from .trie import Trie
 
@@ -104,7 +104,7 @@ class Files:
 
         if self.all_sections_final_path_json.exists():
             with open(self.all_sections_final_path_json, "r") as file:
-                sections = TypeAdapter(list[SectionResponse]).validate_json(file.read())
+                sections = TypeAdapter(list[Section]).validate_json(file.read())
 
             professors = {
                 leclab.prof

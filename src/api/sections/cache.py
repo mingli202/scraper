@@ -8,13 +8,13 @@ from sqlmodel import Session, col, select
 from api.sections.queries import with_section_relationships
 from scraper.files import Files
 from scraper.db import engine
-from scraper.models import Section, SectionResponse
+from scraper.models import Section, Section
 
 
 @dataclass(frozen=True)
 class SectionCache:
-    by_id: dict[int, SectionResponse]
-    all_sections: tuple[SectionResponse, ...]
+    by_id: dict[int, Section]
+    all_sections: tuple[Section, ...]
 
 
 def section_cache_enabled() -> bool:
@@ -39,8 +39,6 @@ def load_section_cache() -> SectionCache | None:
         )
         sections = session.exec(statement).all()
 
-    all_sections = tuple(
-        SectionResponse.model_validate(section) for section in sections
-    )
+    all_sections = tuple(Section.model_validate(section) for section in sections)
     by_id = {section.id: section for section in all_sections}
     return SectionCache(by_id=by_id, all_sections=all_sections)

@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pydantic import TypeAdapter
 import requests
 from .files import Files
-from .models import Rating, RatingResponse, SectionResponse, Status
+from .models import Rating, Rating, Section, Status
 
 from . import util
 
@@ -19,9 +19,7 @@ class Scraper:
     def run(self, force_override: bool = False):
         if not force_override and self.files.ratings_path.exists():
             with open(self.files.ratings_path, "r") as file:
-                existing_ratings = TypeAdapter(list[RatingResponse]).validate_json(
-                    file.read()
-                )
+                existing_ratings = TypeAdapter(list[Rating]).validate_json(file.read())
 
             if existing_ratings:
                 override = input("Ratings JSON already populated, override? (y/n) ")
@@ -210,7 +208,7 @@ class Scraper:
             _ = file.write(
                 json.dumps(
                     [
-                        RatingResponse.model_validate(rating).model_dump(
+                        Rating.model_validate(rating).model_dump(
                             mode="json", by_alias=True
                         )
                         for rating in ratings.values()
@@ -223,10 +221,10 @@ class Scraper:
             return
 
         with open(self.files.all_sections_final_path_json, "r") as file:
-            sections = TypeAdapter(list[SectionResponse]).validate_json(file.read())
+            sections = TypeAdapter(list[Section]).validate_json(file.read())
 
         ratings_by_prof = {
-            prof: RatingResponse.model_validate(rating) for prof, rating in ratings.items()
+            prof: Rating.model_validate(rating) for prof, rating in ratings.items()
         }
 
         updated_sections = [

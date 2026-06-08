@@ -5,7 +5,7 @@ from pydantic import TypeAdapter
 from pydantic_core import from_json
 from scraper.files import Files
 
-from scraper.models import Rating, RatingResponse, Status
+from scraper.models import Rating, Rating, Status
 from scraper.scraper import Scraper
 import json
 
@@ -142,9 +142,7 @@ def test_accuracy_of_not_found():
         with open(files.ratings_path, "r") as file:
             ratings = [
                 Rating.model_validate(rating)
-                for rating in TypeAdapter(list[RatingResponse]).validate_json(
-                    file.read()
-                )
+                for rating in TypeAdapter(list[Rating]).validate_json(file.read())
             ]
 
     if os.path.exists(files.missing_pids_path):
@@ -170,9 +168,7 @@ def update_section_with_checked_pids():
         with open(files.ratings_path, "r") as file:
             ratings_list = [
                 Rating.model_validate(rating)
-                for rating in TypeAdapter(list[RatingResponse]).validate_json(
-                    file.read()
-                )
+                for rating in TypeAdapter(list[Rating]).validate_json(file.read())
             ]
 
     ratings: dict[str, Rating] = {rating.prof: rating for rating in ratings_list}
@@ -189,9 +185,7 @@ def update_section_with_checked_pids():
         _ = file.write(
             json.dumps(
                 [
-                    RatingResponse.model_validate(rating).model_dump(
-                        mode="json", by_alias=True
-                    )
+                    Rating.model_validate(rating).model_dump(mode="json", by_alias=True)
                     for rating in ratings.values()
                 ],
                 indent=2,

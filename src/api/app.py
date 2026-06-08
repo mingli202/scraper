@@ -11,7 +11,7 @@ from api.sections.cache import load_section_cache
 from api.sections.router import router as section_router
 from scraper.db import SessionDep, init_db
 from scraper.files import Files
-from scraper.models import LecLab, LecLabResponse, Rating, RatingResponse
+from scraper.models import LecLab, LecLab, Rating, Rating
 
 _ = load_dotenv()
 
@@ -56,8 +56,8 @@ async def health():
     return {"status": "ok"}
 
 
-@app.get("/ratings/{prof}", response_model=RatingResponse)
-def get_ratings(prof: str, request: Request, session: SessionDep) -> RatingResponse:
+@app.get("/ratings/{prof}", response_model=Rating)
+def get_ratings(prof: str, request: Request, session: SessionDep) -> Rating:
     files = Files()
 
     ratings = files.read_ratings_responses()
@@ -81,7 +81,7 @@ def get_ratings(prof: str, request: Request, session: SessionDep) -> RatingRespo
         if rating is None:
             db_rating = session.get(Rating, prof)
             if db_rating is not None:
-                rating = RatingResponse.model_validate(db_rating)
+                rating = Rating.model_validate(db_rating)
 
     if rating is None:
         raise HTTPException(status_code=404, detail=f"Rating for {prof} not found")
@@ -89,6 +89,6 @@ def get_ratings(prof: str, request: Request, session: SessionDep) -> RatingRespo
     return rating
 
 
-@app.get("/leclab/{section_id}", response_model=list[LecLabResponse])
+@app.get("/leclab/{section_id}", response_model=list[LecLab])
 def get_leclab(section_id: int, session: SessionDep) -> list[LecLab]:
     return list(session.exec(select(LecLab).where(LecLab.section_id == section_id)))

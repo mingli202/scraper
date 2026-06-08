@@ -1,8 +1,8 @@
-from .models import Section, SectionResponse
+from .models import Section, Section
 
 
-def sections_to_section_responses(sections: list[Section]) -> list[SectionResponse]:
-    section_responses: list[SectionResponse] = []
+def sections_to_section_responses(sections: list[Section]) -> list[Section]:
+    section_responses: list[Section] = []
     leclab_id = 1
     day_time_id = 1
 
@@ -38,7 +38,7 @@ def sections_to_section_responses(sections: list[Section]) -> list[SectionRespon
             leclab_id += 1
 
         section_responses.append(
-            SectionResponse.model_validate(
+            Section.model_validate(
                 {
                     "id": section_id,
                     "course": section.course,

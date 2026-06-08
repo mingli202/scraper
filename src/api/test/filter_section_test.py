@@ -4,17 +4,17 @@ from pydantic import TypeAdapter
 import pytest
 
 from api.app import app
-from scraper.models import SectionResponse
+from scraper.models import Section
 
 
 client = TestClient(app)
 
 
-def _fetch_sections(params: dict[str, str | int]) -> list[SectionResponse]:
+def _fetch_sections(params: dict[str, str | int]) -> list[Section]:
     res = client.get("/sections/", params=params)
     assert res.status_code == 200
 
-    return TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    return TypeAdapter(list[Section]).validate_python(res.json())
 
 
 @pytest.mark.parametrize(
@@ -31,7 +31,7 @@ def test_filter_by_q(q: str):
     q = q.lower()
     res = client.get(f"/sections/?q={q}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
 
     for section in sections:
         assert (
@@ -56,7 +56,7 @@ def test_filter_by_course(course: str):
     course = course.lower()
     res = client.get(f"/sections/?course={course}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
 
     for section in sections:
         assert section.course.lower().startswith(course)
@@ -76,7 +76,7 @@ def test_filter_by_domain(domain: str):
     domain = domain.lower()
     res = client.get(f"/sections/?domain={domain}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
 
     for section in sections:
         assert section.domain.lower().startswith(domain)
@@ -96,7 +96,7 @@ def test_filter_by_title(title: str):
     title = title.lower()
     res = client.get(f"/sections/?title={title}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
 
     for section in sections:
         assert title in section.title.lower()
@@ -116,7 +116,7 @@ def test_filter_by_code(code: str):
     code = code.lower()
     res = client.get(f"/sections/?code={code}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
 
     for section in sections:
         assert code in section.code.lower()
@@ -136,7 +136,7 @@ def test_filter_by_teacher(teacher: str):
     teacher = teacher.lower()
     res = client.get(f"/sections/?teacher={teacher}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
 
     for section in sections:
         assert any(teacher in leclab.prof.lower() for leclab in section.leclabs)
@@ -149,7 +149,7 @@ def test_filter_by_teacher(teacher: str):
 def test_filter_by_min_rating(min_rating: int):
     res = client.get(f"/sections/?min_rating={min_rating}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
     leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
     ratings = [leclab.rating for leclab in leclabs]
 
@@ -163,7 +163,7 @@ def test_filter_by_min_rating(min_rating: int):
 def test_filter_by_max_rating(max_rating: int):
     res = client.get(f"/sections/?max_rating={max_rating}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
     leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
     ratings = [leclab.rating for leclab in leclabs]
 
@@ -177,7 +177,7 @@ def test_filter_by_max_rating(max_rating: int):
 def test_filter_by_min_score(min_score: int):
     res = client.get(f"/sections/?min_score={min_score}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
     leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
     ratings = [leclab.rating for leclab in leclabs]
 
@@ -191,7 +191,7 @@ def test_filter_by_min_score(min_score: int):
 def test_filter_by_max_score(max_score: int):
     res = client.get(f"/sections/?max_score={max_score}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
     leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
     ratings = [leclab.rating for leclab in leclabs]
 
@@ -204,7 +204,7 @@ def test_filter_by_max_score(max_score: int):
 def test_filter_by_days_off(days_off: str):
     res = client.get(f"/sections/?days_off={days_off}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
     leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
     day_times = itertools.chain.from_iterable(leclab.day_times for leclab in leclabs)
 
@@ -229,7 +229,7 @@ def test_filter_by_days_off(days_off: str):
 def test_filter_by_time_start(time_start: str):
     res = client.get(f"/sections/?time_start={time_start}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
     leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
     day_times = itertools.chain.from_iterable(leclab.day_times for leclab in leclabs)
 
@@ -252,7 +252,7 @@ def test_filter_by_time_start(time_start: str):
 def test_filter_by_time_end(time_end: str):
     res = client.get(f"/sections/?time_end={time_end}")
     assert res.status_code == 200
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
     leclabs = itertools.chain.from_iterable(section.leclabs for section in sections)
     day_times = itertools.chain.from_iterable(leclab.day_times for leclab in leclabs)
 
@@ -339,7 +339,7 @@ def test_post_list_of_sections():
     res = client.post("/sections/", json=ids)
     assert res.status_code == 200
 
-    sections = TypeAdapter(list[SectionResponse]).validate_python(res.json())
+    sections = TypeAdapter(list[Section]).validate_python(res.json())
     assert len(sections) > 0
 
     for section in sections:

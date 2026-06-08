@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 from pydantic import TypeAdapter
 
 from .files import Files
-from .models import LecLab, LecLabType, Section, SectionResponse, Word
+from .models import LecLab, LecLabType, Section, Word
 from .section_response_mapper import sections_to_section_responses
 
 logger = logging.getLogger(__name__)
@@ -35,8 +35,8 @@ class NewParser(INewParser):
         self.columns_x = self.files.get_section_columns_x_content()
 
         self.sections: list[Section] = []
-        self.current_section: Section = Section.default()
-        self.leclab: LecLab = LecLab.default()
+        self.current_section: Section = Section()
+        self.leclab: LecLab = LecLab()
         self.lines = self.files.get_sorted_lines_content()
 
     @override
@@ -44,7 +44,7 @@ class NewParser(INewParser):
         if not force_override and self.files.all_sections_final_path_json.exists():
             with open(self.files.all_sections_final_path_json, "r") as file:
                 try:
-                    existing_sections = TypeAdapter(list[SectionResponse]).validate_json(
+                    existing_sections = TypeAdapter(list[Section]).validate_json(
                         file.read()
                     )
                     if existing_sections:
@@ -197,15 +197,17 @@ class NewParser(INewParser):
 
         self.sections.append(self.current_section)
 
+        new_id = f"{self.current_section.code}-{self.current_section.section}"
+
         if keep_course:
-            self.current_section = Section.default(
-                id=self.current_section.id + 1,
+            self.current_section = Section(
+                id=new_id,
                 course=self.current_section.course,
                 domain=self.current_section.domain,
             )
         else:
-            self.current_section = Section.default(
-                id=self.current_section.id + 1,
+            self.current_section = Section(
+                id=new_id,
             )
 
     def _update_section_times(self):
@@ -235,10 +237,9 @@ class NewParser(INewParser):
 
         self.current_section.title = self.leclab.title
 
-        self.leclab.section_id = self.current_section.id
         self.current_section.leclabs.append(self.leclab)
 
-        self.leclab = LecLab.default()
+        self.leclab = LecLab()
 
     def _add_viewdata_to_current_section(self):
         col = ["M", "T", "W", "R", "F"]

@@ -4,8 +4,6 @@ from typing import override
 
 from pydantic import BaseModel, ConfigDict
 from pydantic.alias_generators import to_camel
-from sqlalchemy import JSON
-from sqlmodel import Field, Relationship, SQLModel
 
 logger = logging.getLogger(__name__)
 
@@ -23,113 +21,41 @@ class LecLabType(str, Enum):
     LAB = "laboratory"
 
 
-class Section(SQLModel, table=True):
-    id: int = Field(primary_key=True, index=True)
-
-    course: str = Field(index=True)
-    domain: str = Field(index=True)
-    section: str = Field(index=True)
-    code: str = Field(index=True)
-    title: str = Field(index=True)
-    more: str = Field(index=True)
-    view_data: ViewData = Field(sa_type=JSON)
-
-    leclabs: list[LecLab] = Relationship(back_populates="section")
-
-    @classmethod
-    def default(
-        cls,
-        id: int = 0,
-        course: str = "",
-        section: str = "",
-        domain: str = "",
-        code: str = "",
-        title: str = "",
-        more: str = "",
-        view_data: ViewData | None = None,
-        leclabs: list[LecLab] | None = None,
-    ) -> Section:
-        return Section(
-            id=id,
-            course=course,
-            section=section,
-            domain=domain,
-            code=code,
-            title=title,
-            more=more,
-            view_data=view_data if view_data is not None else [],
-            leclabs=leclabs if leclabs is not None else [],
-        )
+class ConfiguredBaseModel(BaseModel):
+    model_config = ConfigDict(
+        alias_generator=to_camel, populate_by_name=True, from_attributes=True
+    )
 
 
-class Rating(SQLModel, table=True):
-    prof: str = Field(primary_key=True, index=True)
-
-    score: float = Field(index=True)
-    avg: float = Field(index=True)
-    nRating: int = Field()
-    takeAgain: int = Field()
-    difficulty: float = Field()
-    status: Status = Field(index=True)
-    pId: str | None = Field()
-
-    leclabs: list[LecLab] = Relationship(back_populates="rating")
-
-    @classmethod
-    def default(
-        cls,
-        prof: str = "",
-        score: int = 0,
-        avg: float = 0.0,
-        nRating: int = 0,
-        takeAgain: int = 0,
-        difficulty: float = 0.0,
-        status: Status = Status.FOUNDNT,
-        pId: str | None = None,
-        leclabs: list[LecLab] | None = None,
-    ) -> Rating:
-        return Rating(
-            prof=prof,
-            score=score,
-            avg=avg,
-            nRating=nRating,
-            takeAgain=takeAgain,
-            difficulty=difficulty,
-            status=status,
-            pId=pId,
-            leclabs=leclabs if leclabs is not None else [],
-        )
+class Section(ConfiguredBaseModel):
+    id: str = ""  # unique Id for this section made of the code + section number
+    course: str = ""
+    section: str = ""
+    domain: str = ""
+    code: str = ""
+    title: str = ""
+    leclabs: list[LecLab] = []
+    more: str = ""
+    view_data: ViewData = []
 
 
-class LecLab(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
+class Rating(ConfiguredBaseModel):
+    prof: str
+    score: float
+    avg: float
+    nRating: int
+    takeAgain: int
+    difficulty: float
+    status: Status
+    pId: str | None
 
-    title: str = Field()
-    type: LecLabType | None = Field()
 
-    section_id: int = Field(index=True, foreign_key="section.id")
-    prof: str = Field(foreign_key="rating.prof", index=True)
-
-    section: Section = Relationship(back_populates="leclabs")
-    rating: Rating | None = Relationship(back_populates="leclabs")
-    day_times: list[DayTime] = Relationship(back_populates="leclab")
-
-    @classmethod
-    def default(
-        cls,
-        title: str = "",
-        type: LecLabType | None = None,
-        section_id: int = 0,
-        prof: str = "",
-        day_times: list[DayTime] | None = None,
-    ) -> LecLab:
-        return LecLab(
-            title=title,
-            type=type,
-            section_id=section_id,
-            prof=prof,
-            day_times=day_times if day_times is not None else [],
-        )
+class LecLab(ConfiguredBaseModel):
+    title: str = ""
+    type: LecLabType | None = None
+    prof: str = ""
+    rating: Rating | None = None
+    day_times: list[DayTime] = []
 
     def update_time(self, day: str, start_time: str, end_time: str):
         day_time = DayTime(
@@ -141,62 +67,10 @@ class LecLab(SQLModel, table=True):
         self.day_times.append(day_time)
 
 
-class DayTime(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
-
-    day: str = Field(index=True)
-    start_time_hhmm: str = Field(index=True)
-    end_time_hhmm: str = Field(index=True)
-    leclab_id: int = Field(default=None, foreign_key="leclab.id", index=True)
-
-    leclab: LecLab = Relationship(back_populates="day_times")
-
-
-class ConfiguredBaseModel(BaseModel):
-    model_config = ConfigDict(
-        alias_generator=to_camel, populate_by_name=True, from_attributes=True
-    )
-
-
-class SectionResponse(ConfiguredBaseModel):
-    id: int
-    course: str
-    section: str
-    domain: str
-    code: str
-    title: str
-    leclabs: list[LecLabResponse]
-    more: str
-    view_data: ViewData
-
-
-class RatingResponse(ConfiguredBaseModel):
-    prof: str
-    score: float
-    avg: float
-    nRating: int
-    takeAgain: int
-    difficulty: float
-    status: Status
-    pId: str | None
-
-
-class LecLabResponse(ConfiguredBaseModel):
-    id: int
-    title: str
-    type: LecLabType | None
-    section_id: int
-    prof: str
-    rating: RatingResponse | None
-    day_times: list[DayTimeResponse]
-
-
-class DayTimeResponse(ConfiguredBaseModel):
-    id: int
-    day: str
-    start_time_hhmm: str
-    end_time_hhmm: str
-    leclab_id: int
+class DayTime(ConfiguredBaseModel):
+    day: str = ""
+    start_time_hhmm: str = ""
+    end_time_hhmm: str = ""
 
 
 class ColumnsXs(BaseModel):

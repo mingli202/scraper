@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from scraper.models import SectionResponse, Status
+from scraper.models import Section, Status
 
 
 def _contains_ignore_case(value: str, query: str) -> bool:
@@ -11,7 +11,7 @@ def _starts_with_ignore_case(value: str, query: str) -> bool:
     return value.lower().startswith(query)
 
 
-def _valid_rating_for_min(section: SectionResponse, min_rating: int) -> bool:
+def _valid_rating_for_min(section: Section, min_rating: int) -> bool:
     for leclab in section.leclabs:
         rating = leclab.rating
         if rating is None or rating.status != Status.FOUND or rating.avg < min_rating:
@@ -19,7 +19,7 @@ def _valid_rating_for_min(section: SectionResponse, min_rating: int) -> bool:
     return True
 
 
-def _valid_rating_for_max(section: SectionResponse, max_rating: int) -> bool:
+def _valid_rating_for_max(section: Section, max_rating: int) -> bool:
     for leclab in section.leclabs:
         rating = leclab.rating
         if rating is None or rating.status != Status.FOUND or rating.avg > max_rating:
@@ -27,7 +27,7 @@ def _valid_rating_for_max(section: SectionResponse, max_rating: int) -> bool:
     return True
 
 
-def _valid_score_for_min(section: SectionResponse, min_score: int) -> bool:
+def _valid_score_for_min(section: Section, min_score: int) -> bool:
     for leclab in section.leclabs:
         rating = leclab.rating
         if rating is None or rating.status != Status.FOUND or rating.score < min_score:
@@ -35,7 +35,7 @@ def _valid_score_for_min(section: SectionResponse, min_score: int) -> bool:
     return True
 
 
-def _valid_score_for_max(section: SectionResponse, max_score: int) -> bool:
+def _valid_score_for_max(section: Section, max_score: int) -> bool:
     for leclab in section.leclabs:
         rating = leclab.rating
         if rating is None or rating.status != Status.FOUND or rating.score > max_score:
@@ -44,7 +44,7 @@ def _valid_score_for_max(section: SectionResponse, max_score: int) -> bool:
 
 
 def filter_cached_sections(
-    sections: tuple[SectionResponse, ...],
+    sections: tuple[Section, ...],
     q: str | None = None,
     course: str | None = None,
     domain: str | None = None,
@@ -62,7 +62,7 @@ def filter_cached_sections(
     honours: bool = False,
     limit: int | None = None,
     offset: int = 0,
-) -> list[SectionResponse]:
+) -> list[Section]:
     qv = q.lower() if q is not None else None
     coursev = course.lower() if course is not None else None
     domainv = domain.lower() if domain is not None else None

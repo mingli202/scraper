@@ -11,14 +11,14 @@ from api.sections.filter_cached_sections import filter_cached_sections
 from api.sections.queries import section_by_id_statement, with_section_relationships
 from scraper.db import engine
 from scraper.files import Files
-from scraper.models import Section, SectionResponse
+from scraper.models import Section, Section
 from scraper.new_parser import NewParser
 from scraper.section_response_mapper import sections_to_section_responses
 
 router = APIRouter(prefix="/sections", tags=["Sections"])
 
 
-def _load_sections_from_json() -> tuple[SectionResponse, ...]:
+def _load_sections_from_json() -> tuple[Section, ...]:
     files = Files()
     sections_from_json = files.read_sections_responses()
 
@@ -31,11 +31,11 @@ def _load_sections_from_json() -> tuple[SectionResponse, ...]:
         )
         sections = session.exec(statement).all()
 
-    return tuple(SectionResponse.model_validate(section) for section in sections)
+    return tuple(Section.model_validate(section) for section in sections)
 
 
 @router.get("/all")
-def get_all(request: Request) -> list[SectionResponse]:
+def get_all(request: Request) -> list[Section]:
     section_cache = getattr(request.app.state, "section_cache", None)
 
     if isinstance(section_cache, SectionCache):
@@ -45,7 +45,7 @@ def get_all(request: Request) -> list[SectionResponse]:
 
 
 @router.post("/parse-pdf")
-def parse_uploaded_pdf(file: UploadFile) -> list[SectionResponse]:
+def parse_uploaded_pdf(file: UploadFile) -> list[Section]:
     filename = (file.filename or "").lower()
     if not filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Uploaded file must be a PDF")
@@ -105,7 +105,7 @@ def get_sections(
     honours: bool = False,
     limit: Annotated[int | None, Query(ge=1, le=500)] = None,
     offset: Annotated[int, Query(ge=0)] = 0,
-) -> list[SectionResponse]:
+) -> list[Section]:
     def _is_blank(value: str | None) -> bool:
         return value is None or value.strip() == ""
 
@@ -174,7 +174,7 @@ def get_sections(
 
 
 @router.get("/{section_id}")
-def get_section(section_id: int, request: Request) -> SectionResponse:
+def get_section(section_id: int, request: Request) -> Section:
     section_cache = getattr(request.app.state, "section_cache", None)
     if isinstance(section_cache, SectionCache):
         section = section_cache.by_id.get(section_id)
@@ -199,13 +199,13 @@ def get_section(section_id: int, request: Request) -> SectionResponse:
         raise HTTPException(status_code=404, detail=f"Section {section_id} not found")
 
     if isinstance(section, Section):
-        return SectionResponse.model_validate(section)
+        return Section.model_validate(section)
 
     return section
 
 
 @router.post("/")
-def get_many(ids: list[int], request: Request) -> list[SectionResponse]:
+def get_many(ids: list[int], request: Request) -> list[Section]:
     section_cache = getattr(request.app.state, "section_cache", None)
 
     if isinstance(section_cache, SectionCache):
