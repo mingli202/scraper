@@ -46,6 +46,36 @@ def main():
 
                 codegen.append("\n".join(a_zod_type))
 
+            if isinstance(node, ast.ClassDef) and any(
+                isinstance(exp, ast.Name) and "Enum" == exp.id for exp in node.bases
+            ):
+                enum_variants: list[tuple[str, str]] = []
+
+                for body_node in node.body:
+                    if isinstance(body_node, ast.Assign):
+                        variant_name = next(
+                            t.id for t in body_node.targets if isinstance(t, ast.Name)
+                        )
+
+                        value = body_node.value
+                        assert isinstance(value, ast.Constant)
+
+                        enum_variants.append((variant_name, str(value.value)))
+
+                variants_object = (
+                    f"export const {node.name}Enum = {{"
+                    + ",".join(f"{v[0]}: {json.dumps(v[1])}" for v in enum_variants)
+                    + "} as const;"
+                )
+
+                zod_enum = f"export const {node.name} = z.enum({node.name}Enum)"
+
+                codegen.append(variants_object)
+                codegen.append(zod_enum)
+                codegen.append(
+                    f"export type {node.name} = z.infer<typeof {node.name}>;"
+                )
+
             if isinstance(node, ast.TypeAlias):
                 name = node.name.id
                 zod_type = handle_type_annotation(node.value)
