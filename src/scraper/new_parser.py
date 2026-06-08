@@ -287,13 +287,12 @@ class NewParser(INewParser):
 
     @override
     def save_sections(self):
-        section_responses = sections_to_section_responses(self.sections)
         with open(self.files.all_sections_final_path_json, "w") as file:
             _ = file.write(
                 json.dumps(
                     [
                         section.model_dump(mode="json", by_alias=True)
-                        for section in section_responses
+                        for section in self.sections
                     ],
                     indent=2,
                 )
