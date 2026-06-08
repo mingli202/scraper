@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import pytest
 
 from pydantic import TypeAdapter
@@ -10,7 +11,12 @@ from scraper.scraper import Scraper
 import json
 
 
-files = Files()
+pre_refac_path = (
+    Path(__file__).parent.parent.parent.parent
+    / "SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
+)
+
+files = Files(pre_refac_path)
 professors: list[str] = []
 with open(files.professors_path, "r") as file:
     professors = from_json(file.read())
