@@ -8,7 +8,7 @@ from pydantic_core import from_json
 from sqlalchemy import Engine
 from sqlmodel import Session, select
 
-from .models import ColumnsXs, LecLab, Section, Word
+from .models import ColumnsXs, LecLab, Section, SectionResponse, Word
 from . import parser_utils
 from .trie import Trie
 
@@ -35,6 +35,8 @@ class Files:
         self.pids_path = cwd / "data" / "pids.json"
         self.professors_path = data_dir / "professors.json"
         self.all_sections_final_path = data_dir / "all_sections_final.db"
+        self.all_sections_final_path_json = data_dir / "all_sections_final.json"
+        self.ratings_path = data_dir / "ratings.json"
 
         self.missing_pids_path = data_dir / "missingPids.json"
         self.classes_file_path = data_dir / "classes.json"
@@ -93,16 +95,27 @@ class Files:
         with open(self.parsed_sections_path, "r") as file:
             return [Section.model_validate(s) for s in from_json(file.read())]
 
-    def get_professors_file_content(self, engine: Engine) -> Trie:
+    def get_professors_file_content(self, engine: Engine | None = None) -> Trie:
         if self.professors_path.exists():
             with open(self.professors_path, "r") as file:
                 return Trie.model_validate(from_json(file.read()))
 
         professors: set[str] = set()
 
-        with Session(engine) as session:
-            statement = select(LecLab.prof).where(LecLab.prof != "")
-            professors = set(session.exec(statement).all())
+        if self.all_sections_final_path_json.exists():
+            with open(self.all_sections_final_path_json, "r") as file:
+                sections = TypeAdapter(list[SectionResponse]).validate_json(file.read())
+
+            professors = {
+                leclab.prof
+                for section in sections
+                for leclab in section.leclabs
+                if leclab.prof != ""
+            }
+        elif engine is not None:
+            with Session(engine) as session:
+                statement = select(LecLab.prof).where(LecLab.prof != "")
+                professors = set(session.exec(statement).all())
 
         trie = Trie()
 

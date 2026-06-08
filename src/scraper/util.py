@@ -8,7 +8,3 @@ def normalize_string(s: str):
     s = s.replace("\u0000", "")  #  removes null character
 
     return s
-
-
-def cache_everything_into_big_json(yes: bool):
-    pass

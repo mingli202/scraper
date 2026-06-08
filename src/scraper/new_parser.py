@@ -1,16 +1,15 @@
 import logging
 import math
 import re
+import json
 from typing import final, override
 from abc import ABC, abstractmethod
 
-from sqlmodel import Session, delete, select
-
-from .db import engine
-
+from pydantic import TypeAdapter
 
 from .files import Files
-from .models import DayTime, LecLab, LecLabType, Section, Word
+from .models import LecLab, LecLabType, Section, SectionResponse, Word
+from .section_response_mapper import sections_to_section_responses
 
 logger = logging.getLogger(__name__)
 
@@ -42,22 +41,21 @@ class NewParser(INewParser):
 
     @override
     def run(self, force_override: bool = False):
-        with Session(engine) as session:
-            sections = session.exec(select(Section)).all()
-            count = len(sections)
+        if not force_override and self.files.all_sections_final_path_json.exists():
+            with open(self.files.all_sections_final_path_json, "r") as file:
+                try:
+                    existing_sections = TypeAdapter(list[SectionResponse]).validate_json(
+                        file.read()
+                    )
+                    if existing_sections:
+                        override = input(
+                            "Sections JSON already populated, override? (y/n): "
+                        )
 
-            if not force_override and count > 0:
-                override = input("Section table already populated, override? (y/n): ")
-
-                if override.lower() != "y":
-                    self.sections = list(sections)
-                    return
-
-            _ = session.exec(delete(DayTime))
-            _ = session.exec(delete(LecLab))
-            _ = session.exec(delete(Section))
-
-            session.commit()
+                        if override.lower() != "y":
+                            return
+                except Exception:
+                    pass
 
         self.parse()
         self.save_sections()
@@ -288,12 +286,17 @@ class NewParser(INewParser):
 
     @override
     def save_sections(self):
-        with Session(engine) as session:
-            if len(session.exec(select(Section)).all()) != 0:
-                raise Exception("rows not deleted")
-
-            session.add_all(self.sections)
-            session.commit()
+        section_responses = sections_to_section_responses(self.sections)
+        with open(self.files.all_sections_final_path_json, "w") as file:
+            _ = file.write(
+                json.dumps(
+                    [
+                        section.model_dump(mode="json", by_alias=True)
+                        for section in section_responses
+                    ],
+                    indent=2,
+                )
+            )
 
 
 if __name__ == "__main__":

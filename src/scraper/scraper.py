@@ -5,13 +5,10 @@ from concurrent.futures import ThreadPoolExecutor
 
 from pydantic import TypeAdapter
 import requests
-from sqlmodel import Session, delete, select
-
-from .db import engine
 from .files import Files
-from .models import Rating, Status
+from .models import Rating, RatingResponse, SectionResponse, Status
 
-from . import util, db
+from . import util
 
 
 class Scraper:
@@ -20,21 +17,18 @@ class Scraper:
         self.debug = False
 
     def run(self, force_override: bool = False):
-        with Session(engine) as session:
-            if not force_override and self.files.all_sections_final_path.exists():
-                count = len(session.exec(select(Rating)).all())
+        if not force_override and self.files.ratings_path.exists():
+            with open(self.files.ratings_path, "r") as file:
+                existing_ratings = TypeAdapter(list[RatingResponse]).validate_json(
+                    file.read()
+                )
 
-                if count > 0:
-                    override = input(
-                        "Ratings table already populated, override? (y/n) "
-                    )
-                    if override.lower() != "y":
-                        return
+            if existing_ratings:
+                override = input("Ratings JSON already populated, override? (y/n) ")
+                if override.lower() != "y":
+                    return
 
-            _ = session.exec(delete(Rating))
-            session.commit()
-
-        professors = self.files.get_professors_file_content(engine).get_words("")
+        professors = self.files.get_professors_file_content().get_words("")
 
         ratings: dict[str, Rating] = {}
         pids = self.get_saved_pids()
@@ -211,13 +205,57 @@ class Scraper:
     def save_ratings(self, ratings: dict[str, Rating]):
         print("SAVING RATINGS")
         print(ratings)
-        with Session(engine) as session:
-            session.add_all(ratings.values())
-            session.commit()
+
+        with open(self.files.ratings_path, "w") as file:
+            _ = file.write(
+                json.dumps(
+                    [
+                        RatingResponse.model_validate(rating).model_dump(
+                            mode="json", by_alias=True
+                        )
+                        for rating in ratings.values()
+                    ],
+                    indent=2,
+                )
+            )
+
+        if not self.files.all_sections_final_path_json.exists():
+            return
+
+        with open(self.files.all_sections_final_path_json, "r") as file:
+            sections = TypeAdapter(list[SectionResponse]).validate_json(file.read())
+
+        ratings_by_prof = {
+            prof: RatingResponse.model_validate(rating) for prof, rating in ratings.items()
+        }
+
+        updated_sections = [
+            section.model_copy(
+                update={
+                    "leclabs": [
+                        leclab.model_copy(
+                            update={"rating": ratings_by_prof.get(leclab.prof)}
+                        )
+                        for leclab in section.leclabs
+                    ]
+                }
+            )
+            for section in sections
+        ]
+
+        with open(self.files.all_sections_final_path_json, "w") as file:
+            _ = file.write(
+                json.dumps(
+                    [
+                        section.model_dump(mode="json", by_alias=True)
+                        for section in updated_sections
+                    ],
+                    indent=2,
+                )
+            )
 
 
 if __name__ == "__main__":
-    db.init_db()
     files = Files()
     scraper = Scraper(files)
     scraper.run()
