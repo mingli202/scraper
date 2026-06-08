@@ -5,10 +5,8 @@ from typing import Any, final
 
 from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
-from sqlalchemy import Engine
-from sqlmodel import Session, select
 
-from .models import ColumnsXs, LecLab, Section, Section, Word
+from .models import ColumnsXs, Section, Word
 from . import parser_utils
 from .trie import Trie
 
@@ -41,6 +39,8 @@ class Files:
         self.missing_pids_path = data_dir / "missingPids.json"
         self.classes_file_path = data_dir / "classes.json"
         self.all_classes_path = data_dir / "allClasses.json"
+
+        self.out_file_path = cwd / "winter" / "winter-out.json"  # backwards
 
     def get_sorted_lines_content(
         self, use_cache: bool = True
@@ -95,7 +95,7 @@ class Files:
         with open(self.parsed_sections_path, "r") as file:
             return [Section.model_validate(s) for s in from_json(file.read())]
 
-    def get_professors_file_content(self, engine: Engine | None = None) -> Trie:
+    def get_professors_file_content(self) -> Trie:
         if self.professors_path.exists():
             with open(self.professors_path, "r") as file:
                 return Trie.model_validate(from_json(file.read()))
@@ -112,10 +112,6 @@ class Files:
                 for leclab in section.leclabs
                 if leclab.prof != ""
             }
-        elif engine is not None:
-            with Session(engine) as session:
-                statement = select(LecLab.prof).where(LecLab.prof != "")
-                professors = set(session.exec(statement).all())
 
         trie = Trie()
 
@@ -134,3 +130,9 @@ class Files:
     def get_pids_file_content(self) -> dict[str, str | None]:
         with open(self.pids_path, "r") as file:
             return from_json(file.read())
+
+    def get_all_sections_final_path_json_content(self) -> dict[str, Section]:
+        with open(self.all_sections_final_path_json, "r") as file:
+            sections = TypeAdapter(list[Section]).validate_json(file.read())
+
+            return {section.id: section for section in sections}
