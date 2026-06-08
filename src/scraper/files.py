@@ -89,9 +89,6 @@ class Files:
         return columns_x
 
     def get_parsed_sections_file_content(self) -> list[Section]:
-        if not self.parsed_sections_path.exists():
-            return []
-
         with open(self.parsed_sections_path, "r") as file:
             return [Section.model_validate(s) for s in from_json(file.read())]
 
