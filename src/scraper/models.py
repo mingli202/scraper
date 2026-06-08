@@ -41,13 +41,13 @@ class Section(ConfiguredBaseModel):
 
 class Rating(ConfiguredBaseModel):
     prof: str
-    score: float
-    avg: float
-    nRating: int
-    takeAgain: int
-    difficulty: float
-    status: Status
-    pId: str | None
+    score: float = 0
+    avg: float = 0
+    nRating: int = 0
+    takeAgain: int = 0
+    difficulty: float = 0
+    status: Status = Status.FOUNDNT
+    pId: str | None = None
 
 
 class LecLab(ConfiguredBaseModel):

@@ -5,7 +5,7 @@ from pydantic import TypeAdapter
 from pydantic_core import from_json
 from scraper.files import Files
 
-from scraper.models import Rating, Rating, Status
+from scraper.models import Rating, Status
 from scraper.scraper import Scraper
 import json
 
@@ -69,7 +69,7 @@ def test_department_with_space_and_duplicate_pids():
 
 def test_missing_rating():
     rating = scraper.get_rating("Voinea, Sorin", scraper.get_saved_pids())
-    assert rating == Rating.default(prof="Voinea, Sorin")
+    assert rating == Rating(prof="Voinea, Sorin")
 
 
 # NOTE: these are hardcoded values, so subject to change
@@ -120,7 +120,7 @@ def test_Klochko_Yuliya():
         return
 
     rating: Rating = scraper.get_rating("Klochko, Yuliya", scraper.get_saved_pids())
-    assert rating == Rating.default(prof="Klochko, Yuliya")
+    assert rating == Rating(prof="Klochko, Yuliya")
 
 
 # NOTE: manually check foundn't

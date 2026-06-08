@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pydantic import TypeAdapter
 import requests
 from .files import Files
-from .models import Rating, Rating, Section, Status
+from .models import Rating, Section, Status
 
 from . import util
 
@@ -77,7 +77,7 @@ class Scraper:
 
     def get_rating(self, prof: str, saved_pids: dict[str, str | None]) -> Rating:
         print("GETTING RATING")
-        rating = Rating.default(prof=prof)
+        rating = Rating(prof=prof)
 
         if (
             prof in saved_pids
@@ -178,7 +178,7 @@ class Scraper:
             ) = matches.groups()
 
             try:
-                rating = Rating.default(
+                rating = Rating(
                     prof=prof,
                     nRating=round(float(numRating)),
                     avg=round(float(avgRating), 1),
