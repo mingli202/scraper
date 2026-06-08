@@ -119,7 +119,9 @@ class Files:
             trie.add(prof)
 
         with open(self.professors_path, "w") as file:
-            _ = file.write(json.dumps(trie.model_dump(by_alias=True), indent=2))
+            _ = file.write(
+                json.dumps(trie.model_dump(by_alias=True, mode="json"), indent=2)
+            )
 
         return trie
 

@@ -217,41 +217,6 @@ class Scraper:
                 )
             )
 
-        if not self.files.all_sections_final_path_json.exists():
-            return
-
-        with open(self.files.all_sections_final_path_json, "r") as file:
-            sections = TypeAdapter(list[Section]).validate_json(file.read())
-
-        ratings_by_prof = {
-            prof: Rating.model_validate(rating) for prof, rating in ratings.items()
-        }
-
-        updated_sections = [
-            section.model_copy(
-                update={
-                    "leclabs": [
-                        leclab.model_copy(
-                            update={"rating": ratings_by_prof.get(leclab.prof)}
-                        )
-                        for leclab in section.leclabs
-                    ]
-                }
-            )
-            for section in sections
-        ]
-
-        with open(self.files.all_sections_final_path_json, "w") as file:
-            _ = file.write(
-                json.dumps(
-                    [
-                        section.model_dump(mode="json", by_alias=True)
-                        for section in updated_sections
-                    ],
-                    indent=2,
-                )
-            )
-
 
 if __name__ == "__main__":
     files = Files()

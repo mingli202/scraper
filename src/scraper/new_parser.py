@@ -9,7 +9,6 @@ from pydantic import TypeAdapter
 
 from .files import Files
 from .models import LecLab, LecLabType, Section, Word
-from .section_response_mapper import sections_to_section_responses
 
 logger = logging.getLogger(__name__)
 

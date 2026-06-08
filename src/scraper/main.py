@@ -3,6 +3,8 @@ from typing import Annotated
 
 from dotenv import load_dotenv
 
+from scraper.util import add_rating_to_sections
+
 from .new_parser import NewParser
 from .files import Files
 from .scraper import Scraper
@@ -32,6 +34,7 @@ def _main(
 
     parser.run(yes)
     scraper.run(yes)
+    add_rating_to_sections(files)
 
     if run_tests:
         exit(pytest.main(["--no-header", "-s", "-v"]))
