@@ -96,4 +96,4 @@ class Word(BaseModel):
 
 class GlobalAllSections(ConfiguredBaseModel):
     semester: str
-    sections_by_id: dict[str, dict[str, Any]]
+    sections_by_id: dict[str, Section]

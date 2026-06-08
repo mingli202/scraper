@@ -20,7 +20,7 @@ def normalize_string(s: str):
 
 def make_sections_final(
     sections: list[Section], ratings_by_prof: dict[str, Rating], files: Files
-) -> dict[str, dict[str, Any]]:
+) -> dict[str, Section]:
     """
     Adds teacher ratings to each section
     Writes to the final json {sectionId: Section}
@@ -42,11 +42,11 @@ def make_sections_final(
             indent=2,
         )
 
-    return sections_dict_json
+    return {section.id: section for section in sections}
 
 
 def make_global_sections_final(
-    semester: str, section_by_id: dict[str, dict[str, Any]], files: Files
+    semester: str, section_by_id: dict[str, Section], files: Files
 ):
     """
     Write to the same place rather than by directory
