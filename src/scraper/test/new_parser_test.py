@@ -258,7 +258,7 @@ def test_parity_with_old_parser():
 
         assert len(out) == len(parser.sections)
 
-        new_sections = files.get_all_sections_final_path_json_content()
+        new_sections = {section.id: section for section in parser.sections}
 
         for old_section in out:
             old = Section(
@@ -342,7 +342,7 @@ def test_parity_with_old_parser():
             old.more = remove_double_space(old.more)
             old.domain = remove_double_space(old.domain)
 
-            new_section = new_sections[section_id]
+            new_section = new_sections[f"{old.code}-{old.section}"]
 
             assert new_section is not None
 
