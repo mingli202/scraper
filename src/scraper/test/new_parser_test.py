@@ -6,7 +6,6 @@ from pydantic_core import from_json
 import pytest
 import re
 
-from sqlmodel import SQLModel, Session, create_engine
 
 from scraper.files import Files
 from scraper.models import DayTime, LecLab, LecLabType, Section, Word
@@ -27,9 +26,6 @@ pre_refac_path = (
 files = Files(pdf_path)
 width, height = 0, 0
 
-engine = create_engine("sqlite://")
-SQLModel.metadata.create_all(engine)
-
 with pdfplumber.open(files.pdf_path) as pdf:
     page = pdf.pages[0]
     width = page.width
@@ -47,8 +43,8 @@ def parser():
     yield parser
 
     parser.sections = []
-    parser.current_section = Section.default()
-    parser.leclab = LecLab.default()
+    parser.current_section = Section()
+    parser.leclab = LecLab()
 
 
 def test_optimal_x_tolerance() -> None:
@@ -257,18 +253,16 @@ def test_parity_with_old_parser():
     for section in parser.sections:
         section.view_data = []
 
-    with Session(engine) as session:
-        session.add_all(parser.sections)
-        session.commit()
-
     with open(files.out_file_path, "r") as file:
         out: list[dict[str, Any]] = from_json(file.read())
 
         assert len(out) == len(parser.sections)
 
+        new_sections = files.get_all_sections_final_path_json_content()
+
         for old_section in out:
-            old = Section.default(
-                id=old_section["count"],
+            old = Section(
+                id=f"{old_section['code']}-{old_section['section']}",
                 domain=old_section["course"],
                 course=old_section["program"],
                 view_data=old_section["viewData"],
@@ -282,10 +276,9 @@ def test_parity_with_old_parser():
                 lecture = old_section["lecture"]
                 title = lecture["title"]
 
-                leclab = LecLab.default(
+                leclab = LecLab(
                     title=title,
                     type=LecLabType.LECTURE,
-                    section_id=section_id,
                     prof=lecture["prof"],
                     day_times=list(
                         itertools.chain.from_iterable(
@@ -306,10 +299,9 @@ def test_parity_with_old_parser():
                     case 559 | 944:
                         day_times = [day_time for day_time in leclab.day_times]
                         leclabs = [
-                            LecLab.default(
+                            LecLab(
                                 title=leclab.title,
                                 type=leclab.type,
-                                section_id=leclab.section_id,
                                 prof=leclab.prof,
                                 day_times=[day_time],
                             )
@@ -324,10 +316,9 @@ def test_parity_with_old_parser():
                 lab = old_section["lab"]
                 title = lab["title"]
 
-                leclab = LecLab.default(
+                leclab = LecLab(
                     title=title,
                     type=LecLabType.LAB,
-                    section_id=section_id,
                     prof=lab["prof"],
                     day_times=list(
                         itertools.chain.from_iterable(
@@ -351,34 +342,32 @@ def test_parity_with_old_parser():
             old.more = remove_double_space(old.more)
             old.domain = remove_double_space(old.domain)
 
-            with Session(engine) as session:
-                new_section = session.get(Section, section_id)
+            new_section = new_sections[section_id]
 
-                assert new_section is not None
+            assert new_section is not None
 
-                new_section.leclabs = [
-                    LecLab(
-                        title=leclab.title,
-                        section_id=leclab.section_id,
-                        prof=leclab.prof,
-                        type=leclab.type,
-                        day_times=[
-                            DayTime(
-                                day=daytime.day,
-                                start_time_hhmm=daytime.start_time_hhmm,
-                                end_time_hhmm=daytime.end_time_hhmm,
-                            )
-                            for daytime in leclab.day_times
-                        ],
-                    )
-                    for leclab in new_section.leclabs
-                ]
+            new_section.leclabs = [
+                LecLab(
+                    title=leclab.title,
+                    prof=leclab.prof,
+                    type=leclab.type,
+                    day_times=[
+                        DayTime(
+                            day=daytime.day,
+                            start_time_hhmm=daytime.start_time_hhmm,
+                            end_time_hhmm=daytime.end_time_hhmm,
+                        )
+                        for daytime in leclab.day_times
+                    ],
+                )
+                for leclab in new_section.leclabs
+            ]
 
-                assert old == new_section
-                assert old.leclabs == new_section.leclabs
-                assert [leclab.day_times for leclab in old.leclabs] == [
-                    leclab.day_times for leclab in new_section.leclabs
-                ]
+            assert old == new_section
+            assert old.leclabs == new_section.leclabs
+            assert [leclab.day_times for leclab in old.leclabs] == [
+                leclab.day_times for leclab in new_section.leclabs
+            ]
 
 
 if __name__ == "__main__":
