@@ -22,9 +22,7 @@ class Files:
         if pdf_path is not None:
             self.pdf_path = pdf_path
         else:
-            self.pdf_path = Path(
-                "/Users/vincentliu/dev/schedule-maker/scraper/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
-            )
+            self.pdf_path = cwd / "RPHOR200_-_Schedule_of_classes_June_5.pdf"
 
         data_dir = cwd / "data" / self.pdf_path.stem
         data_dir.mkdir(exist_ok=True, parents=True)
@@ -41,10 +39,6 @@ class Files:
         self.missing_pids_path = data_dir / "missingPids.json"
         self.classes_file_path = data_dir / "classes.json"
         self.all_classes_path = data_dir / "allClasses.json"
-
-        self.raw_file = cwd / "winter" / "winter-raw.json"
-        self.pdf_name = cwd / "SCHEDULE_OF_CLASSES_Winter_2026_December_11.txt"
-        self.out_file_path = cwd / "winter" / "winter-out.json"
 
     def get_sorted_lines_content(
         self, use_cache: bool = True

@@ -14,6 +14,7 @@ import typer
 
 # TODO: 1. Change filename and semester in files.py
 def _main(
+    pdf_path: Annotated[str, typer.Option(help="Path to the schedule of classes file")],
     yes: Annotated[
         bool, typer.Option(help="Answer yes to all override prompts")
     ] = False,
@@ -25,11 +26,9 @@ def _main(
     db.init_db()
     _ = load_dotenv()
 
-    files = Files(
-        Path(
-            "/Users/vincentliu/Downloads/SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
-        )
-    )
+    files = Files(pdf_path=Path(pdf_path))
+
+    print(f"parsing pdf at {files.pdf_path}")
 
     parser = NewParser(files)
     scraper = Scraper(files)
