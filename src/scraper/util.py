@@ -23,9 +23,9 @@ def add_rating_to_sections(files: Files):
         sections = TypeAdapter(list[Section]).validate_json(file.read())
 
     with open(files.ratings_path, "r") as file:
-        ratings = json.load(file)
+        ratings = [Rating.model_validate(r) for r in json.load(file)]
 
-    ratings_by_prof = {prof: Rating.model_validate(rating) for prof, rating in ratings}
+    ratings_by_prof = {rating.prof: rating for rating in ratings}
 
     updated_sections = [
         section.model_copy(
