@@ -1,8 +1,9 @@
 import json
+from typing import Any
 
 
 from scraper.files import Files
-from scraper.models import Rating
+from scraper.models import GlobalAllSections, Rating, Section
 
 
 def normalize_string(s: str):
@@ -17,31 +18,41 @@ def normalize_string(s: str):
     return s
 
 
-def make_sections_final(files: Files):
+def make_sections_final(
+    sections: list[Section], ratings_by_prof: dict[str, Rating], files: Files
+) -> dict[str, dict[str, Any]]:
     """
     Adds teacher ratings to each section
     Writes to the final json {sectionId: Section}
     """
 
-    sections = files.get_parsed_sections_file_content()
-
-    with open(files.ratings_path, "r") as file:
-        ratings = [Rating.model_validate(r) for r in json.load(file)]
-
-    ratings_by_prof = {rating.prof: rating for rating in ratings}
-
     for section in sections:
         for leclab in section.leclabs:
             leclab.rating = ratings_by_prof.get(leclab.prof)
 
-    sections_dict = {
+    sections_dict_json = {
         section.id: section.model_dump(mode="json", by_alias=True)
         for section in sections
     }
 
     with open(files.all_sections_final_path_json, "w") as file:
         json.dump(
-            sections_dict,
+            sections_dict_json,
             file,
             indent=2,
         )
+
+    return sections_dict_json
+
+
+def make_global_sections_final(
+    semester: str, section_by_id: dict[str, dict[str, Any]], files: Files
+):
+    """
+    Write to the same place rather than by directory
+    """
+
+    global_sections = GlobalAllSections(semester=semester, sections_by_id=section_by_id)
+
+    with open(files.global_all_sections_final_path_json, "w") as file:
+        json.dump(global_sections.model_dump(mode="json", by_alias=True), file)

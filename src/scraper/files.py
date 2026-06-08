@@ -6,7 +6,7 @@ from typing import Any, final
 from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
 
-from .models import ColumnsXs, Section, Word
+from .models import ColumnsXs, GlobalAllSections, Section, Word
 from . import parser_utils
 from .trie import Trie
 
@@ -36,6 +36,7 @@ class Files:
         self.ratings_path = data_dir / "ratings.json"
 
         self.missing_pids_path = data_dir / "missingPids.json"
+        self.global_all_sections_final_path_json = cwd / "all_sections_final.json"
 
         self.out_file_path = cwd / "winter" / "winter-out.json"  # backwards
 
@@ -129,6 +130,6 @@ class Files:
 
     def get_all_sections_final_path_json_content(self) -> dict[str, Section]:
         with open(self.all_sections_final_path_json, "r") as file:
-            sections = TypeAdapter(list[Section]).validate_json(file.read())
+            sections = TypeAdapter(dict[str, Section]).validate_json(file.read())
 
-            return {section.id: section for section in sections}
+            return sections

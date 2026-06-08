@@ -16,7 +16,7 @@ class Scraper:
         self.files = files
         self.debug = False
 
-    def run(self, force_override: bool = False):
+    def run(self, force_override: bool = False) -> dict[str, Rating]:
         if not force_override and self.files.ratings_path.exists():
             with open(self.files.ratings_path, "r") as file:
                 existing_ratings = TypeAdapter(list[Rating]).validate_json(file.read())
@@ -24,7 +24,7 @@ class Scraper:
             if existing_ratings:
                 override = input("Ratings JSON already populated, override? (y/n) ")
                 if override.lower() != "y":
-                    return
+                    return {rating.prof: rating for rating in existing_ratings}
 
         professors = self.files.get_professors_file_content().get_words("")
 
@@ -39,6 +39,8 @@ class Scraper:
             _ = file.write(json.dumps(new_pids, indent=2))
 
         self.save_ratings(ratings)
+
+        return ratings
 
     def scrape_ratings(
         self,

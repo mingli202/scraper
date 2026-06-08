@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class INewParser(ABC):
     @abstractmethod
-    def run(self):
+    def run(self) -> list[Section]:
         pass
 
     @abstractmethod
@@ -39,25 +39,24 @@ class NewParser(INewParser):
         self.lines = self.files.get_sorted_lines_content()
 
     @override
-    def run(self, force_override: bool = False):
+    def run(self, force_override: bool = False) -> list[Section]:
         if not force_override and self.files.parsed_sections_path.exists():
             with open(self.files.parsed_sections_path, "r") as file:
-                try:
-                    existing_sections = TypeAdapter(list[Section]).validate_json(
-                        file.read()
+                existing_sections = TypeAdapter(list[Section]).validate_json(
+                    file.read()
+                )
+                if existing_sections:
+                    override = input(
+                        "Sections JSON already populated, override? (y/n): "
                     )
-                    if existing_sections:
-                        override = input(
-                            "Sections JSON already populated, override? (y/n): "
-                        )
 
-                        if override.lower() != "y":
-                            return
-                except Exception:
-                    pass
+                    if override.lower() != "y":
+                        return existing_sections
 
         self.parse()
         self.save_sections()
+
+        return self.sections
 
     @override
     def parse(self):
@@ -294,6 +293,11 @@ class NewParser(INewParser):
                     indent=2,
                 )
             )
+
+    def get_semester(self):
+        lines = list(self.lines.values())
+        title = self._get_line_text(lines[0])
+        return title.replace("SCHEDULE OF CLASSES - ", "")
 
 
 if __name__ == "__main__":

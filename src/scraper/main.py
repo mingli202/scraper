@@ -3,7 +3,7 @@ from typing import Annotated
 
 from dotenv import load_dotenv
 
-from scraper.util import make_sections_final
+from scraper.util import make_global_sections_final, make_sections_final
 
 from .new_parser import NewParser
 from .files import Files
@@ -32,9 +32,12 @@ def _main(
     parser = NewParser(files)
     scraper = Scraper(files)
 
-    parser.run(yes)
-    scraper.run(yes)
-    make_sections_final(files)
+    sections = parser.run(yes)
+    ratings = scraper.run(yes)
+    section_by_id = make_sections_final(sections, ratings, files)
+
+    semester = parser.get_semester()
+    make_global_sections_final(semester, section_by_id, files)
 
     if run_tests:
         exit(pytest.main(["--no-header", "-s", "-v"]))
