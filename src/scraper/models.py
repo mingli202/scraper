@@ -27,16 +27,10 @@ class ConfiguredBaseModel(BaseModel):
     )
 
 
-class Section(ConfiguredBaseModel):
-    id: str = ""  # unique Id for this section made of the code + section number
-    course: str = ""
-    section: str = ""
-    domain: str = ""
-    code: str = ""
-    title: str = ""
-    leclabs: list[LecLab] = []
-    more: str = ""
-    view_data: ViewData = []
+class DayTime(ConfiguredBaseModel):
+    day: str = ""
+    start_time_hhmm: str = ""
+    end_time_hhmm: str = ""
 
 
 class Rating(ConfiguredBaseModel):
@@ -67,10 +61,16 @@ class LecLab(ConfiguredBaseModel):
         self.day_times.append(day_time)
 
 
-class DayTime(ConfiguredBaseModel):
-    day: str = ""
-    start_time_hhmm: str = ""
-    end_time_hhmm: str = ""
+class Section(ConfiguredBaseModel):
+    id: str = ""  # unique Id for this section made of the code + section number
+    course: str = ""
+    section: str = ""
+    domain: str = ""
+    code: str = ""
+    title: str = ""
+    leclabs: list[LecLab] = []
+    more: str = ""
+    view_data: ViewData = []
 
 
 class ColumnsXs(BaseModel):
