@@ -1759,11 +1759,11 @@
     "section": "00001",
     "domain": "BIOLOGY",
     "code": "101-SF2-AB",
-    "title": "\u00c9cologie et \u00e9volution",
+    "title": "Écologie et évolution",
     "leclabs": [
       {
         "id": 45,
-        "title": "\u00c9cologie et \u00e9volution",
+        "title": "Écologie et évolution",
         "type": "lecture",
         "sectionId": 23,
         "prof": "Levesque, Christian",
@@ -1789,7 +1789,7 @@
       },
       {
         "id": 46,
-        "title": "\u00c9cologie et \u00e9volution",
+        "title": "Écologie et évolution",
         "type": "laboratory",
         "sectionId": 23,
         "prof": "Levesque, Christian",
@@ -1842,11 +1842,11 @@
     "section": "00002",
     "domain": "BIOLOGY",
     "code": "101-SF2-AB",
-    "title": "\u00c9cologie et \u00e9volution",
+    "title": "Écologie et évolution",
     "leclabs": [
       {
         "id": 47,
-        "title": "\u00c9cologie et \u00e9volution",
+        "title": "Écologie et évolution",
         "type": "lecture",
         "sectionId": 24,
         "prof": "Levesque, Christian",
@@ -1872,7 +1872,7 @@
       },
       {
         "id": 48,
-        "title": "\u00c9cologie et \u00e9volution",
+        "title": "Écologie et évolution",
         "type": "laboratory",
         "sectionId": 24,
         "prof": "Levesque, Christian",
@@ -3869,9 +3869,9 @@
         "title": "General Chemistry",
         "type": "lecture",
         "sectionId": 49,
-        "prof": "R\u00e9gimbal, Jean-Michel",
+        "prof": "Régimbal, Jean-Michel",
         "rating": {
-          "prof": "R\u00e9gimbal, Jean-Michel",
+          "prof": "Régimbal, Jean-Michel",
           "score": 40.2,
           "avg": 2.0,
           "nRating": 93,
@@ -3895,9 +3895,9 @@
         "title": "General Chemistry",
         "type": "laboratory",
         "sectionId": 49,
-        "prof": "R\u00e9gimbal, Jean-Michel",
+        "prof": "Régimbal, Jean-Michel",
         "rating": {
-          "prof": "R\u00e9gimbal, Jean-Michel",
+          "prof": "Régimbal, Jean-Michel",
           "score": 40.2,
           "avg": 2.0,
           "nRating": 93,
@@ -3952,9 +3952,9 @@
         "title": "General Chemistry",
         "type": "lecture",
         "sectionId": 50,
-        "prof": "R\u00e9gimbal, Jean-Michel",
+        "prof": "Régimbal, Jean-Michel",
         "rating": {
-          "prof": "R\u00e9gimbal, Jean-Michel",
+          "prof": "Régimbal, Jean-Michel",
           "score": 40.2,
           "avg": 2.0,
           "nRating": 93,
@@ -3978,9 +3978,9 @@
         "title": "General Chemistry",
         "type": "laboratory",
         "sectionId": 50,
-        "prof": "R\u00e9gimbal, Jean-Michel",
+        "prof": "Régimbal, Jean-Michel",
         "rating": {
-          "prof": "R\u00e9gimbal, Jean-Michel",
+          "prof": "Régimbal, Jean-Michel",
           "score": 40.2,
           "avg": 2.0,
           "nRating": 93,
@@ -4533,9 +4533,9 @@
         "title": "General Chemistry",
         "type": "lecture",
         "sectionId": 57,
-        "prof": "R\u00e9gimbal, Jean-Michel",
+        "prof": "Régimbal, Jean-Michel",
         "rating": {
-          "prof": "R\u00e9gimbal, Jean-Michel",
+          "prof": "Régimbal, Jean-Michel",
           "score": 40.2,
           "avg": 2.0,
           "nRating": 93,
@@ -4559,9 +4559,9 @@
         "title": "General Chemistry",
         "type": "laboratory",
         "sectionId": 57,
-        "prof": "R\u00e9gimbal, Jean-Michel",
+        "prof": "Régimbal, Jean-Michel",
         "rating": {
-          "prof": "R\u00e9gimbal, Jean-Michel",
+          "prof": "Régimbal, Jean-Michel",
           "score": 40.2,
           "avg": 2.0,
           "nRating": 93,
@@ -4623,9 +4623,9 @@
         "title": "General Chemistry",
         "type": "lecture",
         "sectionId": 58,
-        "prof": "R\u00e9gimbal, Jean-Michel",
+        "prof": "Régimbal, Jean-Michel",
         "rating": {
-          "prof": "R\u00e9gimbal, Jean-Michel",
+          "prof": "Régimbal, Jean-Michel",
           "score": 40.2,
           "avg": 2.0,
           "nRating": 93,
@@ -4649,9 +4649,9 @@
         "title": "General Chemistry",
         "type": "laboratory",
         "sectionId": 58,
-        "prof": "R\u00e9gimbal, Jean-Michel",
+        "prof": "Régimbal, Jean-Michel",
         "rating": {
-          "prof": "R\u00e9gimbal, Jean-Michel",
+          "prof": "Régimbal, Jean-Michel",
           "score": 40.2,
           "avg": 2.0,
           "nRating": 93,
@@ -5950,9 +5950,9 @@
         "title": "Organic Chemistry",
         "type": "lecture",
         "sectionId": 75,
-        "prof": "B\u00e9rub\u00e9, Am\u00e9lie",
+        "prof": "Bérubé, Amélie",
         "rating": {
-          "prof": "B\u00e9rub\u00e9, Am\u00e9lie",
+          "prof": "Bérubé, Amélie",
           "score": 34.6,
           "avg": 1.7,
           "nRating": 54,
@@ -5976,9 +5976,9 @@
         "title": "Organic Chemistry",
         "type": "laboratory",
         "sectionId": 75,
-        "prof": "B\u00e9rub\u00e9, Am\u00e9lie",
+        "prof": "Bérubé, Amélie",
         "rating": {
-          "prof": "B\u00e9rub\u00e9, Am\u00e9lie",
+          "prof": "Bérubé, Amélie",
           "score": 34.6,
           "avg": 1.7,
           "nRating": 54,
@@ -6027,9 +6027,9 @@
         "title": "Organic Chemistry",
         "type": "lecture",
         "sectionId": 76,
-        "prof": "B\u00e9rub\u00e9, Am\u00e9lie",
+        "prof": "Bérubé, Amélie",
         "rating": {
-          "prof": "B\u00e9rub\u00e9, Am\u00e9lie",
+          "prof": "Bérubé, Amélie",
           "score": 34.6,
           "avg": 1.7,
           "nRating": 54,
@@ -6053,9 +6053,9 @@
         "title": "Organic Chemistry",
         "type": "laboratory",
         "sectionId": 76,
-        "prof": "B\u00e9rub\u00e9, Am\u00e9lie",
+        "prof": "Bérubé, Amélie",
         "rating": {
-          "prof": "B\u00e9rub\u00e9, Am\u00e9lie",
+          "prof": "Bérubé, Amélie",
           "score": 34.6,
           "avg": 1.7,
           "nRating": 54,
@@ -6104,9 +6104,9 @@
         "title": "Planetary Geology",
         "type": "lecture",
         "sectionId": 77,
-        "prof": "L\u00e9veill\u00e9, Richard John",
+        "prof": "Léveillé, Richard John",
         "rating": {
-          "prof": "L\u00e9veill\u00e9, Richard John",
+          "prof": "Léveillé, Richard John",
           "score": 76.7,
           "avg": 4.1,
           "nRating": 10,
@@ -6130,9 +6130,9 @@
         "title": "Planetary Geology",
         "type": "laboratory",
         "sectionId": 77,
-        "prof": "L\u00e9veill\u00e9, Richard John",
+        "prof": "Léveillé, Richard John",
         "rating": {
-          "prof": "L\u00e9veill\u00e9, Richard John",
+          "prof": "Léveillé, Richard John",
           "score": 76.7,
           "avg": 4.1,
           "nRating": 10,
@@ -6181,9 +6181,9 @@
         "title": "Planetary Geology",
         "type": "lecture",
         "sectionId": 78,
-        "prof": "L\u00e9veill\u00e9, Richard John",
+        "prof": "Léveillé, Richard John",
         "rating": {
-          "prof": "L\u00e9veill\u00e9, Richard John",
+          "prof": "Léveillé, Richard John",
           "score": 76.7,
           "avg": 4.1,
           "nRating": 10,
@@ -6207,9 +6207,9 @@
         "title": "Planetary Geology",
         "type": "laboratory",
         "sectionId": 78,
-        "prof": "L\u00e9veill\u00e9, Richard John",
+        "prof": "Léveillé, Richard John",
         "rating": {
-          "prof": "L\u00e9veill\u00e9, Richard John",
+          "prof": "Léveillé, Richard John",
           "score": 76.7,
           "avg": 4.1,
           "nRating": 10,
@@ -6258,9 +6258,9 @@
         "title": "Understanding Planet Earth",
         "type": "lecture",
         "sectionId": 79,
-        "prof": "L\u00e9veill\u00e9, Richard John",
+        "prof": "Léveillé, Richard John",
         "rating": {
-          "prof": "L\u00e9veill\u00e9, Richard John",
+          "prof": "Léveillé, Richard John",
           "score": 76.7,
           "avg": 4.1,
           "nRating": 10,
@@ -6284,9 +6284,9 @@
         "title": "Understanding Planet Earth",
         "type": "laboratory",
         "sectionId": 79,
-        "prof": "L\u00e9veill\u00e9, Richard John",
+        "prof": "Léveillé, Richard John",
         "rating": {
-          "prof": "L\u00e9veill\u00e9, Richard John",
+          "prof": "Léveillé, Richard John",
           "score": 76.7,
           "avg": 4.1,
           "nRating": 10,
@@ -6335,9 +6335,9 @@
         "title": "Understanding Planet Earth",
         "type": "lecture",
         "sectionId": 80,
-        "prof": "L\u00e9veill\u00e9, Richard John",
+        "prof": "Léveillé, Richard John",
         "rating": {
-          "prof": "L\u00e9veill\u00e9, Richard John",
+          "prof": "Léveillé, Richard John",
           "score": 76.7,
           "avg": 4.1,
           "nRating": 10,
@@ -6361,9 +6361,9 @@
         "title": "Understanding Planet Earth",
         "type": "laboratory",
         "sectionId": 80,
-        "prof": "L\u00e9veill\u00e9, Richard John",
+        "prof": "Léveillé, Richard John",
         "rating": {
-          "prof": "L\u00e9veill\u00e9, Richard John",
+          "prof": "Léveillé, Richard John",
           "score": 76.7,
           "avg": 4.1,
           "nRating": 10,
@@ -7485,16 +7485,16 @@
     "section": "00001",
     "domain": "COMPUTER SCIENCE",
     "code": "420-SNP-AB",
-    "title": "Problem solving \u2013 from Algorithms to Programs",
+    "title": "Problem solving – from Algorithms to Programs",
     "leclabs": [
       {
         "id": 182,
-        "title": "Problem solving \u2013 from Algorithms to Programs",
+        "title": "Problem solving – from Algorithms to Programs",
         "type": "lecture",
         "sectionId": 99,
-        "prof": "Cl\u00e9ment, Ian",
+        "prof": "Clément, Ian",
         "rating": {
-          "prof": "Cl\u00e9ment, Ian",
+          "prof": "Clément, Ian",
           "score": 74.9,
           "avg": 4.1,
           "nRating": 7,
@@ -9077,11 +9077,11 @@
     "section": "00001",
     "domain": "MATHEMATICS",
     "code": "201-SF3-AB",
-    "title": "Calcul int\u00e9gral",
+    "title": "Calcul intégral",
     "leclabs": [
       {
         "id": 207,
-        "title": "Calcul int\u00e9gral",
+        "title": "Calcul intégral",
         "type": "lecture",
         "sectionId": 124,
         "prof": "Herlin, Antoine",
@@ -13484,11 +13484,11 @@
     "section": "00009",
     "domain": "PHYSICS",
     "code": "203-SF2-AB",
-    "title": "\u00c9lectricit\u00e9 et magn\u00e9tisme",
+    "title": "Électricité et magnétisme",
     "leclabs": [
       {
         "id": 301,
-        "title": "\u00c9lectricit\u00e9 et magn\u00e9tisme",
+        "title": "Électricité et magnétisme",
         "type": "lecture",
         "sectionId": 188,
         "prof": "Camirand, Hubert",
@@ -13514,7 +13514,7 @@
       },
       {
         "id": 302,
-        "title": "\u00c9lectricit\u00e9 et magn\u00e9tisme",
+        "title": "Électricité et magnétisme",
         "type": "laboratory",
         "sectionId": 188,
         "prof": "Camirand, Hubert",
@@ -13561,11 +13561,11 @@
     "section": "00010",
     "domain": "PHYSICS",
     "code": "203-SF2-AB",
-    "title": "\u00c9lectricit\u00e9 et magn\u00e9tisme",
+    "title": "Électricité et magnétisme",
     "leclabs": [
       {
         "id": 303,
-        "title": "\u00c9lectricit\u00e9 et magn\u00e9tisme",
+        "title": "Électricité et magnétisme",
         "type": "lecture",
         "sectionId": 189,
         "prof": "Camirand, Hubert",
@@ -13591,7 +13591,7 @@
       },
       {
         "id": 304,
-        "title": "\u00c9lectricit\u00e9 et magn\u00e9tisme",
+        "title": "Électricité et magnétisme",
         "type": "laboratory",
         "sectionId": 189,
         "prof": "Camirand, Hubert",
@@ -16036,11 +16036,11 @@
     "section": "00007",
     "domain": "MULTIDISCIPLINARY",
     "code": "360-PR0-AB",
-    "title": "Energy in Motion: Measuring Life\u2019s Power Costs",
+    "title": "Energy in Motion: Measuring Life’s Power Costs",
     "leclabs": [
       {
         "id": 363,
-        "title": "Energy in Motion: Measuring Life\u2019s Power Costs",
+        "title": "Energy in Motion: Measuring Life’s Power Costs",
         "type": "lecture",
         "sectionId": 222,
         "prof": "",
@@ -22651,11 +22651,11 @@
     "section": "00001",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 489,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 340,
         "prof": "Sotiron, Jean Michel",
@@ -22702,11 +22702,11 @@
     "section": "00002",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 490,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 341,
         "prof": "Sotiron, Jean Michel",
@@ -22753,11 +22753,11 @@
     "section": "00003",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 491,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 342,
         "prof": "Sotiron, Jean Michel",
@@ -22804,11 +22804,11 @@
     "section": "00004",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 492,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 343,
         "prof": "Seck, Medoune Mouhamad",
@@ -22855,11 +22855,11 @@
     "section": "00005",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 493,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 344,
         "prof": "Seck, Medoune Mouhamad",
@@ -22906,11 +22906,11 @@
     "section": "00006",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 494,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 345,
         "prof": "Tosaj, Nicholas",
@@ -22957,11 +22957,11 @@
     "section": "00007",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 495,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 346,
         "prof": "Nassif, Charbel",
@@ -23008,11 +23008,11 @@
     "section": "00008",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 496,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 347,
         "prof": "Nassif, Charbel",
@@ -23053,11 +23053,11 @@
     "section": "00009",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 497,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 348,
         "prof": "TBA-1, Psychology",
@@ -23104,11 +23104,11 @@
     "section": "00010",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 498,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 349,
         "prof": "Tosaj, Nicholas",
@@ -23155,11 +23155,11 @@
     "section": "00011",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 499,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 350,
         "prof": "Riverin, Maude",
@@ -23206,11 +23206,11 @@
     "section": "00012",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 500,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 351,
         "prof": "Riverin, Maude",
@@ -23257,11 +23257,11 @@
     "section": "00013",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 501,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 352,
         "prof": "Boer, Elise Marianne",
@@ -23308,11 +23308,11 @@
     "section": "00014",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 502,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 353,
         "prof": "Sanchez-Nicolas, Darien",
@@ -23359,11 +23359,11 @@
     "section": "00015",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 503,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 354,
         "prof": "Ziliotti, Roberto",
@@ -23410,11 +23410,11 @@
     "section": "00016",
     "domain": "METHODOLOGY",
     "code": "300-10F-AB",
-    "title": "M\u00e9thodes de travail intellectuel",
+    "title": "Méthodes de travail intellectuel",
     "leclabs": [
       {
         "id": 504,
-        "title": "M\u00e9thodes de travail intellectuel",
+        "title": "Méthodes de travail intellectuel",
         "type": "lecture",
         "sectionId": 355,
         "prof": "Ziliotti, Roberto",
@@ -23666,9 +23666,9 @@
         "title": "Introduction to Social Science",
         "type": "lecture",
         "sectionId": 360,
-        "prof": "Beaupr\u00e9-Odorico, Vicki",
+        "prof": "Beaupré-Odorico, Vicki",
         "rating": {
-          "prof": "Beaupr\u00e9-Odorico, Vicki",
+          "prof": "Beaupré-Odorico, Vicki",
           "score": 90.2,
           "avg": 4.8,
           "nRating": 14,
@@ -25050,9 +25050,9 @@
         "title": "Research and Qualitative Methods",
         "type": "lecture",
         "sectionId": 380,
-        "prof": "Guay, Andr\u00e9e-Anne",
+        "prof": "Guay, Andrée-Anne",
         "rating": {
-          "prof": "Guay, Andr\u00e9e-Anne",
+          "prof": "Guay, Andrée-Anne",
           "score": 51.8,
           "avg": 2.6,
           "nRating": 18,
@@ -25076,9 +25076,9 @@
         "title": "Research and Qualitative Methods",
         "type": "laboratory",
         "sectionId": 380,
-        "prof": "Guay, Andr\u00e9e-Anne",
+        "prof": "Guay, Andrée-Anne",
         "rating": {
-          "prof": "Guay, Andr\u00e9e-Anne",
+          "prof": "Guay, Andrée-Anne",
           "score": 51.8,
           "avg": 2.6,
           "nRating": 18,
@@ -25127,9 +25127,9 @@
         "title": "Research and Qualitative Methods",
         "type": "lecture",
         "sectionId": 381,
-        "prof": "Guay, Andr\u00e9e-Anne",
+        "prof": "Guay, Andrée-Anne",
         "rating": {
-          "prof": "Guay, Andr\u00e9e-Anne",
+          "prof": "Guay, Andrée-Anne",
           "score": 51.8,
           "avg": 2.6,
           "nRating": 18,
@@ -25153,9 +25153,9 @@
         "title": "Research and Qualitative Methods",
         "type": "laboratory",
         "sectionId": 381,
-        "prof": "Guay, Andr\u00e9e-Anne",
+        "prof": "Guay, Andrée-Anne",
         "rating": {
-          "prof": "Guay, Andr\u00e9e-Anne",
+          "prof": "Guay, Andrée-Anne",
           "score": 51.8,
           "avg": 2.6,
           "nRating": 18,
@@ -25396,9 +25396,9 @@
         "title": "Social Science Integrative Project",
         "type": "lecture",
         "sectionId": 386,
-        "prof": "Beaupr\u00e9-Odorico, Vicki",
+        "prof": "Beaupré-Odorico, Vicki",
         "rating": {
-          "prof": "Beaupr\u00e9-Odorico, Vicki",
+          "prof": "Beaupré-Odorico, Vicki",
           "score": 90.2,
           "avg": 4.8,
           "nRating": 14,
@@ -25441,9 +25441,9 @@
         "title": "Social Science Integrative Project",
         "type": "lecture",
         "sectionId": 387,
-        "prof": "Beaupr\u00e9-Odorico, Vicki",
+        "prof": "Beaupré-Odorico, Vicki",
         "rating": {
-          "prof": "Beaupr\u00e9-Odorico, Vicki",
+          "prof": "Beaupré-Odorico, Vicki",
           "score": 90.2,
           "avg": 4.8,
           "nRating": 14,
@@ -25531,9 +25531,9 @@
         "title": "Social Science Integrative Project",
         "type": "lecture",
         "sectionId": 389,
-        "prof": "Chowanietz, Christophe Cl\u00e9ment",
+        "prof": "Chowanietz, Christophe Clément",
         "rating": {
-          "prof": "Chowanietz, Christophe Cl\u00e9ment",
+          "prof": "Chowanietz, Christophe Clément",
           "score": 88.6,
           "avg": 4.5,
           "nRating": 56,
@@ -28353,9 +28353,9 @@
         "title": "Introduction to Political Science",
         "type": "lecture",
         "sectionId": 427,
-        "prof": "Chowanietz, Christophe Cl\u00e9ment",
+        "prof": "Chowanietz, Christophe Clément",
         "rating": {
-          "prof": "Chowanietz, Christophe Cl\u00e9ment",
+          "prof": "Chowanietz, Christophe Clément",
           "score": 88.6,
           "avg": 4.5,
           "nRating": 56,
@@ -28455,9 +28455,9 @@
         "title": "Introduction to Political Science",
         "type": "lecture",
         "sectionId": 429,
-        "prof": "Chowanietz, Christophe Cl\u00e9ment",
+        "prof": "Chowanietz, Christophe Clément",
         "rating": {
-          "prof": "Chowanietz, Christophe Cl\u00e9ment",
+          "prof": "Chowanietz, Christophe Clément",
           "score": 88.6,
           "avg": 4.5,
           "nRating": 56,
@@ -28506,9 +28506,9 @@
         "title": "Introduction to Political Science",
         "type": "lecture",
         "sectionId": 430,
-        "prof": "Chowanietz, Christophe Cl\u00e9ment",
+        "prof": "Chowanietz, Christophe Clément",
         "rating": {
-          "prof": "Chowanietz, Christophe Cl\u00e9ment",
+          "prof": "Chowanietz, Christophe Clément",
           "score": 88.6,
           "avg": 4.5,
           "nRating": 56,
@@ -30678,9 +30678,9 @@
         "title": "Popular Culture",
         "type": "lecture",
         "sectionId": 473,
-        "prof": "Beaupr\u00e9-Odorico, Vicki",
+        "prof": "Beaupré-Odorico, Vicki",
         "rating": {
-          "prof": "Beaupr\u00e9-Odorico, Vicki",
+          "prof": "Beaupré-Odorico, Vicki",
           "score": 90.2,
           "avg": 4.8,
           "nRating": 14,
@@ -32109,11 +32109,11 @@
     "section": "00001",
     "domain": "MATHEMATICS",
     "code": "201-A3F-AB",
-    "title": "Probabilit\u00e9s et statistiques",
+    "title": "Probabilités et statistiques",
     "leclabs": [
       {
         "id": 703,
-        "title": "Probabilit\u00e9s et statistiques",
+        "title": "Probabilités et statistiques",
         "type": "lecture",
         "sectionId": 504,
         "prof": "Dubois, Olivier",
@@ -33099,11 +33099,11 @@
     "section": "00001",
     "domain": "THEATRE ARTS",
     "code": "560-LAF-AB",
-    "title": "Atelier de th\u00e9\u00e2tre: explorer la condition humaine",
+    "title": "Atelier de théâtre: explorer la condition humaine",
     "leclabs": [
       {
         "id": 724,
-        "title": "Atelier de th\u00e9\u00e2tre: explorer la condition humaine",
+        "title": "Atelier de théâtre: explorer la condition humaine",
         "type": "lecture",
         "sectionId": 521,
         "prof": "Fontaine, Edouard",
@@ -33463,11 +33463,11 @@
     "section": "00003",
     "domain": "",
     "code": "502-CCC-AB",
-    "title": "Arts and Cultures of Qu\u00e9bec",
+    "title": "Arts and Cultures of Québec",
     "leclabs": [
       {
         "id": 731,
-        "title": "Arts and Cultures of Qu\u00e9bec",
+        "title": "Arts and Cultures of Québec",
         "type": "lecture",
         "sectionId": 528,
         "prof": "Wees, Michael",
@@ -33508,11 +33508,11 @@
     "section": "00004",
     "domain": "",
     "code": "502-CCC-AB",
-    "title": "Arts and Cultures of Qu\u00e9bec",
+    "title": "Arts and Cultures of Québec",
     "leclabs": [
       {
         "id": 732,
-        "title": "Arts and Cultures of Qu\u00e9bec",
+        "title": "Arts and Cultures of Québec",
         "type": "lecture",
         "sectionId": 529,
         "prof": "",
@@ -33544,11 +33544,11 @@
     "section": "00001",
     "domain": "",
     "code": "502-CCC-AB",
-    "title": "Arts and Cultures of Qu\u00e9bec",
+    "title": "Arts and Cultures of Québec",
     "leclabs": [
       {
         "id": 733,
-        "title": "Arts and Cultures of Qu\u00e9bec",
+        "title": "Arts and Cultures of Québec",
         "type": "lecture",
         "sectionId": 530,
         "prof": "Golden, Anne",
@@ -33589,11 +33589,11 @@
     "section": "00002",
     "domain": "",
     "code": "502-CCC-AB",
-    "title": "Arts and Cultures of Qu\u00e9bec",
+    "title": "Arts and Cultures of Québec",
     "leclabs": [
       {
         "id": 734,
-        "title": "Arts and Cultures of Qu\u00e9bec",
+        "title": "Arts and Cultures of Québec",
         "type": "lecture",
         "sectionId": 531,
         "prof": "Golden, Anne",
@@ -33760,11 +33760,11 @@
     "section": "00001",
     "domain": "",
     "code": "502-CFC-AB",
-    "title": "Arts et cultures du Qu\u00e9bec",
+    "title": "Arts et cultures du Québec",
     "leclabs": [
       {
         "id": 738,
-        "title": "Arts et cultures du Qu\u00e9bec",
+        "title": "Arts et cultures du Québec",
         "type": "lecture",
         "sectionId": 535,
         "prof": "Hage, Merdad",
@@ -36655,9 +36655,9 @@
         "title": "Insights: Community, College, and Self",
         "type": "lecture",
         "sectionId": 589,
-        "prof": "Couture-Grondin, \u00c9lise",
+        "prof": "Couture-Grondin, Élise",
         "rating": {
-          "prof": "Couture-Grondin, \u00c9lise",
+          "prof": "Couture-Grondin, Élise",
           "score": 0.0,
           "avg": 0.0,
           "nRating": 0,
@@ -43631,11 +43631,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-011-AB",
-    "title": "Initiation au fran\u00e7ais, langue seconde",
+    "title": "Initiation au français, langue seconde",
     "leclabs": [
       {
         "id": 936,
-        "title": "Initiation au fran\u00e7ais, langue seconde",
+        "title": "Initiation au français, langue seconde",
         "type": "lecture",
         "sectionId": 726,
         "prof": "Bessette, Ariane",
@@ -43688,11 +43688,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-006-50",
-    "title": "Pratique du fran\u00e7ais, langue seconde, \u00e0 l'oral et \u00e0 l'\u00e9crit",
+    "title": "Pratique du français, langue seconde, à l'oral et à l'écrit",
     "leclabs": [
       {
         "id": 937,
-        "title": "Pratique du fran\u00e7ais, langue seconde, \u00e0 l'oral et \u00e0 l'\u00e9crit",
+        "title": "Pratique du français, langue seconde, à l'oral et à l'écrit",
         "type": "lecture",
         "sectionId": 727,
         "prof": "Hemmati, Proshat",
@@ -43739,11 +43739,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-007-50",
-    "title": "Pratique du fran\u00e7ais, langue seconde, \u00e0 l'oral et \u00e0 l'\u00e9crit",
+    "title": "Pratique du français, langue seconde, à l'oral et à l'écrit",
     "leclabs": [
       {
         "id": 938,
-        "title": "Pratique du fran\u00e7ais, langue seconde, \u00e0 l'oral et \u00e0 l'\u00e9crit",
+        "title": "Pratique du français, langue seconde, à l'oral et à l'écrit",
         "type": "lecture",
         "sectionId": 728,
         "prof": "Hemmati, Proshat",
@@ -43790,11 +43790,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-009-AB",
-    "title": "Renforcement en fran\u00e7ais, langue seconde",
+    "title": "Renforcement en français, langue seconde",
     "leclabs": [
       {
         "id": 939,
-        "title": "Renforcement en fran\u00e7ais, langue seconde",
+        "title": "Renforcement en français, langue seconde",
         "type": "lecture",
         "sectionId": 729,
         "prof": "Tellier, Christine",
@@ -43841,11 +43841,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-009-AB",
-    "title": "Renforcement en fran\u00e7ais, langue seconde",
+    "title": "Renforcement en français, langue seconde",
     "leclabs": [
       {
         "id": 940,
-        "title": "Renforcement en fran\u00e7ais, langue seconde",
+        "title": "Renforcement en français, langue seconde",
         "type": "lecture",
         "sectionId": 730,
         "prof": "Nicou, Claude",
@@ -43892,11 +43892,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-009-AB",
-    "title": "Renforcement en fran\u00e7ais, langue seconde",
+    "title": "Renforcement en français, langue seconde",
     "leclabs": [
       {
         "id": 941,
-        "title": "Renforcement en fran\u00e7ais, langue seconde",
+        "title": "Renforcement en français, langue seconde",
         "type": "lecture",
         "sectionId": 731,
         "prof": "Tellier, Christine",
@@ -43943,11 +43943,11 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-009-AB",
-    "title": "Renforcement en fran\u00e7ais, langue seconde",
+    "title": "Renforcement en français, langue seconde",
     "leclabs": [
       {
         "id": 942,
-        "title": "Renforcement en fran\u00e7ais, langue seconde",
+        "title": "Renforcement en français, langue seconde",
         "type": "lecture",
         "sectionId": 732,
         "prof": "Tellier, Christine",
@@ -43994,16 +43994,16 @@
     "section": "00005",
     "domain": "FRENCH",
     "code": "602-009-AB",
-    "title": "Renforcement en fran\u00e7ais, langue seconde",
+    "title": "Renforcement en français, langue seconde",
     "leclabs": [
       {
         "id": 943,
-        "title": "Renforcement en fran\u00e7ais, langue seconde",
+        "title": "Renforcement en français, langue seconde",
         "type": "lecture",
         "sectionId": 733,
-        "prof": "Couture-Grondin, \u00c9lise",
+        "prof": "Couture-Grondin, Élise",
         "rating": {
-          "prof": "Couture-Grondin, \u00c9lise",
+          "prof": "Couture-Grondin, Élise",
           "score": 0.0,
           "avg": 0.0,
           "nRating": 0,
@@ -44045,11 +44045,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-008-RE",
-    "title": "Mise \u00e0 niveau pour Fran\u00e7ais, langue seconde de la 5e seconda",
+    "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
     "leclabs": [
       {
         "id": 944,
-        "title": "Mise \u00e0 niveau pour Fran\u00e7ais, langue seconde de la 5e seconda",
+        "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
         "type": "lecture",
         "sectionId": 734,
         "prof": "Tellier, Christine",
@@ -44096,11 +44096,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-008-RE",
-    "title": "Mise \u00e0 niveau pour Fran\u00e7ais, langue seconde de la 5e seconda",
+    "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
     "leclabs": [
       {
         "id": 945,
-        "title": "Mise \u00e0 niveau pour Fran\u00e7ais, langue seconde de la 5e seconda",
+        "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
         "type": "lecture",
         "sectionId": 735,
         "prof": "Nicou, Claude",
@@ -44147,11 +44147,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-008-RE",
-    "title": "Mise \u00e0 niveau pour Fran\u00e7ais, langue seconde de la 5e seconda",
+    "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
     "leclabs": [
       {
         "id": 946,
-        "title": "Mise \u00e0 niveau pour Fran\u00e7ais, langue seconde de la 5e seconda",
+        "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
         "type": "lecture",
         "sectionId": 736,
         "prof": "Tellier, Christine",
@@ -44198,11 +44198,11 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-008-RE",
-    "title": "Mise \u00e0 niveau pour Fran\u00e7ais, langue seconde de la 5e seconda",
+    "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
     "leclabs": [
       {
         "id": 947,
-        "title": "Mise \u00e0 niveau pour Fran\u00e7ais, langue seconde de la 5e seconda",
+        "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
         "type": "lecture",
         "sectionId": 737,
         "prof": "Tellier, Christine",
@@ -44249,16 +44249,16 @@
     "section": "00005",
     "domain": "FRENCH",
     "code": "602-008-RE",
-    "title": "Mise \u00e0 niveau pour Fran\u00e7ais, langue seconde de la 5e seconda",
+    "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
     "leclabs": [
       {
         "id": 948,
-        "title": "Mise \u00e0 niveau pour Fran\u00e7ais, langue seconde de la 5e seconda",
+        "title": "Mise à niveau pour Français, langue seconde de la 5e seconda",
         "type": "lecture",
         "sectionId": 738,
-        "prof": "Couture-Grondin, \u00c9lise",
+        "prof": "Couture-Grondin, Élise",
         "rating": {
-          "prof": "Couture-Grondin, \u00c9lise",
+          "prof": "Couture-Grondin, Élise",
           "score": 0.0,
           "avg": 0.0,
           "nRating": 0,
@@ -44300,11 +44300,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-100-MQ",
-    "title": "Fran\u00e7ais niveau 1",
+    "title": "Français niveau 1",
     "leclabs": [
       {
         "id": 949,
-        "title": "Fran\u00e7ais niveau 1",
+        "title": "Français niveau 1",
         "type": "lecture",
         "sectionId": 739,
         "prof": "Laganiere, Frederic",
@@ -44351,11 +44351,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-100-MQ",
-    "title": "Fran\u00e7ais niveau 1",
+    "title": "Français niveau 1",
     "leclabs": [
       {
         "id": 950,
-        "title": "Fran\u00e7ais niveau 1",
+        "title": "Français niveau 1",
         "type": "lecture",
         "sectionId": 740,
         "prof": "Mizouni, Sophia",
@@ -44402,11 +44402,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-100-MQ",
-    "title": "Fran\u00e7ais niveau 1",
+    "title": "Français niveau 1",
     "leclabs": [
       {
         "id": 951,
-        "title": "Fran\u00e7ais niveau 1",
+        "title": "Français niveau 1",
         "type": "lecture",
         "sectionId": 741,
         "prof": "Mizouni, Sophia",
@@ -44453,11 +44453,11 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-100-MQ",
-    "title": "Fran\u00e7ais niveau 1",
+    "title": "Français niveau 1",
     "leclabs": [
       {
         "id": 952,
-        "title": "Fran\u00e7ais niveau 1",
+        "title": "Français niveau 1",
         "type": "lecture",
         "sectionId": 742,
         "prof": "Prince, Sophie",
@@ -44504,11 +44504,11 @@
     "section": "00005",
     "domain": "FRENCH",
     "code": "602-100-MQ",
-    "title": "Fran\u00e7ais niveau 1",
+    "title": "Français niveau 1",
     "leclabs": [
       {
         "id": 953,
-        "title": "Fran\u00e7ais niveau 1",
+        "title": "Français niveau 1",
         "type": "lecture",
         "sectionId": 743,
         "prof": "Laganiere, Frederic",
@@ -44555,11 +44555,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-101-MQ",
-    "title": "Fran\u00e7ais niveau 2",
+    "title": "Français niveau 2",
     "leclabs": [
       {
         "id": 954,
-        "title": "Fran\u00e7ais niveau 2",
+        "title": "Français niveau 2",
         "type": "lecture",
         "sectionId": 744,
         "prof": "Nicou, Claude",
@@ -44606,11 +44606,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-101-MQ",
-    "title": "Fran\u00e7ais niveau 2",
+    "title": "Français niveau 2",
     "leclabs": [
       {
         "id": 955,
-        "title": "Fran\u00e7ais niveau 2",
+        "title": "Français niveau 2",
         "type": "lecture",
         "sectionId": 745,
         "prof": "Inch, Robert A.",
@@ -44657,11 +44657,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-101-MQ",
-    "title": "Fran\u00e7ais niveau 2",
+    "title": "Français niveau 2",
     "leclabs": [
       {
         "id": 956,
-        "title": "Fran\u00e7ais niveau 2",
+        "title": "Français niveau 2",
         "type": "lecture",
         "sectionId": 746,
         "prof": "Inch, Robert A.",
@@ -44708,16 +44708,16 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-101-MQ",
-    "title": "Fran\u00e7ais niveau 2",
+    "title": "Français niveau 2",
     "leclabs": [
       {
         "id": 957,
-        "title": "Fran\u00e7ais niveau 2",
+        "title": "Français niveau 2",
         "type": "lecture",
         "sectionId": 747,
-        "prof": "Estim\u00e9, Qualito",
+        "prof": "Estimé, Qualito",
         "rating": {
-          "prof": "Estim\u00e9, Qualito",
+          "prof": "Estimé, Qualito",
           "score": 38.9,
           "avg": 1.9,
           "nRating": 25,
@@ -44759,11 +44759,11 @@
     "section": "00005",
     "domain": "FRENCH",
     "code": "602-101-MQ",
-    "title": "Fran\u00e7ais niveau 2",
+    "title": "Français niveau 2",
     "leclabs": [
       {
         "id": 958,
-        "title": "Fran\u00e7ais niveau 2",
+        "title": "Français niveau 2",
         "type": "lecture",
         "sectionId": 748,
         "prof": "Nicou, Claude",
@@ -44810,11 +44810,11 @@
     "section": "00006",
     "domain": "FRENCH",
     "code": "602-101-MQ",
-    "title": "Fran\u00e7ais niveau 2",
+    "title": "Français niveau 2",
     "leclabs": [
       {
         "id": 959,
-        "title": "Fran\u00e7ais niveau 2",
+        "title": "Français niveau 2",
         "type": "lecture",
         "sectionId": 749,
         "prof": "Mercado, Sebastian",
@@ -44861,11 +44861,11 @@
     "section": "00007",
     "domain": "FRENCH",
     "code": "602-101-MQ",
-    "title": "Fran\u00e7ais niveau 2",
+    "title": "Français niveau 2",
     "leclabs": [
       {
         "id": 960,
-        "title": "Fran\u00e7ais niveau 2",
+        "title": "Français niveau 2",
         "type": "lecture",
         "sectionId": 750,
         "prof": "Michael, Minar",
@@ -44912,11 +44912,11 @@
     "section": "00008",
     "domain": "FRENCH",
     "code": "602-101-MQ",
-    "title": "Fran\u00e7ais niveau 2",
+    "title": "Français niveau 2",
     "leclabs": [
       {
         "id": 961,
-        "title": "Fran\u00e7ais niveau 2",
+        "title": "Français niveau 2",
         "type": "lecture",
         "sectionId": 751,
         "prof": "Michael, Minar",
@@ -44963,11 +44963,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-PR2-AB",
-    "title": "Pratique du fran\u00e7ais, langue d'enseignement 2",
+    "title": "Pratique du français, langue d'enseignement 2",
     "leclabs": [
       {
         "id": 962,
-        "title": "Pratique du fran\u00e7ais, langue d'enseignement 2",
+        "title": "Pratique du français, langue d'enseignement 2",
         "type": "lecture",
         "sectionId": 752,
         "prof": "Xu, Xiao",
@@ -45020,11 +45020,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-102-MQ",
-    "title": "Fran\u00e7ais niveau 3",
+    "title": "Français niveau 3",
     "leclabs": [
       {
         "id": 963,
-        "title": "Fran\u00e7ais niveau 3",
+        "title": "Français niveau 3",
         "type": "lecture",
         "sectionId": 753,
         "prof": "Tellier, Christine",
@@ -45065,11 +45065,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-102-MQ",
-    "title": "Fran\u00e7ais niveau 3",
+    "title": "Français niveau 3",
     "leclabs": [
       {
         "id": 964,
-        "title": "Fran\u00e7ais niveau 3",
+        "title": "Français niveau 3",
         "type": "lecture",
         "sectionId": 754,
         "prof": "Boutin, David",
@@ -45110,11 +45110,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-102-MQ",
-    "title": "Fran\u00e7ais niveau 3",
+    "title": "Français niveau 3",
     "leclabs": [
       {
         "id": 965,
-        "title": "Fran\u00e7ais niveau 3",
+        "title": "Français niveau 3",
         "type": "lecture",
         "sectionId": 755,
         "prof": "Boutin, David",
@@ -45155,11 +45155,11 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-102-MQ",
-    "title": "Fran\u00e7ais niveau 3",
+    "title": "Français niveau 3",
     "leclabs": [
       {
         "id": 966,
-        "title": "Fran\u00e7ais niveau 3",
+        "title": "Français niveau 3",
         "type": "lecture",
         "sectionId": 756,
         "prof": "Popica, Maria",
@@ -45200,11 +45200,11 @@
     "section": "00005",
     "domain": "FRENCH",
     "code": "602-102-MQ",
-    "title": "Fran\u00e7ais niveau 3",
+    "title": "Français niveau 3",
     "leclabs": [
       {
         "id": 967,
-        "title": "Fran\u00e7ais niveau 3",
+        "title": "Français niveau 3",
         "type": "lecture",
         "sectionId": 757,
         "prof": "Lazhar, Yasmine",
@@ -45245,16 +45245,16 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-C01-MQ",
-    "title": "Fran\u00e7ais et soci\u00e9t\u00e9 qu\u00e9b\u00e9coise (niveau 1)",
+    "title": "Français et société québécoise (niveau 1)",
     "leclabs": [
       {
         "id": 968,
-        "title": "Fran\u00e7ais et soci\u00e9t\u00e9 qu\u00e9b\u00e9coise (niveau 1)",
+        "title": "Français et société québécoise (niveau 1)",
         "type": "lecture",
         "sectionId": 758,
-        "prof": "Estim\u00e9, Qualito",
+        "prof": "Estimé, Qualito",
         "rating": {
-          "prof": "Estim\u00e9, Qualito",
+          "prof": "Estimé, Qualito",
           "score": 38.9,
           "avg": 1.9,
           "nRating": 25,
@@ -45296,11 +45296,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-C01-MQ",
-    "title": "Fran\u00e7ais et soci\u00e9t\u00e9 qu\u00e9b\u00e9coise (niveau 1)",
+    "title": "Français et société québécoise (niveau 1)",
     "leclabs": [
       {
         "id": 969,
-        "title": "Fran\u00e7ais et soci\u00e9t\u00e9 qu\u00e9b\u00e9coise (niveau 1)",
+        "title": "Français et société québécoise (niveau 1)",
         "type": "lecture",
         "sectionId": 759,
         "prof": "Aissani, Louiza",
@@ -45347,11 +45347,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-C01-MQ",
-    "title": "Fran\u00e7ais et soci\u00e9t\u00e9 qu\u00e9b\u00e9coise (niveau 1)",
+    "title": "Français et société québécoise (niveau 1)",
     "leclabs": [
       {
         "id": 970,
-        "title": "Fran\u00e7ais et soci\u00e9t\u00e9 qu\u00e9b\u00e9coise (niveau 1)",
+        "title": "Français et société québécoise (niveau 1)",
         "type": "lecture",
         "sectionId": 760,
         "prof": "Aissani, Louiza",
@@ -45398,11 +45398,11 @@
     "section": "00007",
     "domain": "FRENCH",
     "code": "602-REN-AB",
-    "title": "Renforcement en fran\u00e7ais \u00e9crit",
+    "title": "Renforcement en français écrit",
     "leclabs": [
       {
         "id": 971,
-        "title": "Renforcement en fran\u00e7ais \u00e9crit",
+        "title": "Renforcement en français écrit",
         "type": "lecture",
         "sectionId": 761,
         "prof": "Mariage, Sylvie",
@@ -45449,11 +45449,11 @@
     "section": "00008",
     "domain": "FRENCH",
     "code": "602-REN-AB",
-    "title": "Renforcement en fran\u00e7ais \u00e9crit",
+    "title": "Renforcement en français écrit",
     "leclabs": [
       {
         "id": 972,
-        "title": "Renforcement en fran\u00e7ais \u00e9crit",
+        "title": "Renforcement en français écrit",
         "type": "lecture",
         "sectionId": 762,
         "prof": "Campeau-Devlin, Marianne",
@@ -45500,11 +45500,11 @@
     "section": "00009",
     "domain": "FRENCH",
     "code": "602-REN-AB",
-    "title": "Renforcement en fran\u00e7ais \u00e9crit",
+    "title": "Renforcement en français écrit",
     "leclabs": [
       {
         "id": 973,
-        "title": "Renforcement en fran\u00e7ais \u00e9crit",
+        "title": "Renforcement en français écrit",
         "type": "lecture",
         "sectionId": 763,
         "prof": "Mariage, Sylvie",
@@ -45551,11 +45551,11 @@
     "section": "00010",
     "domain": "FRENCH",
     "code": "602-REN-AB",
-    "title": "Renforcement en fran\u00e7ais \u00e9crit",
+    "title": "Renforcement en français écrit",
     "leclabs": [
       {
         "id": 974,
-        "title": "Renforcement en fran\u00e7ais \u00e9crit",
+        "title": "Renforcement en français écrit",
         "type": "lecture",
         "sectionId": 764,
         "prof": "Campeau-Devlin, Marianne",
@@ -45602,16 +45602,16 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-REN-AB",
-    "title": "Renforcement en fran\u00e7ais \u00e9crit",
+    "title": "Renforcement en français écrit",
     "leclabs": [
       {
         "id": 975,
-        "title": "Renforcement en fran\u00e7ais \u00e9crit",
+        "title": "Renforcement en français écrit",
         "type": "lecture",
         "sectionId": 765,
-        "prof": "Rozenberg, \u00c9velyne",
+        "prof": "Rozenberg, Évelyne",
         "rating": {
-          "prof": "Rozenberg, \u00c9velyne",
+          "prof": "Rozenberg, Évelyne",
           "score": 84.2,
           "avg": 4.7,
           "nRating": 7,
@@ -45653,11 +45653,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-REN-AB",
-    "title": "Renforcement en fran\u00e7ais \u00e9crit",
+    "title": "Renforcement en français écrit",
     "leclabs": [
       {
         "id": 976,
-        "title": "Renforcement en fran\u00e7ais \u00e9crit",
+        "title": "Renforcement en français écrit",
         "type": "lecture",
         "sectionId": 766,
         "prof": "Sweeney, Antoine",
@@ -45704,16 +45704,16 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-REN-AB",
-    "title": "Renforcement en fran\u00e7ais \u00e9crit",
+    "title": "Renforcement en français écrit",
     "leclabs": [
       {
         "id": 977,
-        "title": "Renforcement en fran\u00e7ais \u00e9crit",
+        "title": "Renforcement en français écrit",
         "type": "lecture",
         "sectionId": 767,
-        "prof": "Tiganus Calin, Am\u00e9lia",
+        "prof": "Tiganus Calin, Amélia",
         "rating": {
-          "prof": "Tiganus Calin, Am\u00e9lia",
+          "prof": "Tiganus Calin, Amélia",
           "score": 41.8,
           "avg": 2.0,
           "nRating": 9,
@@ -45755,16 +45755,16 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-REN-AB",
-    "title": "Renforcement en fran\u00e7ais \u00e9crit",
+    "title": "Renforcement en français écrit",
     "leclabs": [
       {
         "id": 978,
-        "title": "Renforcement en fran\u00e7ais \u00e9crit",
+        "title": "Renforcement en français écrit",
         "type": "lecture",
         "sectionId": 768,
-        "prof": "Rozenberg, \u00c9velyne",
+        "prof": "Rozenberg, Évelyne",
         "rating": {
-          "prof": "Rozenberg, \u00c9velyne",
+          "prof": "Rozenberg, Évelyne",
           "score": 84.2,
           "avg": 4.7,
           "nRating": 7,
@@ -45806,16 +45806,16 @@
     "section": "00005",
     "domain": "FRENCH",
     "code": "602-REN-AB",
-    "title": "Renforcement en fran\u00e7ais \u00e9crit",
+    "title": "Renforcement en français écrit",
     "leclabs": [
       {
         "id": 979,
-        "title": "Renforcement en fran\u00e7ais \u00e9crit",
+        "title": "Renforcement en français écrit",
         "type": "lecture",
         "sectionId": 769,
-        "prof": "Tiganus Calin, Am\u00e9lia",
+        "prof": "Tiganus Calin, Amélia",
         "rating": {
-          "prof": "Tiganus Calin, Am\u00e9lia",
+          "prof": "Tiganus Calin, Amélia",
           "score": 41.8,
           "avg": 2.0,
           "nRating": 9,
@@ -45857,11 +45857,11 @@
     "section": "00006",
     "domain": "FRENCH",
     "code": "602-REN-AB",
-    "title": "Renforcement en fran\u00e7ais \u00e9crit",
+    "title": "Renforcement en français écrit",
     "leclabs": [
       {
         "id": 980,
-        "title": "Renforcement en fran\u00e7ais \u00e9crit",
+        "title": "Renforcement en français écrit",
         "type": "lecture",
         "sectionId": 770,
         "prof": "Bernard, Matthieu",
@@ -45908,11 +45908,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-103-MQ",
-    "title": "Fran\u00e7ais niveau 4",
+    "title": "Français niveau 4",
     "leclabs": [
       {
         "id": 981,
-        "title": "Fran\u00e7ais niveau 4",
+        "title": "Français niveau 4",
         "type": "lecture",
         "sectionId": 771,
         "prof": "Rondeau, Daniel",
@@ -45953,11 +45953,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-103-MQ",
-    "title": "Fran\u00e7ais niveau 4",
+    "title": "Français niveau 4",
     "leclabs": [
       {
         "id": 982,
-        "title": "Fran\u00e7ais niveau 4",
+        "title": "Français niveau 4",
         "type": "lecture",
         "sectionId": 772,
         "prof": "Laganiere, Frederic",
@@ -46004,11 +46004,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-103-MQ",
-    "title": "Histoire du fran\u00e7ais",
+    "title": "Histoire du français",
     "leclabs": [
       {
         "id": 983,
-        "title": "Histoire du fran\u00e7ais",
+        "title": "Histoire du français",
         "type": "lecture",
         "sectionId": 773,
         "prof": "Prince, Sophie",
@@ -46055,11 +46055,11 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-103-MQ",
-    "title": "Histoire du fran\u00e7ais",
+    "title": "Histoire du français",
     "leclabs": [
       {
         "id": 984,
-        "title": "Histoire du fran\u00e7ais",
+        "title": "Histoire du français",
         "type": "lecture",
         "sectionId": 774,
         "prof": "Prince, Sophie",
@@ -46106,11 +46106,11 @@
     "section": "00005",
     "domain": "FRENCH",
     "code": "602-103-MQ",
-    "title": "Fran\u00e7ais niveau 4",
+    "title": "Français niveau 4",
     "leclabs": [
       {
         "id": 985,
-        "title": "Fran\u00e7ais niveau 4",
+        "title": "Français niveau 4",
         "type": "lecture",
         "sectionId": 775,
         "prof": "Rondeau, Daniel",
@@ -46151,11 +46151,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-200-AB",
-    "title": "Fran\u00e7ais niveau 1",
+    "title": "Français niveau 1",
     "leclabs": [
       {
         "id": 986,
-        "title": "Fran\u00e7ais niveau 1",
+        "title": "Français niveau 1",
         "type": "lecture",
         "sectionId": 776,
         "prof": "Bernard, Matthieu",
@@ -46202,16 +46202,16 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-200-AB",
-    "title": "Fran\u00e7ais niveau 1",
+    "title": "Français niveau 1",
     "leclabs": [
       {
         "id": 987,
-        "title": "Fran\u00e7ais niveau 1",
+        "title": "Français niveau 1",
         "type": "lecture",
         "sectionId": 777,
-        "prof": "Rozenberg, \u00c9velyne",
+        "prof": "Rozenberg, Évelyne",
         "rating": {
-          "prof": "Rozenberg, \u00c9velyne",
+          "prof": "Rozenberg, Évelyne",
           "score": 84.2,
           "avg": 4.7,
           "nRating": 7,
@@ -46253,11 +46253,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-200-AB",
-    "title": "Fran\u00e7ais niveau 1",
+    "title": "Français niveau 1",
     "leclabs": [
       {
         "id": 988,
-        "title": "Fran\u00e7ais niveau 1",
+        "title": "Français niveau 1",
         "type": "lecture",
         "sectionId": 778,
         "prof": "Mercado, Sebastian",
@@ -46304,11 +46304,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-201-AB",
-    "title": "Fran\u00e7ais niveau 2",
+    "title": "Français niveau 2",
     "leclabs": [
       {
         "id": 989,
-        "title": "Fran\u00e7ais niveau 2",
+        "title": "Français niveau 2",
         "type": "lecture",
         "sectionId": 779,
         "prof": "Prince, Sophie",
@@ -46355,11 +46355,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-201-AB",
-    "title": "Fran\u00e7ais niveau 2",
+    "title": "Français niveau 2",
     "leclabs": [
       {
         "id": 990,
-        "title": "Fran\u00e7ais niveau 2",
+        "title": "Français niveau 2",
         "type": "lecture",
         "sectionId": 780,
         "prof": "Nicou, Claude",
@@ -46406,11 +46406,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-201-AB",
-    "title": "Fran\u00e7ais niveau 2",
+    "title": "Français niveau 2",
     "leclabs": [
       {
         "id": 991,
-        "title": "Fran\u00e7ais niveau 2",
+        "title": "Français niveau 2",
         "type": "lecture",
         "sectionId": 781,
         "prof": "Piquette, Sophie",
@@ -46457,16 +46457,16 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-201-AB",
-    "title": "Fran\u00e7ais niveau 2",
+    "title": "Français niveau 2",
     "leclabs": [
       {
         "id": 992,
-        "title": "Fran\u00e7ais niveau 2",
+        "title": "Français niveau 2",
         "type": "lecture",
         "sectionId": 782,
-        "prof": "Rozenberg, \u00c9velyne",
+        "prof": "Rozenberg, Évelyne",
         "rating": {
-          "prof": "Rozenberg, \u00c9velyne",
+          "prof": "Rozenberg, Évelyne",
           "score": 84.2,
           "avg": 4.7,
           "nRating": 7,
@@ -46502,11 +46502,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-202-AB",
-    "title": "Fran\u00e7ais niveau 3",
+    "title": "Français niveau 3",
     "leclabs": [
       {
         "id": 993,
-        "title": "Fran\u00e7ais niveau 3",
+        "title": "Français niveau 3",
         "type": "lecture",
         "sectionId": 783,
         "prof": "Hemmati, Proshat",
@@ -46553,11 +46553,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-202-AB",
-    "title": "Fran\u00e7ais niveau 3",
+    "title": "Français niveau 3",
     "leclabs": [
       {
         "id": 994,
-        "title": "Fran\u00e7ais niveau 3",
+        "title": "Français niveau 3",
         "type": "lecture",
         "sectionId": 784,
         "prof": "Hemmati, Proshat",
@@ -46604,11 +46604,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-202-AB",
-    "title": "Fran\u00e7ais niveau 3",
+    "title": "Français niveau 3",
     "leclabs": [
       {
         "id": 995,
-        "title": "Fran\u00e7ais niveau 3",
+        "title": "Français niveau 3",
         "type": "lecture",
         "sectionId": 785,
         "prof": "Mercado, Sebastian",
@@ -46655,11 +46655,11 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-202-AB",
-    "title": "Fran\u00e7ais niveau 3",
+    "title": "Français niveau 3",
     "leclabs": [
       {
         "id": 996,
-        "title": "Fran\u00e7ais niveau 3",
+        "title": "Français niveau 3",
         "type": "lecture",
         "sectionId": 786,
         "prof": "Mercado, Sebastian",
@@ -46706,11 +46706,11 @@
     "section": "00005",
     "domain": "FRENCH",
     "code": "602-202-AB",
-    "title": "Fran\u00e7ais niveau 3",
+    "title": "Français niveau 3",
     "leclabs": [
       {
         "id": 997,
-        "title": "Fran\u00e7ais niveau 3",
+        "title": "Français niveau 3",
         "type": "lecture",
         "sectionId": 787,
         "prof": "Aissani, Louiza",
@@ -46751,11 +46751,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-203-AB",
-    "title": "Le Modernisme et le r\u00e9el",
+    "title": "Le Modernisme et le réel",
     "leclabs": [
       {
         "id": 998,
-        "title": "Le Modernisme et le r\u00e9el",
+        "title": "Le Modernisme et le réel",
         "type": "lecture",
         "sectionId": 788,
         "prof": "Limoges, Alexandre",
@@ -46802,11 +46802,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-203-AB",
-    "title": "Le Modernisme et le r\u00e9el",
+    "title": "Le Modernisme et le réel",
     "leclabs": [
       {
         "id": 999,
-        "title": "Le Modernisme et le r\u00e9el",
+        "title": "Le Modernisme et le réel",
         "type": "lecture",
         "sectionId": 789,
         "prof": "Limoges, Alexandre",
@@ -46853,11 +46853,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-203-AB",
-    "title": "Fran\u00e7ais niveau 4",
+    "title": "Français niveau 4",
     "leclabs": [
       {
         "id": 1000,
-        "title": "Fran\u00e7ais niveau 4",
+        "title": "Français niveau 4",
         "type": "lecture",
         "sectionId": 790,
         "prof": "Inch, Robert A.",
@@ -46904,11 +46904,11 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-203-AB",
-    "title": "Identit\u00e9s multiples",
+    "title": "Identités multiples",
     "leclabs": [
       {
         "id": 1001,
-        "title": "Identit\u00e9s multiples",
+        "title": "Identités multiples",
         "type": "lecture",
         "sectionId": 791,
         "prof": "Mariage, Sylvie",
@@ -46949,11 +46949,11 @@
     "section": "00007",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1002,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 792,
         "prof": "Inch, Robert A.",
@@ -46994,11 +46994,11 @@
     "section": "00008",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1003,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 793,
         "prof": "Limoges, Alexandre",
@@ -47039,11 +47039,11 @@
     "section": "00009",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1004,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 794,
         "prof": "Beausoleil, Jean Marc",
@@ -47084,11 +47084,11 @@
     "section": "00010",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1005,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 795,
         "prof": "Bechara, Rosa Maria",
@@ -47129,11 +47129,11 @@
     "section": "00011",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1006,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 796,
         "prof": "Bechara, Rosa Maria",
@@ -47174,11 +47174,11 @@
     "section": "00012",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1007,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 797,
         "prof": "Limoges, Alexandre",
@@ -47219,11 +47219,11 @@
     "section": "00013",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1008,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 798,
         "prof": "Babkine-Ringuette, Astrid",
@@ -47264,11 +47264,11 @@
     "section": "00014",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1009,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 799,
         "prof": "Bessette, Ariane",
@@ -47309,16 +47309,16 @@
     "section": "00015",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1010,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 800,
-        "prof": "Estim\u00e9, Qualito",
+        "prof": "Estimé, Qualito",
         "rating": {
-          "prof": "Estim\u00e9, Qualito",
+          "prof": "Estimé, Qualito",
           "score": 38.9,
           "avg": 1.9,
           "nRating": 25,
@@ -47354,11 +47354,11 @@
     "section": "00016",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1011,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 801,
         "prof": "Aissani, Louiza",
@@ -47399,11 +47399,11 @@
     "section": "00017",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1012,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 802,
         "prof": "Bernard, Matthieu",
@@ -47444,11 +47444,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1013,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 803,
         "prof": "Bernard, Matthieu",
@@ -47489,11 +47489,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1014,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 804,
         "prof": "Beausoleil, Jean Marc",
@@ -47534,11 +47534,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1015,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 805,
         "prof": "Laganiere, Frederic",
@@ -47579,11 +47579,11 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1016,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 806,
         "prof": "Michael, Minar",
@@ -47624,11 +47624,11 @@
     "section": "00005",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1017,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 807,
         "prof": "Bessette, Ariane",
@@ -47669,11 +47669,11 @@
     "section": "00006",
     "domain": "FRENCH",
     "code": "602-UF0-MQ",
-    "title": "Oeuvres narratives et \u00e9criture",
+    "title": "Oeuvres narratives et écriture",
     "leclabs": [
       {
         "id": 1018,
-        "title": "Oeuvres narratives et \u00e9criture",
+        "title": "Oeuvres narratives et écriture",
         "type": "lecture",
         "sectionId": 808,
         "prof": "Babkine-Ringuette, Astrid",
@@ -47714,11 +47714,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-C02-MQ",
-    "title": "Fran\u00e7ais et soci\u00e9t\u00e9 qu\u00e9b\u00e9coise (niveau 2)",
+    "title": "Français et société québécoise (niveau 2)",
     "leclabs": [
       {
         "id": 1019,
-        "title": "Fran\u00e7ais et soci\u00e9t\u00e9 qu\u00e9b\u00e9coise (niveau 2)",
+        "title": "Français et société québécoise (niveau 2)",
         "type": "lecture",
         "sectionId": 809,
         "prof": "Pezeshki, Shahrouz",
@@ -47765,11 +47765,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-C02-MQ",
-    "title": "Fran\u00e7ais et soci\u00e9t\u00e9 qu\u00e9b\u00e9coise (niveau 2)",
+    "title": "Français et société québécoise (niveau 2)",
     "leclabs": [
       {
         "id": 1020,
-        "title": "Fran\u00e7ais et soci\u00e9t\u00e9 qu\u00e9b\u00e9coise (niveau 2)",
+        "title": "Français et société québécoise (niveau 2)",
         "type": "lecture",
         "sectionId": 810,
         "prof": "Pezeshki, Shahrouz",
@@ -47816,11 +47816,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-C02-MQ",
-    "title": "Fran\u00e7ais et soci\u00e9t\u00e9 qu\u00e9b\u00e9coise (niveau 2)",
+    "title": "Français et société québécoise (niveau 2)",
     "leclabs": [
       {
         "id": 1021,
-        "title": "Fran\u00e7ais et soci\u00e9t\u00e9 qu\u00e9b\u00e9coise (niveau 2)",
+        "title": "Français et société québécoise (niveau 2)",
         "type": "lecture",
         "sectionId": 811,
         "prof": "Mizouni, Sophia",
@@ -47874,11 +47874,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-D01-MQ",
-    "title": "Fran\u00e7ais, travail et num\u00e9rique (niveau 1)",
+    "title": "Français, travail et numérique (niveau 1)",
     "leclabs": [
       {
         "id": 1022,
-        "title": "Fran\u00e7ais, travail et num\u00e9rique (niveau 1)",
+        "title": "Français, travail et numérique (niveau 1)",
         "type": "lecture",
         "sectionId": 812,
         "prof": "Mizouni, Sophia",
@@ -47925,16 +47925,16 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-D01-MQ",
-    "title": "Fran\u00e7ais, travail et num\u00e9rique (niveau 1)",
+    "title": "Français, travail et numérique (niveau 1)",
     "leclabs": [
       {
         "id": 1023,
-        "title": "Fran\u00e7ais, travail et num\u00e9rique (niveau 1)",
+        "title": "Français, travail et numérique (niveau 1)",
         "type": "lecture",
         "sectionId": 813,
-        "prof": "Gagn\u00e9, Nicolas",
+        "prof": "Gagné, Nicolas",
         "rating": {
-          "prof": "Gagn\u00e9, Nicolas",
+          "prof": "Gagné, Nicolas",
           "score": 61.5,
           "avg": 3.1,
           "nRating": 46,
@@ -47976,11 +47976,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-D01-MQ",
-    "title": "Fran\u00e7ais, travail et num\u00e9rique (niveau 1)",
+    "title": "Français, travail et numérique (niveau 1)",
     "leclabs": [
       {
         "id": 1024,
-        "title": "Fran\u00e7ais, travail et num\u00e9rique (niveau 1)",
+        "title": "Français, travail et numérique (niveau 1)",
         "type": "lecture",
         "sectionId": 814,
         "prof": "Sweeney, Antoine",
@@ -48027,11 +48027,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-D02-MQ",
-    "title": "Fran\u00e7ais, travail et num\u00e9rique (niveau 2)",
+    "title": "Français, travail et numérique (niveau 2)",
     "leclabs": [
       {
         "id": 1025,
-        "title": "Fran\u00e7ais, travail et num\u00e9rique (niveau 2)",
+        "title": "Français, travail et numérique (niveau 2)",
         "type": "lecture",
         "sectionId": 815,
         "prof": "Xu, Xiao",
@@ -48078,11 +48078,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-D02-MQ",
-    "title": "Fran\u00e7ais, travail et num\u00e9rique (niveau 2)",
+    "title": "Français, travail et numérique (niveau 2)",
     "leclabs": [
       {
         "id": 1026,
-        "title": "Fran\u00e7ais, travail et num\u00e9rique (niveau 2)",
+        "title": "Français, travail et numérique (niveau 2)",
         "type": "lecture",
         "sectionId": 816,
         "prof": "Dukanic, Filip",
@@ -48123,11 +48123,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-D02-MQ",
-    "title": "Fran\u00e7ais, travail et num\u00e9rique (niveau 2)",
+    "title": "Français, travail et numérique (niveau 2)",
     "leclabs": [
       {
         "id": 1027,
-        "title": "Fran\u00e7ais, travail et num\u00e9rique (niveau 2)",
+        "title": "Français, travail et numérique (niveau 2)",
         "type": "lecture",
         "sectionId": 817,
         "prof": "Dukanic, Filip",
@@ -48168,11 +48168,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-E01-MQ",
-    "title": "Projet exp\u00e9rientiel en fran\u00e7ais (niveau 1)",
+    "title": "Projet expérientiel en français (niveau 1)",
     "leclabs": [
       {
         "id": 1028,
-        "title": "Projet exp\u00e9rientiel en fran\u00e7ais (niveau 1)",
+        "title": "Projet expérientiel en français (niveau 1)",
         "type": "lecture",
         "sectionId": 818,
         "prof": "Pezeshki, Shahrouz",
@@ -48213,16 +48213,16 @@
     "section": "00010",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1029,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 819,
-        "prof": "Gagn\u00e9, Nicolas",
+        "prof": "Gagné, Nicolas",
         "rating": {
-          "prof": "Gagn\u00e9, Nicolas",
+          "prof": "Gagné, Nicolas",
           "score": 61.5,
           "avg": 3.1,
           "nRating": 46,
@@ -48258,11 +48258,11 @@
     "section": "00011",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1030,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 820,
         "prof": "Bechara, Rosa Maria",
@@ -48303,16 +48303,16 @@
     "section": "00012",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1031,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 821,
-        "prof": "Couture-Grondin, \u00c9lise",
+        "prof": "Couture-Grondin, Élise",
         "rating": {
-          "prof": "Couture-Grondin, \u00c9lise",
+          "prof": "Couture-Grondin, Élise",
           "score": 0.0,
           "avg": 0.0,
           "nRating": 0,
@@ -48348,11 +48348,11 @@
     "section": "00013",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1032,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 822,
         "prof": "Sweeney, Antoine",
@@ -48393,11 +48393,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1033,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 823,
         "prof": "Dukanic, Filip",
@@ -48438,11 +48438,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1034,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 824,
         "prof": "Bechara, Rosa Maria",
@@ -48483,11 +48483,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1035,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 825,
         "prof": "Lazhar, Yasmine",
@@ -48528,16 +48528,16 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1036,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 826,
-        "prof": "Couture-Grondin, \u00c9lise",
+        "prof": "Couture-Grondin, Élise",
         "rating": {
-          "prof": "Couture-Grondin, \u00c9lise",
+          "prof": "Couture-Grondin, Élise",
           "score": 0.0,
           "avg": 0.0,
           "nRating": 0,
@@ -48573,11 +48573,11 @@
     "section": "00005",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1037,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 827,
         "prof": "Sweeney, Antoine",
@@ -48618,11 +48618,11 @@
     "section": "00006",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1038,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 828,
         "prof": "Beausoleil, Jean Marc",
@@ -48663,11 +48663,11 @@
     "section": "00007",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1039,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 829,
         "prof": "Lazhar, Yasmine",
@@ -48708,11 +48708,11 @@
     "section": "00008",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1040,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 830,
         "prof": "Beausoleil, Jean Marc",
@@ -48753,11 +48753,11 @@
     "section": "00009",
     "domain": "FRENCH",
     "code": "602-UF2-MQ",
-    "title": "Comparaison d'oeuvres litt\u00e9raires",
+    "title": "Comparaison d'oeuvres littéraires",
     "leclabs": [
       {
         "id": 1041,
-        "title": "Comparaison d'oeuvres litt\u00e9raires",
+        "title": "Comparaison d'oeuvres littéraires",
         "type": "lecture",
         "sectionId": 831,
         "prof": "Dukanic, Filip",
@@ -48798,11 +48798,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-E02-MQ",
-    "title": "Projet exp\u00e9rientiel en fran\u00e7ais (niveau 2)",
+    "title": "Projet expérientiel en français (niveau 2)",
     "leclabs": [
       {
         "id": 1042,
-        "title": "Projet exp\u00e9rientiel en fran\u00e7ais (niveau 2)",
+        "title": "Projet expérientiel en français (niveau 2)",
         "type": "lecture",
         "sectionId": 832,
         "prof": "Pezeshki, Shahrouz",
@@ -48843,11 +48843,11 @@
     "section": "00001",
     "domain": "FRENCH",
     "code": "602-UF1-MQ",
-    "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+    "title": "Poésie, théâtre et écriture",
     "leclabs": [
       {
         "id": 1043,
-        "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+        "title": "Poésie, théâtre et écriture",
         "type": "lecture",
         "sectionId": 833,
         "prof": "Larochelle, Claudia",
@@ -48888,11 +48888,11 @@
     "section": "00002",
     "domain": "FRENCH",
     "code": "602-UF1-MQ",
-    "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+    "title": "Poésie, théâtre et écriture",
     "leclabs": [
       {
         "id": 1044,
-        "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+        "title": "Poésie, théâtre et écriture",
         "type": "lecture",
         "sectionId": 834,
         "prof": "Boutin, David",
@@ -48933,11 +48933,11 @@
     "section": "00003",
     "domain": "FRENCH",
     "code": "602-UF1-MQ",
-    "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+    "title": "Poésie, théâtre et écriture",
     "leclabs": [
       {
         "id": 1045,
-        "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+        "title": "Poésie, théâtre et écriture",
         "type": "lecture",
         "sectionId": 835,
         "prof": "Michael, Minar",
@@ -48978,16 +48978,16 @@
     "section": "00004",
     "domain": "FRENCH",
     "code": "602-UF1-MQ",
-    "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+    "title": "Poésie, théâtre et écriture",
     "leclabs": [
       {
         "id": 1046,
-        "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+        "title": "Poésie, théâtre et écriture",
         "type": "lecture",
         "sectionId": 836,
-        "prof": "Gagn\u00e9, Nicolas",
+        "prof": "Gagné, Nicolas",
         "rating": {
-          "prof": "Gagn\u00e9, Nicolas",
+          "prof": "Gagné, Nicolas",
           "score": 61.5,
           "avg": 3.1,
           "nRating": 46,
@@ -49023,11 +49023,11 @@
     "section": "00005",
     "domain": "FRENCH",
     "code": "602-UF1-MQ",
-    "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+    "title": "Poésie, théâtre et écriture",
     "leclabs": [
       {
         "id": 1047,
-        "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+        "title": "Poésie, théâtre et écriture",
         "type": "lecture",
         "sectionId": 837,
         "prof": "Lazhar, Yasmine",
@@ -49068,16 +49068,16 @@
     "section": "00006",
     "domain": "FRENCH",
     "code": "602-UF1-MQ",
-    "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+    "title": "Poésie, théâtre et écriture",
     "leclabs": [
       {
         "id": 1048,
-        "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+        "title": "Poésie, théâtre et écriture",
         "type": "lecture",
         "sectionId": 838,
-        "prof": "Gagn\u00e9, Nicolas",
+        "prof": "Gagné, Nicolas",
         "rating": {
-          "prof": "Gagn\u00e9, Nicolas",
+          "prof": "Gagné, Nicolas",
           "score": 61.5,
           "avg": 3.1,
           "nRating": 46,
@@ -49113,11 +49113,11 @@
     "section": "00007",
     "domain": "FRENCH",
     "code": "602-UF1-MQ",
-    "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+    "title": "Poésie, théâtre et écriture",
     "leclabs": [
       {
         "id": 1049,
-        "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+        "title": "Poésie, théâtre et écriture",
         "type": "lecture",
         "sectionId": 839,
         "prof": "Popica, Maria",
@@ -49158,11 +49158,11 @@
     "section": "00008",
     "domain": "FRENCH",
     "code": "602-UF1-MQ",
-    "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+    "title": "Poésie, théâtre et écriture",
     "leclabs": [
       {
         "id": 1050,
-        "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+        "title": "Poésie, théâtre et écriture",
         "type": "lecture",
         "sectionId": 840,
         "prof": "Babkine-Ringuette, Astrid",
@@ -49203,11 +49203,11 @@
     "section": "00009",
     "domain": "FRENCH",
     "code": "602-UF1-MQ",
-    "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+    "title": "Poésie, théâtre et écriture",
     "leclabs": [
       {
         "id": 1051,
-        "title": "Po\u00e9sie, th\u00e9\u00e2tre et \u00e9criture",
+        "title": "Poésie, théâtre et écriture",
         "type": "lecture",
         "sectionId": 841,
         "prof": "Michael, Minar",
@@ -50727,11 +50727,11 @@
     "section": "00001",
     "domain": "HUMANITIES",
     "code": "345-1F1-AB",
-    "title": "Connaissance du cin\u00e9ma",
+    "title": "Connaissance du cinéma",
     "leclabs": [
       {
         "id": 1081,
-        "title": "Connaissance du cin\u00e9ma",
+        "title": "Connaissance du cinéma",
         "type": "lecture",
         "sectionId": 871,
         "prof": "Riverin, Maude",
@@ -54493,9 +54493,9 @@
         "title": "Team Sports",
         "type": "lecture",
         "sectionId": 950,
-        "prof": "Marin, No\u00e9mie",
+        "prof": "Marin, Noémie",
         "rating": {
-          "prof": "Marin, No\u00e9mie",
+          "prof": "Marin, Noémie",
           "score": 84.5,
           "avg": 4.4,
           "nRating": 20,
@@ -54538,9 +54538,9 @@
         "title": "Team Sports",
         "type": "lecture",
         "sectionId": 951,
-        "prof": "Marin, No\u00e9mie",
+        "prof": "Marin, Noémie",
         "rating": {
-          "prof": "Marin, No\u00e9mie",
+          "prof": "Marin, Noémie",
           "score": 84.5,
           "avg": 4.4,
           "nRating": 20,
@@ -54583,9 +54583,9 @@
         "title": "Team Sports",
         "type": "lecture",
         "sectionId": 952,
-        "prof": "Marin, No\u00e9mie",
+        "prof": "Marin, Noémie",
         "rating": {
-          "prof": "Marin, No\u00e9mie",
+          "prof": "Marin, Noémie",
           "score": 84.5,
           "avg": 4.4,
           "nRating": 20,
@@ -55303,9 +55303,9 @@
         "title": "Fitness Conditioning",
         "type": "lecture",
         "sectionId": 968,
-        "prof": "Priv\u00e9e, Chelsea",
+        "prof": "Privée, Chelsea",
         "rating": {
-          "prof": "Priv\u00e9e, Chelsea",
+          "prof": "Privée, Chelsea",
           "score": 88.5,
           "avg": 4.6,
           "nRating": 22,
@@ -55348,9 +55348,9 @@
         "title": "Fitness Conditioning",
         "type": "lecture",
         "sectionId": 969,
-        "prof": "Priv\u00e9e, Chelsea",
+        "prof": "Privée, Chelsea",
         "rating": {
-          "prof": "Priv\u00e9e, Chelsea",
+          "prof": "Privée, Chelsea",
           "score": 88.5,
           "avg": 4.6,
           "nRating": 22,
@@ -55393,9 +55393,9 @@
         "title": "Fitness Conditioning",
         "type": "lecture",
         "sectionId": 970,
-        "prof": "Priv\u00e9e, Chelsea",
+        "prof": "Privée, Chelsea",
         "rating": {
-          "prof": "Priv\u00e9e, Chelsea",
+          "prof": "Privée, Chelsea",
           "score": 88.5,
           "avg": 4.6,
           "nRating": 22,
@@ -55438,9 +55438,9 @@
         "title": "Sustainable Fitness (Aug 13-19 9:00-16:00)",
         "type": "lecture",
         "sectionId": 971,
-        "prof": "Raymond-Parent, Genevi\u00e8ve",
+        "prof": "Raymond-Parent, Geneviève",
         "rating": {
-          "prof": "Raymond-Parent, Genevi\u00e8ve",
+          "prof": "Raymond-Parent, Geneviève",
           "score": 91.6,
           "avg": 4.7,
           "nRating": 35,
@@ -56468,7 +56468,7 @@
         ]
       }
     ],
-    "more": "ADDITIONAL FEE: $145.00\nIntensive course: includes 8 classes on campus and 1 weekend trip Oct 16-18 in Foret Ouareau. Students must provide suitable hiking boots (some pairs available to rent), appropriate clothing. Some equipment available to rent from college \u2013 tents, stoves, sleeping bags, back packs\u2026(max. $15)",
+    "more": "ADDITIONAL FEE: $145.00\nIntensive course: includes 8 classes on campus and 1 weekend trip Oct 16-18 in Foret Ouareau. Students must provide suitable hiking boots (some pairs available to rent), appropriate clothing. Some equipment available to rent from college – tents, stoves, sleeping bags, back packs…(max. $15)",
     "viewData": [
       {
         "3": [
@@ -56513,7 +56513,7 @@
         ]
       }
     ],
-    "more": "ADDITIONAL FEE: $145.00\n6 classes plus one weekend trip (Sept.25-27) to Montagne D'Argent. Students must provide appropriate outdoor clothing and footwear. Climbing equipment provided. Must provide or rent camping equipment. Some equipment available to rent from college \u2013 tents, stoves, sleeping bags, back packs (max $15). Climbing shoes are optional and can be rented for $20/semester or $8/weekend.",
+    "more": "ADDITIONAL FEE: $145.00\n6 classes plus one weekend trip (Sept.25-27) to Montagne D'Argent. Students must provide appropriate outdoor clothing and footwear. Climbing equipment provided. Must provide or rent camping equipment. Some equipment available to rent from college – tents, stoves, sleeping bags, back packs (max $15). Climbing shoes are optional and can be rented for $20/semester or $8/weekend.",
     "viewData": [
       {
         "4": [
@@ -56761,9 +56761,9 @@
         "title": "Softball (Aug 13 - 19 9:00 - 15:00",
         "type": "lecture",
         "sectionId": 1000,
-        "prof": "Marin, No\u00e9mie",
+        "prof": "Marin, Noémie",
         "rating": {
-          "prof": "Marin, No\u00e9mie",
+          "prof": "Marin, Noémie",
           "score": 84.5,
           "avg": 4.4,
           "nRating": 20,
@@ -56806,9 +56806,9 @@
         "title": "Weight Training techniques",
         "type": "lecture",
         "sectionId": 1001,
-        "prof": "Marin, No\u00e9mie",
+        "prof": "Marin, Noémie",
         "rating": {
-          "prof": "Marin, No\u00e9mie",
+          "prof": "Marin, Noémie",
           "score": 84.5,
           "avg": 4.4,
           "nRating": 20,
@@ -56851,9 +56851,9 @@
         "title": "Ball Hockey",
         "type": "lecture",
         "sectionId": 1002,
-        "prof": "Marin, No\u00e9mie",
+        "prof": "Marin, Noémie",
         "rating": {
-          "prof": "Marin, No\u00e9mie",
+          "prof": "Marin, Noémie",
           "score": 84.5,
           "avg": 4.4,
           "nRating": 20,
@@ -57352,9 +57352,9 @@
         "title": "Weight Training techniques",
         "type": "lecture",
         "sectionId": 1013,
-        "prof": "Priv\u00e9e, Chelsea",
+        "prof": "Privée, Chelsea",
         "rating": {
-          "prof": "Priv\u00e9e, Chelsea",
+          "prof": "Privée, Chelsea",
           "score": 88.5,
           "avg": 4.6,
           "nRating": 22,
@@ -57397,9 +57397,9 @@
         "title": "Weight Training techniques",
         "type": "lecture",
         "sectionId": 1014,
-        "prof": "Priv\u00e9e, Chelsea",
+        "prof": "Privée, Chelsea",
         "rating": {
-          "prof": "Priv\u00e9e, Chelsea",
+          "prof": "Privée, Chelsea",
           "score": 88.5,
           "avg": 4.6,
           "nRating": 22,
@@ -57442,9 +57442,9 @@
         "title": "Pilates",
         "type": "lecture",
         "sectionId": 1015,
-        "prof": "Raymond-Parent, Genevi\u00e8ve",
+        "prof": "Raymond-Parent, Geneviève",
         "rating": {
-          "prof": "Raymond-Parent, Genevi\u00e8ve",
+          "prof": "Raymond-Parent, Geneviève",
           "score": 91.6,
           "avg": 4.7,
           "nRating": 35,
@@ -58139,7 +58139,7 @@
         ]
       }
     ],
-    "more": "ADDITIONAL FEE: $145.00\nIntensive course: Includes 8 classes on campus and one weekend trip, September 18 - 20, to Nominingue. Students must provide suitable hiking boots (some pairs available to rent), and appropriate camping gear (equipment available to rent from the college \u2013 tents, stoves, sleeping bags). As part of the college's Climate Action Plan, these courses will be covering the four Climate and Ecological Emergency Learning Objectives in their content. Depending on the discipline, these Learning Objectives will be woven into the course competencies in various ways, and assessed by the teacher as part of the course evaluation plan.",
+    "more": "ADDITIONAL FEE: $145.00\nIntensive course: Includes 8 classes on campus and one weekend trip, September 18 - 20, to Nominingue. Students must provide suitable hiking boots (some pairs available to rent), and appropriate camping gear (equipment available to rent from the college – tents, stoves, sleeping bags). As part of the college's Climate Action Plan, these courses will be covering the four Climate and Ecological Emergency Learning Objectives in their content. Depending on the discipline, these Learning Objectives will be woven into the course competencies in various ways, and assessed by the teacher as part of the course evaluation plan.",
     "viewData": [
       {
         "1": [
@@ -58319,7 +58319,7 @@
         ]
       }
     ],
-    "more": "ADDITIONAL FEE: $145.00\nIntensive course: includes 6 classes on campus and 1 weekend trip Oct 2-4. Students must provide suitable hiking boots (some pairs available to rent), and appropriate clothing. Some equipment available to rent from college \u2013 tents, stoves, sleeping bags, back packs\u2026(max. $15). Trip location Adirondacks, NY; students must be eligible to enter the USA.",
+    "more": "ADDITIONAL FEE: $145.00\nIntensive course: includes 6 classes on campus and 1 weekend trip Oct 2-4. Students must provide suitable hiking boots (some pairs available to rent), and appropriate clothing. Some equipment available to rent from college – tents, stoves, sleeping bags, back packs…(max. $15). Trip location Adirondacks, NY; students must be eligible to enter the USA.",
     "viewData": [
       {
         "1": [
@@ -58364,7 +58364,7 @@
         ]
       }
     ],
-    "more": "ADDITIONAL FEE: $145.00\nIntensive course: includes 3 days of classes on Campus (Aug.17, 18, 19) and a 3 day trip (Aug.21-23) to Fish Creek, NY. Students must be able to enter the USA. Must be comfortable in deep water and able to swim 50 meters (with or without a lifejacket). Students must provide suitable hiking boots (some pairs available to rent), and appropriate outdoor clothing. Some equipment available to rent from college \u2013 tents, stoves, sleeping bags, back packs\u2026(max. $15).",
+    "more": "ADDITIONAL FEE: $145.00\nIntensive course: includes 3 days of classes on Campus (Aug.17, 18, 19) and a 3 day trip (Aug.21-23) to Fish Creek, NY. Students must be able to enter the USA. Must be comfortable in deep water and able to swim 50 meters (with or without a lifejacket). Students must provide suitable hiking boots (some pairs available to rent), and appropriate outdoor clothing. Some equipment available to rent from college – tents, stoves, sleeping bags, back packs…(max. $15).",
     "viewData": [
       {
         "5": [
@@ -58499,7 +58499,7 @@
         ]
       }
     ],
-    "more": "ADDITIONAL FEE: $125.00\nIntensive course. Includes 5 in-class sessions (Aug 11,13,14,18, Sat Sept 26 )and one 2-day, overnight trip (August 16-17th) in Mont Tremblant. Camping gear required and available for rent \u2013 Max. $15.00. Must be comfortable on the Lake and have an interest in the outdoors.",
+    "more": "ADDITIONAL FEE: $125.00\nIntensive course. Includes 5 in-class sessions (Aug 11,13,14,18, Sat Sept 26 )and one 2-day, overnight trip (August 16-17th) in Mont Tremblant. Camping gear required and available for rent – Max. $15.00. Must be comfortable on the Lake and have an interest in the outdoors.",
     "viewData": [
       {
         "5": [
@@ -58933,9 +58933,9 @@
         "title": "Team Sports",
         "type": "lecture",
         "sectionId": 1048,
-        "prof": "Priv\u00e9e, Chelsea",
+        "prof": "Privée, Chelsea",
         "rating": {
-          "prof": "Priv\u00e9e, Chelsea",
+          "prof": "Privée, Chelsea",
           "score": 88.5,
           "avg": 4.6,
           "nRating": 22,
@@ -58978,9 +58978,9 @@
         "title": "Team Sports",
         "type": "lecture",
         "sectionId": 1049,
-        "prof": "Priv\u00e9e, Chelsea",
+        "prof": "Privée, Chelsea",
         "rating": {
-          "prof": "Priv\u00e9e, Chelsea",
+          "prof": "Privée, Chelsea",
           "score": 88.5,
           "avg": 4.6,
           "nRating": 22,
@@ -59023,9 +59023,9 @@
         "title": "Mind Body Fitness",
         "type": "lecture",
         "sectionId": 1050,
-        "prof": "Raymond-Parent, Genevi\u00e8ve",
+        "prof": "Raymond-Parent, Geneviève",
         "rating": {
-          "prof": "Raymond-Parent, Genevi\u00e8ve",
+          "prof": "Raymond-Parent, Geneviève",
           "score": 91.6,
           "avg": 4.7,
           "nRating": 35,
@@ -59466,11 +59466,11 @@
     "section": "00001",
     "domain": "",
     "code": "120-DFB-AB",
-    "title": "Nutrition pour le sport et l\u2019exercice",
+    "title": "Nutrition pour le sport et l’exercice",
     "leclabs": [
       {
         "id": 1270,
-        "title": "Nutrition pour le sport et l\u2019exercice",
+        "title": "Nutrition pour le sport et l’exercice",
         "type": "lecture",
         "sectionId": 1060,
         "prof": "Fahmy, Magda",
@@ -59517,11 +59517,11 @@
     "section": "00002",
     "domain": "",
     "code": "120-DFB-AB",
-    "title": "Nutrition pour le sport et l\u2019exercice",
+    "title": "Nutrition pour le sport et l’exercice",
     "leclabs": [
       {
         "id": 1271,
-        "title": "Nutrition pour le sport et l\u2019exercice",
+        "title": "Nutrition pour le sport et l’exercice",
         "type": "lecture",
         "sectionId": 1061,
         "prof": "Fahmy, Magda",
@@ -59568,11 +59568,11 @@
     "section": "00001",
     "domain": "",
     "code": "201-DFC-AB",
-    "title": "Logique et fondements des math\u00e9matiques",
+    "title": "Logique et fondements des mathématiques",
     "leclabs": [
       {
         "id": 1272,
-        "title": "Logique et fondements des math\u00e9matiques",
+        "title": "Logique et fondements des mathématiques",
         "type": "lecture",
         "sectionId": 1062,
         "prof": "Delage, Philippe",
@@ -59619,11 +59619,11 @@
     "section": "00001",
     "domain": "",
     "code": "203-DFB-AB",
-    "title": "Sports et conception d'\u00e9quipements sportifs",
+    "title": "Sports et conception d'équipements sportifs",
     "leclabs": [
       {
         "id": 1273,
-        "title": "Sports et conception d'\u00e9quipements sportifs",
+        "title": "Sports et conception d'équipements sportifs",
         "type": "lecture",
         "sectionId": 1063,
         "prof": "Portelance, Etienne",
@@ -59664,11 +59664,11 @@
     "section": "00002",
     "domain": "",
     "code": "203-DFB-AB",
-    "title": "Sports et conception d'\u00e9quipements sportifs",
+    "title": "Sports et conception d'équipements sportifs",
     "leclabs": [
       {
         "id": 1274,
-        "title": "Sports et conception d'\u00e9quipements sportifs",
+        "title": "Sports et conception d'équipements sportifs",
         "type": "lecture",
         "sectionId": 1064,
         "prof": "Solomon Baird, Zoe",
@@ -59709,11 +59709,11 @@
     "section": "00001",
     "domain": "",
     "code": "101-DFA-AB",
-    "title": "Biologie du sexe et de la sexualit\u00e9",
+    "title": "Biologie du sexe et de la sexualité",
     "leclabs": [
       {
         "id": 1275,
-        "title": "Biologie du sexe et de la sexualit\u00e9",
+        "title": "Biologie du sexe et de la sexualité",
         "type": "lecture",
         "sectionId": 1065,
         "prof": "Daoust, Simon",
@@ -59760,11 +59760,11 @@
     "section": "00002",
     "domain": "",
     "code": "101-DFA-AB",
-    "title": "Biologie du sexe et de la sexualit\u00e9",
+    "title": "Biologie du sexe et de la sexualité",
     "leclabs": [
       {
         "id": 1276,
-        "title": "Biologie du sexe et de la sexualit\u00e9",
+        "title": "Biologie du sexe et de la sexualité",
         "type": "lecture",
         "sectionId": 1066,
         "prof": "Daoust, Simon",
@@ -59811,11 +59811,11 @@
     "section": "00001",
     "domain": "",
     "code": "320-DFB-AB",
-    "title": "Initiation \u00e0 la g\u00e9ographie",
+    "title": "Initiation à la géographie",
     "leclabs": [
       {
         "id": 1277,
-        "title": "Initiation \u00e0 la g\u00e9ographie",
+        "title": "Initiation à la géographie",
         "type": "lecture",
         "sectionId": 1067,
         "prof": "Elliott, Heather Louise",
@@ -60015,11 +60015,11 @@
     "section": "00001",
     "domain": "",
     "code": "350-DBF-AB",
-    "title": "Initiation \u00e0 la psychologie sociale",
+    "title": "Initiation à la psychologie sociale",
     "leclabs": [
       {
         "id": 1281,
-        "title": "Initiation \u00e0 la psychologie sociale",
+        "title": "Initiation à la psychologie sociale",
         "type": "lecture",
         "sectionId": 1071,
         "prof": "Caouette, Julie",
@@ -60219,11 +60219,11 @@
     "section": "00001",
     "domain": "",
     "code": "381-DFF-AB",
-    "title": "Civilisations perdues, extraterrestres et pseudo- arch\u00e9ologie",
+    "title": "Civilisations perdues, extraterrestres et pseudo- archéologie",
     "leclabs": [
       {
         "id": 1285,
-        "title": "Civilisations perdues, extraterrestres et pseudo- arch\u00e9ologie",
+        "title": "Civilisations perdues, extraterrestres et pseudo- archéologie",
         "type": "lecture",
         "sectionId": 1075,
         "prof": "Guiducci, Dario",
@@ -60270,16 +60270,16 @@
     "section": "00001",
     "domain": "",
     "code": "387-DFF-AB",
-    "title": "Sociologie de la sant\u00e9",
+    "title": "Sociologie de la santé",
     "leclabs": [
       {
         "id": 1286,
-        "title": "Sociologie de la sant\u00e9",
+        "title": "Sociologie de la santé",
         "type": "lecture",
         "sectionId": 1076,
-        "prof": "L\u00e9g\u00e8re, Jessica",
+        "prof": "Légère, Jessica",
         "rating": {
-          "prof": "L\u00e9g\u00e8re, Jessica",
+          "prof": "Légère, Jessica",
           "score": 79.2,
           "avg": 4.0,
           "nRating": 70,
@@ -60321,16 +60321,16 @@
     "section": "00002",
     "domain": "",
     "code": "387-DFF-AB",
-    "title": "Sociologie de la sant\u00e9",
+    "title": "Sociologie de la santé",
     "leclabs": [
       {
         "id": 1287,
-        "title": "Sociologie de la sant\u00e9",
+        "title": "Sociologie de la santé",
         "type": "lecture",
         "sectionId": 1077,
-        "prof": "L\u00e9g\u00e8re, Jessica",
+        "prof": "Légère, Jessica",
         "rating": {
-          "prof": "L\u00e9g\u00e8re, Jessica",
+          "prof": "Légère, Jessica",
           "score": 79.2,
           "avg": 4.0,
           "nRating": 70,
@@ -60519,11 +60519,11 @@
     "section": "00001",
     "domain": "",
     "code": "530-DFA-AB",
-    "title": "Cin\u00e9ma d\u2019animation en stop motion",
+    "title": "Cinéma d’animation en stop motion",
     "leclabs": [
       {
         "id": 1291,
-        "title": "Cin\u00e9ma d\u2019animation en stop motion",
+        "title": "Cinéma d’animation en stop motion",
         "type": "lecture",
         "sectionId": 1081,
         "prof": "Schorr, Daniel",
@@ -60564,11 +60564,11 @@
     "section": "00001",
     "domain": "",
     "code": "530-DFC-AB",
-    "title": "Cr\u00e9ation vid\u00e9o",
+    "title": "Création vidéo",
     "leclabs": [
       {
         "id": 1292,
-        "title": "Cr\u00e9ation vid\u00e9o",
+        "title": "Création vidéo",
         "type": "lecture",
         "sectionId": 1082,
         "prof": "Stafiej, Mitchell",
@@ -60744,11 +60744,11 @@
     "section": "00001",
     "domain": "",
     "code": "585-DFB-AB",
-    "title": "Photographie num\u00e9rique",
+    "title": "Photographie numérique",
     "leclabs": [
       {
         "id": 1296,
-        "title": "Photographie num\u00e9rique",
+        "title": "Photographie numérique",
         "type": "lecture",
         "sectionId": 1086,
         "prof": "Wees, Michael",
@@ -60936,11 +60936,11 @@
     "section": "00001",
     "domain": "",
     "code": "365-CAF-AB",
-    "title": "Introduction \u00e0 la culture allemande : Feuille de route vers",
+    "title": "Introduction à la culture allemande : Feuille de route vers",
     "leclabs": [
       {
         "id": 1300,
-        "title": "Introduction \u00e0 la culture allemande : Feuille de route vers",
+        "title": "Introduction à la culture allemande : Feuille de route vers",
         "type": "lecture",
         "sectionId": 1090,
         "prof": "Siderova, Spaska",
@@ -60987,11 +60987,11 @@
     "section": "00001",
     "domain": "",
     "code": "401-DFC-AB",
-    "title": "Art oratoire en public pour des pr\u00e9sentations puissantes et",
+    "title": "Art oratoire en public pour des présentations puissantes et",
     "leclabs": [
       {
         "id": 1301,
-        "title": "Art oratoire en public pour des pr\u00e9sentations puissantes et",
+        "title": "Art oratoire en public pour des présentations puissantes et",
         "type": "lecture",
         "sectionId": 1091,
         "prof": "Raymond, Darcy Gabriel",
@@ -61117,3 +61117,4 @@
     ]
   }
 ]
+
