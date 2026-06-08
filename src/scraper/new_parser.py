@@ -194,20 +194,18 @@ class NewParser(INewParser):
         self.current_section.more = self.current_section.more.strip("\n").strip()
         self._add_viewdata_to_current_section()
 
-        self.sections.append(self.current_section)
+        id = f"{self.current_section.code}-{self.current_section.section}"
+        self.current_section.id = id
 
-        new_id = f"{self.current_section.code}-{self.current_section.section}"
+        self.sections.append(self.current_section)
 
         if keep_course:
             self.current_section = Section(
-                id=new_id,
                 course=self.current_section.course,
                 domain=self.current_section.domain,
             )
         else:
-            self.current_section = Section(
-                id=new_id,
-            )
+            self.current_section = Section()
 
     def _update_section_times(self):
         if self.leclab.title == "":
