@@ -1,9 +1,8 @@
 import json
 
-from pydantic import TypeAdapter
 
 from scraper.files import Files
-from scraper.models import Rating, Section
+from scraper.models import Rating
 
 
 def normalize_string(s: str):
@@ -18,36 +17,31 @@ def normalize_string(s: str):
     return s
 
 
-def add_rating_to_sections(files: Files):
-    with open(files.all_sections_final_path_json, "r") as file:
-        sections = TypeAdapter(list[Section]).validate_json(file.read())
+def make_sections_final(files: Files):
+    """
+    Adds teacher ratings to each section
+    Writes to the final json {sectionId: Section}
+    """
+
+    sections = files.get_parsed_sections_file_content()
 
     with open(files.ratings_path, "r") as file:
         ratings = [Rating.model_validate(r) for r in json.load(file)]
 
     ratings_by_prof = {rating.prof: rating for rating in ratings}
 
-    updated_sections = [
-        section.model_copy(
-            update={
-                "leclabs": [
-                    leclab.model_copy(
-                        update={"rating": ratings_by_prof.get(leclab.prof)}
-                    )
-                    for leclab in section.leclabs
-                ]
-            }
-        )
+    for section in sections:
+        for leclab in section.leclabs:
+            leclab.rating = ratings_by_prof.get(leclab.prof)
+
+    sections_dict = {
+        section.id: section.model_dump(mode="json", by_alias=True)
         for section in sections
-    ]
+    }
 
     with open(files.all_sections_final_path_json, "w") as file:
-        _ = file.write(
-            json.dumps(
-                [
-                    section.model_dump(mode="json", by_alias=True)
-                    for section in updated_sections
-                ],
-                indent=2,
-            )
+        json.dump(
+            sections_dict,
+            file,
+            indent=2,
         )

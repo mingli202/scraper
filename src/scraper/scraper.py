@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pydantic import TypeAdapter
 import requests
 from .files import Files
-from .models import Rating, Section, Status
+from .models import Rating, Status
 
 from . import util
 

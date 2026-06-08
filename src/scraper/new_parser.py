@@ -40,8 +40,8 @@ class NewParser(INewParser):
 
     @override
     def run(self, force_override: bool = False):
-        if not force_override and self.files.all_sections_final_path_json.exists():
-            with open(self.files.all_sections_final_path_json, "r") as file:
+        if not force_override and self.files.parsed_sections_path.exists():
+            with open(self.files.parsed_sections_path, "r") as file:
                 try:
                     existing_sections = TypeAdapter(list[Section]).validate_json(
                         file.read()
@@ -284,7 +284,7 @@ class NewParser(INewParser):
 
     @override
     def save_sections(self):
-        with open(self.files.all_sections_final_path_json, "w") as file:
+        with open(self.files.parsed_sections_path, "w") as file:
             _ = file.write(
                 json.dumps(
                     [
