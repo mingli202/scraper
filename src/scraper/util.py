@@ -45,6 +45,22 @@ def make_sections_final(
     return {section.id: section for section in sections}
 
 
+def is_different(old_section: Section, new_section: Section) -> bool:
+    """
+    Checks whether the given old and new sections are the same after removing
+    the teacher's rating
+    """
+
+    old_section_copy = old_section.model_copy(deep=True)
+    new_section_copy = new_section.model_copy(deep=True)
+
+    for leclab in old_section_copy.leclabs:
+        leclab.rating = None
+
+    for leclab in new_section_copy.leclabs:
+        leclab.rating = None
+
+    return old_section_copy != new_section_copy
 def make_global_sections_final(
     semester: str, section_by_id: dict[str, Section], files: Files
 ):
