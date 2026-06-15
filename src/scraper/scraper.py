@@ -225,4 +225,4 @@ class Scraper:
 if __name__ == "__main__":
     files = Files()
     scraper = Scraper(files)
-    scraper.run()
+    _ = scraper.run()
