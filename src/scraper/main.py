@@ -7,7 +7,7 @@ from typing import Annotated
 from dotenv import load_dotenv
 
 from scraper.util import (
-    get_schedule_diff,
+    get_global_sections_diff,
     make_global_sections_final,
     make_sections_final,
 )
@@ -68,7 +68,9 @@ def _main(
             f"Parsed and current semester differs: parsed {parsed_semester}, current {semester}",
         )
 
-    schedule_diff = get_schedule_diff(semester, section_by_id, files)
+    schedule_diff = get_global_sections_diff(
+        semester, files.get_global_all_sections_content(), section_by_id
+    )
     make_global_sections_final(semester, section_by_id, files, schedule_diff)
 
     if run_tests:
