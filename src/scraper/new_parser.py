@@ -7,8 +7,8 @@ from abc import ABC, abstractmethod
 
 from pydantic import TypeAdapter
 
-from .files import Files
-from .models import LecLab, LecLabType, Section, Word
+from scraper.files import Files
+from scraper.models import LecLab, LecLabType, Section, Word
 
 logger = logging.getLogger(__name__)
 

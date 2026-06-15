@@ -6,9 +6,9 @@ from typing import Any, final
 from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
 
-from .models import ColumnsXs, GlobalAllSections, Section, Word
-from . import parser_utils
-from .trie import Trie
+from scraper.models import ColumnsXs, GlobalAllSections, Section, Word
+from scraper import parser_utils
+from scraper.trie import Trie
 
 
 @final

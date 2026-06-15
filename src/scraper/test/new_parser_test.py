@@ -10,7 +10,7 @@ import re
 from scraper.files import Files
 from scraper.models import DayTime, LecLab, LecLabType, Section, Word
 from scraper.new_parser import NewParser
-from .individual_parsing_data import ATestCase, data
+from scraper.test.individual_parsing_data import ATestCase, data
 
 
 pdf_path = (

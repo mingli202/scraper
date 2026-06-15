@@ -5,10 +5,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 from pydantic import TypeAdapter
 import requests
-from .files import Files
-from .models import Rating, Status
-
-from . import util
+from scraper.files import Files
+from scraper.models import Rating, Status
+from scraper import util
 
 
 class Scraper:

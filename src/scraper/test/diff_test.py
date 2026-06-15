@@ -58,7 +58,12 @@ def test_is_different_prof(old_section: Section, new_section: Section, res: bool
 
 def test_global_diff_different_semester():
     old_global = GlobalAllSections(
-        semester="fall 2026", filename="", sections_diff=None, sections_by_id={}
+        semester="fall 2026",
+        filename="",
+        sections_diff=SectionsDiff(
+            previous_sections_changed=[], sections_added=[], sections_removed=[]
+        ),
+        sections_by_id={},
     )
 
     assert get_global_sections_diff("winter", old_global, {}) is None

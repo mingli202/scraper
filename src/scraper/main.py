@@ -12,9 +12,9 @@ from scraper.util import (
     make_sections_final,
 )
 
-from .new_parser import NewParser
-from .files import Files
-from .scraper import Scraper
+from scraper.new_parser import NewParser
+from scraper.files import Files
+from scraper.scraper import Scraper
 import pytest
 import typer
 
