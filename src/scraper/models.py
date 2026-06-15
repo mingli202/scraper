@@ -1,6 +1,6 @@
 from enum import Enum
 import logging
-from typing import Any, override
+from typing import override
 
 from pydantic import BaseModel, ConfigDict
 from pydantic.alias_generators import to_camel
@@ -95,19 +95,9 @@ class Word(BaseModel):
 
 
 class SectionsDiff(ConfiguredBaseModel):
-    sections_diff: dict[str, SectionDiff]
+    previous_sections_changed: list[Section]
     sections_added: list[str]
-    sections_removed: list[str]
-
-
-class Diff(ConfiguredBaseModel):
-    old: str
-    new: str
-
-
-class SectionDiff(ConfiguredBaseModel):
-    sectionId: str
-    diffs: list[Diff]
+    sections_removed: list[Section]
 
 
 class GlobalAllSections(ConfiguredBaseModel):
