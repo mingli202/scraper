@@ -26,11 +26,11 @@ def get_current_semester() -> str:
 
     now = datetime.datetime.now()
 
-    if 8 <= now.month < 12:
+    if 6 <= now.month < 12:
         return f"FALL {now.year}"
     elif now.month == 12:
         return f"WINTER {now.year + 1}"
-    elif 1 <= now.month < 7:
+    elif 1 <= now.month < 6:
         return f"WINTER {now.year}"
     else:
         return f"SUMMER {now.year}"
