@@ -127,7 +127,7 @@ def make_global_sections_final(
     filename = files.pdf_path.name
     global_sections = GlobalAllSections(
         semester=semester,
-        sections_by_id=section_by_id,
+        sections_by_id=dict(sorted(section_by_id.items())),
         filename=filename,
         sections_diff=diff,
     )
