@@ -36,7 +36,9 @@ class Scraper:
         self.scrape_ratings(professors, ratings, pids, new_pids)
 
         with open(self.files.pids_path, "w") as file:
-            _ = file.write(json.dumps(new_pids, indent=2))
+            sorted_dict = dict(sorted(new_pids.items()))
+
+            _ = file.write(json.dumps(sorted_dict, indent=2))
 
         self.save_ratings(ratings)
 
