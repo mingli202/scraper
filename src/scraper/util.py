@@ -55,4 +55,6 @@ def make_global_sections_final(
     global_sections = GlobalAllSections(semester=semester, sections_by_id=section_by_id)
 
     with open(files.global_all_sections_final_path_json, "w") as file:
-        json.dump(global_sections.model_dump(mode="json", by_alias=True), file)
+        json.dump(
+            global_sections.model_dump(mode="json", by_alias=True), file, indent=2
+        )
