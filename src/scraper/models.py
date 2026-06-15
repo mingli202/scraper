@@ -96,4 +96,5 @@ class Word(BaseModel):
 
 class GlobalAllSections(ConfiguredBaseModel):
     semester: str
+    filename: str
     sections_by_id: dict[str, Section]

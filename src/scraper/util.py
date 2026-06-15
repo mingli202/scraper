@@ -52,7 +52,10 @@ def make_global_sections_final(
     Write to the same place rather than by directory
     """
 
-    global_sections = GlobalAllSections(semester=semester, sections_by_id=section_by_id)
+    filename = files.pdf_path.name
+    global_sections = GlobalAllSections(
+        semester=semester, sections_by_id=section_by_id, filename=filename
+    )
 
     with open(files.global_all_sections_final_path_json, "w") as file:
         json.dump(
