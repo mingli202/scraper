@@ -94,7 +94,24 @@ class Word(BaseModel):
         return hash(self.model_dump_json(by_alias=True))
 
 
+class SectionsDiff(ConfiguredBaseModel):
+    sections_diff: dict[str, SectionDiff]
+    sections_added: list[str]
+    sections_removed: list[str]
+
+
+class Diff(ConfiguredBaseModel):
+    old: str
+    new: str
+
+
+class SectionDiff(ConfiguredBaseModel):
+    sectionId: str
+    diffs: list[Diff]
+
+
 class GlobalAllSections(ConfiguredBaseModel):
     semester: str
     filename: str
+    sections_diff: SectionsDiff | None
     sections_by_id: dict[str, Section]
