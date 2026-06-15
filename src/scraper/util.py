@@ -50,7 +50,9 @@ def make_sections_final(
 
 
 def get_global_sections_diff(
-    semester: str, sections_by_id: dict[str, Section], files: Files
+    current_semester: str,
+    old_global_all_sections: GlobalAllSections,
+    sections_by_id: dict[str, Section],
 ) -> SectionsDiff | None:
     """
     Gets the difference between the old sections and the incoming sections.
@@ -59,12 +61,10 @@ def get_global_sections_diff(
     since ratings are prone to change frequently but will be small changes, so we don't care
     """
 
-    global_all_sections = files.get_global_all_sections_content()
-
-    if global_all_sections.semester != semester:
+    if old_global_all_sections.semester != current_semester:
         return None
 
-    return get_sections_diff(global_all_sections.sections_by_id, sections_by_id)
+    return get_sections_diff(old_global_all_sections.sections_by_id, sections_by_id)
 
 
 def get_sections_diff(
@@ -74,25 +74,25 @@ def get_sections_diff(
     Gets the diff between the old and new sections_by_id
     """
 
-    sections_added: set[str] = set()
-    sections_removed: set[str] = set()
+    sections_added: list[str] = []
+    sections_removed: list[Section] = []
     previous_sections: list[Section] = []
 
     for id, old_section in old_sections_by_id.items():
         if id not in new_sections_by_id:
-            sections_removed.add(old_section.id)
+            sections_removed.append(old_section)
 
         elif is_different(old_section, new_sections_by_id[id]):
             previous_sections.append(old_section)
 
     for id in new_sections_by_id.keys():
         if id not in old_sections_by_id:
-            sections_added.add(id)
+            sections_added.append(id)
 
     return SectionsDiff(
-        previous_sections=previous_sections,
-        sections_added=list(sections_added),
-        sections_removed=list(sections_removed),
+        previous_sections_changed=previous_sections,
+        sections_added=sections_added,
+        sections_removed=sections_removed,
     )
 
 
