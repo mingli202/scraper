@@ -6,7 +6,7 @@ from typing import Any, final
 from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
 
-from .models import ColumnsXs, GlobalAllSections, Section, Word
+from .models import ColumnsXs, Section, Word
 from . import parser_utils
 from .trie import Trie
 
@@ -98,7 +98,7 @@ class Files:
         professors: set[str] = set()
 
         if self.all_sections_final_path_json.exists():
-            with open(self.all_sections_final_path_json, "r") as file:
+            with open(self.parsed_sections_path, "r") as file:
                 sections = TypeAdapter(list[Section]).validate_json(file.read())
 
             professors = {
