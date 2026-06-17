@@ -5,10 +5,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 from pydantic import TypeAdapter
 import requests
-from .files import Files
-from .models import Rating, Status
-
-from . import util
+from scraper.files import Files
+from scraper.models import Rating, Status
+from scraper import util
 
 
 class Scraper:
@@ -36,7 +35,9 @@ class Scraper:
         self.scrape_ratings(professors, ratings, pids, new_pids)
 
         with open(self.files.pids_path, "w") as file:
-            _ = file.write(json.dumps(new_pids, indent=2))
+            sorted_dict = dict(sorted(new_pids.items()))
+
+            _ = file.write(json.dumps(sorted_dict, indent=2))
 
         self.save_ratings(ratings)
 
@@ -223,4 +224,4 @@ class Scraper:
 if __name__ == "__main__":
     files = Files()
     scraper = Scraper(files)
-    scraper.run()
+    _ = scraper.run()

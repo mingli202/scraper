@@ -6,9 +6,9 @@ from typing import Any, final
 from pydantic import TypeAdapter, ValidationError
 from pydantic_core import from_json
 
-from .models import ColumnsXs, GlobalAllSections, Section, Word
-from . import parser_utils
-from .trie import Trie
+from scraper.models import ColumnsXs, GlobalAllSections, Section, Word
+from scraper import parser_utils
+from scraper.trie import Trie
 
 
 @final
@@ -98,7 +98,7 @@ class Files:
         professors: set[str] = set()
 
         if self.all_sections_final_path_json.exists():
-            with open(self.all_sections_final_path_json, "r") as file:
+            with open(self.parsed_sections_path, "r") as file:
                 sections = TypeAdapter(list[Section]).validate_json(file.read())
 
             professors = {
@@ -133,3 +133,7 @@ class Files:
             sections = TypeAdapter(dict[str, Section]).validate_json(file.read())
 
             return sections
+
+    def get_global_all_sections_content(self) -> GlobalAllSections:
+        with open(self.global_all_sections_final_path_json, "r") as file:
+            return GlobalAllSections.model_validate_json(file.read())

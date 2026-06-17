@@ -1,9 +1,13 @@
 import json
-from typing import Any
 
 
 from scraper.files import Files
-from scraper.models import GlobalAllSections, Rating, Section
+from scraper.models import (
+    GlobalAllSections,
+    Rating,
+    SectionsDiff,
+    Section,
+)
 
 
 def normalize_string(s: str):
@@ -20,7 +24,7 @@ def normalize_string(s: str):
 
 def make_sections_final(
     sections: list[Section], ratings_by_prof: dict[str, Rating], files: Files
-) -> dict[str, dict[str, Any]]:
+) -> dict[str, Section]:
     """
     Adds teacher ratings to each section
     Writes to the final json {sectionId: Section}
@@ -42,17 +46,93 @@ def make_sections_final(
             indent=2,
         )
 
-    return sections_dict_json
+    return {section.id: section for section in sections}
+
+
+def get_global_sections_diff(
+    current_semester: str,
+    old_global_all_sections: GlobalAllSections,
+    sections_by_id: dict[str, Section],
+) -> SectionsDiff | None:
+    """
+    Gets the difference between the old sections and the incoming sections.
+    Checks for added/removed/changed sections.
+    For changed sections, every key is compared for equality except for leclab.rating
+    since ratings are prone to change frequently but will be small changes, so we don't care
+    """
+
+    if old_global_all_sections.semester != current_semester:
+        return None
+
+    return get_sections_diff(old_global_all_sections.sections_by_id, sections_by_id)
+
+
+def get_sections_diff(
+    old_sections_by_id: dict[str, Section], new_sections_by_id: dict[str, Section]
+) -> SectionsDiff:
+    """
+    Gets the diff between the old and new sections_by_id
+    """
+
+    sections_added: list[str] = []
+    sections_removed: list[Section] = []
+    previous_sections: list[Section] = []
+
+    for id, old_section in old_sections_by_id.items():
+        if id not in new_sections_by_id:
+            sections_removed.append(old_section)
+
+        elif is_different(old_section, new_sections_by_id[id]):
+            previous_sections.append(old_section)
+
+    for id in new_sections_by_id.keys():
+        if id not in old_sections_by_id:
+            sections_added.append(id)
+
+    return SectionsDiff(
+        previous_sections_changed=previous_sections,
+        sections_added=sections_added,
+        sections_removed=sections_removed,
+    )
+
+
+def is_different(old_section: Section, new_section: Section) -> bool:
+    """
+    Checks whether the given old and new sections are the same after removing
+    the teacher's rating
+    """
+
+    old_section_copy = old_section.model_copy(deep=True)
+    new_section_copy = new_section.model_copy(deep=True)
+
+    for leclab in old_section_copy.leclabs:
+        leclab.rating = None
+
+    for leclab in new_section_copy.leclabs:
+        leclab.rating = None
+
+    return old_section_copy != new_section_copy
 
 
 def make_global_sections_final(
-    semester: str, section_by_id: dict[str, dict[str, Any]], files: Files
+    semester: str,
+    section_by_id: dict[str, Section],
+    files: Files,
+    diff: SectionsDiff | None,
 ):
     """
     Write to the same place rather than by directory
     """
 
-    global_sections = GlobalAllSections(semester=semester, sections_by_id=section_by_id)
+    filename = files.pdf_path.name
+    global_sections = GlobalAllSections(
+        semester=semester,
+        sections_by_id=dict(sorted(section_by_id.items())),
+        filename=filename,
+        sections_diff=diff,
+    )
 
     with open(files.global_all_sections_final_path_json, "w") as file:
-        json.dump(global_sections.model_dump(mode="json", by_alias=True), file)
+        json.dump(
+            global_sections.model_dump(mode="json", by_alias=True), file, indent=2
+        )

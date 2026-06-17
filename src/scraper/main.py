@@ -1,18 +1,41 @@
+import datetime
+from logging import log
+import logging
 from pathlib import Path
 from typing import Annotated
 
 from dotenv import load_dotenv
 
-from scraper.util import make_global_sections_final, make_sections_final
+from scraper.util import (
+    get_global_sections_diff,
+    make_global_sections_final,
+    make_sections_final,
+)
 
-from .new_parser import NewParser
-from .files import Files
-from .scraper import Scraper
+from scraper.new_parser import NewParser
+from scraper.files import Files
+from scraper.scraper import Scraper
 import pytest
 import typer
 
 
-# TODO: 1. Change filename and semester in files.py
+def get_current_semester() -> str:
+    """
+    Gets the current semester at the time this function got called
+    """
+
+    now = datetime.datetime.now()
+
+    if 6 <= now.month < 12:
+        return f"FALL {now.year}"
+    elif now.month == 12:
+        return f"WINTER {now.year + 1}"
+    elif 1 <= now.month < 6:
+        return f"WINTER {now.year}"
+    else:
+        return f"SUMMER {now.year}"
+
+
 def _main(
     pdf_path: Annotated[str, typer.Option(help="Path to the schedule of classes file")],
     yes: Annotated[
@@ -26,6 +49,7 @@ def _main(
     _ = load_dotenv()
 
     files = Files(pdf_path=Path(pdf_path))
+    semester = get_current_semester()
 
     print(f"parsing pdf at {files.pdf_path}")
 
@@ -36,8 +60,18 @@ def _main(
     ratings = scraper.run(yes)
     section_by_id = make_sections_final(sections, ratings, files)
 
-    semester = parser.get_semester()
-    make_global_sections_final(semester, section_by_id, files)
+    parsed_semester = parser.get_semester()
+
+    if parsed_semester != semester:
+        log(
+            logging.WARN,
+            f"Parsed and current semester differs: parsed {parsed_semester}, current {semester}",
+        )
+
+    schedule_diff = get_global_sections_diff(
+        semester, files.get_global_all_sections_content(), section_by_id
+    )
+    make_global_sections_final(semester, section_by_id, files, schedule_diff)
 
     if run_tests:
         exit(pytest.main(["--no-header", "-s", "-v"]))
