@@ -71,7 +71,7 @@ def _main(
     schedule_diff = get_global_sections_diff(
         semester, files.get_global_all_sections_content(), section_by_id
     )
-    make_global_sections_final(semester, section_by_id, files, schedule_diff)
+    make_global_sections_final(semester, section_by_id, files, schedule_diff, [])
 
     if run_tests:
         exit(pytest.main(["--no-header", "-s", "-v"]))

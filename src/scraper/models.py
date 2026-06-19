@@ -104,5 +104,5 @@ class GlobalAllSections(ConfiguredBaseModel):
     semester: str
     sections_by_id: dict[str, Section]
     filename: str
-    sections_diff: SectionsDiff
+    sections_diff: SectionsDiff | None
     comments: list[str]

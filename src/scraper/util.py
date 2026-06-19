@@ -119,6 +119,7 @@ def make_global_sections_final(
     section_by_id: dict[str, Section],
     files: Files,
     diff: SectionsDiff | None,
+    comments: list[str],
 ):
     """
     Write to the same place rather than by directory
@@ -130,6 +131,7 @@ def make_global_sections_final(
         sections_by_id=dict(sorted(section_by_id.items())),
         filename=filename,
         sections_diff=diff,
+        comments=comments,
     )
 
     with open(files.global_all_sections_final_path_json, "w") as file:
