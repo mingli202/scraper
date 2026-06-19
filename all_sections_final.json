@@ -55767,8 +55767,540 @@
   },
   "filename": "RPHOR200_-_Schedule_of_classes_F26_JUNE_12.pdf",
   "sectionsDiff": {
-    "previousSectionsChanged": [],
-    "sectionsAdded": [],
+    "previousSectionsChanged": [
+      {
+        "id": "109-101-MQ-00004",
+        "course": "Physical Education",
+        "section": "00004",
+        "domain": "PHYSICAL EDUCATION - PHYSICAL EDUCATION & NUTRITION",
+        "code": "109-101-MQ",
+        "title": "Racquets",
+        "leclabs": [
+          {
+            "title": "Racquets",
+            "type": "lecture",
+            "prof": "Cameron, John",
+            "rating": {
+              "prof": "Cameron, John",
+              "score": 88.5,
+              "avg": 4.7,
+              "nRating": 14,
+              "takeAgain": 93,
+              "difficulty": 1.6,
+              "status": "found",
+              "pId": "3067753"
+            },
+            "dayTimes": [
+              {
+                "day": "W",
+                "startTimeHhmm": "1200",
+                "endTimeHhmm": "1400"
+              }
+            ]
+          }
+        ],
+        "more": "Students must provide squash ball and eye prtection.",
+        "viewData": [
+          {
+            "3": [
+              9,
+              13
+            ]
+          }
+        ]
+      },
+      {
+        "id": "109-101-MQ-00045",
+        "course": "Physical Education",
+        "section": "00045",
+        "domain": "PHYSICAL EDUCATION - PHYSICAL EDUCATION & NUTRITION",
+        "code": "109-101-MQ",
+        "title": "Team Sports",
+        "leclabs": [
+          {
+            "title": "Team Sports",
+            "type": "lecture",
+            "prof": "Simes, Misty",
+            "rating": {
+              "prof": "Simes, Misty",
+              "score": 80.0,
+              "avg": 5.0,
+              "nRating": 3,
+              "takeAgain": 100,
+              "difficulty": 2.7,
+              "status": "found",
+              "pId": "3063644"
+            },
+            "dayTimes": [
+              {
+                "day": "M",
+                "startTimeHhmm": "1000",
+                "endTimeHhmm": "1200"
+              }
+            ]
+          }
+        ],
+        "more": "",
+        "viewData": [
+          {
+            "1": [
+              5,
+              9
+            ]
+          }
+        ]
+      },
+      {
+        "id": "109-102-MQ-00040",
+        "course": "Physical Education",
+        "section": "00040",
+        "domain": "PHYSICAL EDUCATION - PHYSICAL EDUCATION & NUTRITION",
+        "code": "109-102-MQ",
+        "title": "Martial Arts",
+        "leclabs": [
+          {
+            "title": "Martial Arts",
+            "type": "lecture",
+            "prof": "Zimerman, Mikhail",
+            "rating": {
+              "prof": "Zimerman, Mikhail",
+              "score": 84.2,
+              "avg": 4.3,
+              "nRating": 39,
+              "takeAgain": 84,
+              "difficulty": 2.0,
+              "status": "found",
+              "pId": "1858709"
+            },
+            "dayTimes": [
+              {
+                "day": "T",
+                "startTimeHhmm": "1500",
+                "endTimeHhmm": "1700"
+              }
+            ]
+          }
+        ],
+        "more": "",
+        "viewData": [
+          {
+            "2": [
+              15,
+              19
+            ]
+          }
+        ]
+      },
+      {
+        "id": "109-103-MQ-00016",
+        "course": "Physical Education",
+        "section": "00016",
+        "domain": "PHYSICAL EDUCATION - PHYSICAL EDUCATION & NUTRITION",
+        "code": "109-103-MQ",
+        "title": "Move It! Fitness, Fun, and Games",
+        "leclabs": [
+          {
+            "title": "Move It! Fitness, Fun, and Games",
+            "type": "lecture",
+            "prof": "Matthew, Valerie Anne",
+            "rating": {
+              "prof": "Matthew, Valerie Anne",
+              "score": 97.1,
+              "avg": 5.0,
+              "nRating": 33,
+              "takeAgain": 100,
+              "difficulty": 1.4,
+              "status": "found",
+              "pId": "1974603"
+            },
+            "dayTimes": [
+              {
+                "day": "F",
+                "startTimeHhmm": "1600",
+                "endTimeHhmm": "1800"
+              }
+            ]
+          }
+        ],
+        "more": "ADDITIONAL FEE: $10.00\nIntensive course - August 12,13,14,17,18,19 10:00-15:00. Must be comfortable swimming.",
+        "viewData": [
+          {
+            "5": [
+              17,
+              21
+            ]
+          }
+        ]
+      },
+      {
+        "id": "360-223-AB-00028",
+        "course": "Social Science / Commerce Courses",
+        "section": "00028",
+        "domain": "MULTIDISCIPLINARY",
+        "code": "360-223-AB",
+        "title": "Quantitative Methods",
+        "leclabs": [
+          {
+            "title": "Quantitative Methods",
+            "type": "lecture",
+            "prof": "Claude, Stephanie Danielle",
+            "rating": {
+              "prof": "Claude, Stephanie Danielle",
+              "score": 87.3,
+              "avg": 4.5,
+              "nRating": 28,
+              "takeAgain": 90,
+              "difficulty": 2.2,
+              "status": "found",
+              "pId": "2754175"
+            },
+            "dayTimes": [
+              {
+                "day": "F",
+                "startTimeHhmm": "1430",
+                "endTimeHhmm": "1630"
+              }
+            ]
+          },
+          {
+            "title": "Quantitative Methods",
+            "type": "laboratory",
+            "prof": "Claude, Stephanie Danielle",
+            "rating": {
+              "prof": "Claude, Stephanie Danielle",
+              "score": 87.3,
+              "avg": 4.5,
+              "nRating": 28,
+              "takeAgain": 90,
+              "difficulty": 2.2,
+              "status": "found",
+              "pId": "2754175"
+            },
+            "dayTimes": [
+              {
+                "day": "T",
+                "startTimeHhmm": "1430",
+                "endTimeHhmm": "1630"
+              }
+            ]
+          }
+        ],
+        "more": "",
+        "viewData": [
+          {
+            "5": [
+              14,
+              18
+            ]
+          },
+          {
+            "2": [
+              14,
+              18
+            ]
+          }
+        ]
+      },
+      {
+        "id": "412-DBC-AB-00001",
+        "course": "Complementary Courses",
+        "section": "00001",
+        "domain": "",
+        "code": "412-DBC-AB",
+        "title": "Photoshop for print and web",
+        "leclabs": [
+          {
+            "title": "Photoshop for print and web",
+            "type": "lecture",
+            "prof": "Lum, Anthony",
+            "rating": {
+              "prof": "Lum, Anthony",
+              "score": 0.0,
+              "avg": 0.0,
+              "nRating": 0,
+              "takeAgain": 0,
+              "difficulty": 0.0,
+              "status": "foundn't",
+              "pId": null
+            },
+            "dayTimes": [
+              {
+                "day": "M",
+                "startTimeHhmm": "1230",
+                "endTimeHhmm": "1530"
+              }
+            ]
+          }
+        ],
+        "more": "Not for Graphic & Web Design students.",
+        "viewData": [
+          {
+            "1": [
+              10,
+              16
+            ]
+          }
+        ]
+      },
+      {
+        "id": "502-CCA-AB-00006",
+        "course": "Arts, Literature & Communication",
+        "section": "00006",
+        "domain": "",
+        "code": "502-CCA-AB",
+        "title": "Cultural Connections",
+        "leclabs": [
+          {
+            "title": "Cultural Connections",
+            "type": "lecture",
+            "prof": "Stafiej, Mitchell",
+            "rating": {
+              "prof": "Stafiej, Mitchell",
+              "score": 70.0,
+              "avg": 4.5,
+              "nRating": 2,
+              "takeAgain": 100,
+              "difficulty": 1.5,
+              "status": "found",
+              "pId": "3144479"
+            },
+            "dayTimes": [
+              {
+                "day": "TR",
+                "startTimeHhmm": "1130",
+                "endTimeHhmm": "1330"
+              }
+            ]
+          }
+        ],
+        "more": "",
+        "viewData": [
+          {
+            "2": [
+              8,
+              12
+            ]
+          },
+          {
+            "4": [
+              8,
+              12
+            ]
+          }
+        ]
+      },
+      {
+        "id": "502-CCB-AB-00003",
+        "course": "Arts, Literature & Communication",
+        "section": "00003",
+        "domain": "",
+        "code": "502-CCB-AB",
+        "title": "Culture & the Environment in the Digital Age",
+        "leclabs": [
+          {
+            "title": "Culture & the Environment in the Digital Age",
+            "type": "lecture",
+            "prof": "",
+            "rating": null,
+            "dayTimes": [
+              {
+                "day": "F",
+                "startTimeHhmm": "0830",
+                "endTimeHhmm": "1130"
+              }
+            ]
+          }
+        ],
+        "more": "*** Not open. May open during registration. ***",
+        "viewData": [
+          {
+            "5": [
+              2,
+              8
+            ]
+          }
+        ]
+      },
+      {
+        "id": "510-DR1-AB-00001",
+        "course": "Visual Arts Courses",
+        "section": "00001",
+        "domain": "VISUAL ARTS",
+        "code": "510-DR1-AB",
+        "title": "Drawing I",
+        "leclabs": [
+          {
+            "title": "Drawing I",
+            "type": "lecture",
+            "prof": "Price, Meghan Faith",
+            "rating": {
+              "prof": "Price, Meghan Faith",
+              "score": 0.0,
+              "avg": 0.0,
+              "nRating": 0,
+              "takeAgain": 0,
+              "difficulty": 0.0,
+              "status": "foundn't",
+              "pId": null
+            },
+            "dayTimes": [
+              {
+                "day": "F",
+                "startTimeHhmm": "0830",
+                "endTimeHhmm": "1130"
+              }
+            ]
+          }
+        ],
+        "more": "Approximate material fee $55",
+        "viewData": [
+          {
+            "5": [
+              2,
+              8
+            ]
+          }
+        ]
+      },
+      {
+        "id": "570-DFB-AB-00002",
+        "course": "Complementary Courses",
+        "section": "00002",
+        "domain": "",
+        "code": "570-DFB-AB",
+        "title": "Tournage",
+        "leclabs": [
+          {
+            "title": "Tournage",
+            "type": "lecture",
+            "prof": "Horlik, Veronika",
+            "rating": {
+              "prof": "Horlik, Veronika",
+              "score": 0.0,
+              "avg": 0.0,
+              "nRating": 0,
+              "takeAgain": 0,
+              "difficulty": 0.0,
+              "status": "foundn't",
+              "pId": null
+            },
+            "dayTimes": [
+              {
+                "day": "F",
+                "startTimeHhmm": "0830",
+                "endTimeHhmm": "1130"
+              }
+            ]
+          }
+        ],
+        "more": "For all programs. Approximate material fee $80",
+        "viewData": [
+          {
+            "5": [
+              2,
+              8
+            ]
+          }
+        ]
+      },
+      {
+        "id": "602-101-MQ-00008",
+        "course": "French",
+        "section": "00008",
+        "domain": "FRENCH",
+        "code": "602-101-MQ",
+        "title": "Français niveau 2",
+        "leclabs": [
+          {
+            "title": "Français niveau 2",
+            "type": "lecture",
+            "prof": "Michael, Minar",
+            "rating": {
+              "prof": "Michael, Minar",
+              "score": 67.3,
+              "avg": 3.5,
+              "nRating": 13,
+              "takeAgain": 86,
+              "difficulty": 2.5,
+              "status": "found",
+              "pId": "3047674"
+            },
+            "dayTimes": [
+              {
+                "day": "WF",
+                "startTimeHhmm": "1300",
+                "endTimeHhmm": "1430"
+              }
+            ]
+          }
+        ],
+        "more": "",
+        "viewData": [
+          {
+            "3": [
+              11,
+              14
+            ]
+          },
+          {
+            "5": [
+              11,
+              14
+            ]
+          }
+        ]
+      },
+      {
+        "id": "603-103-MQ-00016",
+        "course": "English",
+        "section": "00016",
+        "domain": "ENGLISH",
+        "code": "603-103-MQ",
+        "title": "The Glory and the Dream: Romanticism (Arts & Science)",
+        "leclabs": [
+          {
+            "title": "The Glory and the Dream: Romanticism (Arts & Science)",
+            "type": "lecture",
+            "prof": "Raceviciute, Ragne",
+            "rating": {
+              "prof": "Raceviciute, Ragne",
+              "score": 40.8,
+              "avg": 2.0,
+              "nRating": 23,
+              "takeAgain": 26,
+              "difficulty": 3.2,
+              "status": "found",
+              "pId": "2662439"
+            },
+            "dayTimes": [
+              {
+                "day": "MW",
+                "startTimeHhmm": "1030",
+                "endTimeHhmm": "1230"
+              }
+            ]
+          }
+        ],
+        "more": "ADDITIONAL FEE: $25.00\nFor Arts & Sciences students and others.",
+        "viewData": [
+          {
+            "1": [
+              6,
+              10
+            ]
+          },
+          {
+            "3": [
+              6,
+              10
+            ]
+          }
+        ]
+      }
+    ],
+    "sectionsAdded": [
+      "345-2F4-AB-00001"
+    ],
     "sectionsRemoved": []
   },
   "comments": [
