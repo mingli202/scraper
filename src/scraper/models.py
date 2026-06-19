@@ -105,3 +105,4 @@ class GlobalAllSections(ConfiguredBaseModel):
     sections_by_id: dict[str, Section]
     filename: str
     sections_diff: SectionsDiff
+    comments: list[str]
