@@ -10,7 +10,6 @@ from scraper.models import (
     LecLabType,
     Rating,
     Section,
-    Section,
     Status,
 )
 
@@ -49,15 +48,14 @@ def test_parse_uploaded_pdf_returns_sections_schema(monkeypatch: pytest.MonkeyPa
                 day="M",
                 start_time_hhmm="0900",
                 end_time_hhmm="1100",
-                leclab_id=0,
             )
-            leclab = LecLab.default(
+            leclab = LecLab(
                 title="Calculus I",
                 type=LecLabType.LECTURE,
                 prof="Doe, Jane",
                 day_times=[day_time],
             )
-            section = Section.default(
+            section = Section(
                 course="Science Courses",
                 section="00001",
                 domain="MATHEMATICS",
@@ -103,7 +101,6 @@ def test_get_section():
     assert len(section.leclabs) == 2
 
     l1, l2 = section.leclabs
-    assert l1.section_id == l2.section_id == 1
     assert l1.title == l2.title == "Cellular Biology"
 
     assert l1.type == LecLabType.LECTURE

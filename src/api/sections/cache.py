@@ -3,17 +3,13 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
-from sqlmodel import Session, col, select
-
-from api.sections.queries import with_section_relationships
 from scraper.files import Files
-from scraper.db import engine
-from scraper.models import Section, Section
+from scraper.models import Section
 
 
 @dataclass(frozen=True)
 class SectionCache:
-    by_id: dict[int, Section]
+    by_id: dict[str, Section]
     all_sections: tuple[Section, ...]
 
 
@@ -26,19 +22,10 @@ def load_section_cache() -> SectionCache | None:
         return None
 
     files = Files()
-
-    sections_from_json = files.read_sections_responses()
-    if sections_from_json:
-        all_sections = tuple(sections_from_json)
-        by_id = {section.id: section for section in all_sections}
-        return SectionCache(by_id=by_id, all_sections=all_sections)
-
-    with Session(engine) as session:
-        statement = with_section_relationships(
-            select(Section).order_by(col(Section.id))
-        )
-        sections = session.exec(statement).all()
-
-    all_sections = tuple(Section.model_validate(section) for section in sections)
+    global_sections = files.get_global_all_sections_content()
+    all_sections = tuple(
+        section.model_copy(update={"id": f"{section.code}-{section.section}"})
+        for section in global_sections.sections_by_id.values()
+    )
     by_id = {section.id: section for section in all_sections}
     return SectionCache(by_id=by_id, all_sections=all_sections)

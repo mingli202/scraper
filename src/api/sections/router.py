@@ -4,34 +4,34 @@ from tempfile import NamedTemporaryFile
 from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Query, Request, UploadFile
-from sqlmodel import Session, col, select
 
 from api.sections.cache import SectionCache
 from api.sections.filter_cached_sections import filter_cached_sections
-from api.sections.queries import section_by_id_statement, with_section_relationships
-from scraper.db import engine
 from scraper.files import Files
-from scraper.models import Section, Section
+from scraper.models import Section
 from scraper.new_parser import NewParser
-from scraper.section_response_mapper import sections_to_section_responses
 
 router = APIRouter(prefix="/sections", tags=["Sections"])
 
 
+def _canonical_section_id(section: Section) -> str:
+    return f"{section.code}-{section.section}"
+
+
 def _load_sections_from_json() -> tuple[Section, ...]:
     files = Files()
-    sections_from_json = files.read_sections_responses()
+    global_sections = files.get_global_all_sections_content()
+    return tuple(
+        section.model_copy(update={"id": _canonical_section_id(section)})
+        for section in global_sections.sections_by_id.values()
+    )
 
-    if sections_from_json:
-        return tuple(sections_from_json)
 
-    with Session(engine) as session:
-        statement = with_section_relationships(select(Section)).order_by(
-            col(Section.id)
-        )
-        sections = session.exec(statement).all()
-
-    return tuple(Section.model_validate(section) for section in sections)
+def _lookup_section(
+    by_id: dict[str, Section],
+    section_id: str,
+) -> Section | None:
+    return by_id.get(section_id)
 
 
 @router.get("/all")
@@ -70,7 +70,7 @@ def parse_uploaded_pdf(file: UploadFile) -> list[Section]:
         parser = NewParser(files)
         parser.parse()
 
-        return sections_to_section_responses(parser.sections)
+        return parser.sections
     except HTTPException:
         raise
     except Exception as err:
@@ -174,44 +174,43 @@ def get_sections(
 
 
 @router.get("/{section_id}")
-def get_section(section_id: int, request: Request) -> Section:
+def get_section(section_id: str, request: Request) -> Section:
     section_cache = getattr(request.app.state, "section_cache", None)
     if isinstance(section_cache, SectionCache):
-        section = section_cache.by_id.get(section_id)
+        section = _lookup_section(section_cache.by_id, section_id)
         if section is None:
             raise HTTPException(
                 status_code=404, detail=f"Section {section_id} not found"
             )
         return section
 
-    files = Files()
-    sections_from_json = files.read_sections_responses()
-    if not sections_from_json:
-        with Session(engine) as session:
-            section = session.exec(section_by_id_statement(section_id)).first()
-    else:
-        section = next(
-            (section for section in sections_from_json if section.id == section_id),
-            None,
-        )
+    all_sections = _load_sections_from_json()
+    by_id = {section.id: section for section in all_sections}
+    section = _lookup_section(by_id, section_id)
 
     if section is None:
         raise HTTPException(status_code=404, detail=f"Section {section_id} not found")
-
-    if isinstance(section, Section):
-        return Section.model_validate(section)
 
     return section
 
 
 @router.post("/")
-def get_many(ids: list[int], request: Request) -> list[Section]:
+def get_many(ids: list[str], request: Request) -> list[Section]:
     section_cache = getattr(request.app.state, "section_cache", None)
 
     if isinstance(section_cache, SectionCache):
-        sections = [section_cache.by_id.get(id) for id in ids]
-        sections = [section for section in sections if section is not None]
-        return sections
+        cached_sections: list[Section] = []
+        for section_id in ids:
+            section = _lookup_section(section_cache.by_id, section_id)
+            if section is not None:
+                cached_sections.append(section)
+        return cached_sections
 
-    sections_by_id = {section.id: section for section in _load_sections_from_json()}
-    return [section for id in ids if (section := sections_by_id.get(id)) is not None]
+    all_sections = _load_sections_from_json()
+    by_id = {section.id: section for section in all_sections}
+    matched_sections: list[Section] = []
+    for section_id in ids:
+        section = _lookup_section(by_id, section_id)
+        if section is not None:
+            matched_sections.append(section)
+    return matched_sections
