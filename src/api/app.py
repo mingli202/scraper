@@ -7,6 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.sections.cache import load_section_cache
 from api.sections.router import router as section_router
+from scraper.files import Files
+from scraper.models import GlobalAllSections
 
 _ = load_dotenv()
 
@@ -48,3 +50,27 @@ async def root():
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/global-all-sections")
+async def get_global_all_sections() -> GlobalAllSections:
+    files = Files()
+    globalAllSections = files.get_global_all_sections_content()
+
+    sections = globalAllSections.sections_by_id
+    removedSection = sections["101-A1S-AB-00001"]
+    del sections["101-A1S-AB-00001"]
+
+    originalSection = sections["345-2F4-AB-00001"]
+    changedSection = originalSection.model_copy(deep=True)
+
+    originalSection.leclabs[0].prof = "new prof"
+    originalSection.title = "new title"
+    originalSection.leclabs.append(changedSection.leclabs[0])
+
+    sections_diff = globalAllSections.sections_diff
+    if sections_diff is not None:
+        sections_diff.sections_removed.append(removedSection)
+        sections_diff.previous_sections_changed.append(changedSection)
+
+    return globalAllSections
