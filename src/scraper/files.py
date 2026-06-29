@@ -40,22 +40,25 @@ class Files:
 
         self.out_file_path = cwd / "winter" / "winter-out.json"  # backwards
 
-    def get_sorted_lines_content(
-        self, use_cache: bool = True
-    ) -> OrderedDict[int, list[Word]]:
-        if self.sorted_lines_path.exists() and use_cache:
-            with open(self.sorted_lines_path, "r") as f:
-                try:
-                    adapter = TypeAdapter(OrderedDict[int, list[Word]])
-                    data = adapter.validate_json(f.read(), by_alias=True)
-                    return data
-                except ValidationError as e:
-                    print(e)
+    def get_sorted_lines_content(self) -> OrderedDict[int, list[Word]]:
+        """
+        Gets the content of the sorted lines file.
+        Raise if file doesn't exists
+        """
+        with open(self.sorted_lines_path, "r") as f:
+            adapter = TypeAdapter(OrderedDict[int, list[Word]])
+            data = adapter.validate_json(f.read(), by_alias=True)
+            return data
 
-        lines: OrderedDict[int, list[Word]] = parser_utils.compute_sorted_lines(
-            self.pdf_path
-        )
+    def write_to_sorted_lines(self, lines: OrderedDict[int, list[Word]]) -> None:
+        """
+        Write the given lines to the sorted lines file
+        """
 
+        # lines: OrderedDict[int, list[Word]] = parser_utils.compute_sorted_lines(
+        #     self.pdf_path
+        # )
+        #
         def map(word: Word) -> dict[str, Any]:
             return word.model_dump(by_alias=True)
 
@@ -66,59 +69,62 @@ class Files:
         with open(self.sorted_lines_path, "w") as f:
             json.dump(serializable_lines, f, indent=2)
 
-        return lines
+    def get_section_columns_x_content(self) -> ColumnsXs:
+        """
+        Gets the content of the columns_x file
+        Raise if file doesn't exist
+        """
 
-    def get_section_columns_x_content(self, use_cache: bool = True) -> ColumnsXs:
-        if self.section_columns_x_path.exists() and use_cache:
-            with open(self.section_columns_x_path, "r") as f:
-                try:
-                    data = ColumnsXs.model_validate_json(f.read(), by_alias=True)
-                    return data
-                except ValidationError as e:
-                    print(e)
+        with open(self.section_columns_x_path, "r") as f:
+            data = ColumnsXs.model_validate_json(f.read(), by_alias=True)
+            return data
 
-        columns_x: ColumnsXs = parser_utils.compute_columns_x(
-            self.get_sorted_lines_content()
-        )
-
+    def write_to_columns_x(self, columns_x: ColumnsXs) -> None:
+        """
+        Write to the columns_x file
+        """
+        # columns_x: ColumnsXs = parser_utils.compute_columns_x(
+        #     self.get_sorted_lines_content()
+        # )
+        #
         with open(self.section_columns_x_path, "w") as f:
             json.dump(columns_x.model_dump(by_alias=True), f)
 
-        return columns_x
+        #
+        # return columns_x
 
     def get_parsed_sections_file_content(self) -> list[Section]:
         with open(self.parsed_sections_path, "r") as file:
             return [Section.model_validate(s) for s in from_json(file.read())]
 
     def get_professors_file_content(self) -> Trie:
-        if self.professors_path.exists():
-            with open(self.professors_path, "r") as file:
-                return Trie.model_validate(from_json(file.read()))
+        with open(self.professors_path, "r") as file:
+            return Trie.model_validate(from_json(file.read()))
 
-        professors: set[str] = set()
-
-        if self.all_sections_final_path_json.exists():
-            with open(self.parsed_sections_path, "r") as file:
-                sections = TypeAdapter(list[Section]).validate_json(file.read())
-
-            professors = {
-                leclab.prof
-                for section in sections
-                for leclab in section.leclabs
-                if leclab.prof != ""
-            }
-
-        trie = Trie()
-
-        for prof in professors:
-            trie.add(prof)
-
-        with open(self.professors_path, "w") as file:
-            _ = file.write(
-                json.dumps(trie.model_dump(by_alias=True, mode="json"), indent=2)
-            )
-
-        return trie
+        # professors: set[str] = set()
+        #
+        # if self.all_sections_final_path_json.exists():
+        #     with open(self.parsed_sections_path, "r") as file:
+        #         sections = TypeAdapter(list[Section]).validate_json(file.read())
+        #
+        #     professors = {
+        #         leclab.prof
+        #         for section in sections
+        #         for leclab in section.leclabs
+        #         if leclab.prof != ""
+        #     }
+        #
+        # trie = Trie()
+        #
+        # for prof in professors:
+        #     trie.add(prof)
+        #
+        # with open(self.professors_path, "w") as file:
+        #     _ = file.write(
+        #         json.dumps(trie.model_dump(by_alias=True, mode="json"), indent=2)
+        #     )
+        #
+        # return trie
 
     def get_missing_pids_file_content(self) -> dict[str, str]:
         with open(self.missing_pids_path, "r") as file:
