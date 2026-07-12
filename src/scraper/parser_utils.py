@@ -159,3 +159,35 @@ def compute_columns_x(
     )
 
     return columns_x
+
+
+def get_parser_deps_if_not_exists(
+    sorted_lines_path: Path, pdf_path: Path, columns_x_path: Path, override: bool | None
+) -> tuple[list[list[Word]], ColumnsXs]:
+    """
+    Gets the sorted_lines and columns_x with override
+    """
+
+    parsed_sorted_lines_dict = compute_sorted_lines_if_not_exist(
+        sorted_lines_path, pdf_path, override
+    )
+    parsed_columns_x = compute_columns_x_if_not_exists(
+        columns_x_path, parsed_sorted_lines_dict, override
+    )
+    parsed_sorted_lines = list(parsed_sorted_lines_dict.values())
+
+    return parsed_sorted_lines, parsed_columns_x
+
+
+def get_parser_deps(
+    pdf_path: Path,
+) -> tuple[list[list[Word]], ColumnsXs]:
+    """
+    Gets the sorted_lines and columns_x
+    """
+
+    parsed_sorted_lines_dict = compute_sorted_lines(pdf_path)
+    parsed_columns_x = compute_columns_x(parsed_sorted_lines_dict)
+    parsed_sorted_lines = list(parsed_sorted_lines_dict.values())
+
+    return parsed_sorted_lines, parsed_columns_x
