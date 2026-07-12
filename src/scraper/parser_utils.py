@@ -1,14 +1,61 @@
 from collections import OrderedDict
 import itertools
+import json
 from pathlib import Path
 import re
+from typing import Any
 
 import pdfplumber
 from pdfplumber.page import Page
+from pydantic import TypeAdapter
 from scraper.models import ColumnsXs, Word
 
 
+def compute_sorted_lines_if_not_exist(
+    sorted_lines_path: Path | None, pdf_path: Path
+) -> OrderedDict[int, list[Word]]:
+    """
+    Gets the sorted lines at the given sorted_lines_path.
+    If it exists and already parsed, return it, otherwise
+    compute a fresh sorted_lines and save it
+    """
+
+    if sorted_lines_path is not None:
+        if sorted_lines_path.exists():
+            with open(sorted_lines_path, "r") as f:
+                adapter = TypeAdapter(OrderedDict[int, list[Word]])
+                return adapter.validate_json(f.read(), by_alias=True)
+
+    sorted_lines = compute_sorted_lines(pdf_path)
+
+    if sorted_lines_path is not None:
+        save_sorted_lines(sorted_lines, sorted_lines_path)
+
+    return sorted_lines
+
+
+def save_sorted_lines(
+    sorted_lines: OrderedDict[int, list[Word]], sorted_lines_path: Path
+):
+    """Saves the given sorted_lines as json to the given sorted_lines_path"""
+
+    def map(word: Word) -> dict[str, Any]:
+        return word.model_dump(by_alias=True)
+
+    serializable_lines: OrderedDict[float, list[dict[str, Any]]] = OrderedDict()
+    for k, v in sorted_lines.items():
+        serializable_lines[k] = [map(w) for w in v]
+
+    with open(sorted_lines_path, "w") as f:
+        json.dump(serializable_lines, f, indent=2)
+
+
 def compute_sorted_lines(pdf_path: Path) -> OrderedDict[int, list[Word]]:
+    """
+    Parses the pdf at the given path and returns an OrderedDict where
+    the key is the y position of the line in the entire pdf and
+    the value is a list of Word that makes up the line
+    """
     lines: OrderedDict[int, list[Word]] = OrderedDict()
 
     with pdfplumber.open(pdf_path) as pdf:
