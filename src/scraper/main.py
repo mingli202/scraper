@@ -6,13 +6,17 @@ from typing import Annotated
 
 from dotenv import load_dotenv
 
+from scraper.parser_utils import (
+    compute_columns_x_if_not_exists,
+    compute_sorted_lines_if_not_exist,
+)
 from scraper.util import (
     get_global_sections_diff,
     make_global_sections_final,
     make_sections_final,
 )
 
-from scraper.new_parser import NewParser
+from scraper.new_parser import NewParser, get_semester, parse_and_save
 from scraper.files import Files
 from scraper.scraper import Scraper
 import pytest
@@ -36,19 +40,7 @@ def get_current_semester() -> str:
         return f"SUMMER {now.year}"
 
 
-def _main(
-    pdf_path: Annotated[str, typer.Option(help="Path to the schedule of classes file")],
-    yes: Annotated[
-        bool, typer.Option(help="Answer yes to all override prompts")
-    ] = False,
-    run_tests: Annotated[bool, typer.Option(help="Run tests")] = False,
-):
-    """
-    Parse the schedule of classes pdf and scrape professors' ratings into an ultimate compilation of all sections
-    """
-    _ = load_dotenv()
-
-    files = Files(pdf_path=Path(pdf_path))
+def the_entire_loop(files: Files):
     semester = get_current_semester()
 
     print(f"parsing pdf at {files.pdf_path}")
@@ -56,8 +48,8 @@ def _main(
     parser = NewParser(files)
     scraper = Scraper(files)
 
-    sections = parser.run(yes)
-    ratings = scraper.run(yes)
+    sections = parser.run(True)
+    ratings = scraper.run(True)
     section_by_id = make_sections_final(sections, ratings, files)
 
     parsed_semester = parser.get_semester()
@@ -71,7 +63,58 @@ def _main(
     schedule_diff = get_global_sections_diff(
         semester, files.get_global_all_sections_content(), section_by_id
     )
-    make_global_sections_final(semester, section_by_id, files, schedule_diff, [])
+    _ = make_global_sections_final(semester, section_by_id, files, schedule_diff, [])
+
+
+def _main(
+    pdf_path: Annotated[str, typer.Option(help="Path to the schedule of classes file")],
+    override: Annotated[
+        bool | None,
+        typer.Option(
+            help="Override everything [true] or always used saved data [false]. Omitting this will ask the user for confirmation when there is saved data."
+        ),
+    ] = None,
+    run_tests: Annotated[bool, typer.Option(help="Run tests")] = False,
+):
+    """
+    Parse the schedule of classes pdf and scrape professors' ratings into an ultimate compilation of all sections
+    """
+    _ = load_dotenv()
+
+    files = Files(pdf_path=Path(pdf_path))
+    semester = get_current_semester()
+
+    print(f"parsing pdf at {files.pdf_path}")
+
+    sorted_lines_dict = compute_sorted_lines_if_not_exist(
+        files.sorted_lines_path, files.pdf_path, override
+    )
+    columns_x = compute_columns_x_if_not_exists(
+        files.section_columns_x_path, sorted_lines_dict, override
+    )
+    sorted_lines = list(sorted_lines_dict.values())
+
+    sections = parse_and_save(
+        sorted_lines, columns_x, files.parsed_sections_path, override
+    )
+
+    scraper = Scraper(files)
+
+    ratings = scraper.run(yes)
+    section_by_id = make_sections_final(sections, ratings, files)
+
+    parsed_semester = get_semester(sorted_lines)
+
+    if parsed_semester != semester:
+        log(
+            logging.WARN,
+            f"Parsed and current semester differs: parsed {parsed_semester}, current {semester}",
+        )
+
+    schedule_diff = get_global_sections_diff(
+        semester, files.get_global_all_sections_content(), section_by_id
+    )
+    _ = make_global_sections_final(semester, section_by_id, files, schedule_diff, [])
 
     if run_tests:
         exit(pytest.main(["--no-header", "-s", "-v"]))
