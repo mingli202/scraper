@@ -2,14 +2,12 @@ from collections import OrderedDict
 from typing import Any
 from pydantic import BaseModel
 
-from scraper.files import Files
-from scraper.models import DayTime, LecLab, LecLabType, Section, Word
-from scraper.new_parser import NewParser
+from scraper.models import ColumnsXs, DayTime, LecLab, LecLabType, Section, Word
 
 
 class ATestCase(BaseModel):
     name: str
-    lines: OrderedDict[int, list[Word]]
+    lines: list[list[Word]]
 
 
 raw_data: list[tuple[dict[str, Any], Section]] = [
@@ -679,20 +677,7 @@ raw_data: list[tuple[dict[str, Any], Section]] = [
 ]
 
 
-files = Files()
-parser = NewParser(files)
-
-xs = [
-    parser.columns_x.section,
-    parser.columns_x.disc,
-    parser.columns_x.course_number,
-    parser.columns_x.course_title,
-    parser.columns_x.day,
-    parser.columns_x.time,
-]
-
-
-def func(x: dict[str, Any]) -> ATestCase:
+def func(x: dict[str, Any], xs: list[int]) -> ATestCase:
     lines: OrderedDict[int, list[Word]] = OrderedDict()
 
     lines.update({-2: [Word(page_number=0, text="title line", x0=0, top=0, doctop=0)]})
@@ -712,7 +697,16 @@ def func(x: dict[str, Any]) -> ATestCase:
 
         lines.update({i: new_line})
 
-    return ATestCase(name=x["name"], lines=lines)
+    return ATestCase(name=x["name"], lines=list(lines.values()))
 
 
-data: list[tuple[ATestCase, Section]] = [(func(test), exp) for test, exp in raw_data]
+def make_data(columns_x: ColumnsXs) -> list[tuple[ATestCase, Section]]:
+    xs = [
+        columns_x.section,
+        columns_x.disc,
+        columns_x.course_number,
+        columns_x.course_title,
+        columns_x.day,
+        columns_x.time,
+    ]
+    return [(func(test, xs), exp) for test, exp in raw_data]
