@@ -1,13 +1,16 @@
 import json
-from pathlib import Path
 import re
+from collections import OrderedDict
+from collections.abc import Iterable
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
-from pydantic import TypeAdapter
 import requests
+from pydantic import TypeAdapter
+
+from scraper import util
 from scraper.files import Files
 from scraper.models import Rating, Section, Status
-from scraper import util
 
 
 def scrape_with_override(
@@ -29,9 +32,10 @@ def scrape_with_override(
         }
 
     professors = util.get_professors_from_sections(parsed_sections)
-    pids = _get_saved_pids(pids_path)
+    pids = util.get_saved_pids(pids_path)
 
-    ratings = scrape(professors, pids, pids_path, debug)
+    ratings = scrape(professors, pids, debug)
+    _save_pids(ratings.values(), pids_path)
 
     _save_ratings(ratings_path, list(ratings.values()))
 
@@ -41,7 +45,6 @@ def scrape_with_override(
 def scrape(
     professors: list[str],
     saved_pids: dict[str, str | None],
-    pids_path: Path,
     debug: bool,
 ) -> dict[str, Rating]:
     """
@@ -62,43 +65,26 @@ def scrape(
         with ThreadPoolExecutor() as e:
             results = e.map(fn, professors)
 
-    all_pids: dict[str, str | None] = dict()
     ratings: dict[str, Rating] = {}
 
     for rating, prof in results:
         ratings[prof] = rating
-        all_pids[prof] = rating.pId
-
-    _save_pids(all_pids, pids_path)
 
     print("FINISHED SCRAPING")
 
     return ratings
 
 
-def _save_pids(pids: dict[str, str | None], pids_path: Path):
+def _save_pids(ratings: Iterable[Rating], pids_path: Path):
     """
-    Saves the given pids to the given path
+    Saves the pids of all the profs of the given ratings
+    as prof: id sorted dict by prof
     """
+    pids_map = {rating.prof: rating.pId for rating in ratings}
+    sorted_map = OrderedDict(sorted(pids_map.items()))
 
     with open(pids_path, "w") as file:
-        _ = file.write(json.dumps(pids))
-
-
-def _get_saved_pids(pids_path: Path) -> dict[str, str | None]:
-    """
-    Gets the saved pids on the local dics
-    """
-
-    if not pids_path.exists():
-        with open(pids_path, "w") as file:
-            _ = file.write(json.dumps({}))
-
-            return {}
-
-    with open(pids_path, "r") as file:
-        adapter = TypeAdapter(dict[str, str | None])
-        return adapter.validate_json(file.read())
+        json.dump(sorted_map, file)
 
 
 def _get_rating(prof: str, saved_pids: dict[str, str | None]) -> Rating:
