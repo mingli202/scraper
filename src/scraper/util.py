@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from typing import Callable
 
 
 from scraper.files import Files
@@ -171,3 +170,22 @@ def override_for_path(path: Path, message: str) -> str | None:
                 return f.read()
 
     return None
+
+
+def get_professors_from_sections(parsed_sections: list[Section]) -> list[str]:
+    """
+    Get the list if unique professors from the parsed sections
+    """
+    profs: set[str] = set()
+
+    for section in parsed_sections:
+        profs.update(get_professors_from_section(section))
+
+    return list(profs)
+
+
+def get_professors_from_section(section: Section) -> list[str]:
+    """
+    Gets the list of profs for the given section
+    """
+    return [leclab.prof for leclab in section.leclabs]
