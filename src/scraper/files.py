@@ -3,11 +3,10 @@ import json
 from pathlib import Path
 from typing import Any, final
 
-from pydantic import TypeAdapter, ValidationError
+from pydantic import TypeAdapter
 from pydantic_core import from_json
 
 from scraper.models import ColumnsXs, GlobalAllSections, Section, Word
-from scraper import parser_utils
 from scraper.trie import Trie
 
 
@@ -40,11 +39,14 @@ class Files:
 
         self.out_file_path = cwd / "winter" / "winter-out.json"  # backwards
 
-    def get_sorted_lines_content(self) -> OrderedDict[int, list[Word]]:
+    def get_sorted_lines_content(self) -> OrderedDict[int, list[Word]] | None:
         """
         Gets the content of the sorted lines file.
-        Raise if file doesn't exists
+        Returns None if file doesn't exists
         """
+        if not self.sorted_lines_path.exists():
+            return None
+
         with open(self.sorted_lines_path, "r") as f:
             adapter = TypeAdapter(OrderedDict[int, list[Word]])
             data = adapter.validate_json(f.read(), by_alias=True)
