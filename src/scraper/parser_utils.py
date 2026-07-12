@@ -9,26 +9,26 @@ import pdfplumber
 from pdfplumber.page import Page
 from pydantic import TypeAdapter
 from scraper.models import ColumnsXs, Word
+from scraper.util import should_override
 
 
 def compute_sorted_lines_if_not_exist(
-    sorted_lines_path: Path | None, pdf_path: Path
+    sorted_lines_path: Path, pdf_path: Path, override: bool | None
 ) -> OrderedDict[int, list[Word]]:
     """
     Gets the sorted lines at the given sorted_lines_path.
     If it exists and already parsed, return it, otherwise
     compute a fresh sorted_lines and save it
     """
-
-    if sorted_lines_path is not None and if sorted_lines_path.exists():
-        with open(sorted_lines_path, "r") as f:
-            adapter = TypeAdapter(OrderedDict[int, list[Word]])
-            return adapter.validate_json(f.read(), by_alias=True)
+    if s := should_override(
+        override, sorted_lines_path, "Pdf already parsed into sorted lines."
+    ):
+        adapter = TypeAdapter(OrderedDict[int, list[Word]])
+        return adapter.validate_json(s, by_alias=True)
 
     sorted_lines = compute_sorted_lines(pdf_path)
 
-    if sorted_lines_path is not None:
-        save_sorted_lines(sorted_lines, sorted_lines_path)
+    save_sorted_lines(sorted_lines, sorted_lines_path)
 
     return sorted_lines
 
@@ -98,21 +98,24 @@ def __get_sorted_words(page_number: int, page: Page) -> list[Word]:
     return [Word.model_validate(w, by_alias=True) for w in sorted_words]
 
 
-def compute_columns_x_if_not_exists(columns_x_path: Path | None, sorted_lines_dict: OrderedDict[int, list[Word]]) -> ColumnsXs:
+def compute_columns_x_if_not_exists(
+    columns_x_path: Path,
+    sorted_lines_dict: OrderedDict[int, list[Word]],
+    override: bool | None,
+) -> ColumnsXs:
     """
     Returns the columns_x if already exists at the given columns_x_path.
     Otherwise, computes fresh columns_x saving it at the given columns_x_path and returning it
     """
 
-    if columns_x_path is not None and columns_x_path.exists():
+    if s := should_override(override, columns_x_path, "ColumnsX already parsed."):
         with open(columns_x_path, "r") as f:
-            return ColumnsXs.model_validate_json(f.read(), by_alias=True)
+            return ColumnsXs.model_validate_json(s, by_alias=True)
 
     columns_x = compute_columns_x(sorted_lines_dict)
 
-    if columns_x_path is not None:
-        with open(columns_x_path, "w") as f:
-            json.dump(columns_x.model_dump(by_alias=True), f)
+    with open(columns_x_path, "w") as f:
+        json.dump(columns_x.model_dump(by_alias=True), f)
 
     return columns_x
 
