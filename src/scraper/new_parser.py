@@ -9,6 +9,8 @@ from pydantic import TypeAdapter
 
 from scraper.files import Files
 from scraper.models import ColumnsXs, LecLab, LecLabType, Section, Word
+from scraper.parser_utils import compute_columns_x, compute_sorted_lines
+from scraper.util import should_override
 
 logger = logging.getLogger(__name__)
 
@@ -289,8 +291,37 @@ def save_sections(sections: list[Section], path: Path):
 
 
 def get_semester(lines: list[list[Word]]):
+    """
+    Gets the semester of the pdf from the given lines
+    """
+
     title = get_line_text(lines[0])
     return title.replace("SCHEDULE OF CLASSES - ", "")
+
+
+def parse_and_save(
+    sorted_lines: list[list[Word]],
+    columns_x: ColumnsXs,
+    parsed_sections_path: Path,
+    override: bool | None,
+) -> list[Section]:
+    """
+    Parse given the sorted liines and return the parsed sections if override is true.
+    """
+
+    if s := should_override(
+        override, parsed_sections_path, "Parsed sections already populated."
+    ):
+        return TypeAdapter(list[Section]).validate_json(s)
+
+    parser = NewParser()
+    sections = parser.parse(sorted_lines, columns_x)
+
+    with open(parsed_sections_path, "w") as f:
+        dumpable_sections = [section.model_dump(by_alias=True) for section in sections]
+        json.dump(dumpable_sections, f)
+
+    return sections
 
 
 if __name__ == "__main__":
@@ -298,4 +329,9 @@ if __name__ == "__main__":
 
     files = Files()
     parser = NewParser()
-    parser.parse()
+
+    sorted_lines_dict = compute_sorted_lines(files.pdf_path)
+    columns_x = compute_columns_x(sorted_lines_dict)
+    _ = parse_and_save(
+        list(sorted_lines_dict.values()), columns_x, files.parsed_sections_path, None
+    )
