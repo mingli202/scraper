@@ -1,4 +1,6 @@
 import json
+from pathlib import Path
+from typing import Callable
 
 
 from scraper.files import Files
@@ -120,7 +122,7 @@ def make_global_sections_final(
     files: Files,
     diff: SectionsDiff | None,
     comments: list[str],
-):
+) -> GlobalAllSections:
     """
     Write to the same place rather than by directory
     """
@@ -138,3 +140,34 @@ def make_global_sections_final(
         json.dump(
             global_sections.model_dump(mode="json", by_alias=True), file, indent=2
         )
+
+    return global_sections
+
+
+def should_override(override: bool | None, path: Path, message: str) -> str | None:
+    """
+    Whether should override or not the given path, returning the data if
+    no override and data exists at the given path
+    Ask with the given message if confirmation is needed
+    """
+    if override is not None:
+        return None
+
+    return override_for_path(path, message)
+
+
+def override_for_path(path: Path, message: str) -> str | None:
+    """
+    If override is None, ask the user if they want to override or not
+    the data at the given path with the given message if there is data.
+    Returns the existing data if no override and exists
+    Any input other than y/Y is treated as false.
+    """
+
+    if path.exists():
+        override = input(f"{message} Override? [y]")
+        if override.lower() != "y":
+            with open(path, "r") as f:
+                return f.read()
+
+    return None
