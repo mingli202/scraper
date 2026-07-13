@@ -1,15 +1,16 @@
 from collections import OrderedDict
-import itertools
 import json
 from pathlib import Path
 import re
-from typing import Any
+from typing import Any, TypeAlias
 
-import pdfplumber
-from pdfplumber.page import Page
 from pydantic import TypeAdapter
+import pymupdf
+
 from scraper.models import ColumnsXs, Word
 from scraper.util import contains_data
+
+ExtractedWord: TypeAlias = tuple[float, float, float, float, str, int, int, int]
 
 
 def compute_sorted_lines_if_not_exist(
@@ -57,45 +58,47 @@ def compute_sorted_lines(pdf_path: Path) -> OrderedDict[int, list[Word]]:
     """
     lines: OrderedDict[int, list[Word]] = OrderedDict()
 
-    with pdfplumber.open(pdf_path) as pdf:
-        sorted_words = itertools.chain.from_iterable(
-            __get_sorted_words(i, page) for i, page in enumerate(pdf.pages)
-        )
-
+    with pymupdf.open(pdf_path) as doc:
+        doctop_offset = 0.0
         y = -1
         line: list[Word] = []
-        for word in sorted_words:
-            if word.doctop != y:
-                if y != -1:
-                    lines.update({y: line})
-                    line = []
-                y = word.doctop
 
-            line.append(word)
+        for page_number, page in enumerate(doc):
+            for word in __get_sorted_words(page_number, page, doctop_offset):
+                if word.doctop != y:
+                    if y != -1:
+                        lines[y] = line
+                        line = []
+                    y = word.doctop
 
-        lines.update({y: line})
+                line.append(word)
+
+            doctop_offset += page.rect.height
+
+        if line:
+            lines[y] = line
 
     return lines
 
 
-def __get_sorted_words(page_number: int, page: Page) -> list[Word]:
-    words = page.extract_words(x_tolerance=0.1, y_tolerance=0.1)
+def __get_sorted_words(
+    page_number: int, page: pymupdf.Page, doctop_offset: float
+) -> list[Word]:
+    words: list[ExtractedWord] = page.get_text("words", sort=True)
 
-    sorted_words = sorted(
+    return sorted(
         (
             Word(
-                text=re.sub(r"\(cid:\d+\)", "", word["text"]),
-                x0=round(word["x0"]),
-                doctop=round(word["doctop"]),
-                top=round(word["top"]),
+                text=re.sub(r"\(cid:\d+\)", "", word[4]),
+                x0=round(word[0]),
+                doctop=round(doctop_offset + word[1]),
+                top=round(word[1]),
                 page_number=page_number,
             )
             for word in words
         ),
         key=lambda w: (w.top, w.x0),
     )
-
-    return [Word.model_validate(w, by_alias=True) for w in sorted_words]
 
 
 def compute_columns_x_if_not_exists(

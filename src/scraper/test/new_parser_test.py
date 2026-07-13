@@ -1,7 +1,7 @@
 import itertools
 from pathlib import Path
 from typing import Any
-import pdfplumber
+import pymupdf
 from pydantic_core import from_json
 import pytest
 import re
@@ -31,11 +31,11 @@ parsed_sorted_lines_dict = compute_sorted_lines(pdf_path)
 parsed_sorted_lines = list(parsed_sorted_lines_dict.values())
 parsed_columns_x = compute_columns_x(parsed_sorted_lines_dict)
 
-with pdfplumber.open(files.pdf_path) as pdf:
-    page = pdf.pages[0]
-    width = page.width
-    height = page.height
-    print("width", page.width, "height", page.height)
+with pymupdf.open(files.pdf_path) as document:
+    page = document[0]
+    width = page.rect.width
+    height = page.rect.height
+    print("width", width, "height", height)
 
 
 def get_word_position(word: Word) -> str:
@@ -46,61 +46,6 @@ def get_word_position(word: Word) -> str:
 def parser():
     parser = NewParser()
     yield parser
-
-
-def test_optimal_x_tolerance() -> None:
-    with pdfplumber.open(pdf_path) as pdf:
-        page = pdf.pages[
-            93
-        ]  # this page contains (Blended)MW, which are very close to each other
-
-        left = 1
-        right = 3
-        mid = 0
-
-        for _ in range(0, 100):
-            mid = (left + right) / 2
-            words = page.extract_words(x_tolerance=mid)
-            sorted_words = sorted(words, key=lambda w: (w["top"], w["x0"]))
-
-            for word in sorted_words[::-1]:
-                if "(Blended)" in word["text"]:
-                    if "TF" in word["text"]:
-                        right = mid
-                    else:
-                        left = mid
-                    break
-
-        print("x_tolerance", mid)
-
-
-def test_optmial_y_tolerance() -> None:
-    with pdfplumber.open(pdf_path) as pdf:
-        page = pdf.pages[115]
-
-        left = 1
-        right = 3
-        mid = 0
-
-        for _ in range(0, 100):
-            mid = (left + right) / 2
-            words = page.extract_words(y_tolerance=mid)
-            sorted_words = sorted(words, key=lambda w: (w["top"], w["x0"]))
-
-            has_horlik = False
-            for word in sorted_words[::-1]:
-                if "Horlik" in word["text"]:
-                    has_horlik = True
-                    continue
-
-                if has_horlik:
-                    if "CERAMICS" in word["text"]:
-                        right = mid
-                    else:
-                        left = mid
-                    break
-
-        print("y_tolerance", mid)
 
 
 def test_correct_line_extraction() -> None:

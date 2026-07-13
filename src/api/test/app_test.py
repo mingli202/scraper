@@ -6,6 +6,7 @@ from fastapi.testclient import TestClient
 
 from scraper.models import (
     DayTime,
+    GlobalAllSections,
     LecLab,
     LecLabType,
     Rating,
@@ -38,40 +39,37 @@ def test_parse_uploaded_pdf_rejects_non_pdf():
 
 
 def test_parse_uploaded_pdf_returns_sections_schema(monkeypatch: pytest.MonkeyPatch):
-    class FakeFiles:
-        def __init__(self, pdf_path):
-            self.data_dir = pdf_path.parent / "fake-parser-data"
+    def fake_parse(_pdf_path, _ratings):
+        day_time = DayTime(
+            day="M",
+            start_time_hhmm="0900",
+            end_time_hhmm="1100",
+        )
+        leclab = LecLab(
+            title="Calculus I",
+            type=LecLabType.LECTURE,
+            prof="Doe, Jane",
+            day_times=[day_time],
+        )
+        section = Section(
+            course="Science Courses",
+            section="00001",
+            domain="MATHEMATICS",
+            code="201-NYA-05",
+            title="Calculus I",
+            more="",
+            view_data=[{"0": [0, 2]}],
+            leclabs=[leclab],
+        )
+        return GlobalAllSections(
+            semester="FALL 2026",
+            sections_by_id={"201-NYA-05-00001": section},
+            filename="schedule.pdf",
+            sections_diff=None,
+            comments=[],
+        )
 
-    class FakeParser:
-        def __init__(self, _files: FakeFiles):
-            day_time = DayTime(
-                day="M",
-                start_time_hhmm="0900",
-                end_time_hhmm="1100",
-            )
-            leclab = LecLab(
-                title="Calculus I",
-                type=LecLabType.LECTURE,
-                prof="Doe, Jane",
-                day_times=[day_time],
-            )
-            section = Section(
-                course="Science Courses",
-                section="00001",
-                domain="MATHEMATICS",
-                code="201-NYA-05",
-                title="Calculus I",
-                more="",
-                view_data=[{"0": [0, 2]}],
-                leclabs=[leclab],
-            )
-            self.sections = [section]
-
-        def parse(self):
-            return
-
-    monkeypatch.setattr(section_router, "Files", FakeFiles)
-    monkeypatch.setattr(section_router, "NewParser", FakeParser)
+    monkeypatch.setattr(section_router, "the_entire_loop", fake_parse)
 
     res = client.post(
         "/sections/parse-pdf",
@@ -79,7 +77,10 @@ def test_parse_uploaded_pdf_returns_sections_schema(monkeypatch: pytest.MonkeyPa
     )
     assert res.status_code == 200
 
-    sections = [Section.model_validate(section) for section in res.json()]
+    sections = [
+        Section.model_validate(section)
+        for section in res.json()["sectionsById"].values()
+    ]
     assert len(sections) == 1
     assert sections[0].code == "201-NYA-05"
     assert sections[0].leclabs[0].day_times[0].start_time_hhmm == "0900"
