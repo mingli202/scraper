@@ -192,7 +192,7 @@ def get_professors_from_sections(parsed_sections: list[Section]) -> list[str]:
     for section in parsed_sections:
         profs.update(get_professors_from_section(section))
 
-    return list(profs)
+    return list(prof for prof in profs if prof.strip() != "")
 
 
 def get_professors_from_section(section: Section) -> list[str]:
