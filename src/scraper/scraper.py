@@ -21,15 +21,15 @@ def scrape_with_override(
     debug: bool,
 ) -> dict[str, Rating]:
     """
-    Gets the rating for all professors in the given parsed_sections
+    Gets the rating for all professors in the given parsed_sections.
+
+    SIDE EFFECT: will write to pids and ratings file if override
     """
 
     if s := util.should_override(
         override, ratings_path, "Ratings JSON already populated."
     ):
-        return {
-            rating.prof: rating for rating in TypeAdapter(list[Rating]).validate_json(s)
-        }
+        return TypeAdapter(dict[str, Rating]).validate_json(s)
 
     professors = util.get_professors_from_sections(parsed_sections)
     pids = util.get_saved_pids(pids_path)
@@ -37,7 +37,7 @@ def scrape_with_override(
     ratings = scrape(professors, pids, debug)
     _save_pids(ratings.values(), pids_path)
 
-    _save_ratings(ratings_path, list(ratings.values()))
+    _save_ratings(ratings_path, ratings)
 
     return ratings
 
@@ -171,7 +171,7 @@ def _get_pids(lastname: str) -> list[tuple[str, str]]:
     )
 
 
-def _save_ratings(ratings_path: Path, ratings: list[Rating]):
+def _save_ratings(ratings_path: Path, ratings: dict[str, Rating]):
     """
     Saves the ratings at the given ratings_path
     """
@@ -179,16 +179,16 @@ def _save_ratings(ratings_path: Path, ratings: list[Rating]):
     print("SAVING RATINGS")
     print(ratings)
 
+    dumpable = sorted(
+        (
+            (prof, rating.model_dump(mode="json", by_alias=True))
+            for [prof, rating] in ratings.items()
+        ),
+        key=lambda x: x[0],
+    )
+
     with open(ratings_path, "w") as file:
-        _ = file.write(
-            json.dumps(
-                [
-                    Rating.model_validate(rating).model_dump(mode="json", by_alias=True)
-                    for rating in ratings
-                ],
-                indent=2,
-            )
-        )
+        json.dump(OrderedDict(dumpable), file)
 
 
 def _get_stats_from_pid(pid: str, prof: str) -> Rating | None:

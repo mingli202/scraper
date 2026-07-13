@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+from pydantic import TypeAdapter
+
 
 from scraper.files import Files
 from scraper.models import (
@@ -23,31 +25,38 @@ def normalize_string(s: str):
     return s
 
 
+def add_rating_to_sections(sections: list[Section], ratings_by_prof: dict[str, Rating]):
+    """
+    For each of the given sections, adds the approprate rating to the section's leclabs
+    """
+    for section in sections:
+        for leclab in section.leclabs:
+            leclab.rating = ratings_by_prof.get(leclab.prof)
+
+
 def make_sections_final(
-    sections: list[Section], ratings_by_prof: dict[str, Rating], files: Files
-) -> dict[str, Section]:
+    sections: list[Section],
+    ratings_by_prof: dict[str, Rating],
+    all_sections_final_path_json: Path,
+):
     """
     Adds teacher ratings to each section
     Writes to the final json {sectionId: Section}
     """
 
-    for section in sections:
-        for leclab in section.leclabs:
-            leclab.rating = ratings_by_prof.get(leclab.prof)
+    add_rating_to_sections(sections, ratings_by_prof)
 
     sections_dict_json = {
         section.id: section.model_dump(mode="json", by_alias=True)
         for section in sections
     }
 
-    with open(files.all_sections_final_path_json, "w") as file:
+    with open(all_sections_final_path_json, "w") as file:
         json.dump(
             sections_dict_json,
             file,
             indent=2,
         )
-
-    return {section.id: section for section in sections}
 
 
 def get_global_sections_diff(
@@ -189,3 +198,19 @@ def get_professors_from_section(section: Section) -> list[str]:
     Gets the list of profs for the given section
     """
     return [leclab.prof for leclab in section.leclabs]
+
+
+def get_saved_pids(pids_path: Path) -> dict[str, str | None]:
+    """
+    Gets the saved pids on the local dics
+    """
+
+    if not pids_path.exists():
+        with open(pids_path, "w") as file:
+            _ = file.write(json.dumps({}))
+
+            return {}
+
+    with open(pids_path, "r") as file:
+        adapter = TypeAdapter(dict[str, str | None])
+        return adapter.validate_json(file.read())
