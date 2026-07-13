@@ -35,7 +35,8 @@ def scrape_with_override(
     pids = util.get_saved_pids(pids_path)
 
     ratings = scrape(professors, pids, debug)
-    _save_pids(ratings.values(), pids_path)
+    _merge_pids_with_newer(pids, ratings.values())
+    _save_pids(pids, pids_path)
 
     _save_ratings(ratings_path, ratings)
 
@@ -75,16 +76,24 @@ def scrape(
     return ratings
 
 
-def _save_pids(ratings: Iterable[Rating], pids_path: Path):
+def _merge_pids_with_newer(
+    saved_pids: dict[str, str | None], ratings: Iterable[Rating]
+):
     """
-    Saves the pids of all the profs of the given ratings
-    as prof: id sorted dict by prof
+    Merges the new pids from the ratings list with the existing one.
     """
-    pids_map = {rating.prof: rating.pId for rating in ratings}
-    sorted_map = OrderedDict(sorted(pids_map.items()))
+    newer_pids = {rating.prof: rating.pId for rating in ratings}
+    saved_pids.update(newer_pids)
+
+
+def _save_pids(pids: dict[str, str | None], pids_path: Path):
+    """
+    Saves the given pids sorted by the key to the given path
+    """
+    sorted_map = OrderedDict(sorted(pids.items()))
 
     with open(pids_path, "w") as file:
-        json.dump(sorted_map, file, indent=2)
+        json.dump(sorted_map, file, indent=2, ensure_ascii=False)
 
 
 def get_rating(prof: str, saved_pids: dict[str, str | None]) -> Rating:
@@ -195,7 +204,7 @@ def _save_ratings(ratings_path: Path, ratings: dict[str, Rating]):
     )
 
     with open(ratings_path, "w") as file:
-        json.dump(OrderedDict(dumpable), file, indent=2)
+        json.dump(OrderedDict(dumpable), file, indent=2, ensure_ascii=False)
 
 
 def get_stats_from_pid(pid: str, prof: str) -> Rating | None:

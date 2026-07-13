@@ -70,7 +70,7 @@ class Files:
             serializable_lines[k] = [map(w) for w in v]
 
         with open(self.sorted_lines_path, "w") as f:
-            json.dump(serializable_lines, f, indent=2)
+            json.dump(serializable_lines, f, indent=2, ensure_ascii=False)
 
     def get_section_columns_x_content(self) -> ColumnsXs:
         """
@@ -87,7 +87,7 @@ class Files:
         Write to the columns_x file
         """
         with open(self.columns_x_path, "w") as f:
-            json.dump(columns_x.model_dump(by_alias=True), f)
+            json.dump(columns_x.model_dump(by_alias=True), f, ensure_ascii=False)
 
     def get_parsed_sections_file_content(self) -> list[Section]:
         with open(self.parsed_sections_path, "r") as file:

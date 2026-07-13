@@ -46,7 +46,7 @@ def save_sorted_lines(
         serializable_lines[k] = [map(w) for w in v]
 
     with open(sorted_lines_path, "w") as f:
-        json.dump(serializable_lines, f, indent=2)
+        json.dump(serializable_lines, f, indent=2, ensure_ascii=False)
 
 
 def compute_sorted_lines(pdf_path: Path) -> OrderedDict[int, list[Word]]:
@@ -115,7 +115,7 @@ def compute_columns_x_if_not_exists(
     columns_x = compute_columns_x(sorted_lines_dict)
 
     with open(columns_x_path, "w") as f:
-        json.dump(columns_x.model_dump(by_alias=True), f)
+        json.dump(columns_x.model_dump(by_alias=True), f, ensure_ascii=False)
 
     return columns_x
 

@@ -286,6 +286,7 @@ def save_sections(sections: list[Section], path: Path):
                     for section in sections
                 ],
                 indent=2,
+                ensure_ascii=False,
             )
         )
 
@@ -319,7 +320,7 @@ def parse_and_save(
 
     with open(parsed_sections_path, "w") as f:
         dumpable_sections = [section.model_dump(by_alias=True) for section in sections]
-        json.dump(dumpable_sections, f, indent=2)
+        json.dump(dumpable_sections, f, indent=2, ensure_ascii=False)
 
     return sections
 

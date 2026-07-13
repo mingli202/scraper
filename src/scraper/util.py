@@ -52,11 +52,7 @@ def make_sections_final(
     }
 
     with open(all_sections_final_path_json, "w") as file:
-        json.dump(
-            sections_dict_json,
-            file,
-            indent=2,
-        )
+        json.dump(sections_dict_json, file, indent=2, ensure_ascii=False)
 
 
 def get_global_sections_diff(
@@ -147,7 +143,10 @@ def save_global_sections_final(
 
     with open(global_all_sections_final_path_json, "w") as file:
         json.dump(
-            global_sections.model_dump(mode="json", by_alias=True), file, indent=2
+            global_sections.model_dump(mode="json", by_alias=True),
+            file,
+            indent=2,
+            ensure_ascii=False,
         )
 
     return global_sections
