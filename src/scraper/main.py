@@ -6,19 +6,23 @@ from typing import Annotated
 
 from dotenv import load_dotenv
 
+from scraper import util
+from scraper.models import GlobalAllSections
 from scraper.parser_utils import (
-    compute_columns_x_if_not_exists,
-    compute_sorted_lines_if_not_exist,
+    get_parser_deps,
+    get_parser_deps_if_not_exists,
 )
 from scraper.util import (
+    add_rating_to_sections,
     get_global_sections_diff,
-    make_global_sections_final,
+    save_global_sections_final,
     make_sections_final,
+    should_override,
 )
 
 from scraper.new_parser import NewParser, get_semester, parse_and_save
 from scraper.files import Files
-from scraper.scraper import Scraper
+from scraper.scraper import scrape, scrape_with_override
 import pytest
 import typer
 
@@ -40,19 +44,25 @@ def get_current_semester() -> str:
         return f"SUMMER {now.year}"
 
 
-def the_entire_loop(files: Files):
+def the_entire_loop(pdf_path: Path, pids_path: Path) -> GlobalAllSections:
+    """The entire loop with no cache and no diff"""
+
     semester = get_current_semester()
 
-    print(f"parsing pdf at {files.pdf_path}")
+    log(logging.DEBUG, f"parsing pdf at {pdf_path}")
 
-    parser = NewParser(files)
-    scraper = Scraper(files)
+    parser = NewParser()
+    sorted_lines, columns_x = get_parser_deps(pdf_path)
+    sections = parser.parse(sorted_lines, columns_x)
 
-    sections = parser.run(True)
-    ratings = scraper.run(True)
-    section_by_id = make_sections_final(sections, ratings, files)
+    professors = util.get_professors_from_sections(sections)
+    pids = util.get_saved_pids(pids_path)
 
-    parsed_semester = parser.get_semester()
+    ratings = scrape(professors, pids, False)
+    add_rating_to_sections(sections, ratings)
+    sections_by_id = util.to_sections_by_id(sections)
+
+    parsed_semester = get_semester(sorted_lines)
 
     if parsed_semester != semester:
         log(
@@ -60,10 +70,13 @@ def the_entire_loop(files: Files):
             f"Parsed and current semester differs: parsed {parsed_semester}, current {semester}",
         )
 
-    schedule_diff = get_global_sections_diff(
-        semester, files.get_global_all_sections_content(), section_by_id
+    return GlobalAllSections(
+        semester=semester,
+        sections_by_id=sections_by_id,
+        filename=pdf_path.name,
+        sections_diff=None,
+        comments=[],
     )
-    _ = make_global_sections_final(semester, section_by_id, files, schedule_diff, [])
 
 
 def _main(
@@ -86,22 +99,19 @@ def _main(
 
     print(f"parsing pdf at {files.pdf_path}")
 
-    sorted_lines_dict = compute_sorted_lines_if_not_exist(
-        files.sorted_lines_path, files.pdf_path, override
+    sorted_lines, columns_x = get_parser_deps_if_not_exists(
+        files.sorted_lines_path, files.pdf_path, files.columns_x_path, override
     )
-    columns_x = compute_columns_x_if_not_exists(
-        files.section_columns_x_path, sorted_lines_dict, override
-    )
-    sorted_lines = list(sorted_lines_dict.values())
 
     sections = parse_and_save(
         sorted_lines, columns_x, files.parsed_sections_path, override
     )
 
-    scraper = Scraper(files)
-
-    ratings = scraper.run(yes)
-    section_by_id = make_sections_final(sections, ratings, files)
+    ratings = scrape_with_override(
+        sections, files.ratings_path, files.pids_path, override, False
+    )
+    make_sections_final(sections, ratings, files.all_sections_final_path_json)
+    sections_by_id = util.to_sections_by_id(sections)
 
     parsed_semester = get_semester(sorted_lines)
 
@@ -112,9 +122,22 @@ def _main(
         )
 
     schedule_diff = get_global_sections_diff(
-        semester, files.get_global_all_sections_content(), section_by_id
+        semester, files.get_global_all_sections_content(), sections_by_id
     )
-    _ = make_global_sections_final(semester, section_by_id, files, schedule_diff, [])
+
+    if should_override(
+        override,
+        files.global_all_sections_final_path_json,
+        "Global all sections already exists.",
+    ):
+        _ = save_global_sections_final(
+            semester,
+            sections_by_id,
+            files.pdf_path,
+            files.global_all_sections_final_path_json,
+            schedule_diff,
+            [],
+        )
 
     if run_tests:
         exit(pytest.main(["--no-header", "-s", "-v"]))
