@@ -55,7 +55,7 @@ def scrape(
     print("SCRAPING RATINGS")
 
     def fn(prof: str) -> tuple[Rating, str]:
-        rating = _get_rating(prof, saved_pids)
+        rating = get_rating(prof, saved_pids)
         print(rating)
         return rating, prof
 
@@ -87,7 +87,7 @@ def _save_pids(ratings: Iterable[Rating], pids_path: Path):
         json.dump(sorted_map, file)
 
 
-def _get_rating(prof: str, saved_pids: dict[str, str | None]) -> Rating:
+def get_rating(prof: str, saved_pids: dict[str, str | None]) -> Rating:
     """
     Get the rating for the given prof with the given saved_pids dict.
     If the pid is not saved, then try to get the pid of the given prof
@@ -99,7 +99,7 @@ def _get_rating(prof: str, saved_pids: dict[str, str | None]) -> Rating:
     if id is None:
         return Rating(prof=prof)
 
-    if rating := _get_stats_from_pid(id, prof):
+    if rating := get_stats_from_pid(id, prof):
         return rating
     else:
         return Rating(prof=prof, pId=id)
@@ -125,12 +125,16 @@ def _get_prof_id_from_saved_pids(
 
 
 def _get_pid_of_closest_prof(prof: str) -> str | None:
+    """
+    The closest of this prof ig
+    """
+
     _prof = util.normalize_string(prof).lower()
 
     fname = _prof.split(", ")[1]
     lname = _prof.split(", ")[0]
 
-    pids = _get_pids(lname)
+    pids = get_pids(lname)
     if len(pids) == 0:
         return None
 
@@ -138,7 +142,7 @@ def _get_pid_of_closest_prof(prof: str) -> str | None:
     id = pids[0][0]
     if len(pids) > 1:
         for pid in pids:
-            c = _closeness(pid[1].lower(), fname)
+            c = closeness(pid[1].lower(), fname)
             if c > max and c > 0.5:
                 id = pid[0]
                 max = c
@@ -146,8 +150,12 @@ def _get_pid_of_closest_prof(prof: str) -> str | None:
     return id
 
 
-def _get_pids(lastname: str) -> list[tuple[str, str]]:
-    SCHOOL_REF = "U2Nob29sLTEyMDUw"
+def get_pids(lastname: str) -> list[tuple[str, str]]:
+    """
+    Gets all the pids with the given lastname at JAC
+    """
+
+    SCHOOL_REF = "U2Nob29sLTEyMDUw"  # id for jac
 
     url = f"https://www.ratemyprofessors.com/search/professors/12050?q={lastname}"
     r = requests.get(
@@ -191,7 +199,7 @@ def _save_ratings(ratings_path: Path, ratings: dict[str, Rating]):
         json.dump(OrderedDict(dumpable), file)
 
 
-def _get_stats_from_pid(pid: str, prof: str) -> Rating | None:
+def get_stats_from_pid(pid: str, prof: str) -> Rating | None:
     SCHOOL_ID = 12050
     SCHOOL_REF = "U2Nob29sLTEyMDUw"
 
@@ -245,7 +253,7 @@ def _get_stats_from_pid(pid: str, prof: str) -> Rating | None:
     return None
 
 
-def _closeness(candidate: str, target: str) -> float:
+def closeness(candidate: str, target: str) -> float:
     i = 0
     for char in target:
         if char == candidate[i]:
