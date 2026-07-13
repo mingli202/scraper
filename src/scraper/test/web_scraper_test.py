@@ -1,24 +1,26 @@
 from pathlib import Path
+from pydantic import TypeAdapter
 import pytest
 
-from pydantic_core import from_json
 from scraper import util
 from scraper.files import Files
 import scraper.scraper as scraper
 
-from scraper.models import Rating, Status
+from scraper.models import Rating, Section, Status
 
 
-pre_refac_path = (
+pdf_path = (
     Path(__file__).parent.parent.parent.parent
-    / "SCHEDULE_OF_CLASSES_Winter_2026_December_11.pdf"
+    / "RPHOR200_-_Schedule_of_classes_F26_JUNE_12"
 )
 
-files = Files(pre_refac_path)
+files = Files(pdf_path)
 pids = util.get_saved_pids(files.pids_path)
 professors: list[str] = []
-with open(files.professors_path, "r") as file:
-    professors = from_json(file.read())
+with open(files.parsed_sections_path, "r") as file:
+    s = file.read()
+    parsed_sections = TypeAdapter(list[Section]).validate_json(s)
+    professors = util.get_professors_from_sections(parsed_sections)
 
 
 def test_prof_rating_regex():
