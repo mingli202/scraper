@@ -30,7 +30,7 @@ app = "api.app:app"
 scraper = "scraper.main:main"
 
 [dependency-groups]
-dev = [
-    "black>=26.1.0",
-    "mypy>=1.19.1",
-]
+dev = ["black>=26.1.0", "mypy>=1.19.1"]
+
+[tool.vercel]
+entrypoint = "src.api.app:app"
