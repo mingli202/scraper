@@ -63,7 +63,7 @@ def parse_uploaded_pdf(file: UploadFile) -> GlobalAllSections:
     files: Files | None = None
 
     try:
-        with NamedTemporaryFile(suffix=".pdf", delete=False) as tmp_file:
+        with NamedTemporaryFile(suffix=".pdf", delete=False, dir="/tmp") as tmp_file:
             _ = tmp_file.write(content)
             tmp_pdf_path = Path(tmp_file.name)
 
