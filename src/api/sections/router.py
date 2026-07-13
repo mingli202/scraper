@@ -45,10 +45,10 @@ def load_ratings() -> dict[str, Rating]:
 
 
 def _copy_upload_to_tempfile(file: UploadFile) -> Path:
-    file.file.seek(0)
+    _ = file.file.seek(0)
     if file.file.read(5) != b"%PDF-":
         raise HTTPException(status_code=400, detail="Invalid PDF file")
-    file.file.seek(0)
+    _ = file.file.seek(0)
 
     bytes_written = 0
     tmp_pdf_path: Path | None = None

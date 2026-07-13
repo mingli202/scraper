@@ -43,7 +43,7 @@ def test_unique_lastname():
         print(not_unique_last_name)
 
 
-def test_closelness():
+def test_closeness():
     c = scraper.closeness("Grgoy", "Gregory")
     assert c == 5 / 7
 

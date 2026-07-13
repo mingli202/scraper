@@ -335,7 +335,14 @@ def test_filter_by_multiple_params_narrows_progressively(
 
 
 def test_post_list_of_sections():
-    ids = [0, 1, 3, 56, 500, 800, 900]
+    ids = [
+        "101-A1S-AB-00001",
+        "101-A1S-AB-00002",
+        "101-DFA-AB-00002",
+        "300-303-AB-00003",
+        "510-A1S-AB-00002",
+        "603-CRE-AB-00001",
+    ]
     res = client.post("/sections/", json=ids)
     assert res.status_code == 200
 
