@@ -11,7 +11,7 @@ from scraper.models import ColumnsXs, GlobalAllSections, Section, Word
 
 @final
 class Files:
-    def __init__(self, pdf_path: Path | None = None) -> None:
+    def __init__(self, pdf_path: Path | None = None, mkdir: bool = True) -> None:
         cwd = Path(__file__).parent.parent.parent.resolve()
 
         if pdf_path is not None:
@@ -21,7 +21,8 @@ class Files:
 
         data_dir = cwd / "data"
         semester_data_dir = data_dir / self.pdf_path.stem
-        semester_data_dir.mkdir(exist_ok=True, parents=True)
+        if mkdir:
+            semester_data_dir.mkdir(exist_ok=True, parents=True)
 
         self.data_dir = semester_data_dir
 

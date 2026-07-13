@@ -67,7 +67,7 @@ def parse_uploaded_pdf(file: UploadFile) -> GlobalAllSections:
             _ = tmp_file.write(content)
             tmp_pdf_path = Path(tmp_file.name)
 
-        files = Files(pdf_path=tmp_pdf_path)
+        files = Files(pdf_path=tmp_pdf_path, mkdir=False)
         with open(files.ratings_path, "r") as f:
             ratings = TypeAdapter(dict[str, Rating]).validate_json(f.read())
 
