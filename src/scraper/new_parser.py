@@ -319,7 +319,7 @@ def parse_and_save(
 
     with open(parsed_sections_path, "w") as f:
         dumpable_sections = [section.model_dump(by_alias=True) for section in sections]
-        json.dump(dumpable_sections, f)
+        json.dump(dumpable_sections, f, indent=2)
 
     return sections
 

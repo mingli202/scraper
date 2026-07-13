@@ -84,7 +84,7 @@ def _save_pids(ratings: Iterable[Rating], pids_path: Path):
     sorted_map = OrderedDict(sorted(pids_map.items()))
 
     with open(pids_path, "w") as file:
-        json.dump(sorted_map, file)
+        json.dump(sorted_map, file, indent=2)
 
 
 def get_rating(prof: str, saved_pids: dict[str, str | None]) -> Rating:
@@ -185,7 +185,6 @@ def _save_ratings(ratings_path: Path, ratings: dict[str, Rating]):
     """
 
     print("SAVING RATINGS")
-    print(ratings)
 
     dumpable = sorted(
         (
@@ -196,7 +195,7 @@ def _save_ratings(ratings_path: Path, ratings: dict[str, Rating]):
     )
 
     with open(ratings_path, "w") as file:
-        json.dump(OrderedDict(dumpable), file)
+        json.dump(OrderedDict(dumpable), file, indent=2)
 
 
 def get_stats_from_pid(pid: str, prof: str) -> Rating | None:
