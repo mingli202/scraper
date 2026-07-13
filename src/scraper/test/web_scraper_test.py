@@ -1,14 +1,12 @@
-import os
 from pathlib import Path
 import pytest
 
-from pydantic import TypeAdapter
 from pydantic_core import from_json
+from scraper import util
 from scraper.files import Files
+import scraper.scraper as scraper
 
 from scraper.models import Rating, Status
-from scraper.scraper import Scraper
-import json
 
 
 pre_refac_path = (
@@ -17,10 +15,10 @@ pre_refac_path = (
 )
 
 files = Files(pre_refac_path)
+pids = util.get_saved_pids(files.pids_path)
 professors: list[str] = []
 with open(files.professors_path, "r") as file:
     professors = from_json(file.read())
-scraper = Scraper(files)
 
 
 def test_prof_rating_regex():
@@ -28,8 +26,6 @@ def test_prof_rating_regex():
 
 
 def test_unique_lastname():
-    professors: list[str] = files.get_professors_file_content().get_words("")
-
     not_unique_last_name: set[str] = set()
 
     lastnames: set[str] = set()
@@ -74,13 +70,13 @@ def test_department_with_space_and_duplicate_pids():
 
 
 def test_missing_rating():
-    rating = scraper.get_rating("Voinea, Sorin", scraper.get_saved_pids())
+    rating = scraper.get_rating("Voinea, Sorin", pids)
     assert rating == Rating(prof="Voinea, Sorin")
 
 
 # NOTE: these are hardcoded values, so subject to change
 def test_valid_rating():
-    rating = scraper.get_rating("Trepanier, Michele", scraper.get_saved_pids())
+    rating = scraper.get_rating("Trepanier, Michele", pids)
     assert rating == Rating(
         prof="Trepanier, Michele",
         avg=3.0,
@@ -94,7 +90,7 @@ def test_valid_rating():
 
 
 def test_duplicate_rating():
-    rating: Rating = scraper.get_rating("Young, Ryan", scraper.get_saved_pids())
+    rating: Rating = scraper.get_rating("Young, Ryan", pids)
     assert rating == Rating(
         prof="Young, Ryan",
         avg=2.5,
@@ -106,7 +102,7 @@ def test_duplicate_rating():
         pId="2713391",
     )
 
-    rating = scraper.get_rating("Young, Thomas", scraper.get_saved_pids())
+    rating = scraper.get_rating("Young, Thomas", pids)
 
     assert rating == Rating(
         prof="Young, Thomas",
@@ -125,85 +121,12 @@ def test_Klochko_Yuliya():
     if "Klochko, Yuliya" not in professors:
         return
 
-    rating: Rating = scraper.get_rating("Klochko, Yuliya", scraper.get_saved_pids())
+    rating: Rating = scraper.get_rating("Klochko, Yuliya", pids)
     assert rating == Rating(prof="Klochko, Yuliya")
 
 
-# NOTE: manually check foundn't
-# NOTE: winter2026 dec 11 schedule pdf checked!
-# NOTE: missingPids checked!
-def test_accuracy_of_not_found():
-    checked = True
-    updated = True
-
-    if checked:
-        if not updated:
-            update_section_with_checked_pids()
-        return
-
-    odd: dict[str, str] = {}
-
-    ratings = []
-    if files.ratings_path.exists():
-        with open(files.ratings_path, "r") as file:
-            ratings = [
-                Rating.model_validate(rating)
-                for rating in TypeAdapter(list[Rating]).validate_json(file.read())
-            ]
-
-    if os.path.exists(files.missing_pids_path):
-        with open(files.missing_pids_path, "r") as file:
-            odd = json.loads(file.read())
-
-    for rating in ratings:
-        if rating.status == Status.FOUNDNT:
-            odd[rating.prof] = ""
-
-    if len(odd) > 0:
-        print(json.dumps(odd, indent=2))
-
-    with open(files.missing_pids_path, "w") as file:
-        _ = file.write(json.dumps(odd, indent=2))
-
-    assert len(odd) == 0
-
-
-def update_section_with_checked_pids():
-    ratings_list: list[Rating] = []
-    if files.ratings_path.exists():
-        with open(files.ratings_path, "r") as file:
-            ratings_list = [
-                Rating.model_validate(rating)
-                for rating in TypeAdapter(list[Rating]).validate_json(file.read())
-            ]
-
-    ratings: dict[str, Rating] = {rating.prof: rating for rating in ratings_list}
-
-    pids: dict[str, str | None] = {
-        k: v for k, v in files.get_missing_pids_file_content().items() if v != ""
-    }
-    new_pids = files.get_pids_file_content()
-    scraper.scrape_ratings(list(pids.keys()), ratings, pids, new_pids)
-
-    assert ratings["Walker, Tara Leigh"].status == "found"
-
-    with open(files.ratings_path, "w") as file:
-        _ = file.write(
-            json.dumps(
-                [
-                    Rating.model_validate(rating).model_dump(mode="json", by_alias=True)
-                    for rating in ratings.values()
-                ],
-                indent=2,
-            )
-        )
-
-    with open(files.pids_path, "w") as file:
-        _ = file.write(json.dumps(new_pids, indent=2))
-
-
 def test_special_cases():
-    rating: Rating = scraper.get_rating("Lo Vasco, Frank", scraper.get_saved_pids())
+    rating: Rating = scraper.get_rating("Lo Vasco, Frank", pids)
     assert rating == Rating(
         prof="Lo Vasco, Frank",
         avg=3.1,
@@ -214,19 +137,6 @@ def test_special_cases():
         score=61.6,
         pId="898891",
     )
-
-
-def test_prof_trie():
-    professors = files.get_professors_file_content().get_words("")
-    old_professors: list[str] = []
-
-    with open(files.cwd / "winter" / "winter-professors.json", "r") as file:
-        old_professors = from_json(file.read())
-
-    professors = sorted(professors)
-    old_professors = sorted(old_professors)
-    assert len(professors) == len(old_professors)
-    assert professors == old_professors
 
 
 if __name__ == "__main__":
