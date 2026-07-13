@@ -1,4 +1,4 @@
-import shutil
+import os
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Annotated
@@ -13,6 +13,10 @@ from scraper.lib import the_entire_loop
 from scraper.models import GlobalAllSections, Rating, Section
 
 router = APIRouter(prefix="/sections", tags=["Sections"])
+
+UPLOAD_CHUNK_SIZE = 1024 * 1024
+MAX_PDF_UPLOAD_BYTES = int(os.environ.get("MAX_PDF_UPLOAD_BYTES", 10 * 1024 * 1024))
+MAX_PDF_PAGES = int(os.environ.get("MAX_PDF_PAGES", 250))
 
 
 def _canonical_section_id(section: Section) -> str:
@@ -35,6 +39,42 @@ def _lookup_section(
     return by_id.get(section_id)
 
 
+def load_ratings() -> dict[str, Rating]:
+    files = Files()
+    return TypeAdapter(dict[str, Rating]).validate_json(files.ratings_path.read_text())
+
+
+def _copy_upload_to_tempfile(file: UploadFile) -> Path:
+    file.file.seek(0)
+    if file.file.read(5) != b"%PDF-":
+        raise HTTPException(status_code=400, detail="Invalid PDF file")
+    file.file.seek(0)
+
+    bytes_written = 0
+    tmp_pdf_path: Path | None = None
+    try:
+        with NamedTemporaryFile(suffix=".pdf", delete=False, dir="/tmp") as tmp_file:
+            tmp_pdf_path = Path(tmp_file.name)
+            while chunk := file.file.read(UPLOAD_CHUNK_SIZE):
+                bytes_written += len(chunk)
+                if bytes_written > MAX_PDF_UPLOAD_BYTES:
+                    raise HTTPException(
+                        status_code=413,
+                        detail=f"Uploaded PDF exceeds the {MAX_PDF_UPLOAD_BYTES}-byte limit",
+                    )
+                _ = tmp_file.write(chunk)
+
+            if bytes_written == 0:
+                raise HTTPException(status_code=400, detail="Uploaded PDF is empty")
+
+        assert tmp_pdf_path is not None
+        return tmp_pdf_path
+    except Exception:
+        if tmp_pdf_path is not None:
+            tmp_pdf_path.unlink(missing_ok=True)
+        raise
+
+
 @router.get("/all")
 def get_all(request: Request) -> list[Section]:
     section_cache = getattr(request.app.state, "section_cache", None)
@@ -46,32 +86,20 @@ def get_all(request: Request) -> list[Section]:
 
 
 @router.post("/parse-pdf")
-def parse_uploaded_pdf(file: UploadFile) -> GlobalAllSections:
+def parse_uploaded_pdf(file: UploadFile, request: Request) -> GlobalAllSections:
     filename = (file.filename or "").lower()
     if not filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Uploaded file must be a PDF")
 
-    content = file.file.read()
-
-    if len(content) == 0:
-        raise HTTPException(status_code=400, detail="Uploaded PDF is empty")
-
-    if not content.startswith(b"%PDF"):
-        raise HTTPException(status_code=400, detail="Invalid PDF file")
-
     tmp_pdf_path: Path | None = None
-    files: Files | None = None
 
     try:
-        with NamedTemporaryFile(suffix=".pdf", delete=False, dir="/tmp") as tmp_file:
-            _ = tmp_file.write(content)
-            tmp_pdf_path = Path(tmp_file.name)
+        tmp_pdf_path = _copy_upload_to_tempfile(file)
+        ratings = getattr(request.app.state, "ratings", None)
+        if ratings is None:
+            ratings = load_ratings()
 
-        files = Files(pdf_path=tmp_pdf_path, mkdir=False)
-        with open(files.ratings_path, "r") as f:
-            ratings = TypeAdapter(dict[str, Rating]).validate_json(f.read())
-
-        return the_entire_loop(files.pdf_path, ratings)
+        return the_entire_loop(tmp_pdf_path, ratings, max_pages=MAX_PDF_PAGES)
 
     except HTTPException:
         raise
@@ -83,8 +111,6 @@ def parse_uploaded_pdf(file: UploadFile) -> GlobalAllSections:
         file.file.close()
         if tmp_pdf_path is not None:
             tmp_pdf_path.unlink(missing_ok=True)
-        if files is not None:
-            shutil.rmtree(files.data_dir, ignore_errors=True)
 
 
 @router.get("/")

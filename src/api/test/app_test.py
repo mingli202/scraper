@@ -39,7 +39,8 @@ def test_parse_uploaded_pdf_rejects_non_pdf():
 
 
 def test_parse_uploaded_pdf_returns_sections_schema(monkeypatch: pytest.MonkeyPatch):
-    def fake_parse(_pdf_path, _ratings):
+    def fake_parse(_pdf_path, _ratings, max_pages):
+        assert max_pages == section_router.MAX_PDF_PAGES
         day_time = DayTime(
             day="M",
             start_time_hhmm="0900",
@@ -84,6 +85,17 @@ def test_parse_uploaded_pdf_returns_sections_schema(monkeypatch: pytest.MonkeyPa
     assert len(sections) == 1
     assert sections[0].code == "201-NYA-05"
     assert sections[0].leclabs[0].day_times[0].start_time_hhmm == "0900"
+
+
+def test_parse_uploaded_pdf_rejects_oversized_upload(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setattr(section_router, "MAX_PDF_UPLOAD_BYTES", 10)
+
+    res = client.post(
+        "/sections/parse-pdf",
+        files={"file": ("schedule.pdf", b"%PDF-1.7\n123", "application/pdf")},
+    )
+
+    assert res.status_code == 413
 
 
 def test_get_section():

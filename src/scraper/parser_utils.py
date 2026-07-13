@@ -11,6 +11,7 @@ from scraper.models import ColumnsXs, Word
 from scraper.util import contains_data
 
 ExtractedWord: TypeAlias = tuple[float, float, float, float, str, int, int, int]
+CID_PATTERN = re.compile(r"\(cid:\d+\)")
 
 
 def compute_sorted_lines_if_not_exist(
@@ -50,7 +51,9 @@ def save_sorted_lines(
         json.dump(serializable_lines, f, indent=2, ensure_ascii=False)
 
 
-def compute_sorted_lines(pdf_path: Path) -> OrderedDict[int, list[Word]]:
+def compute_sorted_lines(
+    pdf_path: Path, max_pages: int | None = None
+) -> OrderedDict[int, list[Word]]:
     """
     Parses the pdf at the given path and returns an OrderedDict where
     the key is the y position of the line in the entire pdf and
@@ -59,6 +62,9 @@ def compute_sorted_lines(pdf_path: Path) -> OrderedDict[int, list[Word]]:
     lines: OrderedDict[int, list[Word]] = OrderedDict()
 
     with pymupdf.open(pdf_path) as doc:
+        if max_pages is not None and doc.page_count > max_pages:
+            raise ValueError(f"PDF exceeds the {max_pages}-page limit")
+
         doctop_offset = 0.0
         y = -1
         line: list[Word] = []
@@ -88,7 +94,7 @@ def __get_sorted_words(
 
     return [
         Word(
-            text=re.sub(r"\(cid:\d+\)", "", word[4]),
+            text=CID_PATTERN.sub("", word[4]),
             x0=round(word[0]),
             doctop=round(doctop_offset + word[1]),
             top=round(word[1]),
@@ -181,12 +187,13 @@ def get_parser_deps_if_not_exists(
 
 def get_parser_deps(
     pdf_path: Path,
+    max_pages: int | None = None,
 ) -> tuple[list[list[Word]], ColumnsXs]:
     """
     Gets the sorted_lines and columns_x
     """
 
-    parsed_sorted_lines_dict = compute_sorted_lines(pdf_path)
+    parsed_sorted_lines_dict = compute_sorted_lines(pdf_path, max_pages=max_pages)
     parsed_columns_x = compute_columns_x(parsed_sorted_lines_dict)
     parsed_sorted_lines = list(parsed_sorted_lines_dict.values())
 

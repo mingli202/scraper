@@ -89,6 +89,11 @@ def test_correct_line_extraction() -> None:
             continue
 
 
+def test_rejects_pdf_over_page_limit() -> None:
+    with pytest.raises(ValueError, match="1-page limit"):
+        _ = compute_sorted_lines(pdf_path, max_pages=1)
+
+
 def test_correct_column_x():
     columns_x: dict[str, set[Word]] = {}
 

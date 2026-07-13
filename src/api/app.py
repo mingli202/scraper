@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.sections.cache import load_section_cache
-from api.sections.router import router as section_router
+from api.sections.router import load_ratings, router as section_router
 from scraper.files import Files
 from scraper.models import GlobalAllSections
 
@@ -16,6 +16,7 @@ _ = load_dotenv()
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     _app.state.section_cache = load_section_cache()
+    _app.state.ratings = load_ratings()
     yield
 
 
