@@ -5,7 +5,6 @@ from pathlib import Path
 from pydantic import TypeAdapter
 
 
-from scraper.files import Files
 from scraper.models import (
     GlobalAllSections,
     Rating,

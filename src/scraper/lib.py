@@ -2,8 +2,8 @@ import datetime
 import logging
 from pathlib import Path
 
-from scraper import new_parser, parser_utils, scraper, util
-from scraper.models import GlobalAllSections
+from scraper import new_parser, parser_utils, util
+from scraper.models import GlobalAllSections, Rating
 
 
 def get_current_semester() -> str:
@@ -23,8 +23,8 @@ def get_current_semester() -> str:
         return f"SUMMER {now.year}"
 
 
-def the_entire_loop(pdf_path: Path, pids_path: Path) -> GlobalAllSections:
-    """The entire loop with no cache and no diff"""
+def the_entire_loop(pdf_path: Path, ratings: dict[str, Rating]) -> GlobalAllSections:
+    """The entire loop with no cached sections, no diff and precomputed ratings"""
 
     semester = get_current_semester()
 
@@ -34,10 +34,6 @@ def the_entire_loop(pdf_path: Path, pids_path: Path) -> GlobalAllSections:
     sorted_lines, columns_x = parser_utils.get_parser_deps(pdf_path)
     sections = parser.parse(sorted_lines, columns_x)
 
-    professors = util.get_professors_from_sections(sections)
-    pids = util.get_saved_pids(pids_path)
-
-    ratings = scraper.scrape(professors, pids, False)
     util.add_rating_to_sections(sections, ratings)
     sections_by_id = util.to_sections_by_id(sections)
 
