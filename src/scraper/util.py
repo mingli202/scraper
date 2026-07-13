@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import json
 from pathlib import Path
 
@@ -124,10 +125,11 @@ def is_different(old_section: Section, new_section: Section) -> bool:
     return old_section_copy != new_section_copy
 
 
-def make_global_sections_final(
+def save_global_sections_final(
     semester: str,
     section_by_id: dict[str, Section],
-    files: Files,
+    global_all_sections_final_path_json: Path,
+    pdf_path: Path,
     diff: SectionsDiff | None,
     comments: list[str],
 ) -> GlobalAllSections:
@@ -135,16 +137,16 @@ def make_global_sections_final(
     Write to the same place rather than by directory
     """
 
-    filename = files.pdf_path.name
+    filename = pdf_path.name
     global_sections = GlobalAllSections(
         semester=semester,
-        sections_by_id=dict(sorted(section_by_id.items())),
+        sections_by_id=OrderedDict(sorted(section_by_id.items())),
         filename=filename,
         sections_diff=diff,
         comments=comments,
     )
 
-    with open(files.global_all_sections_final_path_json, "w") as file:
+    with open(global_all_sections_final_path_json, "w") as file:
         json.dump(
             global_sections.model_dump(mode="json", by_alias=True), file, indent=2
         )
@@ -214,3 +216,10 @@ def get_saved_pids(pids_path: Path) -> dict[str, str | None]:
     with open(pids_path, "r") as file:
         adapter = TypeAdapter(dict[str, str | None])
         return adapter.validate_json(file.read())
+
+
+def to_sections_by_id(sections: list[Section]) -> OrderedDict[str, Section]:
+    """
+    Returns an ordered dict of the sections
+    """
+    return OrderedDict((section.id, section) for section in sections)
