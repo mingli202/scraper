@@ -13,7 +13,6 @@ from scraper.models import ColumnsXs, GlobalAllSections, Section, Word
 class Files:
     def __init__(self, pdf_path: Path | None = None) -> None:
         cwd = Path(__file__).parent.parent.parent.resolve()
-        self.cwd = cwd
 
         if pdf_path is not None:
             self.pdf_path = pdf_path
