@@ -127,8 +127,8 @@ def is_different(old_section: Section, new_section: Section) -> bool:
 def save_global_sections_final(
     semester: str,
     section_by_id: dict[str, Section],
-    global_all_sections_final_path_json: Path,
     pdf_path: Path,
+    global_all_sections_final_path_json: Path,
     diff: SectionsDiff | None,
     comments: list[str],
 ) -> GlobalAllSections:
