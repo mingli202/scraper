@@ -180,14 +180,15 @@ def _ask_override_for_path(path: Path, message: str) -> str | None:
     Any input other than y/Y is treated as false.
     """
 
-    override = input(f"{message} Override? [y] ")
-    if override.lower() != "y":
-        print("Using saved data.")
-        with open(path, "r") as f:
-            return f.read()
+    override = input(f"{message} Override? (y) ").lower().strip()
 
-    print(f"Overriding {path}")
-    return None
+    if override == "y" or override == "":
+        print(f"Overriding {path}")
+        return None
+
+    print("Using saved data.")
+    with open(path, "r") as f:
+        return f.read()
 
 
 def get_professors_from_sections(parsed_sections: list[Section]) -> list[str]:
