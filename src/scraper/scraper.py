@@ -1,4 +1,6 @@
 import json
+from logging import log
+import logging
 import re
 from collections import OrderedDict
 from collections.abc import Iterable
@@ -53,11 +55,11 @@ def scrape(
     where the key if the prof and the value if the rating if any
     """
 
-    print("SCRAPING RATINGS")
+    log(logging.INFO, "SCRAPING RATINGS")
 
     def fn(prof: str) -> tuple[Rating, str]:
         rating = get_rating(prof, saved_pids)
-        print(rating)
+        log(logging.DEBUG, rating)
         return rating, prof
 
     if debug:
@@ -71,7 +73,7 @@ def scrape(
     for rating, prof in results:
         ratings[prof] = rating
 
-    print("FINISHED SCRAPING")
+    log(logging.INFO, "FINISHED SCRAPING")
 
     return ratings
 
@@ -102,7 +104,7 @@ def get_rating(prof: str, saved_pids: dict[str, str | None]) -> Rating:
     If the pid is not saved, then try to get the pid of the given prof
     """
 
-    print("GETTING RATING")
+    log(logging.DEBUG, f"GETTING RATING for {prof}")
     id = _get_prof_id_from_saved_pids(prof, saved_pids)
 
     if id is None:
@@ -147,14 +149,14 @@ def _get_pid_of_closest_prof(prof: str) -> str | None:
     if len(pids) == 0:
         return None
 
-    max = 0
+    max_closeness = 0
     id = pids[0][0]
     if len(pids) > 1:
         for pid in pids:
             c = closeness(pid[1].lower(), fname)
-            if c > max and c > 0.5:
+            if c > max_closeness and c > 0.5:
                 id = pid[0]
-                max = c
+                max_closeness = c
 
     return id
 
@@ -175,7 +177,7 @@ def get_pids(lastname: str) -> list[tuple[str, str]]:
     )
 
     if r.status_code != 200:
-        raise
+        raise ConnectionError(f"failed to fetch pids for {lastname}: {r.status_code}")
 
     return re.findall(
         r'{"__id":"[\w=]+","__typename":"Teacher","id":"[\w=]+","legacyId":(\d+),"avgRating":[\d\.]+,"numRatings":[\d\.]+,"wouldTakeAgainPercent":[\d\.]+,"avgDifficulty":[\d\.]+,"department":"[\w ]+","school":{"__ref":"'
@@ -193,7 +195,7 @@ def _save_ratings(ratings_path: Path, ratings: dict[str, Rating]):
     Saves the ratings at the given ratings_path
     """
 
-    print("SAVING RATINGS")
+    log(logging.INFO, "SAVING RATINGS")
 
     dumpable = sorted(
         (
@@ -220,8 +222,7 @@ def get_stats_from_pid(pid: str, prof: str) -> Rating | None:
     )
 
     if r.status_code != 200:
-        print("Error")
-        raise
+        raise ConnectionError(f"failed to get stats for {pid}: {r.status_code}")
 
     if matches := re.search(
         rf'"__typename":"Teacher".+"legacyId":{pid}'
@@ -262,14 +263,15 @@ def get_stats_from_pid(pid: str, prof: str) -> Rating | None:
 
 
 def closeness(candidate: str, target: str) -> float:
-    i = 0
-    for char in target:
-        if char == candidate[i]:
-            i += 1
-            if i == len(candidate):
-                break
+    """
+    How close the two strings are to each other.
+    It compares each character at each position to each other
+    and divides the answer by the lenght of the longest string
+    """
 
-    return i / len(target)
+    return sum(1 for t, c in zip(target, candidate) if t == c) / max(
+        len(target), len(candidate)
+    )
 
 
 if __name__ == "__main__":

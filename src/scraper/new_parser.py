@@ -276,21 +276,6 @@ def check_if_already_parsed(files: Files | None) -> list[Section] | None:
     return None
 
 
-def save_sections(sections: list[Section], path: Path):
-    """Saves the given sections to the given path"""
-    with open(path, "w") as file:
-        _ = file.write(
-            json.dumps(
-                [
-                    section.model_dump(mode="json", by_alias=True)
-                    for section in sections
-                ],
-                indent=2,
-                ensure_ascii=False,
-            )
-        )
-
-
 def get_semester(lines: list[list[Word]]):
     """
     Gets the semester of the pdf from the given lines

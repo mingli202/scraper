@@ -41,7 +41,7 @@ def _main(
     files = Files(pdf_path=Path(pdf_path))
     semester = lib.get_current_semester()
 
-    print(f"parsing pdf at {files.pdf_path}")
+    log(logging.INFO, f"parsing pdf at {files.pdf_path}")
 
     sorted_lines, columns_x = get_parser_deps_if_not_exists(
         files.sorted_lines_path, files.pdf_path, files.columns_x_path, override

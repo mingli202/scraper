@@ -1,5 +1,7 @@
 from collections import OrderedDict
 import json
+from logging import log
+import logging
 from pathlib import Path
 
 from pydantic import TypeAdapter
@@ -182,10 +184,10 @@ def _ask_override_for_path(path: Path, message: str) -> str | None:
     override = input(f"{message} Override? (y) ").lower().strip()
 
     if override == "y" or override == "":
-        print(f"Overriding {path}")
+        log(logging.INFO, f"Overriding {path}")
         return None
 
-    print("Using saved data.")
+    log(logging.INFO, "Using saved data.")
     with open(path, "r") as f:
         return f.read()
 
