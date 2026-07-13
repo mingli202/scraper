@@ -86,19 +86,16 @@ def __get_sorted_words(
 ) -> list[Word]:
     words: list[ExtractedWord] = page.get_text("words", sort=True)
 
-    return sorted(
-        (
-            Word(
-                text=re.sub(r"\(cid:\d+\)", "", word[4]),
-                x0=round(word[0]),
-                doctop=round(doctop_offset + word[1]),
-                top=round(word[1]),
-                page_number=page_number,
-            )
-            for word in words
-        ),
-        key=lambda w: (w.top, w.x0),
-    )
+    return [
+        Word(
+            text=re.sub(r"\(cid:\d+\)", "", word[4]),
+            x0=round(word[0]),
+            doctop=round(doctop_offset + word[1]),
+            top=round(word[1]),
+            page_number=page_number,
+        )
+        for word in words
+    ]
 
 
 def compute_columns_x_if_not_exists(
