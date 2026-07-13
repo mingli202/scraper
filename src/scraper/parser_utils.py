@@ -9,7 +9,7 @@ import pdfplumber
 from pdfplumber.page import Page
 from pydantic import TypeAdapter
 from scraper.models import ColumnsXs, Word
-from scraper.util import should_override
+from scraper.util import contains_data
 
 
 def compute_sorted_lines_if_not_exist(
@@ -20,7 +20,7 @@ def compute_sorted_lines_if_not_exist(
     If it exists and already parsed, return it, otherwise
     compute a fresh sorted_lines and save it
     """
-    if s := should_override(
+    if s := contains_data(
         override, sorted_lines_path, "Pdf already parsed into sorted lines."
     ):
         adapter = TypeAdapter(OrderedDict[int, list[Word]])
@@ -108,7 +108,7 @@ def compute_columns_x_if_not_exists(
     Otherwise, computes fresh columns_x saving it at the given columns_x_path and returning it
     """
 
-    if s := should_override(override, columns_x_path, "ColumnsX already parsed."):
+    if s := contains_data(override, columns_x_path, "ColumnsX already parsed."):
         with open(columns_x_path, "r") as f:
             return ColumnsXs.model_validate_json(s, by_alias=True)
 

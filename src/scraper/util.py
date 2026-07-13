@@ -153,19 +153,26 @@ def save_global_sections_final(
     return global_sections
 
 
-def should_override(override: bool | None, path: Path, message: str) -> str | None:
+def contains_data(override: bool | None, path: Path, message: str) -> str | None:
     """
-    Whether should override or not the given path, returning the data if
-    no override and data exists at the given path
-    Ask with the given message if confirmation is needed
+    Gets the data at the given path if it exists.
+    If it exists and given override is true, then no data is returned.
+    If override is None, then asks the user with the given message if they want to override it.
     """
-    if override is not None:
+    if not path.exists():
         return None
 
-    return override_for_path(path, message)
+    if override is None:
+        return _ask_override_for_path(path, message)
+
+    if override:
+        return None
+
+    with open(path, "r") as f:
+        return f.read()
 
 
-def override_for_path(path: Path, message: str) -> str | None:
+def _ask_override_for_path(path: Path, message: str) -> str | None:
     """
     If override is None, ask the user if they want to override or not
     the data at the given path with the given message if there is data.
@@ -173,11 +180,10 @@ def override_for_path(path: Path, message: str) -> str | None:
     Any input other than y/Y is treated as false.
     """
 
-    if path.exists():
-        override = input(f"{message} Override? [y]")
-        if override.lower() != "y":
-            with open(path, "r") as f:
-                return f.read()
+    override = input(f"{message} Override? [y]")
+    if override.lower() != "y":
+        with open(path, "r") as f:
+            return f.read()
 
     return None
 

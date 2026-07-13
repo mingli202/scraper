@@ -26,7 +26,7 @@ def scrape_with_override(
     SIDE EFFECT: will write to pids and ratings file if override
     """
 
-    if s := util.should_override(
+    if s := util.contains_data(
         override, ratings_path, "Ratings JSON already populated."
     ):
         return TypeAdapter(dict[str, Rating]).validate_json(s)

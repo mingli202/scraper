@@ -10,7 +10,7 @@ from pydantic import TypeAdapter
 from scraper.files import Files
 from scraper.models import ColumnsXs, LecLab, LecLabType, Section, Word
 from scraper.parser_utils import compute_columns_x, compute_sorted_lines
-from scraper.util import should_override
+from scraper.util import contains_data
 
 logger = logging.getLogger(__name__)
 
@@ -309,7 +309,7 @@ def parse_and_save(
     Parse given the sorted liines and return the parsed sections if override is true.
     """
 
-    if s := should_override(
+    if s := contains_data(
         override, parsed_sections_path, "Parsed sections already populated."
     ):
         return TypeAdapter(list[Section]).validate_json(s)

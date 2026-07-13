@@ -13,7 +13,7 @@ from scraper.util import (
     get_global_sections_diff,
     save_global_sections_final,
     make_sections_final,
-    should_override,
+    contains_data,
 )
 
 from scraper.new_parser import get_semester, parse_and_save
@@ -69,7 +69,7 @@ def _main(
         semester, files.get_global_all_sections_content(), sections_by_id
     )
 
-    if should_override(
+    if not contains_data(
         override,
         files.global_all_sections_final_path_json,
         "Global all sections already exists.",
