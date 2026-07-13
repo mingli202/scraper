@@ -2,13 +2,13 @@ import os
 from contextlib import asynccontextmanager
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.sections.cache import load_section_cache
 from api.sections.router import load_ratings, router as section_router
 from scraper.files import Files
-from scraper.models import GlobalAllSections
+from scraper.models import GlobalAllSections, Rating
 
 _ = load_dotenv()
 
@@ -75,3 +75,17 @@ async def get_global_all_sections() -> GlobalAllSections:
         sections_diff.previous_sections_changed.append(changedSection)
 
     return globalAllSections
+
+
+@app.get("/ratings/{prof}")
+async def get_rating_prof(prof: str, request: Request) -> Rating:
+    ratings = getattr(request.app.state, "ratings", None)
+    if ratings is None:
+        ratings = load_ratings()
+
+    if prof not in ratings:
+        raise HTTPException(
+            status_code=400, detail=f"Rating for prof '{prof}' not found"
+        )
+
+    return ratings[prof]
