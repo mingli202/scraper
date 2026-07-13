@@ -4,12 +4,13 @@ from tempfile import NamedTemporaryFile
 from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Query, Request, UploadFile
+from pydantic import TypeAdapter
 
 from api.sections.cache import SectionCache
 from api.sections.filter_cached_sections import filter_cached_sections
 from scraper.files import Files
-from scraper.models import Section
-from scraper.new_parser import NewParser
+from scraper.lib import the_entire_loop
+from scraper.models import GlobalAllSections, Rating, Section
 
 router = APIRouter(prefix="/sections", tags=["Sections"])
 
@@ -45,7 +46,7 @@ def get_all(request: Request) -> list[Section]:
 
 
 @router.post("/parse-pdf")
-def parse_uploaded_pdf(file: UploadFile) -> list[Section]:
+def parse_uploaded_pdf(file: UploadFile) -> GlobalAllSections:
     filename = (file.filename or "").lower()
     if not filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Uploaded file must be a PDF")
@@ -67,10 +68,11 @@ def parse_uploaded_pdf(file: UploadFile) -> list[Section]:
             tmp_pdf_path = Path(tmp_file.name)
 
         files = Files(pdf_path=tmp_pdf_path)
-        parser = NewParser(files)
-        parser.parse()
+        with open(files.ratings_path, "r") as f:
+            ratings = TypeAdapter(dict[str, Rating]).validate_json(f.read())
 
-        return parser.sections
+        return the_entire_loop(files.pdf_path, ratings)
+
     except HTTPException:
         raise
     except Exception as err:

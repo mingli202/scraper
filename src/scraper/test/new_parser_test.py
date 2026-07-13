@@ -10,7 +10,8 @@ import re
 from scraper.files import Files
 from scraper.models import DayTime, LecLab, LecLabType, Section, Word
 from scraper.new_parser import NewParser
-from scraper.test.individual_parsing_data import ATestCase, data
+from scraper.parser_utils import compute_columns_x, compute_sorted_lines
+from scraper.test.individual_parsing_data import ATestCase, make_data
 
 
 pdf_path = (
@@ -26,6 +27,10 @@ pre_refac_path = (
 files = Files(pdf_path)
 width, height = 0, 0
 
+parsed_sorted_lines_dict = compute_sorted_lines(pdf_path)
+parsed_sorted_lines = list(parsed_sorted_lines_dict.values())
+parsed_columns_x = compute_columns_x(parsed_sorted_lines_dict)
+
 with pdfplumber.open(files.pdf_path) as pdf:
     page = pdf.pages[0]
     width = page.width
@@ -39,12 +44,8 @@ def get_word_position(word: Word) -> str:
 
 @pytest.fixture
 def parser():
-    parser = NewParser(files)
+    parser = NewParser()
     yield parser
-
-    parser.sections = []
-    parser.current_section = Section()
-    parser.leclab = LecLab()
 
 
 def test_optimal_x_tolerance() -> None:
@@ -102,7 +103,7 @@ def test_optmial_y_tolerance() -> None:
         print("y_tolerance", mid)
 
 
-def test_correct_line_extraction(parser: NewParser) -> None:
+def test_correct_line_extraction() -> None:
     """
     Test to make sure the line extraction is correct: whether a word is well separated and the word text is correct
 
@@ -113,10 +114,7 @@ def test_correct_line_extraction(parser: NewParser) -> None:
         - 00009 HUMA 345-101-MQ Settler Colonialism and Indigenous Resistance (Blended)MW 1230-1430
     """
 
-    files = parser.files
-    lines = files.get_sorted_lines_content()
-
-    for line_y, line in lines.items():
+    for line_y, line in parsed_sorted_lines_dict.items():
         first_word = line[0]
         line_text = " ".join([word.text for word in line])
 
@@ -146,13 +144,10 @@ def test_correct_line_extraction(parser: NewParser) -> None:
             continue
 
 
-def test_correct_column_x(parser: NewParser):
-    files = parser.files
-    lines = files.get_sorted_lines_content()
-
+def test_correct_column_x():
     columns_x: dict[str, set[Word]] = {}
 
-    for line_y, line in lines.items():
+    for line_y, line in parsed_sorted_lines_dict.items():
         first_word = line[0]
         line_text = " ".join([word.text for word in line])
 
@@ -214,26 +209,25 @@ def test_correct_column_x(parser: NewParser):
     assert len({s.x0 for s in columns_x["day"]}) == 1
     assert len({s.x0 for s in columns_x["time"]}) == 1
 
-    assert columns_x["section"].pop().x0 == parser.columns_x.section
-    assert columns_x["disc"].pop().x0 == parser.columns_x.disc
-    assert columns_x["course_number"].pop().x0 == parser.columns_x.course_number
-    assert columns_x["course_title"].pop().x0 == parser.columns_x.course_title
-    assert columns_x["day"].pop().x0 == parser.columns_x.day
-    assert columns_x["time"].pop().x0 == parser.columns_x.time
+    assert columns_x["section"].pop().x0 == parsed_columns_x.section
+    assert columns_x["disc"].pop().x0 == parsed_columns_x.disc
+    assert columns_x["course_number"].pop().x0 == parsed_columns_x.course_number
+    assert columns_x["course_title"].pop().x0 == parsed_columns_x.course_title
+    assert columns_x["day"].pop().x0 == parsed_columns_x.day
+    assert columns_x["time"].pop().x0 == parsed_columns_x.time
 
 
-@pytest.mark.parametrize("test_case,expected", data)
+@pytest.mark.parametrize("test_case,expected", make_data(parsed_columns_x))
 def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: Section):
     print(test_case.name)
-    parser.lines = test_case.lines
-    parser.parse()
+    sections = parser.parse(test_case.lines, parsed_columns_x)
 
-    for section in parser.sections:
+    for section in sections:
         section.view_data = []
 
-    assert len(parser.sections) == 1
+    assert len(sections) == 1
 
-    section = parser.sections[0]
+    section = sections[0]
     assert section == expected
     assert section.leclabs == expected.leclabs
     assert [leclab.day_times for leclab in section.leclabs] == [
@@ -243,22 +237,26 @@ def test_individual_parsing(parser: NewParser, test_case: ATestCase, expected: S
 
 def test_parity_with_old_parser():
     files = Files(pre_refac_path)
-    parser = NewParser(files)
+    parser = NewParser()
 
     def remove_double_space(s: str) -> str:
         return re.sub(" +", " ", s)
 
-    parser.parse()
+    old_sorted_lines_dict = compute_sorted_lines(files.pdf_path)
+    old_sorted_lines = list(old_sorted_lines_dict.values())
+    old_columns_x = compute_columns_x(old_sorted_lines_dict)
 
-    for section in parser.sections:
+    sections = parser.parse(old_sorted_lines, old_columns_x)
+
+    for section in sections:
         section.view_data = []
 
     with open(files.out_file_path, "r") as file:
         out: list[dict[str, Any]] = from_json(file.read())
 
-        assert len(out) == len(parser.sections)
+        assert len(out) == len(sections)
 
-        new_sections = {section.id: section for section in parser.sections}
+        new_sections = {section.id: section for section in sections}
 
         for old_section in out:
             old = Section(

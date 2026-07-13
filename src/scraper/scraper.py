@@ -1,227 +1,282 @@
 import json
-import os
+from logging import log
+import logging
 import re
+from collections import OrderedDict
+from collections.abc import Iterable
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
-from pydantic import TypeAdapter
 import requests
-from scraper.files import Files
-from scraper.models import Rating, Status
+from pydantic import TypeAdapter
+
 from scraper import util
+from scraper.files import Files
+from scraper.models import Rating, Section, Status
 
 
-class Scraper:
-    def __init__(self, files: Files):
-        self.files = files
-        self.debug = False
+def scrape_with_override(
+    parsed_sections: list[Section],
+    ratings_path: Path,
+    pids_path: Path,
+    override: bool | None,
+    debug: bool,
+) -> dict[str, Rating]:
+    """
+    Gets the rating for all professors in the given parsed_sections.
 
-    def run(self, force_override: bool = False) -> dict[str, Rating]:
-        if not force_override and self.files.ratings_path.exists():
-            with open(self.files.ratings_path, "r") as file:
-                existing_ratings = TypeAdapter(list[Rating]).validate_json(file.read())
+    SIDE EFFECT: will write to pids and ratings file if override
+    """
 
-            if existing_ratings:
-                override = input("Ratings JSON already populated, override? (y/n) ")
-                if override.lower() != "y":
-                    return {rating.prof: rating for rating in existing_ratings}
-
-        professors = self.files.get_professors_file_content().get_words("")
-
-        ratings: dict[str, Rating] = {}
-        pids = self.get_saved_pids()
-
-        new_pids: dict[str, str | None] = {}
-
-        self.scrape_ratings(professors, ratings, pids, new_pids)
-
-        with open(self.files.pids_path, "w") as file:
-            sorted_dict = dict(sorted(new_pids.items()))
-
-            _ = file.write(json.dumps(sorted_dict, indent=2))
-
-        self.save_ratings(ratings)
-
-        return ratings
-
-    def scrape_ratings(
-        self,
-        professors: list[str],
-        ratings: dict[str, Rating],
-        pids: dict[str, str | None],
-        new_pids: dict[str, str | None],
+    if s := util.contains_data(
+        override, ratings_path, "Ratings JSON already populated."
     ):
-        print("SCRAPING RATINGS")
+        return TypeAdapter(dict[str, Rating]).validate_json(s)
 
-        def fn(prof: str) -> tuple[Rating, str]:
-            rating = self.get_rating(prof, pids)
-            print(rating)
-            return rating, prof
+    professors = util.get_professors_from_sections(parsed_sections)
+    pids = util.get_saved_pids(pids_path)
 
-        if self.debug:
-            results = [fn(p) for p in professors]
-        else:
-            with ThreadPoolExecutor() as e:
-                results = e.map(fn, professors)
+    ratings = scrape(professors, pids, debug)
+    _merge_pids_with_newer(pids, ratings.values())
+    _save_pids(pids, pids_path)
 
-        for rating, prof in results:
-            ratings[prof] = rating
-            new_pids[prof] = rating.pId
+    _save_ratings(ratings_path, ratings)
 
-        print("FINISHED SCRAPING")
+    return ratings
 
-    def get_saved_pids(self) -> dict[str, str | None]:
-        if not os.path.exists(self.files.pids_path):
-            with open(self.files.pids_path, "w") as file:
-                _ = file.write(json.dumps({}))
 
-        with open(self.files.pids_path, "r") as file:
-            adapter = TypeAdapter(dict[str, str | None])
-            return adapter.validate_json(file.read())
+def scrape(
+    professors: list[str],
+    saved_pids: dict[str, str | None],
+    debug: bool,
+) -> dict[str, Rating]:
+    """
+    Returns the dict of ratings for all the given professors,
+    where the key if the prof and the value if the rating if any
+    """
 
-    def get_rating(self, prof: str, saved_pids: dict[str, str | None]) -> Rating:
-        print("GETTING RATING")
-        rating = Rating(prof=prof)
+    log(logging.INFO, "SCRAPING RATINGS")
 
-        if (
-            prof in saved_pids
-            and saved_pids.get(prof) is not None
-            and saved_pids[prof] != ""
-        ):
-            id = saved_pids[prof]
-        else:
-            _prof = util.normalize_string(prof).lower()
+    def fn(prof: str) -> tuple[Rating, str]:
+        rating = get_rating(prof, saved_pids)
+        log(logging.DEBUG, rating)
+        return rating, prof
 
-            fname = _prof.split(", ")[1]
-            lname = _prof.split(", ")[0]
+    if debug:
+        results = [fn(p) for p in professors]
+    else:
+        with ThreadPoolExecutor() as e:
+            results = e.map(fn, professors)
 
-            pids = self.get_pids(lname)
-            if len(pids) == 0:
-                return rating
+    ratings: dict[str, Rating] = {}
 
-            max = 0
-            id = pids[0][0]
-            if len(pids) > 1:
-                for pid in pids:
-                    c = self.closeness(pid[1].lower(), fname)
-                    if c > max and c > 0.5:
-                        id = pid[0]
-                        max = c
+    for rating, prof in results:
+        ratings[prof] = rating
 
-        assert id is not None
-        if _r := self.get_stats_from_pid(id, prof):
-            rating = _r
+    log(logging.INFO, "FINISHED SCRAPING")
 
-        rating.pId = id
+    return ratings
 
+
+def _merge_pids_with_newer(
+    saved_pids: dict[str, str | None], ratings: Iterable[Rating]
+):
+    """
+    Merges the new pids from the ratings list with the existing one.
+    """
+    newer_pids = {rating.prof: rating.pId for rating in ratings}
+    saved_pids.update(newer_pids)
+
+
+def _save_pids(pids: dict[str, str | None], pids_path: Path):
+    """
+    Saves the given pids sorted by the key to the given path
+    """
+    sorted_map = OrderedDict(sorted(pids.items()))
+
+    with open(pids_path, "w") as file:
+        json.dump(sorted_map, file, indent=2, ensure_ascii=False)
+
+
+def get_rating(prof: str, saved_pids: dict[str, str | None]) -> Rating:
+    """
+    Get the rating for the given prof with the given saved_pids dict.
+    If the pid is not saved, then try to get the pid of the given prof
+    """
+
+    log(logging.DEBUG, f"GETTING RATING for {prof}")
+    id = _get_prof_id_from_saved_pids(prof, saved_pids)
+
+    if id is None:
+        return Rating(prof=prof)
+
+    if rating := get_stats_from_pid(id, prof):
         return rating
+    else:
+        return Rating(prof=prof, pId=id)
 
-    def closeness(self, candidate: str, target: str) -> float:
-        i = 0
-        for char in target:
-            if char == candidate[i]:
-                i += 1
-                if i == len(candidate):
-                    break
 
-        return i / len(target)
+def _get_prof_id_from_saved_pids(
+    prof: str, saved_pids: dict[str, str | None]
+) -> str | None:
+    """
+    Gets the id from the saved pids, otherwise try to get it from rate my professor
+    """
 
-    def get_pids(self, lastname: str) -> list[tuple[str, str]]:
-        SCHOOL_REF = "U2Nob29sLTEyMDUw"
+    has_pid = (
+        prof in saved_pids
+        and saved_pids.get(prof) is not None
+        and saved_pids[prof] != ""
+    )
 
-        url = f"https://www.ratemyprofessors.com/search/professors/12050?q={lastname}"
-        r = requests.get(
-            url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:139.0) Gecko/20100101 Firefox/139.0"
-            },
-        )
+    if has_pid:
+        return saved_pids[prof]
+    else:
+        return _get_pid_of_closest_prof(prof)
 
-        if r.status_code != 200:
-            raise
 
-        return re.findall(
-            r'{"__id":"[\w=]+","__typename":"Teacher","id":"[\w=]+","legacyId":(\d+),"avgRating":[\d\.]+,"numRatings":[\d\.]+,"wouldTakeAgainPercent":[\d\.]+,"avgDifficulty":[\d\.]+,"department":"[\w ]+","school":{"__ref":"'
-            + f"{SCHOOL_REF}"
-            + r'"},"firstName":"([\w\' \-,]+)","lastName":'
-            + f'"{lastname}'
-            + r',?","isSaved":false}',
-            r.text,
-            re.I,
-        )
+def _get_pid_of_closest_prof(prof: str) -> str | None:
+    """
+    The closest of this prof ig
+    """
 
-    def get_stats_from_pid(self, pid: str, prof: str) -> Rating | None:
-        SCHOOL_ID = 12050
-        SCHOOL_REF = "U2Nob29sLTEyMDUw"
+    _prof = util.normalize_string(prof).lower()
 
-        url = f"https://www.ratemyprofessors.com/ShowRatings.jsp?tid={pid}"
-        r = requests.get(
-            url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:139.0) Gecko/20100101 Firefox/139.0"
-            },
-        )
+    fname = _prof.split(", ")[1]
+    lname = _prof.split(", ")[0]
 
-        if r.status_code != 200:
-            print("Error")
-            raise
-
-        if matches := re.search(
-            rf'"__typename":"Teacher".+"legacyId":{pid}'
-            + r',"firstName":"[\w\' \-,]+","lastName":"[\w\' \-,]+","department":"[\w ,]+","school":{"__ref":"'
-            + f"{SCHOOL_REF}"
-            + r'"}.+"numRatings":([\d\.]+).+"avgRating":([\d\.]+).+"avgDifficulty":([\d\.]+),"wouldTakeAgainPercent":([\d\.]+).+'
-            + rf'"__typename":"School","legacyId":{SCHOOL_ID}',
-            r.text,
-        ):
-            (
-                numRating,
-                avgRating,
-                difficulty,
-                takeAgain,
-            ) = matches.groups()
-
-            try:
-                rating = Rating(
-                    prof=prof,
-                    nRating=round(float(numRating)),
-                    avg=round(float(avgRating), 1),
-                    takeAgain=round(float((takeAgain))),
-                    difficulty=round(float(difficulty), 1),
-                    status=Status.FOUND,
-                )
-
-                rating.score = round(
-                    (((rating.avg * rating.nRating) + 5) / (rating.nRating + 2))
-                    * 100
-                    / 5,
-                    1,
-                )
-
-                return rating
-            except ValueError:
-                return None
-
+    pids = get_pids(lname)
+    if len(pids) == 0:
         return None
 
-    def save_ratings(self, ratings: dict[str, Rating]):
-        print("SAVING RATINGS")
-        print(ratings)
+    max_closeness = 0
+    id = pids[0][0]
+    if len(pids) > 1:
+        for pid in pids:
+            c = closeness(pid[1].lower(), fname)
+            if c > max_closeness and c > 0.5:
+                id = pid[0]
+                max_closeness = c
 
-        with open(self.files.ratings_path, "w") as file:
-            _ = file.write(
-                json.dumps(
-                    [
-                        Rating.model_validate(rating).model_dump(
-                            mode="json", by_alias=True
-                        )
-                        for rating in ratings.values()
-                    ],
-                    indent=2,
-                )
+    return id
+
+
+def get_pids(lastname: str) -> list[tuple[str, str]]:
+    """
+    Gets all the pids with the given lastname at JAC
+    """
+
+    SCHOOL_REF = "U2Nob29sLTEyMDUw"  # id for jac
+
+    url = f"https://www.ratemyprofessors.com/search/professors/12050?q={lastname}"
+    r = requests.get(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:139.0) Gecko/20100101 Firefox/139.0"
+        },
+    )
+
+    if r.status_code != 200:
+        raise ConnectionError(f"failed to fetch pids for {lastname}: {r.status_code}")
+
+    return re.findall(
+        r'{"__id":"[\w=]+","__typename":"Teacher","id":"[\w=]+","legacyId":(\d+),"avgRating":[\d\.]+,"numRatings":[\d\.]+,"wouldTakeAgainPercent":[\d\.]+,"avgDifficulty":[\d\.]+,"department":"[\w ]+","school":{"__ref":"'
+        + f"{SCHOOL_REF}"
+        + r'"},"firstName":"([\w\' \-,]+)","lastName":'
+        + f'"{lastname}'
+        + r',?","isSaved":false}',
+        r.text,
+        re.I,
+    )
+
+
+def _save_ratings(ratings_path: Path, ratings: dict[str, Rating]):
+    """
+    Saves the ratings at the given ratings_path
+    """
+
+    log(logging.INFO, "SAVING RATINGS")
+
+    dumpable = sorted(
+        (
+            (prof, rating.model_dump(mode="json", by_alias=True))
+            for [prof, rating] in ratings.items()
+        ),
+        key=lambda x: x[0],
+    )
+
+    with open(ratings_path, "w") as file:
+        json.dump(OrderedDict(dumpable), file, indent=2, ensure_ascii=False)
+
+
+def get_stats_from_pid(pid: str, prof: str) -> Rating | None:
+    SCHOOL_ID = 12050
+    SCHOOL_REF = "U2Nob29sLTEyMDUw"
+
+    url = f"https://www.ratemyprofessors.com/ShowRatings.jsp?tid={pid}"
+    r = requests.get(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:139.0) Gecko/20100101 Firefox/139.0"
+        },
+    )
+
+    if r.status_code != 200:
+        raise ConnectionError(f"failed to get stats for {pid}: {r.status_code}")
+
+    if matches := re.search(
+        rf'"__typename":"Teacher".+"legacyId":{pid}'
+        + r',"firstName":"[\w\' \-,]+","lastName":"[\w\' \-,]+","department":"[\w ,]+","school":{"__ref":"'
+        + f"{SCHOOL_REF}"
+        + r'"}.+"numRatings":([\d\.]+).+"avgRating":([\d\.]+).+"avgDifficulty":([\d\.]+),"wouldTakeAgainPercent":([\d\.]+).+'
+        + rf'"__typename":"School","legacyId":{SCHOOL_ID}',
+        r.text,
+    ):
+        (
+            numRating,
+            avgRating,
+            difficulty,
+            takeAgain,
+        ) = matches.groups()
+
+        try:
+            rating = Rating(
+                pId=pid,
+                prof=prof,
+                nRating=round(float(numRating)),
+                avg=round(float(avgRating), 1),
+                takeAgain=round(float((takeAgain))),
+                difficulty=round(float(difficulty), 1),
+                status=Status.FOUND,
             )
+
+            rating.score = round(
+                (((rating.avg * rating.nRating) + 5) / (rating.nRating + 2)) * 100 / 5,
+                1,
+            )
+
+            return rating
+        except ValueError:
+            return None
+
+    return None
+
+
+def closeness(candidate: str, target: str) -> float:
+    """
+    How close the two strings are to each other.
+    It compares each character at each position to each other
+    and divides the answer by the lenght of the longest string
+    """
+
+    return sum(1 for t, c in zip(target, candidate) if t == c) / max(
+        len(target), len(candidate)
+    )
 
 
 if __name__ == "__main__":
     files = Files()
-    scraper = Scraper(files)
-    _ = scraper.run()
+    parsed_sections = files.get_parsed_sections_file_content()
+    _ = scrape_with_override(
+        parsed_sections, files.ratings_path, files.pids_path, True, False
+    )

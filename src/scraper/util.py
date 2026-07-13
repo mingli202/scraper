@@ -1,7 +1,12 @@
+from collections import OrderedDict
 import json
+from logging import log
+import logging
+from pathlib import Path
+
+from pydantic import TypeAdapter
 
 
-from scraper.files import Files
 from scraper.models import (
     GlobalAllSections,
     Rating,
@@ -22,31 +27,34 @@ def normalize_string(s: str):
     return s
 
 
+def add_rating_to_sections(sections: list[Section], ratings_by_prof: dict[str, Rating]):
+    """
+    For each of the given sections, adds the approprate rating to the section's leclabs
+    """
+    for section in sections:
+        for leclab in section.leclabs:
+            leclab.rating = ratings_by_prof.get(leclab.prof)
+
+
 def make_sections_final(
-    sections: list[Section], ratings_by_prof: dict[str, Rating], files: Files
-) -> dict[str, Section]:
+    sections: list[Section],
+    ratings_by_prof: dict[str, Rating],
+    all_sections_final_path_json: Path,
+):
     """
     Adds teacher ratings to each section
     Writes to the final json {sectionId: Section}
     """
 
-    for section in sections:
-        for leclab in section.leclabs:
-            leclab.rating = ratings_by_prof.get(leclab.prof)
+    add_rating_to_sections(sections, ratings_by_prof)
 
     sections_dict_json = {
         section.id: section.model_dump(mode="json", by_alias=True)
         for section in sections
     }
 
-    with open(files.all_sections_final_path_json, "w") as file:
-        json.dump(
-            sections_dict_json,
-            file,
-            indent=2,
-        )
-
-    return {section.id: section for section in sections}
+    with open(all_sections_final_path_json, "w") as file:
+        json.dump(sections_dict_json, file, indent=2, ensure_ascii=False)
 
 
 def get_global_sections_diff(
@@ -114,27 +122,113 @@ def is_different(old_section: Section, new_section: Section) -> bool:
     return old_section_copy != new_section_copy
 
 
-def make_global_sections_final(
+def save_global_sections_final(
     semester: str,
     section_by_id: dict[str, Section],
-    files: Files,
+    pdf_path: Path,
+    global_all_sections_final_path_json: Path,
     diff: SectionsDiff | None,
     comments: list[str],
-):
+) -> GlobalAllSections:
     """
     Write to the same place rather than by directory
     """
 
-    filename = files.pdf_path.name
+    filename = pdf_path.name
     global_sections = GlobalAllSections(
         semester=semester,
-        sections_by_id=dict(sorted(section_by_id.items())),
+        sections_by_id=OrderedDict(sorted(section_by_id.items())),
         filename=filename,
         sections_diff=diff,
         comments=comments,
     )
 
-    with open(files.global_all_sections_final_path_json, "w") as file:
+    with open(global_all_sections_final_path_json, "w") as file:
         json.dump(
-            global_sections.model_dump(mode="json", by_alias=True), file, indent=2
+            global_sections.model_dump(mode="json", by_alias=True),
+            file,
+            indent=2,
+            ensure_ascii=False,
         )
+
+    return global_sections
+
+
+def contains_data(override: bool | None, path: Path, message: str) -> str | None:
+    """
+    Gets the data at the given path if it exists.
+    If it exists and given override is true, then no data is returned.
+    If override is None, then asks the user with the given message if they want to override it.
+    """
+    if not path.exists():
+        return None
+
+    if override is None:
+        return _ask_override_for_path(path, message)
+
+    if override:
+        return None
+
+    with open(path, "r") as f:
+        return f.read()
+
+
+def _ask_override_for_path(path: Path, message: str) -> str | None:
+    """
+    If override is None, ask the user if they want to override or not
+    the data at the given path with the given message if there is data.
+    Returns the existing data if no override and exists
+    Any input other than y/Y is treated as false.
+    """
+
+    override = input(f"{message} Override? (y) ").lower().strip()
+
+    if override == "y" or override == "":
+        log(logging.INFO, f"Overriding {path}")
+        return None
+
+    log(logging.INFO, "Using saved data.")
+    with open(path, "r") as f:
+        return f.read()
+
+
+def get_professors_from_sections(parsed_sections: list[Section]) -> list[str]:
+    """
+    Get the list if unique professors from the parsed sections
+    """
+    profs: set[str] = set()
+
+    for section in parsed_sections:
+        profs.update(get_professors_from_section(section))
+
+    return list(prof for prof in profs if prof.strip() != "")
+
+
+def get_professors_from_section(section: Section) -> list[str]:
+    """
+    Gets the list of profs for the given section
+    """
+    return [leclab.prof for leclab in section.leclabs]
+
+
+def get_saved_pids(pids_path: Path) -> dict[str, str | None]:
+    """
+    Gets the saved pids on the local dics
+    """
+
+    if not pids_path.exists():
+        with open(pids_path, "w") as file:
+            _ = file.write(json.dumps({}))
+
+            return {}
+
+    with open(pids_path, "r") as file:
+        adapter = TypeAdapter(dict[str, str | None])
+        return adapter.validate_json(file.read())
+
+
+def to_sections_by_id(sections: list[Section]) -> OrderedDict[str, Section]:
+    """
+    Returns an ordered dict of the sections
+    """
+    return OrderedDict((section.id, section) for section in sections)
