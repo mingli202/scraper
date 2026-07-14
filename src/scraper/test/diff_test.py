@@ -64,6 +64,7 @@ def test_global_diff_different_semester():
             previous_sections_changed=[], sections_added=[], sections_removed=[]
         ),
         sections_by_id={},
+        comments=[],
     )
 
     assert get_global_sections_diff("winter", old_global, {}) is None

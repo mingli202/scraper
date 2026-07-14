@@ -264,14 +264,17 @@ def get_stats_from_pid(pid: str, prof: str) -> Rating | None:
 
 def closeness(candidate: str, target: str) -> float:
     """
-    How close the two strings are to each other.
-    It compares each character at each position to each other
-    and divides the answer by the lenght of the longest string
+    How close the candidate is to the target.
+    It counts how many characters in order does the candidate equals the target
     """
+    i = 0
+    for char in target:
+        if char == candidate[i]:
+            i += 1
+            if i == len(candidate):
+                break
 
-    return sum(1 for t, c in zip(target, candidate) if t == c) / max(
-        len(target), len(candidate)
-    )
+    return i / len(target)
 
 
 if __name__ == "__main__":

@@ -55149,7 +55149,7 @@
         ]
       }
     ],
-    "more": "Not for Visual Arts students.  Approximate material fee $80",
+    "more": "Not for Visual Arts students. Approximate material fee $80",
     "viewData": [
       {
         "4": [
@@ -55640,16 +55640,7 @@
         "title": "Photoshop for print and web",
         "type": "lecture",
         "prof": "Lum, Anthony",
-        "rating": {
-          "prof": "Lum, Anthony",
-          "score": 0.0,
-          "avg": 0.0,
-          "nRating": 0,
-          "takeAgain": 0,
-          "difficulty": 0.0,
-          "status": "foundn't",
-          "pId": null
-        },
+        "rating": null,
         "dayTimes": [
           {
             "day": "M",

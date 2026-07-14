@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "src/api/app.py": {
+      "maxDuration": 30,
+      "excludeFiles": "{.venv/**,.pytest_cache/**,.ruff_cache/**,dist/**,fall/**,fall.bak/**,winter/**,winter.bak/**,src/benchmark/**,src/**/test/**,RPHOR200_*.pdf,SCHEDULE_OF_CLASSES_*.pdf}"
+    }
+  }
+}
