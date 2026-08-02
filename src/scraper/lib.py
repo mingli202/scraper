@@ -3,7 +3,9 @@ import logging
 from pathlib import Path
 
 from scraper import new_parser, parser_utils, util
-from scraper.models import GlobalAllSections, Rating
+from scraper.models import ParsedPdf, Section
+
+logger = logging.getLogger(__name__)
 
 
 def get_current_semester() -> str:
@@ -25,14 +27,13 @@ def get_current_semester() -> str:
 
 def the_entire_loop(
     pdf_path: Path,
-    ratings: dict[str, Rating],
     max_pages: int | None = None,
-) -> GlobalAllSections:
-    """The entire loop with no cached sections, no diff and precomputed ratings"""
+) -> ParsedPdf:
+    """The entire loop with no cached sections, no diff and no ratings"""
 
     semester = get_current_semester()
 
-    logging.log(logging.DEBUG, f"parsing pdf at {pdf_path}")
+    logger.debug(f"parsing pdf at {pdf_path}")
 
     parser = new_parser.NewParser()
     sorted_lines, columns_x = parser_utils.get_parser_deps(
@@ -40,21 +41,21 @@ def the_entire_loop(
     )
     sections = parser.parse(sorted_lines, columns_x)
 
-    util.add_rating_to_sections(sections, ratings)
     sections_by_id = util.to_sections_by_id(sections)
 
     parsed_semester = new_parser.get_semester(sorted_lines)
 
     if parsed_semester != semester:
-        logging.log(
-            logging.WARN,
+        logger.warning(
             f"Parsed and current semester differs: parsed {parsed_semester}, current {semester}",
         )
 
-    return GlobalAllSections(
-        semester=semester,
-        sections_by_id=sections_by_id,
-        filename=pdf_path.name,
-        sections_diff=None,
-        comments=[],
-    )
+    return ParsedPdf(semester=semester, sections_by_id=sections_by_id, hash="asdf")
+
+
+def make_hash(sections_by_id: dict[str, Section]) -> str:
+    """
+    Generate a unique hash of the entire dataset without ratings
+    Works by hashing
+    """
+    return ""

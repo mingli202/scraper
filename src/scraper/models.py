@@ -1,5 +1,5 @@
-from enum import Enum
 import logging
+from enum import Enum
 from typing import override
 
 from pydantic import BaseModel, ConfigDict
@@ -106,3 +106,9 @@ class GlobalAllSections(ConfiguredBaseModel):
     filename: str
     sections_diff: SectionsDiff | None
     comments: list[str]
+
+
+class ParsedPdf(ConfiguredBaseModel):
+    semester: str
+    sections_by_id: dict[str, Section]
+    hash: str

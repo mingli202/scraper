@@ -1,26 +1,27 @@
-from logging import log
 import logging
+import sys
 from pathlib import Path
 from typing import Annotated
 
+import pytest
+import typer
 from dotenv import load_dotenv
 
 from scraper import lib, util
+from scraper.files import Files
+from scraper.new_parser import get_semester, parse_and_save
 from scraper.parser_utils import (
     get_parser_deps_if_not_exists,
 )
+from scraper.scraper import scrape_with_override
 from scraper.util import (
-    get_global_sections_diff,
-    save_global_sections_final,
-    make_sections_final,
     contains_data,
+    get_global_sections_diff,
+    make_sections_final,
+    save_global_sections_final,
 )
 
-from scraper.new_parser import get_semester, parse_and_save
-from scraper.files import Files
-from scraper.scraper import scrape_with_override
-import pytest
-import typer
+logger = logging.getLogger(__name__)
 
 
 def _main(
@@ -41,7 +42,7 @@ def _main(
     files = Files(pdf_path=Path(pdf_path))
     semester = lib.get_current_semester()
 
-    log(logging.INFO, f"parsing pdf at {files.pdf_path}")
+    logger.info(f"parsing pdf at {files.pdf_path}")
 
     sorted_lines, columns_x = get_parser_deps_if_not_exists(
         files.sorted_lines_path, files.pdf_path, files.columns_x_path, override
@@ -60,8 +61,7 @@ def _main(
     parsed_semester = get_semester(sorted_lines)
 
     if parsed_semester != semester:
-        log(
-            logging.WARN,
+        logger.warning(
             f"Parsed and current semester differs: parsed {parsed_semester}, current {semester}",
         )
 
@@ -84,7 +84,7 @@ def _main(
         )
 
     if run_tests:
-        exit(pytest.main(["--no-header", "-s", "-v"]))
+        sys.exit(pytest.main(["--no-header", "-s", "-v"]))
 
 
 def main():
