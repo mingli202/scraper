@@ -111,4 +111,3 @@ class GlobalAllSections(ConfiguredBaseModel):
 class ParsedPdf(ConfiguredBaseModel):
     semester: str
     sections_by_id: dict[str, Section]
-    hash: str

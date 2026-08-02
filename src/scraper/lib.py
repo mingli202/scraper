@@ -3,7 +3,7 @@ import logging
 from pathlib import Path
 
 from scraper import new_parser, parser_utils, util
-from scraper.models import ParsedPdf, Section
+from scraper.models import ParsedPdf
 
 logger = logging.getLogger(__name__)
 
@@ -50,12 +50,4 @@ def the_entire_loop(
             f"Parsed and current semester differs: parsed {parsed_semester}, current {semester}",
         )
 
-    return ParsedPdf(semester=semester, sections_by_id=sections_by_id, hash="asdf")
-
-
-def make_hash(sections_by_id: dict[str, Section]) -> str:
-    """
-    Generate a unique hash of the entire dataset without ratings
-    Works by hashing
-    """
-    return ""
+    return ParsedPdf(semester=semester, sections_by_id=sections_by_id)
