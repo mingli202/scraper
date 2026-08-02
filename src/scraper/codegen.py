@@ -31,7 +31,7 @@ class Validator(BaseModel):
     tuple: str
     object: str
     enum: Callable[[str, list[tuple[str, str]]], str]
-    union: str
+    union: Callable[[str], str]
     record: str
     literal: str
     infer: Callable[[str], str]
@@ -46,7 +46,7 @@ zod = Validator(
     tuple="z.tuple",
     object="z.object",
     enum=lambda name, variants: f"z.enum({name}Enum)",
-    union="z.union",
+    union=lambda s: f"z.union([{s}])",
     record="z.record",
     literal="z.literal",
     infer=lambda fnName: f"z.infer<typeof {fnName}>;",
@@ -63,7 +63,7 @@ convex = Validator(
     enum=lambda name, variants: (
         f"v.union({','.join(f'v.literal("{var[1]}")' for var in variants)})"
     ),
-    union="v.union",
+    union=lambda s: f"v.union({s})",
     record="v.record",
     literal="v.literal",
     infer=lambda fnName: f"typeof {fnName}.type",
@@ -95,7 +95,10 @@ def codegen(v: Validator, codegen_file: Path) -> None:
     with open(models_filepath, "r") as file:
         tree = ast.parse(file.read())
 
-        codegen: list[str] = [v.importLine]
+        codegen: list[str] = [
+            "// DO NOT EDIT: THIS FILE WAS GENERATED VIA A SCRIPT",
+            v.importLine,
+        ]
 
         for node in tree.body:
             if isinstance(node, ast.ClassDef) and any(
@@ -195,7 +198,7 @@ def handle_binop(binop: ast.BinOp, v: Validator, in_another_binop: bool = False)
     if in_another_binop:
         return string
 
-    return f"{v.union}([{string}])"
+    return v.union(string)
 
 
 def handle_subscript(subscript: ast.Subscript, v: Validator) -> str:
@@ -253,12 +256,5 @@ def handle_constant(constant: ast.Constant, v: Validator) -> str:
             return json.dumps(constant.value)
 
 
-class T(BaseModel):
-    a: str | None
-
-
 if __name__ == "__main__":
     main()
-
-    t = T(a=None)
-    print(t.model_dump_json(indent=2))
