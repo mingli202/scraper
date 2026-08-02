@@ -1,78 +1,22 @@
 import os
 from pathlib import Path
-from tempfile import NamedTemporaryFile
 from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Query, Request, UploadFile
-from pydantic import TypeAdapter
 
 from api.sections.cache import SectionCache
 from api.sections.filter_cached_sections import filter_cached_sections
-from scraper.files import Files
+from api.sections.helpers import (
+    copy_upload_to_tempfile,
+    load_sections_from_json,
+    lookup_section,
+)
 from scraper.lib import the_entire_loop
-from scraper.models import GlobalAllSections, Rating, Section
+from scraper.models import ParsedPdf, Section
+
+MAX_PDF_PAGES = int(os.environ.get("MAX_PDF_PAGES", str(250)))
 
 router = APIRouter(prefix="/sections", tags=["Sections"])
-
-UPLOAD_CHUNK_SIZE = 1024 * 1024
-MAX_PDF_UPLOAD_BYTES = int(os.environ.get("MAX_PDF_UPLOAD_BYTES", 10 * 1024 * 1024))
-MAX_PDF_PAGES = int(os.environ.get("MAX_PDF_PAGES", 250))
-
-
-def _canonical_section_id(section: Section) -> str:
-    return f"{section.code}-{section.section}"
-
-
-def _load_sections_from_json() -> tuple[Section, ...]:
-    files = Files()
-    global_sections = files.get_global_all_sections_content()
-    return tuple(
-        section.model_copy(update={"id": _canonical_section_id(section)})
-        for section in global_sections.sections_by_id.values()
-    )
-
-
-def _lookup_section(
-    by_id: dict[str, Section],
-    section_id: str,
-) -> Section | None:
-    return by_id.get(section_id)
-
-
-def load_ratings() -> dict[str, Rating]:
-    files = Files()
-    return TypeAdapter(dict[str, Rating]).validate_json(files.ratings_path.read_text())
-
-
-def _copy_upload_to_tempfile(file: UploadFile) -> Path:
-    _ = file.file.seek(0)
-    if file.file.read(5) != b"%PDF-":
-        raise HTTPException(status_code=400, detail="Invalid PDF file")
-    _ = file.file.seek(0)
-
-    bytes_written = 0
-    tmp_pdf_path: Path | None = None
-    try:
-        with NamedTemporaryFile(suffix=".pdf", delete=False, dir="/tmp") as tmp_file:
-            tmp_pdf_path = Path(tmp_file.name)
-            while chunk := file.file.read(UPLOAD_CHUNK_SIZE):
-                bytes_written += len(chunk)
-                if bytes_written > MAX_PDF_UPLOAD_BYTES:
-                    raise HTTPException(
-                        status_code=413,
-                        detail=f"Uploaded PDF exceeds the {MAX_PDF_UPLOAD_BYTES}-byte limit",
-                    )
-                _ = tmp_file.write(chunk)
-
-            if bytes_written == 0:
-                raise HTTPException(status_code=400, detail="Uploaded PDF is empty")
-
-        assert tmp_pdf_path is not None
-        return tmp_pdf_path
-    except Exception:
-        if tmp_pdf_path is not None:
-            tmp_pdf_path.unlink(missing_ok=True)
-        raise
 
 
 @router.get("/all")
@@ -82,11 +26,11 @@ def get_all(request: Request) -> list[Section]:
     if isinstance(section_cache, SectionCache):
         return list(section_cache.all_sections)
 
-    return list(_load_sections_from_json())
+    return list(load_sections_from_json())
 
 
 @router.post("/parse-pdf")
-def parse_uploaded_pdf(file: UploadFile, request: Request) -> GlobalAllSections:
+def parse_uploaded_pdf(file: UploadFile) -> ParsedPdf:
     filename = (file.filename or "").lower()
     if not filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Uploaded file must be a PDF")
@@ -94,12 +38,9 @@ def parse_uploaded_pdf(file: UploadFile, request: Request) -> GlobalAllSections:
     tmp_pdf_path: Path | None = None
 
     try:
-        tmp_pdf_path = _copy_upload_to_tempfile(file)
-        ratings = getattr(request.app.state, "ratings", None)
-        if ratings is None:
-            ratings = load_ratings()
+        tmp_pdf_path = copy_upload_to_tempfile(file)
 
-        return the_entire_loop(tmp_pdf_path, ratings, max_pages=MAX_PDF_PAGES)
+        return the_entire_loop(tmp_pdf_path, max_pages=MAX_PDF_PAGES)
 
     except HTTPException:
         raise
@@ -180,7 +121,7 @@ def get_sections(
         )
 
     return filter_cached_sections(
-        _load_sections_from_json(),
+        load_sections_from_json(),
         q,
         course,
         domain,
@@ -205,16 +146,16 @@ def get_sections(
 def get_section(section_id: str, request: Request) -> Section:
     section_cache = getattr(request.app.state, "section_cache", None)
     if isinstance(section_cache, SectionCache):
-        section = _lookup_section(section_cache.by_id, section_id)
+        section = lookup_section(section_cache.by_id, section_id)
         if section is None:
             raise HTTPException(
                 status_code=404, detail=f"Section {section_id} not found"
             )
         return section
 
-    all_sections = _load_sections_from_json()
+    all_sections = load_sections_from_json()
     by_id = {section.id: section for section in all_sections}
-    section = _lookup_section(by_id, section_id)
+    section = lookup_section(by_id, section_id)
 
     if section is None:
         raise HTTPException(status_code=404, detail=f"Section {section_id} not found")
@@ -229,16 +170,16 @@ def get_many(ids: list[str], request: Request) -> list[Section]:
     if isinstance(section_cache, SectionCache):
         cached_sections: list[Section] = []
         for section_id in ids:
-            section = _lookup_section(section_cache.by_id, section_id)
+            section = lookup_section(section_cache.by_id, section_id)
             if section is not None:
                 cached_sections.append(section)
         return cached_sections
 
-    all_sections = _load_sections_from_json()
+    all_sections = load_sections_from_json()
     by_id = {section.id: section for section in all_sections}
     matched_sections: list[Section] = []
     for section_id in ids:
-        section = _lookup_section(by_id, section_id)
+        section = lookup_section(by_id, section_id)
         if section is not None:
             matched_sections.append(section)
     return matched_sections
