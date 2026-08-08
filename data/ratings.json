@@ -13,8 +13,8 @@
     "prof": "Abray, Thomas Andrew",
     "score": 48.1,
     "avg": 2.4,
-    "nRating": 37,
-    "takeAgain": 37,
+    "nRating": 38,
+    "takeAgain": 36,
     "difficulty": 3.2,
     "status": "found",
     "pId": "2811291"
@@ -28,6 +28,16 @@
     "difficulty": 3.1,
     "status": "found",
     "pId": "2606461"
+  },
+  "Ait-Ouarab, Azeddine": {
+    "prof": "Ait-Ouarab, Azeddine",
+    "score": 0.0,
+    "avg": 0.0,
+    "nRating": 0,
+    "takeAgain": 0,
+    "difficulty": 0.0,
+    "status": "foundn't",
+    "pId": null
   },
   "Allen, Lisa Kathryn": {
     "prof": "Allen, Lisa Kathryn",
@@ -201,10 +211,10 @@
   },
   "Beauvais, Jennifer": {
     "prof": "Beauvais, Jennifer",
-    "score": 64.8,
-    "avg": 3.3,
-    "nRating": 24,
-    "takeAgain": 56,
+    "score": 63.0,
+    "avg": 3.2,
+    "nRating": 25,
+    "takeAgain": 58,
     "difficulty": 3.6,
     "status": "found",
     "pId": "2664713"
@@ -253,8 +263,8 @@
     "prof": "Bernard, Matthieu",
     "score": 55.6,
     "avg": 2.8,
-    "nRating": 31,
-    "takeAgain": 42,
+    "nRating": 32,
+    "takeAgain": 39,
     "difficulty": 4.0,
     "status": "found",
     "pId": "3153088"
@@ -359,6 +369,16 @@
     "status": "found",
     "pId": "2509178"
   },
+  "Bray, Mark": {
+    "prof": "Bray, Mark",
+    "score": 0.0,
+    "avg": 0.0,
+    "nRating": 0,
+    "takeAgain": 0,
+    "difficulty": 0.0,
+    "status": "foundn't",
+    "pId": null
+  },
   "Briffett, Neil": {
     "prof": "Briffett, Neil",
     "score": 89.6,
@@ -411,11 +431,11 @@
   },
   "Cameron, John": {
     "prof": "Cameron, John",
-    "score": 88.5,
+    "score": 88.8,
     "avg": 4.7,
-    "nRating": 14,
-    "takeAgain": 93,
-    "difficulty": 1.6,
+    "nRating": 15,
+    "takeAgain": 94,
+    "difficulty": 1.7,
     "status": "found",
     "pId": "3067753"
   },
@@ -521,10 +541,10 @@
   },
   "Claude, Stephanie Danielle": {
     "prof": "Claude, Stephanie Danielle",
-    "score": 87.3,
-    "avg": 4.5,
-    "nRating": 28,
-    "takeAgain": 90,
+    "score": 89.5,
+    "avg": 4.6,
+    "nRating": 31,
+    "takeAgain": 91,
     "difficulty": 2.2,
     "status": "found",
     "pId": "2754175"
@@ -871,9 +891,9 @@
   },
   "Flood, Kevin": {
     "prof": "Flood, Kevin",
-    "score": 86.3,
-    "avg": 4.4,
-    "nRating": 42,
+    "score": 84.4,
+    "avg": 4.3,
+    "nRating": 43,
     "takeAgain": 84,
     "difficulty": 3.0,
     "status": "found",
@@ -898,6 +918,16 @@
     "difficulty": 3.0,
     "status": "found",
     "pId": "3061963"
+  },
+  "Foran, Kelly Ann": {
+    "prof": "Foran, Kelly Ann",
+    "score": 87.1,
+    "avg": 4.6,
+    "nRating": 15,
+    "takeAgain": 87,
+    "difficulty": 2.8,
+    "status": "found",
+    "pId": "2497904"
   },
   "Forrest, Nicole Anne": {
     "prof": "Forrest, Nicole Anne",
@@ -941,11 +971,11 @@
   },
   "Fu, Roy": {
     "prof": "Fu, Roy",
-    "score": 65.8,
-    "avg": 3.4,
-    "nRating": 14,
-    "takeAgain": 67,
-    "difficulty": 2.5,
+    "score": 67.6,
+    "avg": 3.5,
+    "nRating": 15,
+    "takeAgain": 69,
+    "difficulty": 2.4,
     "status": "found",
     "pId": "2857294"
   },
@@ -1054,7 +1084,7 @@
     "score": 76.4,
     "avg": 3.9,
     "nRating": 33,
-    "takeAgain": 66,
+    "takeAgain": 63,
     "difficulty": 2.9,
     "status": "found",
     "pId": "1797139"
@@ -1088,6 +1118,16 @@
     "difficulty": 3.8,
     "status": "found",
     "pId": "1703283"
+  },
+  "Gougeon, Éric": {
+    "prof": "Gougeon, Éric",
+    "score": 0.0,
+    "avg": 0.0,
+    "nRating": 0,
+    "takeAgain": 0,
+    "difficulty": 0.0,
+    "status": "foundn't",
+    "pId": null
   },
   "Grundy, Peter": {
     "prof": "Grundy, Peter",
@@ -1128,16 +1168,6 @@
     "difficulty": 2.6,
     "status": "found",
     "pId": "2498149"
-  },
-  "Haaf, Michael William": {
-    "prof": "Haaf, Michael William",
-    "score": 62.2,
-    "avg": 3.2,
-    "nRating": 14,
-    "takeAgain": 50,
-    "difficulty": 2.9,
-    "status": "found",
-    "pId": "2760686"
   },
   "Hackett, Kieran": {
     "prof": "Hackett, Kieran",
@@ -1491,9 +1521,9 @@
   },
   "Laganiere, Frederic": {
     "prof": "Laganiere, Frederic",
-    "score": 57.6,
-    "avg": 2.9,
-    "nRating": 42,
+    "score": 59.5,
+    "avg": 3.0,
+    "nRating": 41,
     "takeAgain": 45,
     "difficulty": 3.6,
     "status": "found",
@@ -1511,11 +1541,11 @@
   },
   "Larade, Brian": {
     "prof": "Larade, Brian",
-    "score": 92.3,
+    "score": 92.5,
     "avg": 4.8,
-    "nRating": 23,
+    "nRating": 24,
     "takeAgain": 100,
-    "difficulty": 2.4,
+    "difficulty": 2.3,
     "status": "found",
     "pId": "2604003"
   },
@@ -1544,16 +1574,16 @@
     "score": 74.3,
     "avg": 4.2,
     "nRating": 5,
-    "takeAgain": 80,
+    "takeAgain": 83,
     "difficulty": 2.8,
     "status": "found",
     "pId": "3101645"
   },
   "Larose, Avery": {
     "prof": "Larose, Avery",
-    "score": 88.0,
+    "score": 88.1,
     "avg": 4.5,
-    "nRating": 39,
+    "nRating": 40,
     "takeAgain": 89,
     "difficulty": 2.0,
     "status": "found",
@@ -1571,19 +1601,29 @@
   },
   "Lazhar, Yasmine": {
     "prof": "Lazhar, Yasmine",
-    "score": 69.3,
-    "avg": 3.5,
-    "nRating": 52,
-    "takeAgain": 63,
+    "score": 71.2,
+    "avg": 3.6,
+    "nRating": 54,
+    "takeAgain": 61,
     "difficulty": 2.7,
     "status": "found",
     "pId": "3012349"
   },
+  "Le Doze, Enzo": {
+    "prof": "Le Doze, Enzo",
+    "score": 0.0,
+    "avg": 0.0,
+    "nRating": 0,
+    "takeAgain": 0,
+    "difficulty": 0.0,
+    "status": "foundn't",
+    "pId": null
+  },
   "Leblanc, Andre": {
     "prof": "Leblanc, Andre",
-    "score": 90.6,
+    "score": 90.7,
     "avg": 4.7,
-    "nRating": 24,
+    "nRating": 25,
     "takeAgain": 92,
     "difficulty": 1.8,
     "status": "found",
@@ -1591,9 +1631,9 @@
   },
   "Lee, Karen": {
     "prof": "Lee, Karen",
-    "score": 84.8,
+    "score": 84.9,
     "avg": 4.3,
-    "nRating": 60,
+    "nRating": 61,
     "takeAgain": 84,
     "difficulty": 2.2,
     "status": "found",
@@ -1703,8 +1743,8 @@
     "prof": "Légère, Jessica",
     "score": 79.2,
     "avg": 4.0,
-    "nRating": 70,
-    "takeAgain": 75,
+    "nRating": 74,
+    "takeAgain": 73,
     "difficulty": 3.1,
     "status": "found",
     "pId": "2651027"
@@ -1853,7 +1893,7 @@
     "prof": "McClelland, William",
     "score": 69.2,
     "avg": 3.5,
-    "nRating": 47,
+    "nRating": 48,
     "takeAgain": 58,
     "difficulty": 3.4,
     "status": "found",
@@ -1949,31 +1989,11 @@
     "status": "found",
     "pId": "2499097"
   },
-  "Millette, Roxane": {
-    "prof": "Millette, Roxane",
-    "score": 27.5,
-    "avg": 1.2,
-    "nRating": 13,
-    "takeAgain": 8,
-    "difficulty": 4.7,
-    "status": "found",
-    "pId": "2796622"
-  },
-  "Mizouni, Sophia": {
-    "prof": "Mizouni, Sophia",
-    "score": 0.0,
-    "avg": 0.0,
-    "nRating": 0,
-    "takeAgain": 0,
-    "difficulty": 0.0,
-    "status": "foundn't",
-    "pId": null
-  },
   "Mokhtarian, Faranak": {
     "prof": "Mokhtarian, Faranak",
-    "score": 90.5,
-    "avg": 4.7,
-    "nRating": 23,
+    "score": 92.5,
+    "avg": 4.8,
+    "nRating": 24,
     "takeAgain": 96,
     "difficulty": 2.3,
     "status": "found",
@@ -2019,21 +2039,11 @@
     "status": "found",
     "pId": "2498742"
   },
-  "Mulcair, Gregory": {
-    "prof": "Mulcair, Gregory",
-    "score": 79.5,
-    "avg": 4.3,
-    "nRating": 9,
-    "takeAgain": 90,
-    "difficulty": 2.1,
-    "status": "found",
-    "pId": "2497548"
-  },
   "Mumme, Benjamin": {
     "prof": "Mumme, Benjamin",
-    "score": 93.3,
+    "score": 93.4,
     "avg": 4.8,
-    "nRating": 32,
+    "nRating": 33,
     "takeAgain": 97,
     "difficulty": 1.7,
     "status": "found",
@@ -2083,7 +2093,7 @@
     "prof": "Nicodemo, Antonio",
     "score": 48.1,
     "avg": 2.4,
-    "nRating": 71,
+    "nRating": 72,
     "takeAgain": 33,
     "difficulty": 3.8,
     "status": "found",
@@ -2219,6 +2229,16 @@
     "status": "found",
     "pId": "2937737"
   },
+  "Paulini, Kayla": {
+    "prof": "Paulini, Kayla",
+    "score": 0.0,
+    "avg": 0.0,
+    "nRating": 0,
+    "takeAgain": 0,
+    "difficulty": 0.0,
+    "status": "foundn't",
+    "pId": null
+  },
   "Pendev, Ivo": {
     "prof": "Pendev, Ivo",
     "score": 92.2,
@@ -2261,9 +2281,9 @@
   },
   "Peters, Brian Mitchell": {
     "prof": "Peters, Brian Mitchell",
-    "score": 89.4,
+    "score": 89.5,
     "avg": 4.6,
-    "nRating": 30,
+    "nRating": 31,
     "takeAgain": 97,
     "difficulty": 2.0,
     "status": "found",
@@ -2384,7 +2404,7 @@
     "score": 40.8,
     "avg": 2.0,
     "nRating": 23,
-    "takeAgain": 26,
+    "takeAgain": 25,
     "difficulty": 3.2,
     "status": "found",
     "pId": "2662439"
@@ -2439,6 +2459,16 @@
     "status": "found",
     "pId": "1724001"
   },
+  "Rettino, Matthew": {
+    "prof": "Rettino, Matthew",
+    "score": 0.0,
+    "avg": 0.0,
+    "nRating": 0,
+    "takeAgain": 0,
+    "difficulty": 0.0,
+    "status": "foundn't",
+    "pId": null
+  },
   "Rezaee Asl, Mandana": {
     "prof": "Rezaee Asl, Mandana",
     "score": 82.6,
@@ -2459,15 +2489,15 @@
     "status": "found",
     "pId": "2602085"
   },
-  "Richman, Janice": {
-    "prof": "Richman, Janice",
-    "score": 0.0,
-    "avg": 0.0,
-    "nRating": 0,
-    "takeAgain": 0,
-    "difficulty": 0.0,
-    "status": "foundn't",
-    "pId": null
+  "Richer, Samuel": {
+    "prof": "Richer, Samuel",
+    "score": 84.3,
+    "avg": 4.5,
+    "nRating": 12,
+    "takeAgain": 92,
+    "difficulty": 2.8,
+    "status": "found",
+    "pId": "3054719"
   },
   "Ricotta, Laura": {
     "prof": "Ricotta, Laura",
@@ -2553,7 +2583,7 @@
     "prof": "Régimbal, Jean-Michel",
     "score": 40.2,
     "avg": 2.0,
-    "nRating": 96,
+    "nRating": 98,
     "takeAgain": 19,
     "difficulty": 4.5,
     "status": "found",
@@ -2561,9 +2591,9 @@
   },
   "Samboo, Avinash S.": {
     "prof": "Samboo, Avinash S.",
-    "score": 61.4,
-    "avg": 3.1,
-    "nRating": 37,
+    "score": 59.5,
+    "avg": 3.0,
+    "nRating": 38,
     "takeAgain": 42,
     "difficulty": 3.4,
     "status": "found",
@@ -2573,9 +2603,9 @@
     "prof": "Sanchez, Albert William",
     "score": 82.7,
     "avg": 4.2,
-    "nRating": 50,
+    "nRating": 52,
     "takeAgain": 81,
-    "difficulty": 2.7,
+    "difficulty": 2.8,
     "status": "found",
     "pId": "2499588"
   },
@@ -2701,11 +2731,11 @@
   },
   "Solomon Baird, Zoe": {
     "prof": "Solomon Baird, Zoe",
-    "score": 40.4,
-    "avg": 1.7,
-    "nRating": 3,
-    "takeAgain": 0,
-    "difficulty": 4.3,
+    "score": 47.3,
+    "avg": 2.3,
+    "nRating": 4,
+    "takeAgain": 25,
+    "difficulty": 4.0,
     "status": "found",
     "pId": "3034166"
   },
@@ -2761,11 +2791,11 @@
   },
   "Steenbergen, Candis": {
     "prof": "Steenbergen, Candis",
-    "score": 61.2,
+    "score": 61.3,
     "avg": 3.1,
-    "nRating": 29,
-    "takeAgain": 47,
-    "difficulty": 3.1,
+    "nRating": 31,
+    "takeAgain": 50,
+    "difficulty": 3.0,
     "status": "found",
     "pId": "2986010"
   },
@@ -2781,11 +2811,11 @@
   },
   "Sweeney, Antoine": {
     "prof": "Sweeney, Antoine",
-    "score": 46.5,
-    "avg": 2.3,
-    "nRating": 13,
-    "takeAgain": 36,
-    "difficulty": 4.1,
+    "score": 50.0,
+    "avg": 2.5,
+    "nRating": 14,
+    "takeAgain": 40,
+    "difficulty": 4.0,
     "status": "found",
     "pId": "3035939"
   },
@@ -2809,18 +2839,8 @@
     "status": "found",
     "pId": "2504878"
   },
-  "TBA-1, Economics": {
-    "prof": "TBA-1, Economics",
-    "score": 0.0,
-    "avg": 0.0,
-    "nRating": 0,
-    "takeAgain": 0,
-    "difficulty": 0.0,
-    "status": "foundn't",
-    "pId": null
-  },
-  "TBA-1, Methodology": {
-    "prof": "TBA-1, Methodology",
+  "TBA-1, French": {
+    "prof": "TBA-1, French",
     "score": 0.0,
     "avg": 0.0,
     "nRating": 0,
@@ -2831,26 +2851,6 @@
   },
   "TBA-1, Psychology": {
     "prof": "TBA-1, Psychology",
-    "score": 0.0,
-    "avg": 0.0,
-    "nRating": 0,
-    "takeAgain": 0,
-    "difficulty": 0.0,
-    "status": "foundn't",
-    "pId": null
-  },
-  "TBA-2, English": {
-    "prof": "TBA-2, English",
-    "score": 0.0,
-    "avg": 0.0,
-    "nRating": 0,
-    "takeAgain": 0,
-    "difficulty": 0.0,
-    "status": "foundn't",
-    "pId": null
-  },
-  "TBA-3, English": {
-    "prof": "TBA-3, English",
     "score": 0.0,
     "avg": 0.0,
     "nRating": 0,
@@ -2881,11 +2881,11 @@
   },
   "Tiganus Calin, Amélia": {
     "prof": "Tiganus Calin, Amélia",
-    "score": 41.8,
-    "avg": 2.0,
-    "nRating": 9,
-    "takeAgain": 20,
-    "difficulty": 4.2,
+    "score": 38.2,
+    "avg": 1.8,
+    "nRating": 11,
+    "takeAgain": 25,
+    "difficulty": 4.3,
     "status": "found",
     "pId": "2991734"
   },
@@ -2911,13 +2911,23 @@
   },
   "Tracy, Bruce E.": {
     "prof": "Tracy, Bruce E.",
-    "score": 59.5,
-    "avg": 3.0,
-    "nRating": 35,
-    "takeAgain": 46,
+    "score": 57.6,
+    "avg": 2.9,
+    "nRating": 34,
+    "takeAgain": 47,
     "difficulty": 3.7,
     "status": "found",
     "pId": "2496435"
+  },
+  "Tremblay-Moll, Krystale": {
+    "prof": "Tremblay-Moll, Krystale",
+    "score": 0.0,
+    "avg": 0.0,
+    "nRating": 0,
+    "takeAgain": 0,
+    "difficulty": 0.0,
+    "status": "foundn't",
+    "pId": null
   },
   "Trepanier, Michele": {
     "prof": "Trepanier, Michele",
@@ -2981,9 +2991,9 @@
   },
   "Viger, Caroline": {
     "prof": "Viger, Caroline",
-    "score": 63.3,
-    "avg": 3.2,
-    "nRating": 40,
+    "score": 65.2,
+    "avg": 3.3,
+    "nRating": 39,
     "takeAgain": 54,
     "difficulty": 3.6,
     "status": "found",
@@ -3011,9 +3021,9 @@
   },
   "Wall, Robert Edward": {
     "prof": "Wall, Robert Edward",
-    "score": 91.5,
+    "score": 91.6,
     "avg": 4.7,
-    "nRating": 33,
+    "nRating": 34,
     "takeAgain": 94,
     "difficulty": 1.3,
     "status": "found",
