@@ -1,16 +1,16 @@
-from collections import OrderedDict
 import json
-from pathlib import Path
 import re
-from typing import Any, TypeAlias
+from collections import OrderedDict
+from pathlib import Path
+from typing import Any
 
-from pydantic import TypeAdapter
 import pymupdf
+from pydantic import TypeAdapter
 
 from scraper.models import ColumnsXs, Word
 from scraper.util import contains_data
 
-ExtractedWord: TypeAlias = tuple[float, float, float, float, str, int, int, int]
+type ExtractedWord = tuple[float, float, float, float, str, int, int, int]
 CID_PATTERN = re.compile(r"\(cid:\d+\)")
 
 
