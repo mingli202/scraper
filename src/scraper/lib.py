@@ -31,8 +31,6 @@ def the_entire_loop(
 ) -> ParsedPdf:
     """The entire loop with no cached sections, no diff and no ratings"""
 
-    semester = get_current_semester()
-
     logger.debug(f"parsing pdf at {pdf_path}")
 
     parser = new_parser.NewParser()
@@ -43,11 +41,6 @@ def the_entire_loop(
 
     sections_by_id = util.to_sections_by_id(sections)
 
-    parsed_semester = new_parser.get_semester(sorted_lines)
-
-    if parsed_semester != semester:
-        logger.warning(
-            f"Parsed and current semester differs: parsed {parsed_semester}, current {semester}",
-        )
+    semester = new_parser.get_semester(sorted_lines)
 
     return ParsedPdf(semester=semester, sections_by_id=sections_by_id)
